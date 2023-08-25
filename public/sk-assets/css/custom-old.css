@@ -1,0 +1,7 @@
+a.link, .link, .link-primary, .link-sm {
+  color: #f58320 !important;
+}
+
+a.link:hover {
+  text-decoration: underline;
+}

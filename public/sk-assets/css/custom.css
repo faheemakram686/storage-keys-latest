@@ -1,0 +1,28 @@
+a.link, .link, .link-primary, .link-sm {
+  color: #f58320 !important;
+}
+
+a.link:hover {
+  text-decoration: underline;
+}
+
+.padlock-section-header,.term-section-header,.terms-conditions-section-header{
+  margin-top:10px;
+  font-family: sans-serif;
+  color: #F58320;
+  background-color: #F4F5F5;
+  border: 2px solid #d1dae0;
+  font-weight: bold;
+  z-index: 2;
+  text-align: center;
+  font-size: 1.1rem;
+}
+.padlock-section-body,.term-section-body,.insurance-section-body,.terms-conditions-section-body{
+  background: #f6f6f6;
+  border: 2px solid #d1dae0;
+  border-radius: 5px;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  margin-top: -20px;
+  font-family: sans-serif;
+}
