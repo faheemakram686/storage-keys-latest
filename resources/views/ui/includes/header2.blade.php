@@ -82,6 +82,15 @@
                                     <li class="special-link">
                                         <a href="{{ url('/booking') }}">Book Now</a>
                                     </li>
+                                    <li>
+                                        <a href="{{url('cart')}}" title="Shoping Cart">
+                                            <span class="utilize-btn-icon">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                <sup>{{ Cart::getTotalQuantity()}}</sup>
+                                            </span>
+                                            Shoping Cart
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>

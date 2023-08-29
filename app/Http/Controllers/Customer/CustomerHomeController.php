@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Repo\ContactClass;
 use App\Repo\ContractClass;
+use App\Repo\CustomerDashboardClass;
 use App\Repo\EstimateClass;
+use App\Repo\Interfaces\CustomerDashboardInterface;
 use App\Repo\InvoiceClass;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Validator;
@@ -19,19 +21,25 @@ class CustomerHomeController extends Controller
     private $estimate;
     private $contract;
     private $invoice;
-    public function __construct()
+    private $dashboard;
+    public function __construct(CustomerDashboardInterface $dashboard)
     {
         $this->estimate = new EstimateClass();
         $this->contract = new ContractClass();
         $this->invoice = new InvoiceClass();
+        $this->dashboard = $dashboard;
     }
 
     public function index()
     {
         $customer_id = Auth::user()->customer_id;
+        $data['estimateCount'] = $this->dashboard->getEstimatesCount($customer_id);
+        $data['contractCount'] = $this->dashboard->getContractsCount($customer_id);
+        $data['invoiceCount'] = $this->dashboard->getInvoicesCount($customer_id);
         $data['estimate'] = $this->estimate->getCustomerEstimates($customer_id);
         $data['contract'] = $this->contract->getCustomerContracts($customer_id);
         $data['invoice'] = $this->invoice->getCustomerInvoices($customer_id);
+
         return view('ui.pages.customer.account')->with(compact('data'));
     }
 

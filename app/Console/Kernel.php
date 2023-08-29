@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Backend\PaymentReminder;
 use App\Jobs\Tenant\AssignLeaveByStatusJob;
 use App\Jobs\Tenant\AssignLeaveJob;
 use App\Jobs\Tenant\AssignUpcomingWorkingShiftJob;
@@ -21,7 +22,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        PaymentReminder::class,
     ];
 
     /**
@@ -31,6 +32,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('payment:reminder')
+            ->daily();
+
         $schedule->command('queue:work --queue=high,default --tries=2 --stop-when-empty')->everyMinute()->withoutOverlapping();
 
         $schedule->job(new UpdateWorkingShiftJob)->dailyAt('00:01');

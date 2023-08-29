@@ -265,7 +265,10 @@
                                 html += ' <div class="row apartment" style="width: inherit; border: 2px solid var(--border-color-1);" >' +
                                     '<div class="offset-3 offset-sm-3 offset-md-0 offset-lg-0 col-6 col-sm-6 col-lg-3 col-md-3 apartment-img">' +
                                     ' <img  src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" class="img-fluid" alt="Image of Apartment">' +
-                                    ' <a href="javascript:void(0)" class="  btn-check-map  active show-unit-image" role="button" aria-pressed="true">view storage <i class="fa fa-map-marker-alt"></i></a>' +
+                                    '<div class="image-container">'+
+                                    ' <a href="javascript:void(0)" class=" hover-button btn-check-map  active show-unit-image" role="button" aria-pressed="true">View Storage <i class="fa fa-map-marker-alt"></i></a>' +
+                                    ' <img class="hover-image" src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" class="img-fluid" alt="Image">'+
+                                    '</div>' +
                                     '</div>' +
                                     ' <div class="col-12 col-sm-12 col-lg-6 col-md-6 apartment-details">' +
                                     ' <div class="col-12 city-name-option">' + data.su[i].warehouse.loc.city.city_name + ' <span class="area-name">' + data.su[i].warehouse.loc.loc_name + '</span></div>' +

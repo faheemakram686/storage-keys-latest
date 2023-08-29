@@ -1,5 +1,5 @@
 @extends('ui.layouts.frontend2')
-@section('title', '| Shop')
+@section('title', '| Cart')
 @section('content')
 
    
@@ -54,7 +54,7 @@
                                         <a href="product-details.html"><img src="{{ asset('storage/uploads/product-images/'.$item->attributes->image) }}" alt="#"></a>
                                     </td>
                                     <td class="cart-product-info">
-                                        <h4><a href="product-details.html">{{ $item->name }}</a></h4>
+                                        <h4><a href="#">{{ $item->name }}</a></h4>
                                     </td>
                                     <td class="cart-product-price"> {{ $item->price }}</td>
                                     <td class="cart-product-quantity">
@@ -96,22 +96,22 @@
                                     <td>Cart Subtotal</td>
                                     <td>{{Cart::getTotal()}}</td>
                                 </tr>
-                                <tr>
-                                    <td>Shipping and Handing</td>
-                                    <td>$15.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Vat</td>
-                                    <td>$00.00</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Order Total</strong></td>
-                                    <td><strong>$633.00</strong></td>
-                                </tr>
+{{--                                <tr>--}}
+{{--                                    <td>Shipping and Handing</td>--}}
+{{--                                    <td>$15.00</td>--}}
+{{--                                </tr>--}}
+{{--                                <tr>--}}
+{{--                                    <td>Vat</td>--}}
+{{--                                    <td>$00.00</td>--}}
+{{--                                </tr>--}}
+{{--                                <tr>--}}
+{{--                                    <td><strong>Order Total</strong></td>--}}
+{{--                                    <td><strong>$633.00</strong></td>--}}
+{{--                                </tr>--}}
                                 </tbody>
                             </table>
                             <div class="btn-wrapper text-right">
-                                <a href="checkout.html" class="theme-btn-1 btn btn-effect-1">Proceed to checkout</a>
+                                <a href="{{url(Route('checkout'))}}" class="theme-btn-1 btn btn-effect-1">Proceed to checkout</a>
                             </div>
                         </div>
                     </div>

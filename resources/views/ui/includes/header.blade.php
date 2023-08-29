@@ -96,6 +96,7 @@
                                         <li class="special-link">
                                             <a href="{{ url('/booking') }}">Book Now</a>
                                         </li>
+
                                     </ul>
                                 </div>
                             </nav>

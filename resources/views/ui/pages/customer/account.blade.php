@@ -57,7 +57,7 @@
                         <div class="container">
 
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     <div class="ltn__tab-menu-list mb-50">
                                         <div class="nav">
                                             <a class="active show" data-toggle="tab" href="#liton_tab_1_1">Dashboard <i class="fas fa-home"></i></a>
@@ -71,12 +71,41 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-9">
                                     <div class="tab-content">
                                         <div class="tab-pane fade active show" id="liton_tab_1_1">
                                             <div class="ltn__myaccount-tab-content-inner">
                                                 <p>Hello <strong>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</strong> (not <strong>UserName</strong>? <small><a href="#"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Logout">Logout</a></small> )</p>
-                                                <p>From your account dashboard you can view your <span>recent orders</span>, manage your <span>shipping and billing addresses</span>, and <span>edit your password and account details</span>.</p>
+                                                <div class="row ltn__custom-gutter">
+                                                    <div class="col-lg-3 col-sm-6 col-12 m-4">
+                                                        <div class="ltn__feature-item ltn__feature-item-6 active">
+
+                                                            <div class="ltn__feature-info">
+                                                                <h5><a href="#">Estimates</a></h5>
+                                                                <h3 class="mb-0 mt-2">{{($data['estimateCount'])? :"0"}}</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-6 col-12 m-4">
+                                                        <div class="ltn__feature-item ltn__feature-item-6">
+
+                                                            <div class="ltn__feature-info">
+                                                                <h5><a href="#">Contracts</a></h5>
+                                                                <h3 class="mb-0 mt-2">{{($data['contractCount'])? :"0"}}</h3>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-6 col-12 m-4">
+                                                        <div class="ltn__feature-item ltn__feature-item-6">
+
+                                                            <div class="ltn__feature-info">
+                                                                <h5><a href="@"></a>Invoices</h5>
+                                                                <h3 class="mb-0 mt-2">{{($data['invoiceCount'])? :"0"}}</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <form id="logout-form" action="{{ route('all.logout') }}" method="POST" class="d-none">@csrf</form>
                                             </div>
                                         </div>

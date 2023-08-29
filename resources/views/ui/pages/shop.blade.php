@@ -140,14 +140,19 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="#" title="Add to Cart" data-toggle="modal" data-target="#add_to_cart_modal">
+                                                            <form action="{{ route('cart.store') }}" method="POST" id="add_cart_form" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <input type="hidden" value="{{$product->id}}" name="id">
+                                                                <input type="hidden" value="{{ $product->p_name }}" name="name">
+                                                                <input type="hidden" value="{{$product->sell_price - (($product->sell_price * $product->disc_amount)/100) }}" name="price">
+                                                                <input type="hidden" value="{{ $product->image }}"  name="image">
+                                                                <input type="hidden" value="1" name="quantity">
+                                                            </form>
+                                                            <a href="javascript:{}" onclick="document.getElementById('add_cart_form').submit();" title="Add to Cart" data-toggle="modal" type="submit" form="add_cart_form" data-target="#add_to_cart_modal">
                                                                 <i class="fas fa-shopping-cart"></i>
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="#" title="Wishlist" data-toggle="modal" data-target="#liton_wishlist_modal">
-                                                                <i class="far fa-heart"></i></a>
-                                                        </li>
+
                                                     </ul>
                                                 </div>
                                             </div>

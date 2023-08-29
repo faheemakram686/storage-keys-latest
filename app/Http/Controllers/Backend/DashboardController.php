@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Core\Auth\User;
+use App\Models\Invoice;
 use App\Repo\Interfaces\AdminDashboardInterface;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -26,7 +28,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
         $data['leads']  = $this->dashboard->getLeadsCount();
         $data['estimates']  = $this->dashboard->getEstimatesCount();
         $data['customers']  = $this->dashboard->getCustomersCount();

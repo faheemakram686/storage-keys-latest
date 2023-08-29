@@ -37,6 +37,7 @@ use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Backend\MoveOutController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\Settings\AppSettingsController;
+use App\Http\Controllers\Frontend\OrderController;
 
 require __DIR__.'/auth.php';
 
@@ -438,7 +439,11 @@ require __DIR__.'/auth.php';
         Route::any('update-app-settings', [AppSettingsController::class,'update'])->name('app-settings.update');
         Route::any('get-app-settings', [AppSettingsController::class,'getAppsettings'])->name('app-settings.get');
 
-
+    //Orders
+        Route::any('order', [OrderController::class,'index'])->name('order.index');
+        Route::any('get-orders', [OrderController::class,'getOrders'])->name('order.get');
+        Route::any('order/detail/{id}', [OrderController::class, 'detailOrder'])->name('detail-order');
+        Route::any('print-order/{id}',[OrderController::class,'printOrder']);
 });
 
 

@@ -14,6 +14,7 @@ use App\Repo\ContractTemplateClass;
 use App\Repo\CountryClass;
 use App\Repo\CouponClass;
 use App\Repo\CustomerClass;
+use App\Repo\CustomerDashboardClass;
 use App\Repo\EmailTemplateClass;
 use App\Repo\EstimateClass;
 use App\Repo\InsuranceClass;
@@ -28,6 +29,7 @@ use App\Repo\Interfaces\ContractInterface;
 use App\Repo\Interfaces\ContractTemplateInterface;
 use App\Repo\Interfaces\CountryInterface;
 use App\Repo\Interfaces\CouponInterFace;
+use App\Repo\Interfaces\CustomerDashboardInterface;
 use App\Repo\Interfaces\CustomerInterface;
 use App\Repo\Interfaces\EmailTemplateInterface;
 use App\Repo\Interfaces\EstimateInterface;
@@ -43,6 +45,7 @@ use App\Repo\Interfaces\MoveInRequestInterface;
 use App\Repo\Interfaces\MoveOutInterface;
 use App\Repo\Interfaces\NoteInterface;
 use App\Repo\Interfaces\NotificationInterface;
+use App\Repo\Interfaces\OrderInterface;
 use App\Repo\Interfaces\PaymentInterface;
 use App\Repo\Interfaces\ProductInterface;
 use App\Repo\Interfaces\ReminderInterface;
@@ -67,6 +70,7 @@ use App\Repo\MoveInRequestClass;
 use App\Repo\MoveOutClass;
 use App\Repo\NoteClass;
 use App\Repo\NotificationClass;
+use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\ProductClass;
 use App\Repo\ReminderClass;
@@ -131,6 +135,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(NotificationInterface::class,NotificationClass::class);
         $this->app->bind(AppSettingsInterface::class,AppSettingsClass::class);
         $this->app->bind(NoteInterface::class,NoteClass::class);
+        $this->app->bind(OrderInterface::class,OrderClass::class);
+        $this->app->bind(CustomerDashboardInterface::class,CustomerDashboardClass::class);
     }
 
 

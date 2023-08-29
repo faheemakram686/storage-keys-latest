@@ -311,3 +311,31 @@ input[type="text"], input[type="email"], input[type="password"], input[type="sub
     margin-bottom: 1px;
     text-transform: uppercase;
 }
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-button {
+    background-color: var(--ltn__secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.hover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.hover-button:hover + .hover-image {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: auto;
+}
