@@ -122,4 +122,56 @@ class CustomerHomeController extends Controller
         }
     }
 
+
+    public function updateProfileApi(Request $request)
+    {
+//        return $request->all();
+        try {
+            $validateUser = Validator::make($request->all(),
+                [
+                    'id' => ['required'],
+                    'first_name' => ['required'],
+                    'last_name' => ['required'],
+                    'email' => ['required'],
+                    'phone' => ['required'],
+                ]);
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
+            $contact=Contact::find(Auth::user()->id);
+            $contact->first_name = $request->first_name;
+            $contact->last_name = $request->last_name;
+            $contact->email = $request->email;
+            $contact->phone = $request->phone;
+            if($contact->save()){
+                return response()->json([
+                    'user' => $contact,
+                    'status' => true,
+                    'message' => 'Profile updated Successfully',
+                ], 200);
+            }else
+            {
+                return response()->json([
+                    'user' => $contact,
+                    'status' => true,
+                    'message' => 'Profile not updated Successfully',
+                ], 200);
+            }
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+
+        }
+    }
+
 }

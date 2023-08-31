@@ -35,9 +35,7 @@
                                             <ul>
 {{--                                                @dd(Auth::getDefaultDriver())--}}
                                                 @if (\Auth::user())
-                                                    @if(Auth::getDefaultDriver() == 'web')
-                                                    <li><a href="/admin" title="Panel"><i class="fa fa-user"></i>Penal</a></li>
-                                                    @endif
+{{--                                                    <li><a href="/admin" title="Panel"><i class="fa fa-user"></i>Admin area</a></li>--}}
                                                 @if(Auth::getDefaultDriver() == 'contact')
                                                     <li><a href="{{route('customer.dashboard')}}" title="Panel"><i class="fa fa-user"></i> Dashboard</a></li>
                                                     <li><a href="#"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Logout"><i class="fa fa-sign-out"></i> Logout</a></li>
@@ -45,7 +43,7 @@
                                                     @endif
                                                 @endif
                                                 @guest
-                                                    <li><a href="{{ route('login') }}" title="Login"><i class="fa fa-lock"></i> Login</a></li>
+                                                    <li><a href="/admin" title="Admin Area"><i class="fa fa-lock"></i> Admin area</a></li>
                                                     <li><a href="{{ route('customer.login') }}" title="Login"><i class="fa fa-lock"></i> Customer Login</a></li>
                                                     <li><a href="{{route('customer.register')}}" title="Register"><i class="fa fa-user"></i> Register</a></li>
                                                 @endguest

@@ -11,6 +11,7 @@ use App\Repo\CustomerClass;
 use App\Repo\EstimateClass;
 use App\Repo\Interfaces\ContractInterface;
 use App\Repo\Interfaces\InvoiceInterface;
+use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\UserClass;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class InvoiceController extends Controller
     private  $contract_template;
     private $contact ;
     private $payment;
+    private $order;
 
     public function __construct(InvoiceInterface $invoice )
     {
@@ -37,6 +39,7 @@ class InvoiceController extends Controller
         $this->contact =  new ContactClass();
         $this->contract =  new ContractClass();
         $this->payment = new PaymentClass();
+        $this->order = new OrderClass();
     }
     public function index()
     {
@@ -49,6 +52,14 @@ class InvoiceController extends Controller
         $data['contracts'] = $this->contract->getAllContract();
         $data['users'] = $this->user->getUser();
         return view('backend.invoice.create')->with(compact('data'));
+    }
+    public function createOrderInvoice($id)
+    {
+        $data['customers'] = $this->customer->getAllCustomer();
+        $data['users'] = $this->user->getUser();
+        $data['order'] = $this->order->getOrder($id);
+
+        return view('backend.invoice.create-order-invoice')->with(compact('data'));
     }
     public function saveInvoice(Request $request)
     {
@@ -128,6 +139,11 @@ class InvoiceController extends Controller
     }
     public function getCustomerInvoicesApi(Request $request)
     {
+        return $this->invoice->getCustomerInvoicesApi($request->customer_id);
+    }
+    public function orderInvoice($id)
+    {
+        return $id;
         return $this->invoice->getCustomerInvoicesApi($request->customer_id);
     }
 }

@@ -20,6 +20,8 @@ use App\Http\Controllers\Frontend\OrderController;
 require __DIR__.'/auth.php';
 
 
+Route::middleware(['set.guard'])->group(function () {
+    // Your protected routes here...
 
 // Frontend Routes
     Route::get('/', [HomeController::class, 'index'])->name('index');
@@ -57,9 +59,9 @@ require __DIR__.'/auth.php';
     Route::post('remove', [CartController::class, 'removeCart'])->name('cart.remove');
     Route::post('clear', [CartController::class, 'clearAllCart'])->name('cart.clear');
     Route::post('apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
-
+});
     //checkout
-    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware(['customer','set.guard']);
     Route::post('save-order', [OrderController::class, 'save'])->name('order.save');
 
 

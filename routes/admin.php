@@ -443,7 +443,10 @@ require __DIR__.'/auth.php';
         Route::any('order', [OrderController::class,'index'])->name('order.index');
         Route::any('get-orders', [OrderController::class,'getOrders'])->name('order.get');
         Route::any('order/detail/{id}', [OrderController::class, 'detailOrder'])->name('detail-order');
+        Route::any('generate/invoice/{id}', [InvoiceController::class, 'createOrderInvoice'])->name('order-invoice');
         Route::any('print-order/{id}',[OrderController::class,'printOrder']);
+        Route::any('get-customer-orders', [OrderController::class,'getCustomerOrders'])->name('get-customer-orders');
+        Route::any('get-order-products', [OrderController::class,'getOrderProducts'])->name('get-order-products');
 });
 
 

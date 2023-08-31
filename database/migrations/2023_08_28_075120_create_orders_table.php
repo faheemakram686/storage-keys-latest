@@ -15,18 +15,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable()->default(null);
-            $table->string('company_name')->nullable()->default(null);
-            $table->string('company_address')->nullable()->default(null);
-            $table->string('country')->nullable()->default(null);
-            $table->string('address')->nullable()->default(null);
-            $table->string('town')->nullable()->default(null);
-            $table->string('city')->nullable()->default(null);
-            $table->string('state')->nullable()->default(null);
-            $table->string('zip')->nullable()->default(null);
+            $table->unsignedBigInteger('customer_id');
             $table->text('notes')->nullable()->default(null);
             $table->string('payment_method')->nullable()->default(null);
             $table->integer('sub_amount')->nullable()->default(null);
@@ -35,6 +24,7 @@ return new class extends Migration
             $table->boolean('status');
             $table->boolean('is_deleted')->default(0);
             $table->timestamps();
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

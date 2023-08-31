@@ -14,7 +14,7 @@
                                         <span id="shortname">AB</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="lead-text">{{$data['invoice'][0]->first_name }}</span>
+                                        <span class="lead-text">{{$data['invoice'][0]->customer->company_name}}</span>
                                         <input type="hidden" name="invoice_id" id="invoice_id" value="{{$data['invoice'][0]->id}}">
                                     </div>
                                     <div class="user-action">

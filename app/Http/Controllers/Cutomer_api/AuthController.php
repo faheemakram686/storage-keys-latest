@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Cutomer_api;
 
 use App\Models\Contact;
+use App\Models\Contract;
 use App\Models\Core\Auth\Profile;
 
 use App\Models\Core\Auth\User;
 use App\Models\Customer;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -15,14 +17,24 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function getCustomer(Request $request)
+    public function dashboardApi(Request $request)
     {
         try {
 
             $customer = Customer::with('primaryContact')->find($request->id);
+            $contract = Contract::query();
+            $contract = $contract->where('customer_id',$request->id);
+            $contract = $contract->where('is_deleted',0);
+            $data['contract'] = $contract->latest('id')->first();
+
+            $invoice = Invoice::query();
+            $invoice = $invoice->where('customer_id',$request->id);
+            $invoice = $invoice->where('is_deleted',0);
+            $data['invoice'] = $invoice->latest('id')->first();
+
 
             return response()->json([
-                'customer' => $customer,
+                'data' => $data,
                 'status' => true,
                 'message' => 'Customer data',
             ], 200);
@@ -37,6 +49,26 @@ class AuthController extends Controller
         }
     }
 
+    public function getCustomer(Request $request)
+    {
+        try {
+
+            $customer = Customer::with('primaryContact')->find($request->id);
+            return response()->json([
+                'data' => $customer,
+                'status' => true,
+                'message' => 'Customer data',
+            ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+
+        }
+    }
     public function createUser(Request $request)
     {
 

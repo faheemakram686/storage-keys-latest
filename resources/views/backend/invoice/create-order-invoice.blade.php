@@ -27,9 +27,15 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Contract<span class="text-danger">*</span></label>
+                                    <div class="form-group contract-block " style="display: none;">
+                                        <label>Contract<span class="text-danger ">*</span></label>
                                         <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" required>
+                                            <option value="">Choose One</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group order-block " style="display: none;" >
+                                        <label>Order<span class="text-danger">*</span></label>
+                                        <select name="order_id" id="order_id" class="form-control select2 OrderSection" data-live-search="true" required>
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>
@@ -39,6 +45,14 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Invoice Type <span class="text-danger">*</span></label>
+                                        <select name="invoice_type" id="invoice_type" class="form-control select2" data-live-search="true" required >
+                                            <option value="" selected>Choose One</option>
+                                            <option value="contract" >Contract</option>
+                                            <option value="order">Order</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group">
                                         <label>Payment method Allowed <span class="text-danger"></span></label>
                                         <select name="sale_agent" id="" class="form-control select2" data-live-search="true" required >
@@ -165,8 +179,30 @@
 
     <script>
         $(document).ready(function() {
+
+            $("#invoice_type").on('change', function() {
+                var type = $(this).val();
+                if(type == 'contract')
+                {
+                    $(".contract-block").css({display: "block"});
+                    $(".order-block").css({display: "none"})
+                }
+                if(type == 'order')
+                {
+                    $(".order-block").css({display: "block"});
+                    $(".contract-block").css({display: "none"});
+                }
+            });
+
+            $("#order_id").on('change', function() {
+                var order_id = $(this).val();
+                getOrderProcucts(order_id);
+            });
+
             var dr=0;
+
             getProducts();
+
             $('#add').click(function(){
                 dr++;
                 $('#dynamic_field').append('<tr id="row'+dr+'" class="dynamic-added"><td><input type="hidden" name="invoiceItems[id][]" placeholder="Enter your Name" class="form-control id_list" value="0" /><span>'+dr+'</span></td><td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td><td><input type="text" name="invoiceItems[name][]" placeholder="Enter your Name" class="form-control name_list" /></td><td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td><td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td><td><input type="text" name="invoiceItems[amount][]" placeholder="Enter your Amount" class="form-control amount_list" /></td><td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="" min="0.01" /></td><td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td></tr>');
@@ -180,6 +216,7 @@
                 var total = calculateTotal();
                 $('#subtotal').val(total);
             });
+
             function calculateRowTotal(row) {
                 var quantity = row.find('.qty_list').val();
                 var unitPrice = row.find('.amount_list').val();
@@ -189,7 +226,6 @@
                 return itemTotal;
             }
 
-            // Calculate total price for all rows
             function calculateTotal() {
                 var total = 0;
 
@@ -220,7 +256,9 @@
             $("#customer_id").on('change', function() {
                 var customer_id = $(this).val();
                 getContracts(customer_id);
+                getOrders(customer_id);
             });
+
             function getContracts(customer_id) {
                 $.ajax({
                     url: '{{ url('admin/get-customer-contracts') }}',
@@ -243,6 +281,35 @@
                             var html3 = '<option value="">No Contract Found</option>';
                         }
                         $('.ContractSection').append(html3);
+                    },
+                    error: function() {
+                        toastr.error('any technical error');
+                    }
+                });
+            }
+
+            function getOrders(customer_id) {
+                $.ajax({
+                    url: '{{ url('admin/get-customer-orders') }}',
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { customer_id: customer_id },
+                    success: function(data) {
+                        // console.log(data);
+                        $('.OrderSection').empty();
+                        var html3 = '';
+                        var i;
+                        var c = 0;
+                        $('.OrderSection').html('<option value="">Select Order</option>');
+                        if (data.length > 0) {
+                            for (i = 0; i < data.length; i++) {
+                                html3 += '<option  value="' + data[i].id + '">' + data[i].customer_id + '</option>';
+                            }
+                        } else {
+                            var html3 = '<option value="">No Order Found</option>';
+                        }
+                        $('.OrderSection').append(html3);
                     },
                     error: function() {
                         toastr.error('any technical error');
@@ -283,6 +350,7 @@
                 var product_id = $(this).val();
                 getProduct(product_id);
             });
+
             function getProduct(product_id) {
                 $.ajax({
                     url: '{{ url('admin/get-product-detail') }}',
@@ -311,6 +379,7 @@
                         // total = parseFloat(data.sell_price);
 
                         $('#dynamic_field').append(html);
+
                         var total = calculateTotal();
                         $('#subtotal').val(total);
                         // var totalhtml = total + ' AED';
@@ -326,10 +395,55 @@
 
             }
 
+            function getOrderProcucts(order_id) {
+                $.ajax({
+                    url: '{{ url('admin/get-order-products') }}',
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { order_id: order_id },
+                    success: function(data) {
+                        console.log(data);
+                        // var html3 = '';
+                        // var i;
+                        // var c = 0;
+                        // // var total = 0.00;
+                        // dr++;
+                        // $('input[name=invoice_value]').val();
+                        // var   html = '<tr id="row'+dr+'" class="dynamic-added">'+
+                        //     '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.id + '" /><span>' + dr + '</span></td>'+
+                        //     '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>'+
+                        //     '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.p_name + '" /></td>'+
+                        //     '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
+                        //     '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
+                        //     '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.sell_price + '" min="0.01" /></td>'+
+                        //     '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.sell_price + '" min="0.01" /></td>'+
+                        //     '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
+                        //     '</tr>';
+                        // // total = parseFloat(data.sell_price);
+                        //
+                        // $('#dynamic_field').append(html);
+                        //
+                        // var total = calculateTotal();
+                        // $('#subtotal').val(total);
+                        // // var totalhtml = total + ' AED';
+                        // // $('#subtotal').text(totalhtml);
+                        // // $('#grandtotal').text(totalhtml);
+                        // $('input[name=invoice_value]').val(total);
+
+                    },
+                    error: function() {
+                        toastr.error('any technical error');
+                    }
+                });
+
+            }
+
             $(".ContractSection").on('change', function() {
                 var contract_id = $(this).val();
                 getEstimate(contract_id);
             });
+
             function getEstimate(contract_id) {
                 $.ajax({
                     url: '{{ url('admin/contract-estimate') }}',
@@ -432,11 +546,6 @@
 
 
             });
-
-
-
-
-
 
 
         });

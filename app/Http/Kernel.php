@@ -25,6 +25,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         // \App\Http\Middleware\SecureHeaders::class,
+
     ];
 
     /**
@@ -91,6 +92,8 @@ class Kernel extends HttpKernel
         'valid_purchase_code' => \Gainhq\Installer\App\Middleware\ValidPurchaseCodeMiddleware::class,
         'customer' => \App\Http\Middleware\RedirectIfNotCustomer::class,
         'switch.guard' => \App\Http\Middleware\SwitchGuard::class,
+        'set.guard' =>   \App\Http\Middleware\SetGuard::class,
+
 
     ];
 

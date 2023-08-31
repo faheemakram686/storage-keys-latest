@@ -38,8 +38,9 @@ Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
 Route::middleware(['auth:sanctum'])->group(function () {
 
     //user related api
-    Route::post('/customer',[AuthController::class, 'getCustomer']);
     Route::post('/profile',[AuthController::class, 'getCustomer']);
+    Route::post('/customer',[AuthController::class, 'dashboardApi']);
+    Route::post('/update-profile',[CustomerHomeController::class, 'updateProfileApi']);
     Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi']);
     Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi']);
     Route::post('/payment-list',[PaymentController::class, 'getCustomerPaymentsApi']);

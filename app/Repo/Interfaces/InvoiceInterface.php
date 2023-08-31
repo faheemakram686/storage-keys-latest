@@ -12,6 +12,7 @@ interface InvoiceInterface{
     public function getInvoiceItems($id);
     public function getCustomerInvoices($id);
     public function getCustomerInvoicesApi($id);
+    public function generateOrderInvoice($id);
 
 
 

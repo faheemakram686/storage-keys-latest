@@ -48,8 +48,6 @@ class PaymentReminder extends Command
             ];
             Notification::route('mail', $user->customer->contact->email)->notify(new PaymentReminderNotification($email));
         }
-
-
         return $this->info('Payment Reminder of the Day sent to All Users');
     }
-}
+};;

@@ -35,7 +35,16 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            <div class="d-flex align-center">
+                                                <div class="nk-tab-actions me-n1">
+                                                    <a class="btn btn-primary" title="Payment"  href="{{url('admin/generate/invoice/'.$data['invoice'][0]->id)}}">Generate Invoice</a>
+                                                </div>
+                                                <div class="nk-block-head-content align-self-start d-lg-none">
+                                                    <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </div><!-- .nk-block-head -->
                                     <div class="nk-block">
                                         <div class="invoice">
@@ -50,11 +59,11 @@
                                                     <div class="invoice-contact">
                                                         <span class="overline-title">Invoice To</span>
                                                         <div class="invoice-contact-info">
-                                                            <h4 class="title">{{$data['invoice'][0]->first_name}} {{$data['invoice'][0]->last_name}}</h4>
-                                                            <h5 class="title">{{$data['invoice'][0]->first_name}} {{$data['invoice'][0]->last_name}}</h5>
+                                                            <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
+                                                            <h5 class="title">{{$data['invoice'][0]->customer->contact->first_name}} {{$data['invoice'][0]->customer->contact->last_name}}</h5>
                                                             <ul class="list-plain">
-                                                                <li><em class="icon ni ni-emails-fill"></em><span>{{$data['invoice'][0]->email}}</span></li>
-                                                                <li><em class="icon ni ni-call-fill"></em><span>{{$data['invoice'][0]->phone}}</span></li>
+                                                                <li><em class="icon ni ni-emails-fill"></em><span>{{$data['invoice'][0]->customer->contact->email}}</span></li>
+                                                                <li><em class="icon ni ni-call-fill"></em><span>{{$data['invoice'][0]->customer->contact->phone}}</span></li>
                                                             </ul>
                                                         </div>
                                                     </div>

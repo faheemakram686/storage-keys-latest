@@ -137,10 +137,10 @@
                             html += '<tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/order/detail')}}/' + data[i].id + '>'+data[i].id+'</a></td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].first_name +' '+data[i].last_name +'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.contact.first_name +' '+data[i].customer.contact.last_name +'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
                                 // ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_type+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.contact.email+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].sub_amount+'</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+

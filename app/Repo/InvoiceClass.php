@@ -194,4 +194,8 @@ class InvoiceClass implements InvoiceInterface {
     }
 
 
+    public function generateOrderInvoice($id)
+    {
+
+    }
 }

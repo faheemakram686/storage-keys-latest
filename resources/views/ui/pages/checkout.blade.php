@@ -38,89 +38,90 @@
                             <div class="ltn__checkout-single-content-info">
                                 <form action="{{route('order.save')}}" method="post" id="place_order" >
                                     @csrf
+                                    <input type="hidden" name="customer_id" value="{{Auth::user()->customer_id}}">
                                     <h6>Personal Information</h6>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="input-item input-item-name ltn__custom-icon">
-                                                <input type="text" name="first_name" placeholder="First name" required>
+                                                <input type="text" name="first_name" placeholder="First name" value="{{Auth::user()->first_name}}" required disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-name ltn__custom-icon">
-                                                <input type="text" name="last_name" placeholder="Last name" required>
+                                                <input type="text" name="last_name" placeholder="Last name" value="{{Auth::user()->last_name}}" required disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-email ltn__custom-icon">
-                                                <input type="email" name="email" placeholder="email address" required>
+                                                <input type="email" name="email" placeholder="email address" value="{{Auth::user()->email}}"  required disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-phone ltn__custom-icon">
-                                                <input type="text" name="phone" placeholder="phone number" required>
+                                                <input type="text" name="phone" placeholder="phone number" value="{{Auth::user()->phone}}" required disabled>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="input-item input-item-website ltn__custom-icon">
-                                                <input type="text" name="company" placeholder="Company name (optional)">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="input-item input-item-website ltn__custom-icon">
-                                                <input type="text" name="company_address" placeholder="Company address (optional)">
-                                            </div>
-                                        </div>
+{{--                                        <div class="col-md-6">--}}
+{{--                                            <div class="input-item input-item-website ltn__custom-icon">--}}
+{{--                                                <input type="text" name="company" placeholder="Company name (optional)">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-md-6">--}}
+{{--                                            <div class="input-item input-item-website ltn__custom-icon">--}}
+{{--                                                <input type="text" name="company_address" placeholder="Company address (optional)">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-6">
-                                            <h6>Country</h6>
-                                            <div class="input-item">
-                                                <select name="country" class="nice-select" required>
-                                                    <option value="">Select Country</option>
-                                                    <option value="United Arab Emirates">United Arab Emirates (UAE)</option>
-                                                    <option value="Saudi Arabia" >Saudi Arabia</option>
-                                                    <option value="Australia">Australia</option>
-                                                    <option value="Canada">Canada</option>
-                                                    <option value="China">China</option>
-                                                    <option value="United Kingdom">United Kingdom (UK)</option>
-                                                    <option value="United States">United States (US)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 col-md-12">
-                                            <h6>Address</h6>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="input-item">
-                                                        <input type="text" name="address1" placeholder="House number and street name" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="input-item">
-                                                        <input type="text" name="address2" placeholder="Apartment, suite, unit etc. (optional)">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6">
-                                            <h6>Town / City</h6>
-                                            <div class="input-item">
-                                                <input type="text" placeholder="City" name="city" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6">
-                                            <h6>State </h6>
-                                            <div class="input-item">
-                                                <input type="text" placeholder="State" name="state" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6">
-                                            <h6>Zip</h6>
-                                            <div class="input-item">
-                                                <input type="text" placeholder="Zip" name="zip" required>
-                                            </div>
-                                        </div>
-                                    </div>
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-lg-4 col-md-6">--}}
+{{--                                            <h6>Country</h6>--}}
+{{--                                            <div class="input-item">--}}
+{{--                                                <select name="country" class="nice-select" required>--}}
+{{--                                                    <option value="">Select Country</option>--}}
+{{--                                                    <option value="United Arab Emirates">United Arab Emirates (UAE)</option>--}}
+{{--                                                    <option value="Saudi Arabia" >Saudi Arabia</option>--}}
+{{--                                                    <option value="Australia">Australia</option>--}}
+{{--                                                    <option value="Canada">Canada</option>--}}
+{{--                                                    <option value="China">China</option>--}}
+{{--                                                    <option value="United Kingdom">United Kingdom (UK)</option>--}}
+{{--                                                    <option value="United States">United States (US)</option>--}}
+{{--                                                </select>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-lg-12 col-md-12">--}}
+{{--                                            <h6>Address</h6>--}}
+{{--                                            <div class="row">--}}
+{{--                                                <div class="col-md-6">--}}
+{{--                                                    <div class="input-item">--}}
+{{--                                                        <input type="text" name="address1" placeholder="House number and street name" required>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="col-md-6">--}}
+{{--                                                    <div class="input-item">--}}
+{{--                                                        <input type="text" name="address2" placeholder="Apartment, suite, unit etc. (optional)">--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-lg-4 col-md-6">--}}
+{{--                                            <h6>Town / City</h6>--}}
+{{--                                            <div class="input-item">--}}
+{{--                                                <input type="text" placeholder="City" name="city" required>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-lg-4 col-md-6">--}}
+{{--                                            <h6>State </h6>--}}
+{{--                                            <div class="input-item">--}}
+{{--                                                <input type="text" placeholder="State" name="state" required>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-lg-4 col-md-6">--}}
+{{--                                            <h6>Zip</h6>--}}
+{{--                                            <div class="input-item">--}}
+{{--                                                <input type="text" placeholder="Zip" name="zip" required>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 {{--                                    <p><label class="input-info-save mb-0"><input type="checkbox" name="agree"> Create an account?</label></p>--}}
                                     <h6>Order Notes (optional)</h6>
                                     <div class="input-item input-item-textarea ltn__custom-icon">

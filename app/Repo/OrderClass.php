@@ -22,18 +22,7 @@ class OrderClass implements OrderInterface {
     {
 
         $order =new Order();
-        $order->first_name = $request->first_name;
-        $order->last_name = $request->last_name;
-        $order->email = $request->email;
-        $order->phone = $request->phone;
-        $order->company_name = $request->company;
-        $order->company_address = $request->company_address;
-        $order->country = $request->country;
-        $order->address = $request->address1;
-        $order->town = $request->address2;
-        $order->city = $request->city;
-        $order->state = $request->state;
-        $order->zip = $request->zip;
+        $order->customer_id  = $request->customer_id;
         $order->notes = $request->notes;
         $order->payment_method = $request->payment_method;
         $order->sub_amount = $request->total_amount;
@@ -79,14 +68,14 @@ class OrderClass implements OrderInterface {
 
     public function getAllOrders()
     {
-        $qry=Order::query();
+        $qry=Order::with('customer.contact');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
     }
     public function getCustomerOrder($customerid)
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract');
+        $qry=Order::with('customer.contact');
         $qry=$qry->where('customer_id',$customerid);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
@@ -134,7 +123,7 @@ class OrderClass implements OrderInterface {
     }
     public function getOrder($id)
     {
-        $qry=Order::with('orderItems.product');
+        $qry=Order::with('orderItems.product','customer.contact');
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
@@ -201,4 +190,12 @@ class OrderClass implements OrderInterface {
     }
 
 
+    public function getOrderProducts($id)
+    {
+        $qry=OrderItem::query();
+        $qry=$qry->where('order_id',$id);
+        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=$qry->get();
+        return $qry;
+    }
 }

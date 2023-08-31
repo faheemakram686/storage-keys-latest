@@ -12,6 +12,7 @@ interface OrderInterface{
     public function getOrderItems($id);
     public function getCustomerOrder($id);
     public function getCustomerOrderApi($id);
+    public function getOrderProducts($id);
 
 
 
