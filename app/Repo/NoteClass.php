@@ -4,7 +4,7 @@ use App\Models\Attachment;
 use App\Models\Country;
 use App\Models\EmailTemplate;
 use App\Models\LeadStatus;
-use App\Models\note;
+use App\Models\Note;
 use App\Models\Reminder;
 use App\Repo\Interfaces\AttachmentInterface;
 use App\Repo\Interfaces\CountryInterface;
