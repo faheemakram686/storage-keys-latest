@@ -14,7 +14,7 @@
             @isset($data)
             <div class="card">
                 <div class="card-inner">
-                    <form class="gy-3  is-alter" action="{{url("admin/save-move-in")}}"  method="post" enctype="multipart/form-data" id="MoveInForm1">
+                    <form class="gy-3  is-alter" action="{{url("admin/save-move-in")}}"  method="post" enctype="multipart/form-data" id="MoveInForm">
                         @csrf
                         <div class="row g-4">
                             <div class="col-lg-6">
