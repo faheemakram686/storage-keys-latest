@@ -20,8 +20,16 @@ class InvoiceClass implements InvoiceInterface {
 
         $invoice =new Invoice();
         $invoice->customer_id = $request->customer_id;
+        $invoice->type = $request->invoice_type;
         $invoice->contract_id = $request->contract_id;
-        $invoice->estimate_id = 1;
+        $invoice->order_id = $request->order_id;
+        $invoice->recurring = $request->recurring;
+        $invoice->no_cycle = $request->no_cycle;
+        if($request->recurring == 'custom')
+        {
+            $invoice->duration = $request->duration;
+            $invoice->duration_type = $request->duration_type;
+        }
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
@@ -30,7 +38,7 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->grand_total = $request->grand_total;
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
-        $invoice->payment_method = $request->note;
+        $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){
                 if ($request->invoiceItems)
@@ -72,7 +80,7 @@ class InvoiceClass implements InvoiceInterface {
 
     public function getAllInvoices()
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract');
+        $qry=Invoice::with('customer','estimate.storageunit','contract','order');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
@@ -138,8 +146,16 @@ class InvoiceClass implements InvoiceInterface {
     {
         $invoice =Invoice::find($request->invoice_id);
         $invoice->customer_id = $request->customer_id;
+        $invoice->type = $request->invoice_type;
         $invoice->contract_id = $request->contract_id;
-        $invoice->estimate_id = 1;
+        $invoice->order_id = $request->order_id;
+        $invoice->recurring = $request->recurring;
+        $invoice->no_cycle = $request->no_cycle;
+        if($request->recurring == 'custom')
+        {
+            $invoice->duration = $request->duration;
+            $invoice->duration_type = $request->duration_type;
+        }
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
@@ -148,7 +164,7 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->grand_total = $request->grand_total;
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
-        $invoice->payment_method = $request->note;
+        $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){
             if ($request->invoiceItems)

@@ -94,7 +94,7 @@
                                                             <tr>
                                                                 <td>{{$key + 1}}</td>
                                                                 <td></td>
-                                                                <td>{{$item->product->p_name}}</td>
+                                                                <td>{{$item->productdetail->p_name}}</td>
                                                                 <td></td>
                                                                 <td>{{$item->qty}}</td>
                                                                 <td>{{$item->price}}</td>

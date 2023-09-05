@@ -27,12 +27,32 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Contract<span class="text-danger">*</span></label>
-                                        <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" required>
+                                        <label>Invoice Type <span class="text-danger">*</span></label>
+                                        <select name="invoice_type" id="invoice_type" class="form-control select2" data-live-search="true" required >
+                                            <option value="" selected>Choose One</option>
+                                            <option value="contract" >Contract</option>
+                                            <option value="order">Order</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" >
+                                    <div class="form-group contract-block " style="display: none;">
+                                        <label>Contract<span class="text-danger ">*</span></label>
+                                        <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" >
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>
+                                    <div class="form-group order-block " style="display: none;" >
+                                        <label>Order<span class="text-danger">*</span></label>
+                                        <select name="order_id" id="order_id" class="form-control select2 OrderSection" data-live-search="true">
+                                            <option value="">Choose One</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" >
                                     <div class="form-group">
                                         <label>Invoice No. <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" name="invoice_no" value="{{\App\Models\Invoice::generateInvoiceNumber()}}" placeholder="Contract Value" required>
@@ -40,18 +60,112 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label>Invoice Date <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="date" name="invoice_date" placeholder="Invoice Date" required >
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" >
+                                    <div class="form-group">
+                                        <label>Due Date <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="date" name="due_date" placeholder="Due Date" required >
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label>Payment method Allowed <span class="text-danger"></span></label>
-                                        <select name="sale_agent" id="" class="form-control select2" data-live-search="true" required >
+                                        <select name="payment_method" id="" class="form-control select2" data-live-search="true" required >
                                             <option value="">Choose One</option>
                                             <option value="cash" selected>Cash</option>
                                             <option value="bank">Bank</option>
                                             <option value="opm">Online Payment Method</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Invoice Value <span class="text-danger">*</span></label>
                                         <input class="form-control" type="number" name="invoice_value" id="invoice_value" placeholder="Invoice Value" required readonly>
                                     </div>
+                                </div>
+                                <div class="col-lg-6" >
+                                    <div class="form-group">
+                                        <label>Recurring Invoice?<span class="text-danger"></span></label>
+                                        <select name="recurring" id="recurring" class="form-control select2" data-live-search="true" required >
+                                            <option  value="0"  selected>
+                                                No
+                                            </option>
+                                            <option value="1" >
+                                                Every 1 month
+                                            </option>
+                                            <option value="2" >
+                                                Every 2 months
+                                            </option>
+                                            <option value="3" >
+                                                Every 3 months
+                                            </option>
+                                            <option value="4" >
+                                                Every 4 months
+                                            </option>
+                                            <option value="5" >
+                                                Every 5 months
+                                            </option>
+                                            <option value="6" >
+                                                Every 6 months
+                                            </option>
+                                            <option value="7" >
+                                                Every 7 months
+                                            </option>
+                                            <option value="8" >
+                                                Every 8 months
+                                            </option>
+                                            <option value="9" >
+                                                Every 9 months
+                                            </option>
+                                            <option value="10" >
+                                                Every 10 months
+                                            </option>
+                                            <option value="11" >
+                                                Every 11 months
+                                            </option>
+                                            <option value="12" >
+                                                Every 12 months
+                                            </option>
+                                            <option value="custom" >Custom</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6" >
+                                    <div class="form-control-wrap">
+                                        <label for="no_cycle" class="mr-1">Total Cycles</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <label for="unlimited_cycles" class="mr-1">Infinity</label>
+                                                    <input id="unlimited_cycles" name="no_cycle" value="infinity"  checked  type="checkbox">
+                                                </div>
+                                            </div>
+                                            <input id="no_cycle" name="no_cycle" type="number" value="0" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 custom-recurring" >
+                                    <div class="form-group">
+                                        <label>Duration <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="number" name="duration" id="duration" placeholder="Enter Value" value="1">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 custom-recurring">
+                                    <div class="form-group">
+                                        <label>Duration Type<span class="text-danger"></span></label>
+                                        <select name="duration_type" id="" class="form-control select2" data-live-search="true" required>
+                                            <option value="days" selected>Days</option>
+                                            <option value="weeks">Weeks</option>
+                                            <option value="months">Months</option>
+                                            <option value="years">Years</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Sale Agent<span class="text-danger">*</span></label>
                                         <select name="sale_agent" id="" class="form-control select2" data-live-search="true" required>
@@ -62,19 +176,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Invoice Date <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="date" name="invoice_date" placeholder="Invoice Date" required >
-                                    </div>
-                                </div>
-                                <div  class="col-lg-6" >
-                                    <div class="form-group">
-                                        <label>Due Date <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="date" name="due_date" placeholder="Due Date" required >
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
+
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Products</label>
                                         <select name="product_id" id="" class="form-control select2 ProductSection" data-live-search="true" >
@@ -86,7 +189,6 @@
                                 <div class="col-lg-12">
                                     <div class="invoice-bills">
                                         <div class="table-responsive">
-
                                             <table class="table table-striped" id="dynamic_field">
                                                 <thead>
                                                 <tr>
@@ -101,14 +203,6 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody id="invoiceItems">
-
-                                                {{--                                                <tr>--}}
-                                                {{--                                                    <td><input type="hidden" name="id[]" placeholder="Enter your Name" class="form-control id_list" /><span>1</span></td>--}}
-                                                {{--                                                    <td><input type="text" name="name[]" placeholder="Enter your Name" class="form-control name_list" /></td>--}}
-                                                {{--                                                    <td><input type="text" name="amount[]" placeholder="Enter your Name" class="form-control amount_list" /></td>--}}
-                                                {{--                                                    <td></td>--}}
-                                                {{--                                                </tr>--}}
-
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
@@ -162,11 +256,72 @@
         </div>
     </div>
 
-
     <script>
         $(document).ready(function() {
             var dr=0;
+            $(".custom-recurring").css({display: "none"});
+
+            $("#invoice_type").on('change', function() {
+                var type = $(this).val();
+                if(type == 'contract')
+                {
+                    $(".contract-block").css({display: "block"});
+                    $(".order-block").css({display: "none"})
+                    $('#invoiceItems').empty();
+                    dr=0;
+                    $('#subtotal').val(0.00);
+                    $('#grandtotal').val(0.00);
+                }
+                if(type == 'order')
+                {
+                    $(".order-block").css({display: "block"});
+                    $(".contract-block").css({display: "none"});
+                    $('#invoiceItems').empty();
+                    dr=0;
+                    $('#subtotal').val(0.00);
+                    $('#grandtotal').val(0.00);
+                }
+            });
+
+            $("#unlimited_cycles").change(function(event){
+                if (this.checked){
+                    $('#no_cycle').attr('disabled', 'disabled');
+                    // alert("checked");
+                } else {
+                    $('#no_cycle').removeAttr('disabled')
+                    // alert("not checked");
+                }
+            });
+
+            if($('input[name="unlimited_cycles"]:checked'))
+            {
+                $('#no_cycle').attr('disabled', 'disabled');
+                // checked
+            }else
+            {
+                // unchecked
+                $('#no_cycle').removeAttr('disabled')
+            }
+
+            $("#order_id").on('change', function() {
+                var order_id = $(this).val();
+                getOrderProcucts(order_id);
+            });
+            $("#recurring").on('change', function() {
+                var duration = $(this).val();
+                if (duration == 'custom')
+                {
+                    $(".custom-recurring").css({display: "block"});
+                }else {
+                    $(".custom-recurring").css({display: "none"});
+                }
+
+            });
+
+
+
             getProducts();
+
             $('#add').click(function(){
                 dr++;
                 $('#dynamic_field').append('<tr id="row'+dr+'" class="dynamic-added"><td><input type="hidden" name="invoiceItems[id][]" placeholder="Enter your Name" class="form-control id_list" value="0" /><span>'+dr+'</span></td><td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td><td><input type="text" name="invoiceItems[name][]" placeholder="Enter your Name" class="form-control name_list" /></td><td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td><td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td><td><input type="text" name="invoiceItems[amount][]" placeholder="Enter your Amount" class="form-control amount_list" /></td><td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="" min="0.01" /></td><td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td></tr>');
@@ -180,6 +335,7 @@
                 var total = calculateTotal();
                 $('#subtotal').val(total);
             });
+
             function calculateRowTotal(row) {
                 var quantity = row.find('.qty_list').val();
                 var unitPrice = row.find('.amount_list').val();
@@ -189,7 +345,6 @@
                 return itemTotal;
             }
 
-            // Calculate total price for all rows
             function calculateTotal() {
                 var total = 0;
 
@@ -220,7 +375,9 @@
             $("#customer_id").on('change', function() {
                 var customer_id = $(this).val();
                 getContracts(customer_id);
+                getOrders(customer_id);
             });
+
             function getContracts(customer_id) {
                 $.ajax({
                     url: '{{ url('admin/get-customer-contracts') }}',
@@ -243,6 +400,35 @@
                             var html3 = '<option value="">No Contract Found</option>';
                         }
                         $('.ContractSection').append(html3);
+                    },
+                    error: function() {
+                        toastr.error('any technical error');
+                    }
+                });
+            }
+
+            function getOrders(customer_id) {
+                $.ajax({
+                    url: '{{ url('admin/get-customer-orders') }}',
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { customer_id: customer_id },
+                    success: function(data) {
+                        // console.log(data);
+                        $('.OrderSection').empty();
+                        var html3 = '';
+                        var i;
+                        var c = 0;
+                        $('.OrderSection').html('<option value="">Select Order</option>');
+                        if (data.length > 0) {
+                            for (i = 0; i < data.length; i++) {
+                                html3 += '<option  value="' + data[i].id + '">Order No# ' + data[i].id + '</option>';
+                            }
+                        } else {
+                            var html3 = '<option value="">No Order Found</option>';
+                        }
+                        $('.OrderSection').append(html3);
                     },
                     error: function() {
                         toastr.error('any technical error');
@@ -283,6 +469,7 @@
                 var product_id = $(this).val();
                 getProduct(product_id);
             });
+
             function getProduct(product_id) {
                 $.ajax({
                     url: '{{ url('admin/get-product-detail') }}',
@@ -304,13 +491,60 @@
                             '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.p_name + '" /></td>'+
                             '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
                             '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
-                            '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.sell_price + '" min="0.01" /></td>'+
-                            '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.sell_price + '" min="0.01" /></td>'+
+                            '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" step="any" value="' + data.sell_price + '" min="0.01" /></td>'+
+                            '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" step="any" value="' + data.sell_price + '" min="0.01" /></td>'+
                             '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                             '</tr>';
                         // total = parseFloat(data.sell_price);
 
-                        $('#dynamic_field').append(html);
+                        $('#invoiceItems').append(html);
+
+                        var total = calculateTotal();
+                        $('#subtotal').val(total);
+                        // var totalhtml = total + ' AED';
+                        // $('#subtotal').text(totalhtml);
+                        // $('#grandtotal').text(totalhtml);
+                        $('input[name=invoice_value]').val(total);
+
+                    },
+                    error: function() {
+                        toastr.error('any technical error');
+                    }
+                });
+
+            }
+
+            function getOrderProcucts(order_id) {
+                $.ajax({
+                    url: '{{ url('admin/get-order-products') }}',
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { order_id: order_id },
+                    success: function(data) {
+                        console.log(data[0].productdetail);
+                        var html3 = '';
+                        var i;
+                        var c = 0;
+                        // var total = 0.00;
+                        $('#invoiceItems').empty();
+                        $('input[name=invoice_value]').val();
+                        for (i = 0; i < data.length; i++) {
+                            dr++;
+                            html3 += '<tr id="row' + dr + '" class="dynamic-added">' +
+                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data[i].productdetail.id + '" /><span>' + dr + '</span></td>' +
+                                '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>' +
+                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data[i].productdetail.p_name + '" /></td>' +
+                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>' +
+                                '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>' +
+                                '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" step="any" value="' + data[i].productdetail.sell_price + '" min="0.01" /></td>' +
+                                '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" step="any" value="' + data[i].productdetail.sell_price + '" min="0.01" /></td>' +
+                                '<td><button type="button" name="remove" id="' + dr + '" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>' +
+                                '</tr>';
+                            // total = parseFloat(data.sell_price);
+                        }
+                        $('#invoiceItems').append(html3);
+
                         var total = calculateTotal();
                         $('#subtotal').val(total);
                         // var totalhtml = total + ' AED';
@@ -330,6 +564,7 @@
                 var contract_id = $(this).val();
                 getEstimate(contract_id);
             });
+
             function getEstimate(contract_id) {
                 $.ajax({
                     url: '{{ url('admin/contract-estimate') }}',
@@ -343,6 +578,7 @@
                         var i;
                         var c = 0;
                         // var total = 0.00;
+                        $('#invoiceItems').empty();
                         dr++;
                         $('input[name=invoice_value]').val();
                         var   html = '<tr id="row'+dr+'" class="dynamic-added">'+
@@ -372,7 +608,7 @@
                             // total = total +  parseFloat( data.contract[0].estimate.estimate_addon[i].price);
 
                         }
-                        $('#dynamic_field').append(html);
+                        $('#invoiceItems').append(html);
                         var total = calculateTotal();
                         $('#subtotal').val(total);
                         // var totalhtml = total + ' AED';
@@ -432,11 +668,6 @@
 
 
             });
-
-
-
-
-
 
 
         });

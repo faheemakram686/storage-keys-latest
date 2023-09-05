@@ -16,9 +16,14 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('contract_id');
-            $table->unsignedBigInteger('estimate_id');
+            $table->unsignedBigInteger('contract_id')->nullable()->default(null);
+            $table->unsignedBigInteger('order_id')->nullable()->default(null);
             $table->unsignedBigInteger('user_id')->nullable()->default(null);
+            $table->string('type');
+            $table->string('recurring')->nullable()->default(null);
+            $table->string('no_cycle')->nullable()->default(null);
+            $table->string('duration')->nullable()->default(null);
+            $table->string('duration_type')->nullable()->default(null);
             $table->string('invoice_no')->nullable()->default(null);
             $table->date('invoice_date')->nullable()->default(null);
             $table->date('due_date')->nullable()->default(null);
@@ -33,7 +38,7 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('contract_id')->references('id')->on('contracts');
-            $table->foreign('estimate_id')->references('id')->on('estimates');
+            $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

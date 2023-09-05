@@ -48,8 +48,7 @@
                             <th class="nk-tb-col text-left"><span class="sub-text">ID</span></th>
                             <th class="nk-tb-col"><span class="sub-text">INV-No</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Customer</span></th>
-{{--                            <th class="nk-tb-col"><span class="sub-text">Estiamte</span></th>--}}
-                            <th class="nk-tb-col"><span class="sub-text">Contract</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Contract/Order</span></th>
                             <th class="nk-tb-col"><span class="sub-text">INV-Date</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Due</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
@@ -138,11 +137,9 @@
                             c++;
                             html += '<tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no+'</a></td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no + ' '+((data[i].recurring != '0')? '<span class="badge badge-outline-primary">Recurring</span></a>':' ') +'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.company_name+'</a></td>'+
-                                {{--' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].estimate.id + '>'+data[i].estimate.id+'-'+data[i].estimate.storageunit.storage_unit_name+'/'+data[i].estimate.term_length.title+'</a></td>'+--}}
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/contract/detail')}}/' + data[i].id + '>'+data[i].contract.subject+'</a></td>'+
-                                // ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_type+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools"> '+((data[i].contract != null)? '<a href={{url('admin/contract/detail')}}/' + data[i].contract.id + '>'+data[i].contract.subject+'</a>':'<a href={{url('admin/order/detail')}}/' + data[i].order.id + '>Order No: '+data[i].order.id+'</a>') +' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].invoice_date+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].due_date+'</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+

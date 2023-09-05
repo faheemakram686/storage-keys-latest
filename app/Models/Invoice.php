@@ -32,6 +32,10 @@ class Invoice extends Model
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
     public function estimate()
     {
         return $this->belongsTo(Estimate::class, 'estimate_id', 'id');

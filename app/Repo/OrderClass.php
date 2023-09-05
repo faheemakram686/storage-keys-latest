@@ -123,7 +123,7 @@ class OrderClass implements OrderInterface {
     }
     public function getOrder($id)
     {
-        $qry=Order::with('orderItems.product','customer.contact');
+        $qry=Order::with('orderItems.productdetail','customer.contact');
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
@@ -192,7 +192,7 @@ class OrderClass implements OrderInterface {
 
     public function getOrderProducts($id)
     {
-        $qry=OrderItem::query();
+        $qry=OrderItem::with('productdetail');
         $qry=$qry->where('order_id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();

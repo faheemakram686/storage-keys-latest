@@ -29,6 +29,29 @@
                                         <div class="nk-block-between g-3">
                                             <div class="nk-block-head-content">
                                                 <h4 class="nk-block-title page-title">Invoice <strong class="text-primary small">#{{$data['invoice'][0]->invoice_no}}</strong>  <span class="badge {{((($data['invoice'][0]->grand_total - $data['payment']) == 0)? 'badge-success':'badge-danger')}} ">{{((($data['invoice'][0]->grand_total - $data['payment']) == 0)? 'Paid':'Up-Paid')}}</span></h4>
+                                                @if($data['invoice'][0]->recurring != '0')
+                                                <span class="badge badge-outline-primary">Recurring</span>
+                                                <span class="badge badge-outline-primary">Cycles Remaining: {{ $data['invoice'][0]->no_cycle}} </span>
+                                                    @php
+                                                        $currentDate =   \Carbon\Carbon::create($data['invoice'][0]->invoice_date);
+                                                         if($data['invoice'][0]->duration_type=="days")
+                                                            {
+                                                                  $oneMonthLater = $currentDate->addDays($data['invoice'][0]->duration);
+                                                            }elseif($data['invoice'][0]->duration_type=="months")
+                                                            {
+                                                                  $oneMonthLater = $currentDate->addMonths($data['invoice'][0]->duration);
+                                                            }elseif($data['invoice'][0]->duration_type=="years")
+                                                            {
+                                                                  $oneMonthLater = $currentDate->addYears($data['invoice'][0]->duration);
+                                                            }elseif($data['invoice'][0]->duration == null && $data['invoice'][0]->duration_type== null)
+                                                            {
+                                                                  $oneMonthLater = $currentDate->addMonths($data['invoice'][0]->recurring);
+                                                            }
+                                                        $nextInvoiceDate=$oneMonthLater->format('Y-m-d');
+                                                    @endphp
+                                                <span class="badge badge-outline-primary"> <em class="icon ni ni-help" data-toggle="tooltip" data-placement="top" title="Invoice will be recreated on specific hour of the day"></em>  Next Invoice Date: {{$nextInvoiceDate}}</span>
+                                                @endif
+
                                                 <div class="nk-block-des text-soft">
                                                     <ul class="list-inline">
                                                         <li>Created At: <span class="text-base">{{$data['invoice'][0]->created_at}}</span></li>
@@ -71,7 +94,12 @@
                                                         <h4 class="title">Invoice</h4>
                                                         <ul class="list-plain">
                                                             <li class="invoice-id"><span>Invoice No</span>:<span>{{$data['invoice'][0]->invoice_no}}</span></li>
+                                                            @if($data['invoice'][0]->contract_id != null)
                                                             <li class="invoice-id"><span>Contract No</span>:<span>Contract# {{$data['invoice'][0]->contract_id}}</span></li>
+                                                            @endif
+                                                            @if($data['invoice'][0]->order_id != null)
+                                                                <li class="invoice-id"><span>Order No</span>:<span>Order# {{$data['invoice'][0]->order_id}}</span></li>
+                                                            @endif
                                                             <li class="invoice-date"><span>Date</span>:<span>{{$data['invoice'][0]->created_at}}</span></li>
                                                         </ul>
                                                     </div>
