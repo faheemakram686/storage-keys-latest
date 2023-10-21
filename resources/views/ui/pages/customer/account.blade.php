@@ -192,7 +192,7 @@
                                                             <tbody>
                                                             @foreach($data['invoice'] as $invoice)
                                                                 <tr>
-                                                                    <td>{{$invoice->contract->subject}}</td>
+                                                                    <td>{{(! empty($invoice->contract->subject) ? $invoice->contract->subject : ''); }}</td>
                                                                     <td>{{$invoice->invoice_no}}</td>
                                                                     <td>{{$invoice->invoice_date}}</td>
 {{--                                                                    <td>{{$invoice->due_date}}</td>--}}
