@@ -93,7 +93,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Set reminder to<span class="text-danger">*</span></label>
-                                            <select class="form-control"  name="reminder_to" required readonly="">
+                                            <select class="form-control"  name="reminder_to" required>
                                                 <option value="">Choose One</option>
                                                 @isset($data)
                                                     @foreach ($data['users'] as $user)

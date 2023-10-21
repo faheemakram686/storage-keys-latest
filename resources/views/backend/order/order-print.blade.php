@@ -63,7 +63,7 @@
                         @foreach($data['invoice'][0]->orderItems as $key => $item)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td>{{$item->product->p_name}}</td>
+                                <td>{{$item->productdetail->p_name}}</td>
                                 <td>{{$item->qty}}</td>
                                 <td>{{$item->price}}</td>
                                 <td>{{$item->total}}</td>

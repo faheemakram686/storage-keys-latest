@@ -77,10 +77,39 @@ class MoveInRequestController extends Controller
         }
 
     }
+    public function deleteBarcodeLabel(Request $request)
+    {
+        $res = $this->moveInRequest->deleteBarcode($request->id);
+        if($res){
+            return response()->json(['success' => 'Record deleted successfully'], 200);
+        }else{
+            return response()->json(['success' => 'Record not deleted successfully'], 200);
+        }
+
+    }
 
     public function barcodeLabel(Request $request)
     {
         $data['barcode']=$this->moveInRequest->genrateBarcode($request);
+        $data['moveInRequest']=$this->moveInRequest->getCustomerMoveInRequest($request->request_id);
+        return view('backend.move-in-request.barcode-label')->with(compact('data'));
+    }
+    public function viewBarcodeLabels($id)
+    {
+        $data['barcode']=$this->moveInRequest->getAllBarcodes($id);
+        $data['moveInRequest']=$this->moveInRequest->getCustomerMoveInRequest($id);
+        return view('backend.move-in-request.show-barcode-label')->with(compact('data'));
+    }
+    public function printBarcodeLabels($id)
+    {
+        $data['barcode']=$this->moveInRequest->getAllBarcodes($id);
+        $data['moveInRequest']=$this->moveInRequest->getCustomerMoveInRequest($id);
+        return view('backend.move-in-request.barcode-label')->with(compact('data'));
+    }
+    public function reprintBarcodeLabels($id)
+    {
+        $data['barcode']=$this->moveInRequest->getBarcodes($id);
+        $data['moveInRequest']=$this->moveInRequest->getCustomerMoveInRequest($data['barcode'][0]->request_id);
         return view('backend.move-in-request.barcode-label')->with(compact('data'));
     }
 
@@ -98,4 +127,5 @@ class MoveInRequestController extends Controller
         $data = $this->moveInRequest->getBarcodesMoved($moveinrequest->id);
         return $data;
     }
+
 }

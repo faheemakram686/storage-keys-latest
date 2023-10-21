@@ -6,7 +6,6 @@
             $role = \App\Models\Core\Auth\Role::findByName($roleaccess->name);
         }
 
-//    dd(auth()->user())
 @endphp
 <!-- sidebar @s -->
 <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
@@ -126,13 +125,13 @@
                                         </a>
                                     </li>
                                     @endif
-                                    @if($role->hasPermission('view_move_out'))
-                                    <li class="nk-menu-item">
-                                        <a href="#" class="nk-menu-link">
-                                            <span class="nk-menu-text">Inquiries</span>
-                                        </a>
-                                    </li>
-                                    @endif
+{{--                                    @if($role->hasPermission('view_move_out'))--}}
+{{--                                    <li class="nk-menu-item">--}}
+{{--                                        <a href="#" class="nk-menu-link">--}}
+{{--                                            <span class="nk-menu-text">Inquiries</span>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
+{{--                                    @endif--}}
                              </ul><!-- .nk-menu-sub -->
                         </li>
                     @endif

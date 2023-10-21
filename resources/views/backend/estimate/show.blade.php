@@ -32,7 +32,7 @@
                                                 @if($data['appSettings'][0]->value == auth()->id() && $data['estimate'][0]->status == 'Not Approved' )
                                                        <div class="d-flex align-center">
                                                 <div class="nk-tab-actions me-n1">
-                                                    <a class="btn  btn-primary " title="Approve" id="btn-approve" href="#">Approve</a>
+                                                    <a class="btn  btn-primary btn-approve " title="Approve" id="btn-approve" href="#">Approve</a>
                                                     <a class="btn btn-danger "  data-toggle="modal" data-target="#declineModal" title="Decline" href="#">Decline</a>
                                                 </div>
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
@@ -42,7 +42,7 @@
                                                 @elseif($data['appSettings'][1]->value == auth()->id() && $data['estimate'][0]->status == 'Approved Level 1' )
                                                     <div class="d-flex align-center">
                                                         <div class="nk-tab-actions me-n1">
-                                                            <a class="btn  btn-primary " title="Approve" id="btn-approve" href="#">Approve</a>
+                                                            <a class="btn  btn-primary btn-approve" title="Approve" id="btn-approve" href="#">Approve</a>
                                                             <a class="btn btn-danger "  data-toggle="modal" data-target="#declineModal" title="Decline" href="#">Decline</a>
                                                         </div>
                                                         <div class="nk-block-head-content align-self-start d-lg-none">
@@ -52,7 +52,7 @@
                                                 @elseif($data['appSettings'][2]->value == auth()->id() && $data['estimate'][0]->status == 'Approved Level 2' )
                                                     <div class="d-flex align-center">
                                                         <div class="nk-tab-actions me-n1">
-                                                            <a class="btn  btn-primary " title="Approve" id="btn-approve" href="#">Approve</a>
+                                                            <a class="btn  btn-primary btn-approve" title="Approve" id="btn-approve" href="#">Approve</a>
                                                             <a class="btn btn-danger "  data-toggle="modal" data-target="#declineModal" title="Decline" href="#">Decline</a>
                                                         </div>
                                                         <div class="nk-block-head-content align-self-start d-lg-none">
@@ -226,7 +226,7 @@
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        $('.btn-submit').text('Saving...');
+                        $('.btn-submit').text('Approving...');
                         $(".btn-submit").prop("disabled", true);
                     },
                     success: function(data) {
@@ -270,6 +270,10 @@
                     async: false,
                     dataType: 'json',
                     data: {id: id},
+                    beforeSend: function() {
+                        $('.btn-approve').text('Saving...');
+                        $(".btn-approve").prop("disabled", true);
+                    },
                     success: function (data) {
                         if (data.success) {
                             // getAllCities();
@@ -280,8 +284,14 @@
                             toastr.error(data.error);
                         }
                     },
+                    complete: function(data) {
+                        $('.btn-approve').text('Approve');
+                        $(".btn-approve").prop("disabled", true);
+                    },
                     error: function () {
                         toastr.error('something went wrong');
+                        $('.btn-approve').text('Approve');
+                        $(".btn-approve").prop("disabled", true);
                     }
 
                 });

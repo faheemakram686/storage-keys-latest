@@ -120,6 +120,13 @@
                     // $barcodeList.empty();
                 }
             });
+            $('#MoveOutForm').on('keyup keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
 
 
             // $('#barcode_no').on('input', function() {
@@ -191,7 +198,7 @@
                                         '<td></td>' +
                                         '<td></td>' +
                                         '<td><input type="text" name="barcodeItems[code][]" placeholder="Code" class="form-control code_list" value="' + data[i].code + '" readonly /></td>' +
-                                        '<td></td>' +
+                                        '<td><textarea type="text" name="barcodeItems[des][]" placeholder="Description" class="form-control des_list" readonly >' + data[i].description + '</textarea></td>' +
                                         '<td> ' +
                                         ' <span class="badge ' + ((data[i].status == 'Moved') ? 'badge-success' : 'badge-danger') + ' ">' + data[i].status + '</span>' +
                                         '</td>' +

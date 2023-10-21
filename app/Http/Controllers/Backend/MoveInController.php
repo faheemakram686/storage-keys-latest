@@ -39,10 +39,14 @@ class MoveInController extends Controller
 
     public function saveMoveIn(Request $request)
     {
-//        return $request->all();
            $data = $this->moveIn->saveMoveIn($request);
            return $data;
     }
+      public function editMoveIn(Request $request)
+        {
+               $data = $this->moveIn->editMoveInBarcode($request);
+               return $data;
+        }
 
 
     public function getAllMoveIn()
@@ -59,6 +63,24 @@ class MoveInController extends Controller
         }else{
             return response()->json(['success' => 'Record not deleted successfully'], 200);
         }
+    }
+
+    public function updateMoveIn(Request $request)
+    {
+        $res = $this->moveIn->updateMoveIn($request);
+        if($res){
+            return response()->json(['success' => 'Record Updated successfully'], 200);
+        }else{
+            return response()->json(['success' => 'Record not Updated successfully'], 200);
+        }
+    }
+
+
+
+    public function viewMoveInItems($id)
+    {
+        $data['movein'] = $this->moveIn->getAllMovedInItems($id);
+        return view('backend.move-in.show-move-in')->with(compact('data'));
     }
 
 }

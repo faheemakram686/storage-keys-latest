@@ -72,7 +72,15 @@ class MoveInRequestClass implements MoveInRequestInterface {
     public function getAllMoveInRequest()
     {
         $qry=MoveInRequest::with('customer','contract');
+        $qry = $qry->withCount('barcode');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=$qry->get();
+        return $qry;
+    }
+    public function getCustomerMoveInRequest($id)
+    {
+        $qry= MoveInRequest::with('customer','contract');
+        $qry = $qry->where('id',$id);
         $qry=$qry->get();
         return $qry;
     }
@@ -80,6 +88,15 @@ class MoveInRequestClass implements MoveInRequestInterface {
     public function deleteMoveInRequest($id)
     {
         $country=MoveInRequest::find($id);
+        $country->is_deleted=1;
+        if($country->save()){
+            return 1;
+        }
+
+    }
+    public function deleteBarcode($id)
+    {
+        $country=BarcodeLabel::find($id);
         $country->is_deleted=1;
         if($country->save()){
             return 1;
@@ -107,19 +124,26 @@ class MoveInRequestClass implements MoveInRequestInterface {
         {
         $country=new BarcodeLabel();
         $country->request_id = $request->request_id;
+        $country->contract_id = $request->contract_id;
         $country->code =  rand(100000000, 999999999);
         $country->status=0;
         $country->save();
-
-            $data->push($country);
+        $data->push($country);
         }
         return $data;
     }
     public function getBarcodes($id)
     {
-
        $barcode = BarcodeLabel::with('moverequest');
        $barcode = $barcode->where('code',$id);
+       $barcode = $barcode->where('is_deleted',0);
+       $barcode = $barcode->get();
+       return $barcode;
+    }
+    public function getAllBarcodes($id)
+    {
+       $barcode = BarcodeLabel::with('moverequest');
+       $barcode = $barcode->where('request_id',$id);
        $barcode = $barcode->where('is_deleted',0);
        $barcode = $barcode->get();
        return $barcode;

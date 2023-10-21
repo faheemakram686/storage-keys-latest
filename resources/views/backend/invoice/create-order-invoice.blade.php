@@ -14,7 +14,7 @@
             @isset($data)
                 <div class="card">
                     <div class="card-inner">
-                        <form class="gy-3" action="{{url("admin/save-invoice")}}"  method="post" enctype="multipart/form-data" id="InvoiceForm1">
+                        <form class="gy-3" action="{{url("admin/save-invoice")}}"  method="post" enctype="multipart/form-data" id="InvoiceForm">
                             @csrf
                             <div class="row g-4">
                                 <div class="col-lg-6">
@@ -423,7 +423,7 @@
                         $('.OrderSection').html('<option value="">Select Order</option>');
                         if (data.length > 0) {
                             for (i = 0; i < data.length; i++) {
-                                html3 += '<option  value="' + data[i].id + '">' + data[i].customer_id + '</option>';
+                                html3 += '<option  value="' + data[i].id + '">Order#-' + data[i].id + '</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Order Found</option>';

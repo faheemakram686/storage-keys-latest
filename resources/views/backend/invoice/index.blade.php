@@ -146,7 +146,7 @@
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+
                                 ' </td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge '+((data[i].payment_status == 'Paid')? 'badge-success':'badge-danger') +' ">'+data[i].payment_status+'</span>'+
+                                ' <span class="badge '+((data[i].payment_status == 'PAID')? 'badge-success':'badge-danger') +' ">'+data[i].payment_status+'</span>'+
                                 ' </td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
                                 ' <ul class="nk-tb-actions gx-1">'+

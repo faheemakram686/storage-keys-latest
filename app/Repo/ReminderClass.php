@@ -1,10 +1,13 @@
 <?php
 namespace App\Repo;
 use App\Models\Attachment;
+use App\Models\Core\Auth\User;
 use App\Models\Country;
 use App\Models\EmailTemplate;
 use App\Models\LeadStatus;
 use App\Models\Reminder;
+use App\Notifications\Backend\ReminderNotification;
+use App\Notifications\EmailNotification;
 use App\Repo\Interfaces\AttachmentInterface;
 use App\Repo\Interfaces\CountryInterface;
 use App\Repo\Interfaces\EmailTemplateInterface;
@@ -12,6 +15,7 @@ use App\Repo\Interfaces\LeadStatusInterface;
 use App\Repo\Interfaces\ReminderInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class ReminderClass implements ReminderInterface {
 
@@ -26,6 +30,15 @@ class ReminderClass implements ReminderInterface {
         $temp->user_id = auth()->user()->id;
         $temp->status=$request->status;
         if($temp->save()){
+            $user = User::find($request->reminder_to);
+            $email2 = [
+                'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
+                'body' => "You have received a  reminder",
+                'thanks' => 'Thank you this is from storage Key',
+                'actionText' => 'View Reminder',
+                'actionURL' => url('admin/'.$request->type.'/reminders').'/'.$request->type_id,
+            ];
+            Notification::send($user, new ReminderNotification($email2,$user));
             return response()->json(['success' => 'Record save successfully'], 200);
         }
     }

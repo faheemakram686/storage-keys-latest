@@ -9,6 +9,7 @@ interface MoveInInterface{
     public function editMoveIn($id);
     public function genrateBarcode($request);
     public function updateMoveIn($request);
+    public function viewMoveInItems($id);
 
 
 }

@@ -21,15 +21,24 @@ class PaymentController extends Controller
     public function savePayment(Request $request)
     {
         $invoice = $this->invoice->getInvoice($request->invoice_id);
-        $request->merge([
-            "customer_id"=>$invoice[0]->customer_id,
-            "contract_id"=>$invoice[0]->contract_id,
-        ]);
+        if($invoice[0]->type == 'contract'){
+            $request->merge([
+                "customer_id"=>$invoice[0]->customer_id,
+                "contract_id"=>$invoice[0]->contract_id,
+            ]);
+        }
+        if($invoice[0]->type == 'order'){
+            $request->merge([
+                "customer_id"=>$invoice[0]->customer_id,
+                "order_id"=>$invoice[0]->order_id,
+            ]);
+        }
+
         $data = $this->payment->savePayment($request);
         $invoice = $this->invoice->getInvoice($request->invoice_id);
         if(($invoice[0]->grand_total - $request->amount_received) == 0)
         {
-            $status = $this->invoice->changeStatus($request->invoice_id,1);
+            $status = $this->invoice->changePaymentStatus($request->invoice_id,1);
         }
         return $data;
     }

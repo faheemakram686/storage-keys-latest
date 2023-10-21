@@ -6,6 +6,7 @@ interface MoveInRequestInterface{
     public function saveMoveInRequestApi($request);
 
     public function getAllMoveInRequest();
+    public function getCustomerMoveInRequest($id);
     public function deleteMoveInRequest($id);
     public function editMoveInRequest($id);
     public function genrateBarcode($request);

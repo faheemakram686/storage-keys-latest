@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="reviewer">Description Content</label>
                                     <div class="form-control-wrap">
-                                        <textarea class="summernote-basic"  id="editor" name="description"></textarea>
+                                        <textarea class="summernote-basic form-control"  id="editor" name="description"></textarea>
                                     </div>
                                 </div>
                             </div>

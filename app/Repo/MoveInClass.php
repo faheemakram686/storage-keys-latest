@@ -41,6 +41,7 @@ class MoveInClass implements MoveInInterface {
                 {
                     $id = $request->barcodeItems['id'][$i];
                     $barcode = BarcodeLabel::find($id);
+                    $barcode->description = $request->barcodeItems['des'][$i];
                     $barcode->status = 1;
                     $barcode->save();
                 }
@@ -50,6 +51,13 @@ class MoveInClass implements MoveInInterface {
     }
 
     public function getAllMoveIn()
+    {
+        $qry=MoveIn::with(['customer','contract.barcode' => function($query) { $query->where('status', 1); }]);
+        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=$qry->get();
+        return $qry;
+    }
+    public function viewMoveInItems($id)
     {
         $qry=MoveIn::with('customer','contract');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
@@ -71,6 +79,10 @@ class MoveInClass implements MoveInInterface {
     {
         return $country=MoveInRequest::find($id);
     }
+    public function editMoveInBarcode($id)
+    {
+        return $country=BarcodeLabel::find($id)->first();
+    }
     public function genrateBarcode($request)
     {
         $data = collect([]);
@@ -86,6 +98,7 @@ class MoveInClass implements MoveInInterface {
         }
         return $data;
     }
+
     public function getBarcodes($id)
     {
        $barcode = BarcodeLabel::query();
@@ -97,15 +110,21 @@ class MoveInClass implements MoveInInterface {
 
     public function updateMoveIn($request)
     {
-        $country=MoveInRequest::find($request->id);
-        $country->customer_id = $request->edit_customer_id;
-        $country->contract_id = $request->edit_contract_id;
-        $country->request_date = $request->edit_date;
-        $country->note = $request->edit_note;
-        $country->status=$request->edit_status;
+        $country= BarcodeLabel::find($request->id);
+        $country->description = $request->edit_des;
+        $country->save();
         if($country->save()){
             return 1;
         }
+    }
+
+    public function getAllMovedInItems($id)
+    {
+        $movein = MoveIn::with(['customer','contract.barcode' => function($query) { $query->where('status', 1); }]);
+        $movein = $movein->where('contract_id',$id);
+        $movein = $movein->where('is_deleted',0);
+        $movein = $movein->get();
+        return $movein;
     }
 
   }

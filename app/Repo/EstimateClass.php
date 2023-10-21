@@ -44,6 +44,7 @@ class EstimateClass implements EstimateInterface {
         $estimate->phone=$request->phone;
         $estimate->mobile1=$request->mobile1;
         $estimate->mobile2=$request->mobile2;
+        $estimate->user_id =Auth::id();
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= $request->unit_price;
         $estimate->addon= implode(',', $request->addon);

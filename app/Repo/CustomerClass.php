@@ -5,7 +5,9 @@ use App\Models\Country;
 use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\LeadStatus;
+use App\Notifications\Backend\CustomerWelcomeNotification;
 use App\Notifications\Backend\EstimateNotification;
+use App\Notifications\Backend\SetPasswordNotification;
 use App\Notifications\EmailNotification;
 use App\Repo\Interfaces\CountryInterface;
 use App\Repo\Interfaces\CustomerInterface;
@@ -14,10 +16,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
+use QuickBooksOnline\API\Core\OAuth\OAuth2\OAuth2LoginHelper;
+use QuickBooksOnline\API\DataService\DataService;
+use QuickBooksOnline\API\Exception\ServiceException;
+use QuickBooksOnline\API\ReportService\ReportService;
 
 class CustomerClass implements CustomerInterface {
 
     protected  $customer_id=0;
+
 
     public function saveCustomer($request)
     {
@@ -82,6 +90,13 @@ class CustomerClass implements CustomerInterface {
 
     public function convertCustomer($request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'email'=>'required|email|unique:contacts',
+        ]);
+        if ($validator->fails())
+            return response()->json(['errors' => $validator->errors() ], 200);
+
         $comp_id = 0;
         DB::transaction(function() use ($request)
         {
@@ -105,6 +120,9 @@ class CustomerClass implements CustomerInterface {
             $contact->contact_type = $request->contact_type;
             $contact->status=$request->status;
             if($contact->save()){
+
+
+
                 $lead = Lead::find($request->lead_id);
                 $lead->customer_id =  $customer->id;
                 $lead->save();
@@ -119,7 +137,7 @@ class CustomerClass implements CustomerInterface {
                         'actionURL' => url('/'),
                         'id' => $contact_email->id,
                     ];
-                    Notification::route('mail', $contact_email->email)->notify(new EstimateNotification($email));
+                    Notification::route('mail', $contact_email->email)->notify(new CustomerWelcomeNotification($email));
                 }
                 if($request->set_password == 1)
                 {
@@ -129,11 +147,68 @@ class CustomerClass implements CustomerInterface {
                         'body' => "Welcome to Storage Keys Please Set Your Password",
                         'thanks' => 'Thank you this is from storage Keys',
                         'actionText' => 'Set Password',
-                        'actionURL' => url('contact-setpassword').'/'.encrypt($contact_email->id),
+                        'actionURL' => url('contact-setpassword').'/'.$contact_email->id,
                         'id' => $contact_email->id,
                     ];
-                    Notification::route('mail', $contact_email->email)->notify(new EmailNotification($passwordemail));
+                    Notification::route('mail', $contact_email->email)->notify(new SetPasswordNotification($passwordemail));
                 }
+
+//                $refreshtoken = $this->refreshToken();
+//                $config = config('quickbooks');
+//                $dataService = DataService::Configure([
+//                    'auth_mode' => 'oauth2',
+//                    'ClientID' => $config['client_id'],
+//                    'ClientSecret' => $config['client_secret'],
+//                    'RedirectURI' => $config['redirect_uri'],
+//                    'accessTokenKey' => $refreshtoken['access_token'],
+//                    'refreshTokenKey' => $refreshtoken['refresh_token'],
+//                    'QBORealmID' => $config['realm_id'],
+//                    'baseUrl' => $config['base_url'],
+//                ]);
+//                $displayname =  $contact->first_name.' '.$contact->last_name;
+//                $query = "SELECT * FROM Customer WHERE DisplayName = '{$displayname}'";
+//                $customer = $dataService->Query($query);
+//                if (isset($customer) && !empty($customer) && count($customer) > 0){
+//                    $customer = $customer[0];
+//                    $customer->Id = $customer->Id;
+//                    $customer->GivenName = $displayname;
+//                    $customer -> DisplayName = $displayname;
+//                    $customer -> CompanyName = $request->company_name;
+//                    $customer -> BusinessNumber = '1111111';
+//                    $customer -> Mobile = $contact->phone;
+//                    $customer -> PrimaryEmailAddr->Address = $contact->email;//$customer-PrimaryEmailAddr-Address;
+//                    $customer -> PrimaryPhone->FreeFormNumber = $contact->phone;
+//                    try {
+//                        $result = $dataService->Update($customer);
+////                    echo 'Successfully update';
+//                    }catch (ServiceException $ex) {
+//                        echo "Updation Error message: " . $ex->getMessage();
+//                    }
+//
+//                }else{
+//                    $customerdata = \QuickBooksOnline\API\Facades\Customer::create([
+//                        "GivenName" => $displayname,
+//                        "DisplayName" => $displayname,
+//                        "CompanyName" => $request->company_name,
+//                        "PrimaryEmailAddr" => [
+//                            "Address" => $contact->email
+//                        ],
+//                        "BillAddr" => [
+//                            "Line1" => "123 Main Street",
+//                            "City" => "Mountain View",
+//                            "Country" => "USA",
+//                        ],
+//                        "PrimaryPhone" => [
+//                            "FreeFormNumber" => $contact->phone
+//                        ]
+//                    ]);
+//                    try {
+//                        $result = $dataService->Add($customerdata);
+////                    echo 'Successfully added';
+//                    } catch (ServiceException $ex) {
+//                        echo "Error message: " . $ex->getMessage();
+//                    }
+//                }
 
 //                return response()->json(['success' => 'Record save successfully'], 200);
             }
@@ -180,5 +255,16 @@ class CustomerClass implements CustomerInterface {
 
 
 
+    }
+    public function refreshToken(){
+        $config = config('quickbooks');
+        $oauth2LoginHelper = new OAuth2LoginHelper($config['client_id'],$config['client_secret']);
+        $accessTokenObj = $oauth2LoginHelper->refreshAccessTokenWithRefreshToken($config['refresh_token']);
+        $accessTokenValue = $accessTokenObj->getAccessToken();
+        $refreshTokenValue = $accessTokenObj->getRefreshToken();
+        return [
+            'access_token'=>$accessTokenValue,
+            'refresh_token'=>$refreshTokenValue
+        ];
     }
 }

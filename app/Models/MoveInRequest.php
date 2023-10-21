@@ -17,6 +17,10 @@ class MoveInRequest extends Model
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
+    public function barcode()
+    {
+        return $this->hasMany(BarcodeLabel::class, 'request_id', 'id');
+    }
 
     public function setStatusAttribute($value)
     {

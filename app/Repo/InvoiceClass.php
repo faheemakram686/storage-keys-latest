@@ -208,6 +208,13 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->save();
         return 1;
     }
+    public function changePaymentStatus($id,$status)
+    {
+        $invoice =Invoice::find($id);
+        $invoice->payment_status = 1;
+        $invoice->save();
+        return 1;
+    }
 
 
     public function generateOrderInvoice($id)

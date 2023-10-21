@@ -13,7 +13,7 @@
     <title>Invoice Print | Storage Keys</title>
     <!-- StyleSheets  -->
 {{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/app.css') }}"/>--}}
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/theme.css') }}"/>
+{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/theme.css') }}"/>--}}
     <style>
         .invoice-print {
             max-width: 940px;

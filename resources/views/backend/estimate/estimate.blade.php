@@ -123,6 +123,7 @@
                                                                 <label class="lbl" >Country</label>
                                                                 <select class="selectpicker form-control" name="country_id" id="country_id">
                                                                     <option value="" selected >Choose One</option>
+
                                                                     @isset($data)
                                                                         @foreach ($data['loc'] as $country)
                                                                             <option value="{{ $country->id }}" {{ ($su->warehouse->loc->city->country->id == $country->id) ? "selected" : "" }} >{{$country->name }}</option>
@@ -132,30 +133,29 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >City</label>
-                                                                <select name="city_id" class=" selectpicker form-control  citySection" id="citySection" >
+                                                                <select name="city_id" class=" selectpicker form-control  citySection" id="citySection" data="{{$su->warehouse->loc->city->id}}" >
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Location</label>
-                                                                <select class="selectpicker form-control loc_id" name="loc_id" id="loc_id">
+                                                                <select class="selectpicker form-control loc_id" name="loc_id" id="loc_id" data="{{$su->warehouse->loc->id}}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Warehouse</label>
-                                                                <select class="selectpicker form-control warehouse_id" name="warehouse_id" id="warehouse_id">
+                                                                <select class="selectpicker form-control warehouse_id" name="warehouse_id" id="warehouse_id" data="{{$su->warehouse->id}}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Storage Unit</label>
-                                                                <select class="selectpicker form-control su_id" name="ssu_id" id="su_id">
+                                                                <select class="selectpicker form-control su_id" name="ssu_id" id="su_id" data="{{$su->id}}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -340,6 +340,10 @@
             getCities(country_id);
             var city_id = $('.citySection').val();
             getLocations(city_id);
+            var loc_id = $('.loc_id').val();
+            getWharehouse(loc_id);
+            var warehouse_id = $('.warehouse_id').val();
+            getStorageUnit(warehouse_id);
 
             $("#country_id").on('change', function() {
                 var country_id = $(this).val();
@@ -357,6 +361,8 @@
                     success: function(data) {
                         $('.citySection').empty();
                         getLocations();
+                        var city_id = $('#citySection').attr("data");
+
                         var html3 = '';
                         var i;
                         var c = 0;
@@ -364,7 +370,7 @@
                         if (data.length > 0) {
 
                             for (i = 0; i < data.length; i++) {
-                                html3 += '<option  value="' + data[i].id + '">' + data[i].city_name + '</option>';
+                                html3 += '<option '+  ((data[i].id == city_id) ? 'selected' :'' ) +'  value="' + data[i].id + '">' + data[i].city_name + '</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Cities Found</option>';
@@ -391,6 +397,7 @@
                     data: { city_id: city_id },
                     success: function(data) {
                         $('.loc_id').empty();
+                        var loc_id = $('#loc_id').attr("data");
                         getWharehouse();
                         var html3 = '';
                         var i;
@@ -400,7 +407,7 @@
 
                             for (i = 0; i < data.length; i++) {
                                 c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].loc_name+'</option>';
+                                html3 += ' <option  '+  ((data[i].id == loc_id) ? 'selected' :'' ) +' value='+data[i].id+' > '+data[i].loc_name+'</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Location Found</option>';
@@ -427,6 +434,7 @@
                     data: { loc_id: loc_id },
                     success: function(data) {
                         $('.warehouse_id').empty();
+                        var warehouse_id = $('#warehouse_id').attr("data");
                         getStorageUnit();
                         var html3 = '';
                         var i;
@@ -436,7 +444,7 @@
 
                             for (i = 0; i < data.length; i++) {
                                 c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].name+'</option>';
+                                html3 += ' <option '+  ((data[i].id == warehouse_id) ? 'selected' :'' ) +'  value='+data[i].id+'> '+data[i].name+'</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Warehouse Found</option>';
@@ -462,6 +470,7 @@
                     data: { warehouse_id: warehouse_id },
                     success: function(data) {
                         $('.su_id').empty();
+                        var su_id = $('#su_id').attr("data");
                         var html3 = '';
                         var i;
                         var c = 0;
@@ -469,7 +478,7 @@
                         if (data.length > 0) {
                             for (i = 0; i < data.length; i++) {
                                 c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].storage_unit_name+'</option>';
+                                html3 += ' <option '+  ((data[i].id == su_id) ? 'selected' :'' ) +' value='+data[i].id+'> '+data[i].storage_unit_name+'</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Storage Unit Found</option>';
@@ -499,7 +508,7 @@
                         if (data.success) {
                             // $('#EstimateForm')[0].reset();
                             toastr.success(data.success);
-
+                            window.location.href = "{{ url('admin/estimate')}}";
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
@@ -510,7 +519,7 @@
                     complete: function(data) {
                         $(".btn-submit").html("Save");
                         $(".btn-submit").prop("disabled", false);
-                        window.location.href = "{{ url('admin/estimate')}}";
+
                     },
                     error: function() {
                         toastr.error('any technical error');

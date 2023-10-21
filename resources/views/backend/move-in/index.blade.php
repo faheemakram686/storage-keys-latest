@@ -181,20 +181,17 @@
     <script>
         $(document).ready(function() {
 
-
             getCountries();
+
             function getCountries() {
 
                 $.ajax({
-
                     url: '{{ url('admin/get-move-in') }}',
                     type: 'get',
                     async: false,
                     dataType: 'json',
-
                     success: function(data) {
                         console.log(data);
-
                         var html = '';
                         var i;
                         var c = 0;
@@ -205,7 +202,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.company_name+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.subject+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].moved_items+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.barcode.length+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].move_in_date+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
                             ' <span class="badge badge-success">'+data[i].status+'</span>'+
@@ -217,7 +214,7 @@
                             '  <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>'+
                             ' <div class="dropdown-menu dropdown-menu-right">'+
                             '<ul class="link-list-opt no-bdr">'+
-                            {{--'<li><a href="{{url('admin/edit-move-in')}}/'+data[i].id+'" class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+--}}
+                            '<li><a href="{{url('admin/view-move-in-items')}}/'+data[i].contract.id+'" class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>View MoveIn Items</span></a></li>'+
                             '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                             '</ul>'+
                             ' </div>'+
@@ -237,6 +234,7 @@
 
                 });
             }
+
             $('#countryTable').on('click', '.btn-delete', function() {
                 var id = $(this).attr('data');
                     $.ajax({
@@ -262,6 +260,7 @@
                     });
 
             });
+
             $('#countryTable').on('click', '.btn-edit', function() {
                 var id = $(this).attr('data');
 
@@ -311,6 +310,7 @@
                     }
                 });
             });
+
             $('#updateCountryForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData=$('#updateCountryForm').serialize()

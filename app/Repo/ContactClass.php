@@ -10,6 +10,10 @@ use App\Repo\Interfaces\ContactInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use QuickBooksOnline\API\Core\OAuth\OAuth2\OAuth2LoginHelper;
+use QuickBooksOnline\API\DataService\DataService;
+use QuickBooksOnline\API\Exception\ServiceException;
+use QuickBooksOnline\API\ReportService\ReportService;
 
 class ContactClass implements ContactInterface {
 
@@ -23,13 +27,67 @@ class ContactClass implements ContactInterface {
         $contact->position = $request->position;
         $contact->email = $request->email;
         $contact->phone = $request->phone;
-
         if($request->password)
             $contact->password =  Hash::make($request->password);
 
         $contact->contact_type = $request->contact_type;
         $contact->status=$request->status;
         if($contact->save()){
+//            $refreshtoken = $this->refreshToken();
+//            $config = config('quickbooks');
+//            $dataService = DataService::Configure([
+//                'auth_mode' => 'oauth2',
+//                'ClientID' => $config['client_id'],
+//                'ClientSecret' => $config['client_secret'],
+//                'RedirectURI' => $config['redirect_uri'],
+//                'accessTokenKey' => $refreshtoken['access_token'],
+//                'refreshTokenKey' => $refreshtoken['refresh_token'],
+//                'QBORealmID' => $config['realm_id'],
+//                'baseUrl' => $config['base_url'],
+//            ]);
+//            $displayname =  $contact->first_name.' '.$contact->last_name;
+//            $query = "SELECT * FROM Customer WHERE DisplayName = '{$displayname}'";
+//            $customer = $dataService->Query($query);
+//            if (isset($customer) && !empty($customer) && count($customer) > 0){
+//                $customer = $customer[0];
+//                $customer->Id = $customer->Id;
+//                $customer->GivenName = $displayname;
+//                $customer -> DisplayName = $displayname;
+//                $customer -> CompanyName = 'Mait';
+//                $customer -> BusinessNumber = '1111111';
+//                $customer -> Mobile = $contact->phone;
+//                $customer -> PrimaryEmailAddr->Address = $contact->email;//$customer-PrimaryEmailAddr-Address;
+//                $customer -> PrimaryPhone->FreeFormNumber = $contact->phone;
+//                try {
+//                    $result = $dataService->Update($customer);
+////                    echo 'Successfully update';
+//                }catch (ServiceException $ex) {
+//                    echo "Updation Error message: " . $ex->getMessage();
+//                }
+//
+//            }else{
+//                $customer = \QuickBooksOnline\API\Facades\Customer::create([
+//                    "GivenName" => $displayname,
+//                    "DisplayName" => $displayname,
+//                    "PrimaryEmailAddr" => [
+//                        "Address" => $contact->email
+//                    ],
+//                    "BillAddr" => [
+//                        "Line1" => "123 Main Street",
+//                        "City" => "Mountain View",
+//                        "Country" => "USA",
+//                    ],
+//                    "PrimaryPhone" => [
+//                        "FreeFormNumber" => $contact->phone
+//                    ]
+//                ]);
+//                try {
+//                    $result = $dataService->Add($customer);
+////                    echo 'Successfully added';
+//                } catch (ServiceException $ex) {
+//                    echo "Error message: " . $ex->getMessage();
+//                }
+//            }
             if($request->dont_welcome != 1)
             {
             $contact_email = Contact::find($contact->id);
@@ -126,5 +184,16 @@ class ContactClass implements ContactInterface {
         $qry=$qry->first();
         return $qry;
 
+    }
+    public function refreshToken(){
+        $config = config('quickbooks');
+        $oauth2LoginHelper = new OAuth2LoginHelper($config['client_id'],$config['client_secret']);
+        $accessTokenObj = $oauth2LoginHelper->refreshAccessTokenWithRefreshToken($config['refresh_token']);
+        $accessTokenValue = $accessTokenObj->getAccessToken();
+        $refreshTokenValue = $accessTokenObj->getRefreshToken();
+        return [
+            'access_token'=>$accessTokenValue,
+            'refresh_token'=>$refreshTokenValue
+        ];
     }
 }

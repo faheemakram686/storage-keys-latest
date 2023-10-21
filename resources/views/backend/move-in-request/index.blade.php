@@ -34,6 +34,7 @@
                             <th class="nk-tb-col"><span class="sub-text">Customer</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Contract</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Request Date</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Generated Barcodes</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                             <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>
                         </tr>
@@ -189,6 +190,7 @@
                     <form method="post" action="{{ url('admin/barcode-label') }}" id="updateCountryForm1">
                         @csrf
                         <input type="hidden" name="request_id">
+                        <input type="hidden" name="contract_id">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -318,8 +320,9 @@
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.company_name+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.subject+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools contract_id "  data='+ data[i].contract.id +'>'+data[i].contract.subject+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].request_date+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].barcode_count+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
                             ' <span class="badge badge-success">'+data[i].status+'</span>'+
                             ' </td>'+
@@ -331,7 +334,7 @@
                             ' <div class="dropdown-menu dropdown-menu-right">'+
                             '<ul class="link-list-opt no-bdr">'+
                             '<li><a href="#" class="btn-label" data='+data[i].id+' data-toggle="modal" data-target="#generateBarcode" ><em class="icon ni ni-edit"></em><span>Generate BarCode Labels</span></a></li>'+
-                            {{--'<li><a href="{{url('admin/barcode-label')}}/'+data[i].id+'" class="btn-label" data='+data[i].id+' ><em class="icon ni ni-edit"></em><span>Generate BarCode Labels</span></a></li>'+--}}
+                            '<li><a href="{{url('admin/view-barcode-labels')}}/'+data[i].id+'" class="btn-label" data='+data[i].id+' ><em class="icon ni ni-edit"></em><span>View BarCode Labels</span></a></li>'+
                             '<li><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+
                             '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                             '</ul>'+
@@ -430,7 +433,10 @@
             });
             $('#countryTable').on('click', '.btn-label', function() {
                 var id = $(this).attr('data');
+                var cid = $('.contract_id').attr('data');
+
                 $('input[name=request_id]').val(id);
+                $('input[name=contract_id]').val(cid);
             });
 
 

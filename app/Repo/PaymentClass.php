@@ -22,7 +22,13 @@ class PaymentClass implements PaymentInterface {
     {
         $payment =new Payment();
         $payment->customer_id =$request->customer_id;
-        $payment->contract_id =$request->contract_id;
+
+        if($request->contract_id)
+            $payment->contract_id =$request->contract_id;
+
+        if($request->order_id)
+            $payment->order_id =$request->order_id;
+
         $payment->invoice_id =$request->invoice_id;
         $payment->amount_received=$request->amount_received;
         $payment->payment_method=$request->payment_mode;

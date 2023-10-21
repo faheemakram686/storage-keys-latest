@@ -19,6 +19,7 @@ Route::middleware('guest')->group(function () {
 
     Route::get('customer/register', [CustomerRegisterController::class, 'create'])
         ->name('customer.register');
+
     Route::post('customer/register', [CustomerRegisterController::class, 'register'])
         ->name('customer.register');
 

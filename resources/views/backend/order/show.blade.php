@@ -70,7 +70,7 @@
                                                     <div class="invoice-desc mt-5">
                                                         <h4 class="title">Order</h4>
                                                         <ul class="list-plain">
-                                                            <li class="invoice-id"><span>Order No</span>:<span>{{$data['invoice'][0]->id}}</span></li>
+                                                            <li class="invoice-id"><span>Order No</span>-<span>{{$data['invoice'][0]->id}}</span></li>
                                                             <li class="invoice-date"><span>Date</span>:<span>{{$data['invoice'][0]->created_at}}</span></li>
                                                         </ul>
                                                     </div>

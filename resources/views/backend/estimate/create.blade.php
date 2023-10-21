@@ -284,6 +284,7 @@
                 }
             });
 
+
             $("#country_id").on('change', function() {
                 var country_id = $(this).val();
                 getCities(country_id);

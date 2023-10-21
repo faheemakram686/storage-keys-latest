@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Core\Auth\User;
 use App\Models\Invoice;
+use App\Models\Order;
 use App\Repo\Interfaces\AdminDashboardInterface;
+use App\Repo\OrderClass;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Mail;
@@ -14,10 +16,12 @@ class DashboardController extends Controller
 {
 
     private $dashboard;
+    private $order;
 
     public function __construct(AdminDashboardInterface $dashboard)
     {
         $this->dashboard = $dashboard;
+        $this->order = new OrderClass();
     }
 
 
@@ -35,6 +39,7 @@ class DashboardController extends Controller
         $data['addons']  = $this->dashboard->getAddonsCount();
         $data['products']  = $this->dashboard->getProductsCount();
         $data['storageunits']  = $this->dashboard->getStorageUnitsCount();
+        $data['order']  = $this->order->getAllOrders();
         return view('backend.dashboard')->with(compact('data'));
     }
 

@@ -62,7 +62,7 @@ class ContactController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return back()->with("status", "Password changed successfully!");
+        return redirect(route('customer.login'));
     }
 
 

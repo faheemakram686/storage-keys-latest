@@ -602,7 +602,7 @@
                             window.location.href = "{{ url('admin/customer/leads')}}/"+data.customer_id;
                         }
                         if (data.errors) {
-                            toastr.error(data.errors);
+                            toastr.error(data.errors.email);
                             $('.btn-submit').text('Save');
                             $(".btn-submit").prop("disabled", false);
                         }

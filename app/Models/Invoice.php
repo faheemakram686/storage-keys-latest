@@ -72,13 +72,13 @@ class Invoice extends Model
     public function getPaymentStatusAttribute($value)
     {
         if($value==1){
-            $getVal='Unpaid';
+            $getVal='PAID';
         }
         if($value==2){
-            $getVal='Partially Paid';
+            $getVal='PARTIALLY PAID';
         }
         if($value==0){
-            $getVal='Unpaid';
+            $getVal='UNPAID';
         }
         return $getVal;
     }

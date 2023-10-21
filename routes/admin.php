@@ -402,16 +402,22 @@ require __DIR__.'/auth.php';
    Route::any('update-move-in-request', [MoveInRequestController::class,'updateMoveInRequest']);
    Route::any('delete-move-in-request', [MoveInRequestController::class,'deleteMoveInRequest']);
    Route::any('barcode-label', [MoveInRequestController::class,'barcodeLabel']);
+   Route::any('delete-barcode-label', [MoveInRequestController::class,'deleteBarcodeLabel']);
    Route::any('get-barcode-label', [MoveInRequestController::class,'getBarcodeLable']);
+   Route::any('view-barcode-labels/{id}', [MoveInRequestController::class,'viewBarcodeLabels']);
+   Route::any('print-barcode-labels/{id}', [MoveInRequestController::class,'printBarcodeLabels']);
+   Route::any('reprint-barcode-labels/{id}', [MoveInRequestController::class,'reprintBarcodeLabels']);
 
    //Move In routes
    Route::any('move-in', [MoveInController::class,'index'])->name('move-in.index');
    Route::any('create-move-in', [MoveInController::class,'createMoveIn'])->name('move-in.create');
    Route::any('save-move-in', [MoveInController::class,'saveMoveIn'])->name('move-in.save');
    Route::any('get-move-in', [MoveInController::class,'getAllMoveIn'])->name('move-in.get');
+   Route::any('edit-move-in', [MoveInController::class,'editMoveIn'])->name('move-in.edit');
+   Route::any('update-move-in', [MoveInController::class,'updateMoveIn'])->name('move-in.update');
    Route::any('edit-move-in/{id}', [MoveInController::class,'getAllMoveIn'])->name('move-in.get');
    Route::any('delete-move-in', [MoveInController::class,'deleteMoveIn'])->name('move-in.delete');
-
+   Route::any('view-move-in-items/{id}', [MoveInController::class,'viewMoveInItems']);
 
 
    //Payments routes

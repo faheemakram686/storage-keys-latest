@@ -29,6 +29,10 @@ class Contract extends Model
     protected $casts = [
         'created_at'  => 'datetime:Y-m-d H:00'
     ];
+    public function barcode()
+    {
+        return $this->hasMany(BarcodeLabel::class, 'contract_id', 'id');
+    }
 
 
     public function setIsSignedtatusAttribute($value)

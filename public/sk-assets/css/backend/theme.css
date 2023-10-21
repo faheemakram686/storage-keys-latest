@@ -13495,9 +13495,9 @@ p > span > .icon.ni { vertical-align: middle; }
 
 .invoice-head { padding-bottom: 1.5rem; display: flex; justify-content: space-between; flex-direction: column; }
 
-.invoice-desc { width: 210px; padding-top: 1.5rem; }
+.invoice-desc { width: 370px; padding-top: 1.5rem; }
 
-.invoice-desc .title { text-transform: uppercase; color: #854fff; }
+.invoice-desc .title { text-transform: uppercase; color: #536484; }
 
 .invoice-desc ul li { padding: .25rem 0; }
 
@@ -13506,8 +13506,7 @@ p > span > .icon.ni { vertical-align: middle; }
 .invoice-desc ul span:first-child { min-width: 90px; display: inline-block; text-transform: uppercase; letter-spacing: 1px; color: #8094ae; }
 
 .invoice-desc ul span:last-child { padding-left: 0.75rem; }
-
-.invoice-contact .title { margin-bottom: 1rem; }
+invoice-contact .title { margin-bottom: 1rem; }
 
 .invoice-contact ul li { padding: .5rem 0; line-height: 1.3; }
 
