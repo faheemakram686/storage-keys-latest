@@ -267,4 +267,9 @@ class CustomerClass implements CustomerInterface {
             'refresh_token'=>$refreshTokenValue
         ];
     }
+
+    public function syncCustomerQuickbook()
+    {
+        // TODO: Implement syncCustomerQuickbook() method.
+    }
 }

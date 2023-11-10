@@ -10,4 +10,7 @@ interface ProductInterface{
     public function updateProduct($request);
     public function getProductDetail($request);
     public function getProductPaginate();
+    public function syncWithQuickbook();
+
+
 }

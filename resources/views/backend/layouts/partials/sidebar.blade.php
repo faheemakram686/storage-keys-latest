@@ -47,6 +47,12 @@
                             <span class="nk-menu-text">HRM</span>
                         </a>
                     </li>
+                    <li class="nk-menu-item">
+                        <a href="{{ route('email.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-mail-fill"></em></span>
+                            <span class="nk-menu-text">Emails</span>
+                        </a>
+                    </li>
                     @if($role->hasPermission('view_customer'))
                         <li class="nk-menu-item">
                             <a href="{{route('customer.index')}}" class="nk-menu-link">

@@ -11,4 +11,5 @@ interface CustomerInterface{
     public function updateCustomer($request);
     public function getCustomer($id);
     public function isCustomer($id);
+    public function syncCustomerQuickbook();
 }

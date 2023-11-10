@@ -297,7 +297,8 @@
 
                         }
                         if (data.errors) {
-                            toastr.error(data.errors);
+                            console.log(data.errors);
+                            toastr.error(data.errors.email);
                             $('.btn-submit').text('Save');
                             $(".btn-submit").prop("disabled", false);
                         }

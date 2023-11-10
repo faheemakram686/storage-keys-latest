@@ -10,6 +10,6 @@ interface ContactInterface{
 
     public function getCustomerContacts($id);
     public function getPrimaryContect($id);
-
+    public function syncCustomerQuickbook();
 
 }

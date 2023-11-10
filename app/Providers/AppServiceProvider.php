@@ -17,6 +17,7 @@ use App\Repo\CustomerClass;
 use App\Repo\CustomerDashboardClass;
 use App\Repo\EmailTemplateClass;
 use App\Repo\EstimateClass;
+use App\Repo\GoogleServiceGmail;
 use App\Repo\InsuranceClass;
 use App\Repo\Interfaces\AddonInterface;
 use App\Repo\Interfaces\AdminDashboardInterface;
@@ -33,6 +34,7 @@ use App\Repo\Interfaces\CustomerDashboardInterface;
 use App\Repo\Interfaces\CustomerInterface;
 use App\Repo\Interfaces\EmailTemplateInterface;
 use App\Repo\Interfaces\EstimateInterface;
+use App\Repo\Interfaces\GoogleServiceGmailInterface;
 use App\Repo\Interfaces\InsuranceInterface;
 use App\Repo\Interfaces\InvoiceInterface;
 use App\Repo\Interfaces\LeadInterface;
@@ -137,6 +139,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(NoteInterface::class,NoteClass::class);
         $this->app->bind(OrderInterface::class,OrderClass::class);
         $this->app->bind(CustomerDashboardInterface::class,CustomerDashboardClass::class);
+        $this->app->bind(GoogleServiceGmailInterface::class,GoogleServiceGmail::class);
     }
 
 

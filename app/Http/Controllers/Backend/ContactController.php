@@ -65,6 +65,11 @@ class ContactController extends Controller
         return redirect(route('customer.login'));
     }
 
+    public function syncCustomerQuickbook()
+    {
+        return $this->contact->syncCustomerQuickbook();
+    }
+
 
 
 }

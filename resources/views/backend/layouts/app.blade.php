@@ -78,6 +78,8 @@
     <script src="{{ asset('sk-assets/js/app.js') }}"></script>
     <script src="{{ asset('sk-assets/js/backend/theme.js') }}"></script>
     <script src="{{ asset('sk-assets/js/backend/dataTables.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/backend/inbox.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/backend/tagify.js') }}"></script>
     <script src="{{ asset('sk-assets/js/backend/dataTableResposive.js') }}"></script>
     <script src="{{ asset('sk-assets/js/backend/bootstrap4.js') }}"></script>
     <script src="{{ asset('sk-assets/js/common.js') }}"></script>

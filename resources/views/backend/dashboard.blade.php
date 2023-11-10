@@ -196,6 +196,7 @@
                             <div class="nk-tb-col tb-col-md"><span>Date</span></div>
                             <div class="nk-tb-col"><span>Amount</span></div>
                         </div>
+                        @isset($data['order'])
                         @foreach($data['order'] as $order)
                             <div class="nk-tb-item">
                                 <div class="nk-tb-col">
@@ -219,6 +220,7 @@
                                 </div>
                             </div>
                         @endforeach
+                            @endisset
                     </div>
                 </div><!-- .card -->
             </div>

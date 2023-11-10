@@ -51,6 +51,11 @@ class ProductController extends Controller
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 
+    public function syncProductQuickbook()
+    {
+        return $this->product->syncWithQuickbook();
+    }
+
 
 
 

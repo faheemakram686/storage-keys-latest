@@ -38,6 +38,9 @@ use App\Http\Controllers\Backend\MoveOutController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\Settings\AppSettingsController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Backend\EmailController;
+use Dacastro4\LaravelGmail\Facade\LaravelGmail;
+use App\Http\Controllers\Backend\QuickBooksWebhookController;
 
 require __DIR__.'/auth.php';
 
@@ -453,9 +456,43 @@ require __DIR__.'/auth.php';
         Route::any('print-order/{id}',[OrderController::class,'printOrder']);
         Route::any('get-customer-orders', [OrderController::class,'getCustomerOrders'])->name('get-customer-orders');
         Route::any('get-order-products', [OrderController::class,'getOrderProducts'])->name('get-order-products');
+
+
+
+        Route::any('sync-product-quickbook', [ProductController::class,'syncProductQuickbook'])->name('sync-product-quickbook');
+        Route::any('sync-customer-quickbook', [ContactController::class,'syncCustomerQuickbook'])->name('sync-customer-quickbook');
+
+        Route::post('/webhooks/quickbooks', [QuickBooksWebhookController::class, 'handle']);
+
+        Route::any('get-gmails', [Backend\GoogleServiceGmailController::class,'getAllGmails'])->name('get-gmails');
+        Route::any('get-gmails', [Backend\GoogleServiceGmailController::class,'getAllGmails'])->name('email.index1');
+
+
+        //Emails
+        Route::any('emails', [EmailController::class,'index'])->name('email.index');
+        Route::any('get-email', [EmailController::class,'getEmails'])->name('email.get');
+        Route::any('send-email', [EmailController::class,'sendEmail'])->name('email.send');
+        Route::any('get-email-detail/{id}', [EmailController::class,'getEmailDetail'])->name('email.detail');
+
+
+
+
+
 });
 
 
 Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice']);
 
+Route::get('/oauth/gmail', function (){
+    return LaravelGmail::redirect();
+});
 
+Route::get('/oauth/gmail/callback', function (){
+    LaravelGmail::makeToken();
+    return redirect()->to('/admin/emails');
+});
+
+Route::get('/oauth/gmail/logout', function (){
+    LaravelGmail::logout(); //It returns exception if fails
+    return redirect()->to('/admin/emails');
+});
