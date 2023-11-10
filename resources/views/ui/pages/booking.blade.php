@@ -267,7 +267,7 @@
                                     ' <img  src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" class="img-fluid" alt="Image of Apartment">' +
                                     '<div class="image-container">'+
                                     ' <a href="javascript:void(0)" class=" hover-button btn-check-map  active show-unit-image" role="button" aria-pressed="true">View Storage <i class="fa fa-map-marker-alt"></i></a>' +
-                                    ' <img class="hover-image" src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" class="img-fluid" alt="Image">'+
+                                    
                                     '</div>' +
                                     '</div>' +
                                     ' <div class="col-12 col-sm-12 col-lg-6 col-md-6 apartment-details">' +
