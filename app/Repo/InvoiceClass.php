@@ -118,10 +118,8 @@ class InvoiceClass implements InvoiceInterface {
 //                return response()->json(['success' => 'Record save successfully'], 200);
 //                echo "Created Id={$resultingInvoiceObj->Id}. Reconstructed response body:\n\n";
 //            }
-
-
-
-
+            
+            return response()->json(['success' => 'Record save successfully'], 200);
 
             }
 
