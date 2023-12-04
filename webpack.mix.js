@@ -10,6 +10,12 @@ const mix = require('laravel-mix');
  |
  */
 
+
+// mix.js('resources/js/app.js', 'public/js').vue()
+//     .postCss('resources/css/app.css', 'public/css', [
+//         //
+//     ]);
+
 mix.setPublicPath('public')
     .setResourceRoot('../') // Turns assets paths in css relative to css file
     // .options({
@@ -19,7 +25,7 @@ mix.setPublicPath('public')
     .sass('resources/sass/core/core.scss', 'css/core.css')
     .sass('node_modules/dropzone/src/dropzone.scss', 'css/dropzone.css')
     .sass('resources/sass/_global.scss', 'css/fontawesome.css')
-    .js('resources/js/mainApp.js', 'js/core.js')
+    .js('resources/js/mainApp.js', 'js/core.js').vue()
     .extract([
         // Extract packages from node_modules to vendor.js
         'jquery',
@@ -44,6 +50,10 @@ if (mix.inProduction()) {
 } else {
     // Uses inline source-maps on development
     mix.webpackConfig({
-        devtool: 'inline-source-map'
+        devtool: 'inline-source-map',
+        resolve: {
+            extensions: [".*",".wasm",".mjs",".js",".jsx",".json",".vue",".*"],
+        },
     });
 }
+mix.disableNotifications();

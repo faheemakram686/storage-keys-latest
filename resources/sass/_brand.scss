@@ -48,14 +48,14 @@
 a{
   color: $brand-color;
   &:hover{
-    color: darken($brand-color, 6%);
+    color: darken($brand-color, 0%);
   }
 }
 .sidebar .nav .nav-item {
   &.active{
     .nav-link{
       .menu-title{
-        color: $white;
+        color: $brand-color;
       }
       .icon-wrapper{
         svg{

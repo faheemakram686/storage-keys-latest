@@ -22,8 +22,9 @@
                                             <a class="btn btn-icon btn-trigger me-n2" data-toggle="dropdown" href="#"><em class="icon ni ni-more-v"></em></a>
                                             <div class="dropdown-menu dropdown-menu-right" >
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#"><em class="icon ni ni-camera-fill"></em><span>Change Photo</span></a></li>
-                                                    <li><a href="#"><em class="icon ni ni-edit-fill"></em><span>Update Profile</span></a></li>
+                                                    <li><a href="{{url('admin/contract-pdf').'/'.$data['contract'][0]->id}}"><em class="icon ni ni-document-fill"></em><span>View PDF </span></a></li>
+{{--                                                    <li><a href="#"><em class="icon ni ni-camera-fill"></em><span>Change Photo</span></a></li>--}}
+{{--                                                    <li><a href="#"><em class="icon ni ni-edit-fill"></em><span>Update Profile</span></a></li>--}}
                                                 </ul>
                                             </div>
                                         </div>

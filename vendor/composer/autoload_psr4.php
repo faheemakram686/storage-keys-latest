@@ -149,6 +149,7 @@ return array(
     'BeyondCode\\LaravelWebSockets\\' => array($vendorDir . '/beyondcode/laravel-websockets/src'),
     'Barryvdh\\DomPDF\\' => array($vendorDir . '/barryvdh/laravel-dompdf/src'),
     'Aws\\' => array($vendorDir . '/aws/aws-sdk-php/src'),
+    'ArPHP\\I18N\\' => array($vendorDir . '/khaled.alshamaa/ar-php/src'),
     'App\\' => array($baseDir . '/app'),
     'Altek\\Eventually\\' => array($vendorDir . '/altek/eventually/src'),
 );

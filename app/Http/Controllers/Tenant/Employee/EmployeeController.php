@@ -66,7 +66,7 @@ class EmployeeController extends Controller
          $employee->load([
             'department:id,name',
             'designation:id,name',
-            'profile:id,user_id,joining_date,employee_id,gender,date_of_birth,about_me,phone_number',
+            'profile:id,user_id,joining_date,employee_id,gender,date_of_birth,about_me,phone_number,res_visa_loc,emirate_id,notice_period',
             'profilePicture',
             'workingShift:id,name',
             'employmentStatus:id,name,class,alias',

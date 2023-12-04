@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "../variables";
 @import "../theme-colors";
 
@@ -18,7 +20,7 @@
   .navbar-brand-wrapper {
     height: $navbar-height;
     width: $sidebar-width-lg;
-    background: var(--navbar-brand-bg);
+    background:var(--sidebar-bg);
     transition: width $action-transition-duration $action-transition-timing-function;
     -ms-transition: width $action-transition-duration $action-transition-timing-function;
     -moz-transition: width $action-transition-duration $action-transition-timing-function;
@@ -62,14 +64,15 @@
       .collapsing {
         //padding: 0.75rem 0 0 0;
         margin: 0 -1.25rem 0 -1.25rem;
-        background-color: $sidebar-submenu-bg-color;
+        //background-color: $sidebar-submenu-bg-color;
+        background-color: $white;
       }
 
       .collapse {
         z-index: 999;
         //padding: 0.75rem 0 0 0;
         margin: 0 -1.25rem 0 -1.25rem;
-        background-color: $sidebar-submenu-bg-color;
+        background-color: $white;
       }
 
       .nav-link {
@@ -90,7 +93,7 @@
           align-items: center;
           justify-content: center;
           border-radius: 2px;
-          background-color: $navbar-brand-bg;
+          background-color:$white;
           transition: color $default-transition-duration $action-transition-timing-function;
 
           svg {
@@ -106,6 +109,7 @@
           margin-left: 0.9rem;
           display: inline-block;
           vertical-align: middle;
+          font-weight: 700;
           font-size: $sidebar-menu-font-size;
         }
 
@@ -118,7 +122,7 @@
             display: inline-block;
             color: $sidebar-dark-menu-color;
             transition: $action-transition-duration $action-transition-timing-function;
-            font: normal normal 700 $sidebar-arrow-font-size/1 'Font Awesome 5 Free';
+            font: normal normal 700 math.div($sidebar-arrow-font-size, 1) 'Font Awesome 5 Free';
 
             .rtl & {
               margin-left: 0;
@@ -155,13 +159,13 @@
             background-color: $brand-color;
 
             svg {
-              color: lighten($brand-color, 35%);
+              color: lighten($white, 35%);
             }
           }
 
           .menu-title {
             font-family: $type-1;
-            color: lighten($brand-color, 35%);
+            color: darken($brand-color, 70%);
           }
 
           i {
@@ -188,11 +192,11 @@
         &:hover {
           &:not(.nav-category):not(.nav-profile) {
             > .nav-link {
-              color: lighten($brand-color, 35%);
+              color: lighten($brand-color, 10%);
 
               .icon-wrapper {
                 svg {
-                  color: lighten($brand-color, 35%);
+                  color: lighten($brand-color, 10%);
                 }
               }
             }
@@ -228,7 +232,7 @@
           }
 
           &.active {
-            color: lighten($brand-color, 35%);
+            color: lighten($brand-color, 10%);
             background: transparent;
 
             &::before {
@@ -237,10 +241,10 @@
           }
 
           &:hover {
-            color: lighten($brand-color, 35%);
+            color: lighten($brand-color, 10%);
 
             &::before {
-              background-color: lighten($brand-color, 35%);
+              background-color: lighten($brand-color, 10%);
             }
           }
         }

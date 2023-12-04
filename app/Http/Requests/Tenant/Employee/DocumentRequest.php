@@ -27,6 +27,7 @@ class DocumentRequest extends BaseRequest
         return [
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
+            'expiry_date' => 'nullable',
             'file' => $file
         ];
     }

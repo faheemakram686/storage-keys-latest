@@ -11,7 +11,7 @@ class Document extends BaseModel
 {
     use HasFactory, CreatedByRelationship;
 
-    protected $fillable = ['created_by', 'name', 'path', 'user_id'];
+    protected $fillable = ['created_by', 'name', 'path', 'user_id','expiry_date'];
 
     public function user()
     {

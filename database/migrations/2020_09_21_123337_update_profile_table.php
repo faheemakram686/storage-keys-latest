@@ -27,6 +27,9 @@ class UpdateProfileTable extends Migration
             $table->string('social_security_number')->after('mothers_name')->nullable();
             $table->text('about_me')->after('social_security_number')->nullable();
             $table->string('phone_number',255)->after('employee_id')->nullable();
+            $table->string('emirate_id')->nullable();
+            $table->string('res_visa_loc')->nullable();
+            $table->integer('notice_period')->nullable();
         });
     }
 
@@ -48,6 +51,9 @@ class UpdateProfileTable extends Migration
             $table->dropColumn('fathers_name');
             $table->dropColumn('mothers_name');
             $table->dropColumn('social_security_number');
+            $table->dropColumn('emirate_id');
+            $table->dropColumn('res_visa_loc');
+            $table->dropColumn('notice_period');
         });
     }
 }

@@ -41,12 +41,14 @@
                                         <div class="data-head">
                                             <h6 class="overline-title">Lead Information</h6>
                                         </div>
+                                        @if($data['lead'][0]->company_name != null)
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Company Name</span>
                                                 <span class="data-value">{{$data['lead'][0]->company_name}}</span>
                                             </div>
                                         </div><!-- data-item -->
+                                        @endif
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Full Name</span>

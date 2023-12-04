@@ -14,7 +14,7 @@
             @isset($data)
             <div class="card">
                 <div class="card-inner">
-                    <form class="gy-3 form-validate is-alter" action="{{url("admin/update-contract")}}"  method="post" enctype="multipart/form-data" id="UpdateContractForm">
+                    <form class="gy-3 " action="{{url("admin/update-contract")}}"  method="post" enctype="multipart/form-data" id="UpdateContractForm">
                         @csrf
                             <input type="hidden" name="id" value="{{$data['contract'][0]->id}}">
                         <div class="row g-4">
@@ -24,7 +24,7 @@
                                     <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}" {{ ($customer->id == $data['contract'][0]->customer_id) ? "selected" : "" }}>{{$customer->company_name}}</option>
+                                        <option value="{{$customer->id}}" {{ ($customer->id == $data['contract'][0]->customer_id) ? "selected" : "" }}>{{$customer->customer_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

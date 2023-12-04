@@ -38,6 +38,12 @@ export default {
                         }
                     },
                     {
+                        title: this.$t('Expiry Date'),
+                        type: 'text',
+                        key: 'expiry_date',
+                        isVisible: true,
+                    },
+                    {
                         title: this.$t('actions'),
                         type: 'action',
                         isVisible: true

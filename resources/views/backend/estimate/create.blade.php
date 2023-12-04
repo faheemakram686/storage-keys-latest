@@ -35,7 +35,7 @@
                                                                     <option value="" selected >Choose One</option>
                                                                     @isset($data)
                                                                         @foreach ($data['customer'] as $customer)
-                                                                            <option value="{{ $customer->id }}" @isset($id) {{(($customer->id == $id)? 'selected':'')}} @endisset >{{$customer->company_name }}</option>
+                                                                            <option value="{{ $customer->id }}" @isset($id) {{(($customer->id == $id)? 'selected':'')}} @endisset >{{$customer->customer_name }}</option>
                                                                         @endforeach
                                                                     @endisset
                                                                 </select>

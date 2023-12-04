@@ -34,6 +34,30 @@
                 :placeholder="$placeholder('employee_id','')"
                 :error-message="$errorMessage(errors, 'employee_id', true, true)"
             />
+          <app-form-group
+              page="page"
+              :label="$t('res_visa_loc')"
+              type="text"
+              v-model="formData.res_visa_loc"
+              :placeholder="$placeholder('res_visa_loc','')"
+              :error-message="$errorMessage(errors, 'res_visa_loc')"
+          />
+          <app-form-group
+              page="page"
+              :label="$t('emirate_id')"
+              type="text"
+              v-model="formData.emirate_id"
+              :placeholder="$placeholder('emirate_id','')"
+              :error-message="$errorMessage(errors, 'emirate_id')"
+          />
+          <app-form-group
+              page="page"
+              :label="$t('notice_period')"
+              type="number"
+              v-model="formData.notice_period"
+              :placeholder="$placeholder('notice_period','')"
+              :error-message="$errorMessage(errors, 'notice_period')"
+          />
             <app-form-group
                 page="page"
                 :label="$t('phone_number')"
@@ -105,7 +129,7 @@ export default {
             this.loading = false;
             this.$toastr.s('', response.data.message);
             this.scrollToTop(false)
-            // setTimeout(() => location.reload())
+            setTimeout(() => location.reload())
         },
     },
 
@@ -113,6 +137,7 @@ export default {
         ...mapState({
             employeeDetails: state => state.employees.employee
         }),
+
     },
 
     watch: {
@@ -121,19 +146,22 @@ export default {
                 if (!!Object.keys(employee).length) {
                     this.preloader = false
                 }
-
                 this.formData = {
                     ...employee,
-                    employee_id: employee.profile ? employee.profile.employee_id : '',
+                     employee_id: employee.profile ? employee.profile.employee_id : '',
                     gender: employee.profile ? employee.profile.gender : '',
                     about_me: employee.profile ? employee.profile.about_me : '',
                     phone_number: employee.profile ? employee.profile.phone_number : '',
+                    res_visa_loc: employee.profile ? employee.profile.res_visa_loc : '',
+                    emirate_id: employee.profile ? employee.profile.emirate_id : '',
+                    notice_period: employee.profile ? employee.profile.notice_period : '',
                     date_of_birth: optional(employee, 'profile', 'date_of_birth') ? new Date(employee.profile.date_of_birth) : ''
                 }
             },
             deep: true,
             immediate: true
         }
+
     }
 }
 </script>

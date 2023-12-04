@@ -44,15 +44,69 @@
                                             @csrf
                                             @isset($data)
                                                 <input type="hidden" name="id" value="{{$data['customer']->id}}">
+
                                                 <div class="row ">
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label> Company Name <span class="text-danger">*</span></label>
+                                                            <label> Customer Type <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
-                                                                <input class="form-control" type="text" name="edit_company_name"  value="{{$data['customer']->company_name}}" placeholder="Company Name" required>
+                                                                <input class="form-control" type="text" name="customer_type"  value="{{$data['customer']->customer_type}}" placeholder="Company Type" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                        @if($data['customer']->company_name != null)
+                                                        <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label> Company Name <span class="text-danger">*</span></label>
+                                                            <div class="form-control-wrap">
+                                                                <input class="form-control" type="text" name="company_name"  value="{{$data['customer']->company_name}}" placeholder="Company Name" >
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label> Trade License No. <span class="text-danger"></span></label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" type="text" name="license_no"  value="{{$data['customer']->license_no}}" placeholder="Trade License No." >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label> VAT# <span class="text-danger"></span></label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" type="text" name="vat"  value="{{$data['customer']->vat}}" placeholder="VAT" >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label> Customer ID <span class="text-danger">*</span></label>
+                                                                <div class="form-control-wrap">
+                                                                    <input class="form-control" type="text" name="customer_id_card"  value="{{$data['customer']->customer_id_card}}" placeholder="Customer Name" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label> Customer Passport No <span class="text-danger">*</span></label>
+                                                                <div class="form-control-wrap">
+                                                                    <input class="form-control" type="text" name="passport_no"  value="{{$data['customer']->passport_no}}" placeholder="Customer Passport No" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label> Date of Birth <span class="text-danger">*</span></label>
+                                                                <div class="form-control-wrap">
+                                                                    <input class="form-control" type="text" name="dob"  value="{{$data['customer']->dob}}" placeholder="Customer Date of Birth" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
+
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label> Phone <span class="text-danger"></span></label>
@@ -65,7 +119,7 @@
                                                         <div class="form-group">
                                                             <label> Address <span class="text-danger"></span></label>
                                                             <div class="form-control-wrap">
-                                                                <textarea rows="5" cols="4" class="form-control" type="text" name="edit_address"  value="{{$data['customer']->address}}" placeholder="Address" >{{$data['customer']->address}}</textarea>
+                                                                <textarea rows="5" cols="4" class="form-control" type="text" name="address"  value="{{$data['customer']->address}}" placeholder="Address" >{{$data['customer']->address}}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -73,7 +127,7 @@
                                                         <div class="form-group">
                                                             <label> City <span class="text-danger"></span></label>
                                                             <div class="form-control-wrap">
-                                                                <input class="form-control" type="text" name="edit_city" value="{{$data['customer']->city}}" placeholder="City" >
+                                                                <input class="form-control" type="text" name="city" value="{{$data['customer']->city}}" placeholder="City" >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -81,7 +135,7 @@
                                                         <div class="form-group">
                                                             <label> State <span class="text-danger"></span></label>
                                                             <div class="form-control-wrap">
-                                                                <input class="form-control" type="text" name="edit_state" value="{{$data['customer']->state}}" placeholder="State" >
+                                                                <input class="form-control" type="text" name="state" value="{{$data['customer']->state}}" placeholder="State" >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -89,14 +143,14 @@
                                                         <div class="form-group">
                                                             <label> Country <span class="text-danger"></span></label>
                                                             <div class="form-control-wrap">
-                                                                <input class="form-control" type="text" name="edit_country" value="{{$data['customer']->country}}" placeholder="Country" >
+                                                                <input class="form-control" type="text" name="country" value="{{$data['customer']->country}}" placeholder="Country" >
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="form-label" for="status">Status</label>
-                                                            <select class="form-control form-select " id="status" name="edit_status" required>
+                                                            <select class="form-control form-select " id="status" name="status" required>
                                                                 <option value="1" {{$data['customer']->status == 1 ? 'selected' : ''}}>Active</option>
                                                                 <option value="0" {{$data['customer']->status== 0 ? 'selected' : ''}}>In-Active</option>
                                                             </select>

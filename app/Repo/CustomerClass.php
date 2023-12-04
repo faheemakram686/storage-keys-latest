@@ -30,29 +30,58 @@ class CustomerClass implements CustomerInterface {
     public function saveCustomer($request)
     {
         $customer=new Customer();
-        $customer->company_name = $request->company_name;
+        $customer->customer_type = $request->customer_type;
+        if($request->customer_type == 'company')
+        {
+            $customer->company_name = $request->company_name;
+            $customer->license_no = $request->license_no;
+            $customer->vat = $request->vat;
+        }
+        if($request->customer_type == 'individual')
+        {
+            $customer->customer_id_card = $request->customer_id_card;
+            $customer->passport_no = $request->passport_no;
+            $customer->dob = $request->dob;
+        }
+        $customer->customer_name = $request->f_name .' '. $request->l_name ;
+        $customer->email = $request->email;
+        $customer->mobile = $request->mobile;
+        $customer->home = $request->home;
         $customer->phone = $request->phone;
         $customer->address = $request->address;
         $customer->city = $request->city;
         $customer->state = $request->state;
         $customer->country = $request->country;
         $customer->status=$request->status;
+        $customer->created_by =auth()->id();
         if($customer->save()){
-            return response()->json(['success' => 'Record save successfully'], 200);
+            $contact =new Contact();
+            $contact->customer_id = $customer->id;
+            $contact->first_name = $request->f_name;
+            $contact->last_name = $request->l_name;
+            $contact->position = "owner";
+            $contact->email = $request->email;
+            $contact->phone = $request->phone;
+            $contact->contact_type = 'primary';
+            $contact->status=$request->status;
+            if($contact->save()){
+                return response()->json(['success' => 'Record save successfully'], 200);
+            }
+
         }
     }
 
 
     public function getAllCustomer()
     {
-        $qry=Customer::leftJoin('contacts', 'customers.id', '=', 'contacts.customer_id');
-        $qry=$qry->select('customers.*', 'contacts.first_name','contacts.last_name','contacts.email');
-        $qry=$qry->where('customers.is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-
-//            Customer::with('primaryContact');
-//        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+//        $qry=Customer::leftJoin('contacts', 'customers.id', '=', 'contacts.customer_id');
+//        $qry=$qry->select('customers.*', 'contacts.first_name','contacts.last_name','contacts.email');
+//        $qry=$qry->where('customers.is_deleted',0)->orderBy('id','DESC');
 //        $qry=$qry->get();
+
+        $qry = Customer::with('primaryContact');
+        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=$qry->get();
         return $qry;
     }
 
@@ -72,13 +101,29 @@ class CustomerClass implements CustomerInterface {
     public function updateCustomer($request)
     {
         $customer=Customer::find($request->id);
-        $customer->company_name = $request->edit_company_name;
-        $customer->phone = $request->edit_phone;
-        $customer->address = $request->edit_address;
-        $customer->city = $request->edit_city;
-        $customer->state = $request->edit_state;
-        $customer->country = $request->edit_country;
-        $customer->status=$request->edit_status;
+        $customer->customer_type = $request->customer_type;
+        if($request->customer_type == 'company')
+        {
+            $customer->company_name = $request->company_name;
+            $customer->license_no = $request->license_no;
+            $customer->vat = $request->vat;
+        }
+        if($request->customer_type == 'individual')
+        {
+            $customer->customer_id_card = $request->customer_id_card;
+            $customer->passport_no = $request->passport_no;
+            $customer->dob = $request->dob;
+        }
+        $customer->customer_name = $request->f_name ." ". $request->l_name ;
+        $customer->email = $request->email;
+        $customer->mobile = $request->mobile;
+        $customer->home = $request->home;
+        $customer->phone = $request->phone;
+        $customer->address = $request->address;
+        $customer->city = $request->city;
+        $customer->state = $request->state;
+        $customer->country = $request->country;
+        $customer->status=$request->status;
         $customer->save();
         return 1;
     }
@@ -101,8 +146,16 @@ class CustomerClass implements CustomerInterface {
         DB::transaction(function() use ($request)
         {
         $customer=new Customer();
+        $customer->customer_type = $request->lead_type;
+        $customer->customer_name = $request->first_name.' '.$request->last_name;
         $customer->company_name = $request->company_name;
+        $customer->license_no = $request->license_no;
+        $customer->vat = $request->vat;
+        $customer->customer_id_card = $request->customer_id_card;
+        $customer->passport_no = $request->passport_no;
+        $customer->dob = $request->dob;
         $customer->phone = $request->phone;
+        $customer->email = $request->email;
         $customer->status=$request->status;
         $customer->lead_id=$request->lead_id;
         if($customer->save()){
@@ -120,8 +173,6 @@ class CustomerClass implements CustomerInterface {
             $contact->contact_type = $request->contact_type;
             $contact->status=$request->status;
             if($contact->save()){
-
-
 
                 $lead = Lead::find($request->lead_id);
                 $lead->customer_id =  $customer->id;

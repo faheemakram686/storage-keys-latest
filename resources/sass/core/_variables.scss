@@ -19,7 +19,7 @@ $darkslategray: #2e383e;
 $dodger-blue: #3498db;
 
 // Color Variables
-$brand-color: #019AFF;
+$brand-color: #f58320;
 $base-color: #F9F9F9;
 $default-secondary-color: #9397A0;
 $default-light-color: #F5F8FF;
@@ -93,7 +93,7 @@ $light-navbar-link-color: $brand-color;
 $sidebar-width-lg: 230px;
 $sidebar-width-icon: 70px;
 $sidebar-scrollbar-width: 6px;
-$sidebar-scrollbar-thumb-color: #566076;
+$sidebar-scrollbar-thumb-color: #707887;
 $sidebar-menu-padding-y: 0.5rem;
 $sidebar-menu-padding-x: 1.25rem;
 $sidebar-menu-font-size: $default-font-size;
@@ -107,6 +107,7 @@ $sidebar-light-submenu-color: #888;
 $sidebar-light-menu-arrow-color: #9e9da0;
 
 $sidebar-dark-bg: #2B303B;
+$sidebar-bg: #FFFF;
 $sidebar-dark-menu-color: #707887;
 $sidebar-submenu-bg-color: darken($sidebar-dark-bg, 6%);
 $navbar-brand-bg: darken($sidebar-dark-bg, 6%);
@@ -120,3 +121,6 @@ $dark-layout-box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.5);
 $default-font-size-for-mobile: 0.9rem;
 $main-content-wrapper-mobile-padding: 20px;
 $default-padding-margin-for-mobile: 20px;
+
+//Storage Keys
+$sk-primary: #f58320;

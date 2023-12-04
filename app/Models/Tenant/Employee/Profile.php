@@ -13,7 +13,8 @@ class Profile extends BaseProfile
 
     protected $fillable = [
         'gender', 'date_of_birth', 'address', 'contact', 'joining_date', 'employee_id', 'user_id', 'phone_number',
-        'marital_status', 'fathers_name', 'mothers_name', 'social_security_number', 'department_id', 'designation_id', 'about_me'
+        'marital_status', 'fathers_name', 'mothers_name', 'social_security_number', 'department_id', 'designation_id', 'about_me',
+        'res_visa_loc','emirate_id','notice_period'
     ];
 
     protected $dates = [

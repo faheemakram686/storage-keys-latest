@@ -17,8 +17,19 @@ return new class extends Migration
             $table->id();
             $table->integer('q_customer_id')->nullable()->unique();
             $table->unsignedBigInteger('lead_id')->nullable();
-            $table->string('company_name');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->string('customer_type')->nullable()->default(null);
+            $table->string('company_name')->nullable()->default(null);
+            $table->string('customer_name')->nullable()->default(null);
+            $table->string('license_no')->nullable()->default(null);
+            $table->string('vat')->nullable()->default(null);
+            $table->string('customer_id_card')->nullable()->default(null);
+            $table->string('passport_no')->nullable()->default(null);
+            $table->string('dob')->nullable()->default(null);
+            $table->string('email')->nullable()->default(null);
             $table->string('phone')->nullable()->default(null);
+            $table->string('mobile')->nullable()->default(null);
+            $table->string('home')->nullable()->default(null);
             $table->text('address')->nullable()->default(null);
             $table->string('country')->nullable()->default(null);
             $table->string('state')->nullable()->default(null);
@@ -27,6 +38,7 @@ return new class extends Migration
             $table->boolean('is_deleted')->default(0);
             $table->timestamps();
             $table->foreign('lead_id')->references('id')->on('leads');
+            $table->foreign('created_by')->references('id')->on('users');
 
         });
     }

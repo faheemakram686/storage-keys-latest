@@ -22,7 +22,9 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/custom.css') }}"/>
     <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>
 {{--    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>--}}
-    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/decoupled-document/ckeditor.js"></script>
+{{--    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/decoupled-document/ckeditor.js"></script>--}}
+{{--    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/decoupled-document/ckeditor.js"></script>--}}
+    <script src="{{ asset('vendor/ckeditor3/build/ckeditor.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" ></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>

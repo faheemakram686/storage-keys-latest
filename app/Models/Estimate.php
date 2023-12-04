@@ -40,6 +40,10 @@ class Estimate extends Model
     {
         return $this->belongsTo(TermLength::class, 'term_length', 'id');
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 
 
     public function setStatusAttribute($value)

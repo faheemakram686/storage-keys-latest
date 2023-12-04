@@ -26,15 +26,21 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label for="">Use these strings in template:</label>
+                                        <p> @verbatim{{company_name}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{unit_no}}  - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.phone}} -{{contact.email}} - {{storage_fee}} - {{addon_fee}} @endverbatim</p>
                                         <label>Template Content<span class="text-danger"></span></label>
-                                        <textarea class="summernote-basic"   id="editor" name="temp_body"> {{$data->temp_body}}</textarea>
+                                        <div id="toolbar-container"></div>
+                                        <div id="editor">
+                                            @isset($data->temp_body) {!! $data->temp_body  !!}  @endisset
+                                        </div>
+{{--                                        <textarea class="summernote-basic"   id="editor" name="temp_body"> {{$data->temp_body}}</textarea>--}}
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Status <span class="text-danger"></span></label>
-                                        <select name="status" id="" class="form-control" required>
+                                        <select name="status" id="status" class="form-control" required>
                                             <option value="">Choose One</option>
                                             <option value="1" {{$data->status == 'Active' ? 'selected' : ''}}>Active</option>
                                             <option value="0" {{$data->status == 'In-Active' ? 'selected' : ''}}>In-Active</option>
@@ -52,7 +58,6 @@
             </div>
         </div>
     </div>
-
     <script>
         ClassicEditor
             .create( document.querySelector( '#editor' ) )
@@ -61,18 +66,41 @@
             } );
     </script>
 
+
     <script>
         $(document).ready(function() {
 
+            var myeditor ='';
+            var temp_data = '';
+            var temp_title = '';
+            var temp_id = '';
+            DecoupledEditor
+                .create( document.querySelector( '#editor' ), {
+
+                })
+                .then( editor => {
+                    const toolbarContainer = document.querySelector( '#toolbar-container' )
+                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                    myeditor=editor;
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+
             $('#updateCountryForm').on('submit', function(e) {
                 e.preventDefault();
-                var formData=$('#updateCountryForm').serialize()
+
+                var body = myeditor.getData();
+                var newtitle =$("input[name=temp_title]").val();
+                var id =$("input[name=id]").val();
+                var status= $('#status').find(":selected").val();
+
                 $.ajax({
-                    type: "get",
                     url: '{{ url('admin/update-contract-template') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { id:id,temp_title:newtitle,temp_body:body,status:status},
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
@@ -83,7 +111,7 @@
                             $('#updateCountryForm')[0].reset();
                             $('.close').click();
                             toastr.success(data.success);
-
+                            window.location.href = "{{ route('contract-template.index')}}";
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
@@ -91,13 +119,11 @@
                             $(".btn-update").prop("disabled", false);
                         }
                     },
-
                     complete: function(data) {
                         $(".btn-update").html("Save Changes");
                         $(".btn-update").prop("disabled", false);
-                        window.location.href = "{{ route('contract-template.index')}}";
-                    },
 
+                    },
                     error: function() {;
                         toastr.error('any technical error');
                         $('.btn-update').text('Save Changes');

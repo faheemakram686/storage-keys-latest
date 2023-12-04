@@ -1,27 +1,16 @@
-{{--@extends('backend.layouts.app')--}}
-{{--@section('title', '| Estimate')--}}
-{{--@section('content')--}}
-        <!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zxx" class="js">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/app.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/theme.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/dataTables.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/dataTableResponsive.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/dataTableRowGroup.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/custom.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>--}}
-{{--    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>--}}
-{{--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>--}}
-{{--    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>--}}
-{{--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css">--}}
-
     <style>
+        @font-face {
+            font-family: 'Mcs Book Title 6';
+            src: url('https://www.fontsaddict.com/fontface/mcs-book-title-6.TTF');
+        }
         .ck-editor__editable {
             min-height: 300px !important;
         }
@@ -98,7 +87,7 @@
             padding-top: 1.5rem;
         }
         .invoice-bills {
-            font-size: 12px;
+            font-size: 24px;
         }
         .invoice-contact ul li:first-child {
             padding-top: 0;
@@ -181,22 +170,9 @@
         .card .table {
             margin-bottom: 0;
         }
-        .table {
-            width: 100%;
-            margin-bottom: 1rem;
-            color: #526484;
-        }
-        .table {
-            display: table;
-        }
-        table {
-            border-collapse: collapse;
-        }
-        table {
-            text-indent: 0;
-            border-color: inherit;
-            border-collapse: collapse;
-        }
+
+
+
         .card .table tr:first-child th:first-child {
             border-top-left-radius: 4px;
         }
@@ -212,21 +188,7 @@
             text-transform: uppercase;
             border-top: 0;
         }
-        .table td:first-child, .table th:first-child {
-            padding-left: 1.25rem;
-        }
-        .table thead th {
-            vertical-align: bottom;
-            border-bottom: 2px solid #dbdfea;
-        }
-        .table th {
-            line-height: 1.1;
-        }
-        .table th, .table td {
-            padding: 0.5rem;
-            vertical-align: top;
-            border-top: 1px solid #dbdfea;
-        }
+
         .w-150px {
             width: 150px !important;
         }
@@ -268,26 +230,7 @@
             padding-top: 0.25rem;
             padding-bottom: 0.25rem;
         }
-        .table td:first-child, .table th:first-child {
-            padding-left: 1.25rem;
-        }
-        .table th, .table td {
-            padding: 0.5rem;
-            vertical-align: top;
-            border-top: 1px solid #dbdfea;
-        }
-        @media (min-width: 992px)
-        {
-            .page-title {
-                font-size: 1.75rem;
-            }
-        }
 
-        .page-title {
-            font-family: "DM Sans", sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
 
     </style>
 </head>
@@ -300,19 +243,15 @@
                     <div class="invoice-bills">
                         <div class="table-responsive">
                             @isset($data)
-                                {{--    {{dd($data)}}--}}
                                 <div class="justify-content-center checkout-page">
                                     @foreach ($data['contract'] as $contract)
                                         <div class="container">
-
                                             <div class="row">
                                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
                                                     <form method="post" action="#" id="EstimateForm111">
                                                         @csrf
                                                         <input type="hidden" name="contract_id" id="contract_id" value="{{$contract->id}}">
-                                                        <div class="row reservations-sections">
-
-                                                            <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 term-section-body">
+                                                        <div class="row">
                                                                 <div class="row">
                                                                     <div class=" col-12 col-sm-12 col-md-10 col-lg-12">
                                                                         @isset($contract->contractTemplate)
@@ -320,24 +259,17 @@
                                                                         @endisset
                                                                     </div>
                                                                 </div>
-                                                            </div>
                                                             <div class="col-12 col-sm-12 col-md-3 col-lg-3  order-summary" >
                                                                 <div class="row locations-section" >
                                                                     <div class="col-12 order-section-body">
-
                                                                         @if($contract->is_signed == 'Signed')
                                                                             <div class="separator-item"></div>
                                                                             <div class="row">
                                                                                 @if($contract->sign_image != null)
                                                                                     <div class="col-lg-12 col-md-12">
                                                                                         <div class="text-center">
-{{--                                                                                             {{public_path()}}--}}
-                                                                                            <img src="{{ storage_path('app/public/uploads/648c2b05aeb97.png') }}" alt="image not found" class="img-thumbnail">
-{{--                                                                                            <img src="{{ url("storage/uploads/contract_sign_images/".$contract->sign_image) }}" alt="image not found" class="img-thumbnail">--}}
-{{--                                                                                            <img src="{{  public_path('storage/uploads/contract_sign_images').'/'.$contract->sign_image }}" style="width: 100px; height: 100px">--}}
-{{--                                                                                            <img src="{{ 'http://localhost/public/storage/uploads/contract_sign_images/'.$contract->sign_image}}" alt="image not found" class="img-thumbnail" >--}}
-{{--                                                                                            <img src="{{ asset('storage/uploads/contract_sign_images').'/'.$contract->sign_image}}" alt="image not found" class="img-thumbnail" >--}}
-                                                                                            <h4 style="color:#FF8820;">Signature____________________</h4>
+                                                                                            <img style="height: 100px; width:100px; margin-top:20px"  src="{{ public_path('storage/uploads/contract_sign_images').'/'.$contract->sign_image}}"  alt="image not found" class=" mt-5" >
+                                                                                            <h4 style="color:#FF8820;margin-bottom: 10px">Signature</h4>
                                                                                         </div>
 
                                                                                     </div>
@@ -368,7 +300,7 @@
     </div>
 </body>
 </html>
-{{--@endsection--}}
+
 
 
 

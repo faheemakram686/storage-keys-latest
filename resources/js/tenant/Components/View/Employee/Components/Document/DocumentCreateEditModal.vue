@@ -14,6 +14,14 @@
                 :required="true"
                 :error-message="$errorMessage(errors, 'name')"
             />
+          <app-form-group
+              :label="$t('Expiry Date')"
+              v-model="formData.expiry_date"
+              type="date"
+              :placeholder="$placeholder('expiry date', '')"
+              :required="true"
+              :error-message="$errorMessage(errors, 'expiry_date')"
+          />
 
             <app-form-group
                 :label="$t('document')"
@@ -37,6 +45,12 @@
 import ModalMixin from "../../../../../../common/Mixin/Global/ModalMixin";
 import FormHelperMixins from "../../../../../../common/Mixin/Global/FormHelperMixins";
 import {formDataAssigner} from "../../../../../../common/Helper/Support/FormHelper";
+import moment from "moment-timezone";
+import {
+  formatDateForServer,
+  formatDateToLocal,
+  serverDateTimeFormat
+} from "../../../../../../common/Helper/Support/DateTimeHelper";
 
 export default {
     name: "DocumentCreateEditModal",
@@ -53,11 +67,14 @@ export default {
         submitData() {
             let formData = formDataAssigner(new FormData, this.formData);
             formData.append('user_id', this.userId);
+          let expdate = formatDateForServer(formData.get('expiry_date'));
+          formData.append('expiry_date', expdate);
             if (this.selectedUrl) {
                 // for file update need to send by post.
                 formData.append('_method', 'PATCH');
             }
             let url = this.$refs.form.dataset["url"];
+
             this.submitFromFixin('post', url, formData);
         },
         afterSuccess({data}) {
@@ -68,6 +85,7 @@ export default {
         },
         afterSuccessFromGetEditData({data}) {
             this.formData = data;
+            this.formData.expiry_date =  data?.expiry_date ? new Date(data?.expiry_date) : null;
             this.formData.file = '';
             this.preloader = false;
         },

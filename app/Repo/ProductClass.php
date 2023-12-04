@@ -104,6 +104,7 @@ class ProductClass implements ProductInterface {
     public function getProductPaginate()
     {
         $qry=Product::query();
+        $qry=$qry->where('status',1);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->paginate(8);
         return $qry;

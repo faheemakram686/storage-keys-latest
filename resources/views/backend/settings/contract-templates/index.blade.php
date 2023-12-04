@@ -69,15 +69,21 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label for="">Use these strings in template:</label>
+                                    <p> @verbatim{{company_name}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{unit_no}}  - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.phone}} -{{contact.email}} - {{storage_fee}} - {{addon_fee}} @endverbatim</p>
                                     <label>Template Content<span class="text-danger"></span></label>
-                                    <textarea class="summernote-basic"  id="editor" name="temp_body"></textarea>
+                                    <div id="toolbar-container"></div>
+                                    <div id="editor">
+
+                                    </div>
+{{--                                    <textarea class="summernote-basic"  id="editor" name="temp_body"></textarea>--}}
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Status <span class="text-danger"></span></label>
-                                    <select name="status" id="" class="form-control" required>
+                                    <select name="status" id="status" class="form-control" required>
                                         <option value="">Choose One</option>
                                         <option value="1">Active</option>
                                         <option value="0">In-Active</option>
@@ -97,87 +103,19 @@
     </div>
 
 
-    <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" id="editCountry" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-capitalize" id="ajax_model_title">Edit Contract Template</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" data-form="ajax-form-modal">
-                    <form method="post" action="{{ url('admin/update-email-template') }}" id="updateCountryForm1">
-                        @csrf
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label> Template Name <span class="text-danger"></span></label>
-                                    <input type="hidden" name="id">
-                                    <input class="form-control" type="text" name="et_temp_name" placeholder="Template Name" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label> Template For <span class="text-danger"></span></label>
-                                    <select name="et_temp_for" id="" class="form-control" required>
-                                        <option value="">Choose One</option>
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label> Template Category <span class="text-danger"></span></label>
-                                    <select name="et_temp_category" id="" class="form-control" required>
-                                        <option value="">Choose One</option>
-                                        <option value="general">General</option>
-                                        <option value="hiring">Hiring</option>
-                                        <option value="sales">Sales</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label> Template Subject <span class="text-danger"></span></label>
-                                    <input class="form-control" type="text" name="et_temp_subject" placeholder="Template Subject" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="reviewer">Template Body</label>
-                                    <div class="form-control-wrap">
-                                        <textarea id="editor2" name="et_temp_body"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Status <span class="text-danger"></span></label>
-                                    <select name="edit_status" id="" class="form-control" required>
-                                        <option value="">Choose One</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="float-right">
-                            <button class="btn btn-primary mt-2 btn-update" type="submit">Save Changes</button>
-                        </div>
-                    </form>
-
-                </div>
-            </div><!-- .modal-content -->
-        </div><!-- .modla-dialog -->
-    </div>
-
     <script>
-        ClassicEditor
+        var myeditor ='';
+        var temp_data = '';
+        var temp_title = '';
+        var temp_id = '';
+        DecoupledEditor
             .create( document.querySelector( '#editor' ) )
+            .then( editor => {
+                const toolbarContainer = document.querySelector( '#toolbar-container' );
+
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                myeditor=editor;
+            } )
             .catch( error => {
                 console.error( error );
             } );
@@ -189,18 +127,22 @@
             $('#CountryForm').on('submit', function(e) {
 
                 e.preventDefault();
-                var formData=$('#CountryForm').serialize()
+                var body = myeditor.getData();
+                var newtitle =$("input[name=temp_title]").val();
+                var status= $('#status').find(":selected").val();
+
                 $.ajax({
                     type: "get",
                     url: '{{ url('admin/save-contract-template') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
+                    data: { temp_title:newtitle,temp_body:body,status:status},
+                    async: false,
+                    dataType: 'json',
                     beforeSend: function() {
                         $('.btn-submit').text('Saving...');
                         $(".btn-submit").prop("disabled", true);
                     },
                     success: function(data) {
+                        console.log(data);
 
                         if (data.success) {
                             getAllCities();

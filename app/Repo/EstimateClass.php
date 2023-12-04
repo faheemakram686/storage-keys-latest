@@ -148,7 +148,7 @@ class EstimateClass implements EstimateInterface {
 
     public function getAllEstimate()
     {
-        $qry=Estimate::with('storageunit','termLength');
+        $qry=Estimate::with('storageunit','termLength','customer');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;

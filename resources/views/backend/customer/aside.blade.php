@@ -14,7 +14,7 @@
                                         <span id="shortname">AB</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="lead-text">{{$data['customer']->company_name}}</span>
+                                        <span class="lead-text">{{(($data['customer']->company_name != null? $data['customer']->company_name:$data['customer']->customer_name))}}</span>
                                         <input type="hidden" name="customer_id" id="customer_id" value="{{$data['customer']->id}}">
                                     </div>
                                     <div class="user-action">

@@ -1,16 +1,15 @@
 <template>
   <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <a class="navbar-brand brand-logo" :href="logoUrl">
+      <a class="navbar-brand brand-logo" href="/admin">
         <img :src="logoSrc" alt="logo"/>
       </a>
-      <a class="navbar-brand brand-logo-mini" :href="logoUrl">
+      <a class="navbar-brand brand-logo-mini" href="/admin">
         <img :src="logoIconSrc" alt="logo"/>
       </a>
     </div>
 
     <ul class="nav nav-scrolling">
-
       <li class="nav-item" v-for="(item, index) in data" :key="index" v-if="item.permission">
         <a class="nav-link"
            :href="item.id ? '#'+item.id : item.url"
@@ -61,7 +60,7 @@ export default {
     },
     logoUrl: {
       type: String,
-      default: '/admin'
+      default: '/'
     }
   },
   mounted() {

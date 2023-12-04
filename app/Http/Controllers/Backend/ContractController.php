@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use function Symfony\Component\Translation\t;
 use PDF;
 use Dompdf\Options;
+use ArPHP\I18N\Arabic;
 
 class ContractController extends Controller
 {
@@ -160,9 +161,22 @@ class ContractController extends Controller
             $templateContent = str_replace('{{addon_fee}}',$addonprice , $templateContent);
             $data['contract'][0]->contractTemplate->temp_body = $templateContent;
         }
+//        return view('backend.contract.contract-customer-pdf', compact('data'));
+        $reportHtml = view('backend.contract.contract-customer-pdf', compact('data'))->render();
+        $arabic = new Arabic();
+        $p = $arabic->arIdentify($reportHtml);
 
-        $pdf = PDF::setOptions(['isRemoteEnabled' => true,'defaultFont' => 'sans-serif'])->loadView('backend.contract.contract-customer-pdf', compact('data'));
-        return $pdf->stream('contract.pdf');
+        for ($i = count($p)-1; $i >= 0; $i-=2) {
+            $utf8ar = $arabic->utf8Glyphs(substr($reportHtml, $p[$i-1], $p[$i] - $p[$i-1]));
+            $reportHtml = substr_replace($reportHtml, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
+        }
+
+        $pdf = PDF::loadHTML($reportHtml);
+       return $pdf->stream('contract.pdf');
+
+//
+//        $pdf = PDF::setOptions(['isHtml5ParserEnabled'=>true,'isPhpEnabled'=>true,'isFontSubsettingEnabled'=>true,'chroot' => base_path()])->loadView('backend.contract.contract-customer-pdf', compact('data'));
+//        return $pdf->stream('contract.pdf');
     }
 
     public function signContract(Request $request)

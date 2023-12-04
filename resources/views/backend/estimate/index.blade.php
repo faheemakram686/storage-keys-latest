@@ -31,7 +31,7 @@
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">Sr no.</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Full Name</span></th>
-                            <th class="nk-tb-col"><span class="sub-text">Company Name</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Customer Name</span></th>
 {{--                            <th class="nk-tb-col"><span class="sub-text">Phone</span></th>--}}
                             <th class="nk-tb-col"><span class="sub-text">Email</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Unit-Price</span></th>
@@ -256,7 +256,7 @@
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+data[i].storageunit.storage_unit_name+'/'+data[i].term_length.title+'</a></td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? ' ' : data[i].company_name)+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer.customer_name == null) ? ' ' : data[i].customer.customer_name)+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_price+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools" >'+

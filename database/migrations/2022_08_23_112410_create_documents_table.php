@@ -16,6 +16,7 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->date('expiry_date')->nullable();
             $table->text('path');
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('user_id')->constrained('users');

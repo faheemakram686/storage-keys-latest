@@ -192,6 +192,7 @@
       <path value="$PROJECT_DIR$/vendor/google/apiclient" />
       <path value="$PROJECT_DIR$/vendor/google/auth" />
       <path value="$PROJECT_DIR$/vendor/dacastro4/laravel-gmail" />
+      <path value="$PROJECT_DIR$/vendor/khaled.alshamaa/ar-php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3">

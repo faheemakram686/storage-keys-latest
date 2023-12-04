@@ -114,6 +114,7 @@ class ContactClass implements ContactInterface {
                 $mycustomer = \QuickBooksOnline\API\Facades\Customer::create([
                     "GivenName" => $displayname,
                     "DisplayName" => $displayname,
+                    "CompanyName" => "Test",
                     "PrimaryEmailAddr" => [
                         "Address" => $contact->email
                     ],

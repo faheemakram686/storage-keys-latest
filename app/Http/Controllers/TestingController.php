@@ -58,7 +58,12 @@ class TestingController extends Controller
         ];
     }
 
-    public function getTestValue(Request $request)
+
+
+
+
+
+public function getTestValue(Request $request)
     {
         return [
             'req' => $request->all(),

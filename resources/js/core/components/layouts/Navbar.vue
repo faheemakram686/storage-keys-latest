@@ -40,6 +40,9 @@
                 </div>
                 <div>
                     <ul class="navbar-nav navbar-nav-right ml-auto">
+                      <li class="nav-item d-none d-lg-block">
+                        <a href="/admin" class="btn btn-outline-primary btn-dim btn-sm d-none d-md-inline-flex">Go Back To Panel</a>
+                      </li>
                         <li class="nav-item">
                             <button class="navbar-toggler align-self-center"
                                     type="button"
@@ -63,6 +66,8 @@
                                 <app-icon :name="'maximize'"/>
                             </a>
                         </li>
+
+
 
                         <app-navbar-language-dropdown
                             :selected-language="selectedLanguage"

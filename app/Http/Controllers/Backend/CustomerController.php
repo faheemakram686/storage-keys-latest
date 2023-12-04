@@ -57,13 +57,6 @@ class CustomerController extends Controller
     {
         $data['customer']=$this->customer->isCustomer($request->id);
         return $data;
-//       if( $data['customer'] == null)
-//       {
-//           return 1;
-//       }else
-//       {
-//           return 0;
-//       }
 
     }
     public function editCustomer(Request $request)
@@ -74,6 +67,7 @@ class CustomerController extends Controller
     }
     public function updateCustomer(Request $request)
     {
+
         $res=$this->customer->updateCustomer($request);
         return response()->json(['success' => 'Record updated successfully'], 200);
     }

@@ -266,6 +266,7 @@ class ComposerStaticInit8ede60663c7f942bafd1a1853c4ec236
         'A' => 
         array (
             'Aws\\' => 4,
+            'ArPHP\\I18N\\' => 11,
             'App\\' => 4,
             'Altek\\Eventually\\' => 17,
         ),
@@ -848,6 +849,10 @@ class ComposerStaticInit8ede60663c7f942bafd1a1853c4ec236
         array (
             0 => __DIR__ . '/..' . '/aws/aws-sdk-php/src',
         ),
+        'ArPHP\\I18N\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/khaled.alshamaa/ar-php/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -1105,6 +1110,7 @@ class ComposerStaticInit8ede60663c7f942bafd1a1853c4ec236
         'App\\Http\\Controllers\\Backend\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/PaymentController.php',
         'App\\Http\\Controllers\\Backend\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/ProductController.php',
         'App\\Http\\Controllers\\Backend\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/ProfileController.php',
+        'App\\Http\\Controllers\\Backend\\QuickBooksWebhookController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/QuickBooksWebhookController.php',
         'App\\Http\\Controllers\\Backend\\ReminderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/ReminderController.php',
         'App\\Http\\Controllers\\Backend\\RequireDocumentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/RequireDocumentController.php',
         'App\\Http\\Controllers\\Backend\\RolesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/RolesController.php',
@@ -1709,6 +1715,7 @@ class ComposerStaticInit8ede60663c7f942bafd1a1853c4ec236
         'App\\Services\\Tenant\\Utility\\TenantRoleCreationService' => __DIR__ . '/../..' . '/app/Services/Tenant/Utility/TenantRoleCreationService.php',
         'App\\Services\\Tenant\\WorkingShift\\WorkingShiftService' => __DIR__ . '/../..' . '/app/Services/Tenant/WorkingShift/WorkingShiftService.php',
         'App\\Traits\\StatusChangeTrait' => __DIR__ . '/../..' . '/app/Traits/StatusChangeTrait.php',
+        'ArPHP\\I18N\\Arabic' => __DIR__ . '/..' . '/khaled.alshamaa/ar-php/src/Arabic.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Aws\\ACMPCA\\ACMPCAClient' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/ACMPCA/ACMPCAClient.php',
         'Aws\\ACMPCA\\Exception\\ACMPCAException' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/ACMPCA/Exception/ACMPCAException.php',

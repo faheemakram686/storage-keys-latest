@@ -183,14 +183,9 @@
                     <div class="nk-block nk-block-sm">
                         <form method="post" action="{{ url('admin/convert-customer') }}" id="CountryForm">
                             @csrf
+                            <input type="hidden" name="lead_id">
+                            <input type="hidden" name="lead_type">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="hidden" name="lead_id">
-                                        <label>Company Name <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text" name="company_name" placeholder="Company Name" required>
-                                    </div>
-                                </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>First Name <span class="text-danger">*</span></label>
@@ -201,6 +196,48 @@
                                     <div class="form-group">
                                         <label>Last Name <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" name="last_name" placeholder="Last Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row" id="company">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Company Name <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="company_name" placeholder="Company Name" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Trade License No <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="license_no" placeholder="Trade License No" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>VAT <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="vat" placeholder="VAT" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="individual">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Customer ID <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="customer_id_card" placeholder="Customer ID">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Passport No <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="passport_no" placeholder="Passport No" >
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Date of Birth <span class="text-danger"></span></label>
+                                                <input class="form-control" type="text" name="dob" placeholder="Date of Birth" >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -626,51 +663,6 @@
 
             });
 
-            $('#TaskForm').on('submit', function(e) {
-
-                e.preventDefault();
-                var formData=$('#TaskForm').serialize()
-                $.ajax({
-                    type: "get",
-                    url: '{{ url('admin/save-task') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function() {
-                        $('.btn-submit').text('Saving...');
-                        $(".btn-submit").prop("disabled", true);
-                    },
-                    success: function(data) {
-
-                        if (data.success) {
-                            getCountries();
-                            $('#TaskForm')[0].reset();
-                            $('.close').click();
-                            toastr.success(data.success);
-
-                        }
-                        if (data.errors) {
-                            toastr.error(data.errors);
-                            $('.btn-submit').text('Save');
-                            $(".btn-submit").prop("disabled", false);
-                        }
-                    },
-
-                    complete: function(data) {
-                        $(".btn-submit").html("Save");
-                        $(".btn-submit").prop("disabled", false);
-                        window.location.href = "{{ route('leads.index')}}";
-                    },
-
-                    error: function() {;
-                        toastr.error('any technical error');
-                        $('.btn-submit').text('Save');
-                        $(".btn-submit").prop("disabled", false);
-                    }
-                });
-
-
-            });
 
             getCountries();
             function getCountries() {
@@ -698,7 +690,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+data[i].storageunit.storage_unit_name+'/'+data[i].term_length.title+'</a></td>'+
                             {{--' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+data[i].f_name+' '+data[i].l_name+'</a></td>'+--}}
                             // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry">'+data[i].f_name+' '+data[i].l_name+'</a></td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? ' ' : data[i].company_name)+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? data[i].f_name+' '+data[i].l_name : data[i].company_name)+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].phone+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
@@ -790,49 +782,6 @@
 
             });
 
-            getTasks();
-            function getTasks() {
-
-                $.ajax({
-
-                    url: '{{ url('admin/get-tasks') }}',
-                    type: 'get',
-                    async: false,
-                    dataType: 'json',
-
-                    success: function(data) {
-                        // console.log(data);
-
-                        var html = '';
-                        var i;
-                        var c = 0;
-
-
-                        for (i = 0; i < data.length; i++) {
-                            c++;
-
-                            html += ' <tr class="nk-tb-item odd">'+
-                                ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].subject+'</td>'+
-                                '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
-                                ' </td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].start_date+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].due_date == null) ? ' ' : data[i].due_date)+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].assignee == null) ? ' ' : data[i].assignee.first_name +' '+data[i].assignee.last_name)+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].priority == null) ? ' ' : data[i].priority)+'</td>'+
-                                '</tr>';
-                        }
-
-                        $('#taskTable').html(html);
-
-                    },
-                    error: function() {
-                        toastr.error('something went wrong');
-                    }
-
-                });
-            }
 
             $('#countryTable').on('click', '.btn-edit', function() {
                 var id = $(this).attr('data');
@@ -871,7 +820,8 @@
 
             $('#convert').on('click', '.btn-make', function() {
                 var id = $(this).attr('data');
-
+                $('#company').hide();
+                $('#individual').hide();
                 $.ajax({
                     url: '{{ url('admin/show-lead') }}',
                     type: 'get',
@@ -880,8 +830,17 @@
                     data: { id: id },
                     success: function(data) {
                         console.log(data);
+                        if(data.lead[0].lead_type == 'company')
+                        {
+                            $('#company').show();
+                            $('#individual').hide();
+                        }else {
+                            $('#individual').show();
+                            $('#company').hide()
+                        }
                         $('input[name=id]').val(id);
                         $('input[name=lead_id]').val(data.lead[0].id);
+                        $('input[name=lead_type]').val(data.lead[0].lead_type);
                         $('input[name=first_name]').val(data.lead[0].f_name);
                         $('input[name=last_name]').val(data.lead[0].l_name);
                         $('input[name=company_name]').val(((data.lead[0].company_name == null) ? ' ' : data.lead[0].company_name));

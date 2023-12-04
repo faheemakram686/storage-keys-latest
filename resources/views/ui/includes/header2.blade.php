@@ -29,7 +29,7 @@
                                                     <form id="logout-form" action="{{ route('all.logout') }}" method="POST" class="d-none">@csrf</form>
                                                 @endif
                                             @else
-                                                <li><a href="/admin" title="Admin Area"><i class="fa fa-lock"></i> Admin area</a></li>
+                                                <li><a href="{{url('admin')}}" title="Admin Area"><i class="fa fa-lock"></i> Admin area</a></li>
                                                 <li><a href="{{ route('customer.login') }}" title="Login"><i class="fa fa-lock"></i> Customer Login</a></li>
                                                 <li><a href="{{route('customer.register')}}" title="Register"><i class="fa fa-user"></i> Register</a></li>
                                             @endif

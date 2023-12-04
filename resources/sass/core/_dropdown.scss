@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "variables";
 @import "theme-colors";
 
@@ -64,7 +66,7 @@
         display: inline-block;
         vertical-align: inherit;
         transition: all $default-transition-duration $action-transition-timing-function;
-        font: normal normal 700 $dropdown-arrow-font-size/1 'Font Awesome 5 Free';
+        font: normal normal 700 math.div($dropdown-arrow-font-size, 1) 'Font Awesome 5 Free';
       }
 
       &[aria-expanded="true"] {

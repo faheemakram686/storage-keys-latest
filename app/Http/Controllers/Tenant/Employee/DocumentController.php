@@ -38,7 +38,7 @@ class DocumentController extends Controller
         );
 
         Document::query()->create(array_merge(
-            $request->only('user_id', 'name'),
+            $request->only('user_id', 'name','expiry_date'),
             [
                 'created_by' => auth()->id(),
                 'path' => $file_path
@@ -86,9 +86,9 @@ class DocumentController extends Controller
                 'documents'
             );
         }
-
         $document->update([
             'name' => $request->name,
+            'expiry_date' => $request->expiry_date,
             'path' => $file_path
         ]);
 

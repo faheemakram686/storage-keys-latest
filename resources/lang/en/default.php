@@ -187,6 +187,11 @@ return array_merge([
     'view_as_admin' => 'View As Admin',
     'view_as_manager' => 'View As Manager',
     'change_password' => 'Change Password',
+    'res_visa_loc' => 'Residency Visa Location',
+    'emirate_id' => 'Emirates ID No.',
+    'notice_period' => 'Notice Period',
+
+
 
     // Settings
     'app_name' => 'App Name',

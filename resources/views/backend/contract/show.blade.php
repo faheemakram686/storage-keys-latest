@@ -67,7 +67,7 @@
                                         </div>
                                     </div><!-- .nk-block-head -->
                                     <div class="nk-block">
-                                        <form method="post" action="#" id="ContentForm">
+                                        <form method="post" id="ContentForm">
                                             @csrf
                                             <input type="hidden" name="id" value="{{$data['contract'][0]->id}}">
                                             <div class="row">
@@ -84,6 +84,8 @@
                                                 </div>
                                                 <div class="col-sm-11">
                                                             <div class="form-group">
+                                                                <label for="">Use these strings in template:</label>
+                                                                <p> @verbatim{{company_name}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{unit_no}}  - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.phone}} -{{contact.email}} - {{storage_fee}} - {{addon_fee}} @endverbatim</p>
                                                                 <label>Contract Content<span class="text-danger"></span></label>
                                                                 <div id="toolbar-container"></div>
                                                                 <div id="editor">
@@ -187,44 +189,31 @@
         </div>
     </div>
     <script>
+        var myeditor ='';
+        var temp_data = '';
+        var temp_title = '';
+        var editor_content = '';
+        var temp_id = '';
 
+
+        DecoupledEditor
+            .create( document.querySelector( '#editor' ) )
+            .then( editor => {
+                const toolbarContainer = document.querySelector( '#toolbar-container' );
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                myeditor=editor;
+                editor_content=editor.getData();
+                // console.log(myeditor.getData());
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
     </script>
     <script>
         $(document).ready(function() {
 
-             var myeditor ='';
-             var temp_data = '';
-             var temp_title = '';
-             var temp_id = '';
+            var id= $('#temp_id').find(":selected").val();
 
-            DecoupledEditor
-                .create( document.querySelector( '#editor' ) )
-                .then( editor => {
-                    const toolbarContainer = document.querySelector( '#toolbar-container' );
-
-                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-                    myeditor=editor;
-                } )
-                .catch( error => {
-                    console.error( error );
-                } );
-
-
-            // ClassicEditor.create(
-            //     document.querySelector( '#editor' ),
-            //     {
-            //         placeholder: 'Type the content here!'
-            //
-            //     }
-            // ).then( editor => {
-            //     myeditor=editor;
-            //     // editor.execute( 'bold' );
-            //     // myeditor.setData('abc')
-            //     // console.log(myeditor.getData());
-            //     // console.log( editor );
-            // } ).catch( error => {
-            //     console.error( error );
-            // } );
 
             $('#temp_id').change(function () {
                 var id =  $('#temp_id').val();
@@ -260,11 +249,10 @@
                            dataType: 'json',
                            data: formData,
                            success: function(data) {
-
                                if (data.success) {
                                    $('.close').click();
                                    toastr.success(data.success);
-                                    window.location.reload();
+                                    // window.location.reload();
                                }
                                if (data.errors) {
                                    toastr.error(data.errors);
@@ -283,9 +271,7 @@
                 });
 
             });
-
             $(".btn-change").click(function(){
-
                 var radioGroup = $('input[name="temp_change"]:checked');
                 const editor_data = myeditor.getData();
                 var newtitle = $('#temp_title').val();
@@ -303,7 +289,6 @@
                      update(temp_id,temp_title, editor_data);
                  }
             });
-
             function insertNew(title, body) {
                 $.ajax({
                     url: '{{ url('admin/save-contract-template') }}',
@@ -316,7 +301,7 @@
                         if (data.success) {
                             $('.close').click();
                             toastr.success(data.success);
-                            window.location.reload();
+                            // window.location.reload();
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
@@ -332,7 +317,6 @@
                 });
 
             }
-
             function update(id,title,body) {
                 $.ajax({
                     url: '{{ url('admin/update-contract-template') }}',
@@ -345,7 +329,7 @@
                         if (data.success) {
                             $('.close').click();
                             toastr.success(data.success);
-                            window.location.reload();
+                            // window.location.reload();
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
@@ -359,8 +343,6 @@
                     }
                 });
             }
-
-
 
         });
 
@@ -437,148 +419,9 @@
 
 
         });
-        $("#temp_id").change(function () {
-            var end = this.value;
-            alert(end);
-            var firstDropVal = $('#pick').val();
-        });
-        $('#changeStatus').on('submit', function(e) {
-
-            e.preventDefault();
-            var formData=$('#changeStatus').serialize()
-            $.ajax({
-                type: "get",
-                url: '{{ url('admin/change-lead-status') }}',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('.btn-submit').text('Saving...');
-                    $(".btn-submit").prop("disabled", true);
-                },
-                success: function(data) {
-
-                    if (data.success) {
-
-                        $('#changeStatus')[0].reset();
-                        $('.close').click();
-                        toastr.success(data.success);
-
-                    }
-                    if (data.errors) {
-                        toastr.error(data.errors);
-                        $('.btn-submit').text('Save');
-                        $(".btn-submit").prop("disabled", false);
-                    }
-                },
-
-                complete: function(data) {
-                    $(".btn-submit").html("Save");
-                    $(".btn-submit").prop("disabled", false);
-                    location.reload();
-                },
-
-                error: function() {;
-                    toastr.error('any technical error');
-                    $('.btn-submit').text('Save');
-                    $(".btn-submit").prop("disabled", false);
-                }
-            });
 
 
-        });
 
-        $('#changeSource').on('submit', function(e) {
-
-            e.preventDefault();
-            var formData=$('#changeSource').serialize()
-            $.ajax({
-                type: "get",
-                url: '{{ url('admin/change-lead-source') }}',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('.btn-submit').text('Saving...');
-                    $(".btn-submit").prop("disabled", true);
-                },
-                success: function(data) {
-
-                    if (data.success) {
-
-                        $('#changeSource')[0].reset();
-                        $('.close').click();
-                        toastr.success(data.success);
-
-                    }
-                    if (data.errors) {
-                        toastr.error(data.errors);
-                        $('.btn-submit').text('Save');
-                        $(".btn-submit").prop("disabled", false);
-                    }
-                },
-
-                complete: function(data) {
-                    $(".btn-submit").html("Save");
-                    $(".btn-submit").prop("disabled", false);
-                    location.reload();
-                },
-
-                error: function() {;
-                    toastr.error('any technical error');
-                    $('.btn-submit').text('Save');
-                    $(".btn-submit").prop("disabled", false);
-                }
-            });
-
-
-        });
-
-        $('#changeAssigneeForm').on('submit', function(e) {
-
-            e.preventDefault();
-            var formData=$('#changeAssigneeForm').serialize()
-            $.ajax({
-                type: "get",
-                url: '{{ url('admin/change-lead-assignee') }}',
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    $('.btn-submit').text('Saving...');
-                    $(".btn-submit").prop("disabled", true);
-                },
-                success: function(data) {
-
-                    if (data.success) {
-
-                        $('#changeAssigneeForm')[0].reset();
-                        $('.close').click();
-                        toastr.success(data.success);
-
-                    }
-                    if (data.errors) {
-                        toastr.error(data.errors);
-                        $('.btn-submit').text('Save');
-                        $(".btn-submit").prop("disabled", false);
-                    }
-                },
-
-                complete: function(data) {
-                    $(".btn-submit").html("Save");
-                    $(".btn-submit").prop("disabled", false);
-                    location.reload();
-                },
-
-                error: function() {;
-                    toastr.error('any technical error');
-                    $('.btn-submit').text('Save');
-                    $(".btn-submit").prop("disabled", false);
-                }
-            });
-
-
-        });
     </script>
 @endsection
 

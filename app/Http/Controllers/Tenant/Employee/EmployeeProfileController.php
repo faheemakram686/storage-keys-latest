@@ -34,7 +34,7 @@ class EmployeeProfileController extends Controller
             ['user_id' => $employee->id],
             array_merge(
                 ['user_id' => $employee->id],
-                $request->only('employee_id', 'gender', 'date_of_birth', 'about_me', 'phone_number')
+                $request->only('employee_id', 'gender', 'date_of_birth', 'about_me', 'phone_number','res_visa_loc','emirate_id','notice_period')
             )
         );
 
@@ -58,7 +58,9 @@ class EmployeeProfileController extends Controller
             User::query()
                 ->whereIn('id', $users_id)
                 ->get()
-                ->map(fn($employee) => $employee->profile()->update(['joining_date' => request()->get('joining_date')]));
+                ->map(function ($employee) {
+                    return $employee->profile()->update(['joining_date' => request()->get('joining_date')]);
+                });
             return updated_responses('employees');
         }
         else if ($type == 'workshift'){

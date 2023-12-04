@@ -261,6 +261,7 @@ require __DIR__.'/auth.php';
     Route::any('update-contract-id',[ContractController::class,'updateContractId']);
     Route::any('delete-contract',[ContractController::class,'deleteContract']);
     Route::any('contract/detail/{id}', [ContractController::class, 'detailContract'])->name('detail-contract');
+    Route::any('get-contract-template', [ContractController::class, 'getContractTemplateAjax'])->name('get-contract-template');
     Route::any('get-customer-contracts', [ContractController::class,'getCustomerContracts'])->name('get-customer-contracts');
     Route::any('contract/tasks/{id}', [ContractController::class,'showTasks'])->name('contract-tasks');
     Route::any('contract/attachments/{id}', [ContractController::class,'showAttachments'])->name('contract-attachments');
