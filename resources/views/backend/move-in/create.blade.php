@@ -24,7 +24,7 @@
                                         <option value="">Choose One</option>
                                         @isset($data['customers'])
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->company_name}}</option>
+                                        <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
                                         @endforeach
                                         @endisset
                                     </select>

@@ -138,7 +138,7 @@
                             html += '<tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no + ' '+((data[i].recurring != '0')? '<span class="badge badge-outline-primary">Recurring</span></a>':' ') +'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.company_name+'</a></td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a></td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"> '+((data[i].contract != null)? '<a href={{url('admin/contract/detail')}}/' + data[i].contract.id + '>'+data[i].contract.subject+'</a>':'<a href={{url('admin/order/detail')}}/' + data[i].order.id + '>Order No: '+data[i].order.id+'</a>') +' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].invoice_date+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].due_date+'</td>'+
