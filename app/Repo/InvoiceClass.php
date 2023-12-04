@@ -60,64 +60,64 @@ class InvoiceClass implements InvoiceInterface {
                             $invoiceItem->save();
                     }
                 }
-            $refreshtoken = $this->refreshToken();
-                $config = config('quickbooks');
-                $dataService = DataService::Configure([
-                    'auth_mode' => 'oauth2',
-                    'ClientID' => $config['client_id'],
-                    'ClientSecret' => $config['client_secret'],
-                    'RedirectURI' => $config['redirect_uri'],
-                    'accessTokenKey' => $refreshtoken['access_token'],
-                    'refreshTokenKey' => $refreshtoken['refresh_token'],
-                    'QBORealmID' => $config['realm_id'],
-                    'baseUrl' => $config['base_url'],
-                ]);
-                $myinvoice = Invoice::find($invoice->id)->first();
-                $items = InvoiceItem::query();
-                $items = $items->where('invoice_id',$invoice->id);
-                $items = $items->get();
-
-        $invoiceObj = \QuickBooksOnline\API\Facades\Invoice::create([
-            "Line" => [
-                [
-                "Amount" => $myinvoice->_total,
-                "DetailType" => "SalesItemLineDetail",
-                "SalesItemLineDetail" => [
-                    "Qty" => 2,
-                    "ItemRef" => [
-                        "value" => 42
-                    ]
-                ]
-            ],
+//            $refreshtoken = $this->refreshToken();
+//                $config = config('quickbooks');
+//                $dataService = DataService::Configure([
+//                    'auth_mode' => 'oauth2',
+//                    'ClientID' => $config['client_id'],
+//                    'ClientSecret' => $config['client_secret'],
+//                    'RedirectURI' => $config['redirect_uri'],
+//                    'accessTokenKey' => $refreshtoken['access_token'],
+//                    'refreshTokenKey' => $refreshtoken['refresh_token'],
+//                    'QBORealmID' => $config['realm_id'],
+//                    'baseUrl' => $config['base_url'],
+//                ]);
+//                $myinvoice = Invoice::find($invoice->id)->first();
+//                $items = InvoiceItem::query();
+//                $items = $items->where('invoice_id',$invoice->id);
+//                $items = $items->get();
+//
+//        $invoiceObj = \QuickBooksOnline\API\Facades\Invoice::create([
+//            "Line" => [
 //                [
-//                    "Amount" => $myinvoice->grand_total,
-//                    "DetailType" => "SalesItemLineDetail",
-//                    "SalesItemLineDetail" => [
-//                        "Qty" => 3,
-//                        "ItemRef" => [
-//                            "value" => 41
-//                        ]
+//                "Amount" => $myinvoice->_total,
+//                "DetailType" => "SalesItemLineDetail",
+//                "SalesItemLineDetail" => [
+//                    "Qty" => 2,
+//                    "ItemRef" => [
+//                        "value" => 42
 //                    ]
-//                ],
-            ],
-            "CustomerRef"=> [
-                "value"=> $myinvoice->customer->q_customer_id,
-            ],
-            "BillEmail" => [
-                "Address" => "author@intuit.com"
-            ]
-        ]);
-        $resultingInvoiceObj = $dataService->Add($invoiceObj);
-            $error = $dataService->getLastError();
-            if ($error) {
-                echo "The Status code is: " . $error->getHttpStatusCode() . "\n";
-                echo "The Helper message is: " . $error->getOAuthHelperError() . "\n";
-                echo "The Response message is: " . $error->getResponseBody() . "\n";
-            }
-            else {
-                return response()->json(['success' => 'Record save successfully'], 200);
-                echo "Created Id={$resultingInvoiceObj->Id}. Reconstructed response body:\n\n";
-            }
+//                ]
+//            ],
+////                [
+////                    "Amount" => $myinvoice->grand_total,
+////                    "DetailType" => "SalesItemLineDetail",
+////                    "SalesItemLineDetail" => [
+////                        "Qty" => 3,
+////                        "ItemRef" => [
+////                            "value" => 41
+////                        ]
+////                    ]
+////                ],
+//            ],
+//            "CustomerRef"=> [
+//                "value"=> $myinvoice->customer->q_customer_id,
+//            ],
+//            "BillEmail" => [
+//                "Address" => "author@intuit.com"
+//            ]
+//        ]);
+//        $resultingInvoiceObj = $dataService->Add($invoiceObj);
+//            $error = $dataService->getLastError();
+//            if ($error) {
+//                echo "The Status code is: " . $error->getHttpStatusCode() . "\n";
+//                echo "The Helper message is: " . $error->getOAuthHelperError() . "\n";
+//                echo "The Response message is: " . $error->getResponseBody() . "\n";
+//            }
+//            else {
+//                return response()->json(['success' => 'Record save successfully'], 200);
+//                echo "Created Id={$resultingInvoiceObj->Id}. Reconstructed response body:\n\n";
+//            }
 
 
 
