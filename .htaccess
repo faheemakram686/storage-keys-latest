@@ -3,4 +3,7 @@
     RewriteBase /
     RewriteRule ^$ public/index.php [L]
     RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+    <IfModule mod_substitute.c>
+    SubstituteMaxLineLength 10M
+    </IfModule>
 </IfModule>
