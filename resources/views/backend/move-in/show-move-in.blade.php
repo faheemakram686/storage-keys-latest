@@ -8,7 +8,7 @@
                     <div class="nk-block-head-content">
                         <h3 class="nk-block-title page-title">Move-In Items List</h3>
                         <div class="nk-block-des text-soft">
-                            <h5 class="">{{$data['movein'][0]->customer->company_name}}</h5>
+                            <h5 class="">{{$data['movein'][0]->customer->customer_name}}</h5>
                             <h6 class="">{{$data['movein'][0]->contract->subject}}</h6>
                         </div>
                     </div>

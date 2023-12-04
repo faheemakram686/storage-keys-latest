@@ -69,7 +69,7 @@
                                         <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['customers'] as $customer)
-                                                <option value="{{$customer->id}}">{{$customer->company_name}}</option>
+                                                <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -202,7 +202,7 @@
                             c++;
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.company_name+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.customer_name+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.subject+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+((data[i].moved_out_items)? data[i].moved_out_items:" ")+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].move_date_date+'</td>'+

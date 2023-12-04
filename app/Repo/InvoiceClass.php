@@ -60,6 +60,7 @@ class InvoiceClass implements InvoiceInterface {
                             $invoiceItem->save();
                     }
                 }
+
 //            $refreshtoken = $this->refreshToken();
 //                $config = config('quickbooks');
 //                $dataService = DataService::Configure([
@@ -115,10 +116,12 @@ class InvoiceClass implements InvoiceInterface {
 //                echo "The Response message is: " . $error->getResponseBody() . "\n";
 //            }
 //            else {
-//                return response()->json(['success' => 'Record save successfully'], 200);
+//
 //                echo "Created Id={$resultingInvoiceObj->Id}. Reconstructed response body:\n\n";
 //            }
-            
+
+
+
             return response()->json(['success' => 'Record save successfully'], 200);
 
             }

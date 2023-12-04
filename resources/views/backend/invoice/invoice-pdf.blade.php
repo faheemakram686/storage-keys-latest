@@ -279,7 +279,7 @@
                 <div class="invoice-contact">
                     <span class="overline-title">Invoice To</span>
                     <div class="invoice-contact-info">
-                        <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
+                        <h4 class="title">{{($data['invoice'][0]->customer->company_name==null)? "":$data['invoice'][0]->customer->company_name}}</h4>
                         <h4 class="title">{{$data['invoice'][0]->customer->primaryContact->first_name}} {{$data['invoice'][0]->customer->primaryContact->last_name}}</h4>
                         <ul class="list-plain">
                             <li><em class="icon ni ni-map-pin-fill fs-18px"></em><span>@isset($data['invoice'][0]->customer->address){{$data['invoice'][0]->customer->address}}@endisset<br>{{$data['invoice'][0]->customer->city}}, {{$data['invoice'][0]->customer->country}}</span></li>

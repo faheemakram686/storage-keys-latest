@@ -70,7 +70,7 @@
                                         <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['customers'] as $customer)
-                                                <option value="{{$customer->id}}">{{$customer->company_name}}</option>
+                                                <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -200,7 +200,7 @@
                             c++;
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.company_name+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.customer_name+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.subject+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract.barcode.length+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].move_in_date+'</td>'+
@@ -290,7 +290,7 @@
 
                             $('select[name="edit_customer_id"]')
                                 .append(
-                                    `<option value="${customer.id}" ${customer.id == res.moveInRequest.customer_id ? 'selected' : ''}>${customer.company_name}</option>`
+                                    `<option value="${customer.id}" ${customer.id == res.moveInRequest.customer_id ? 'selected' : ''}>${customer.customer_name}</option>`
                                 )
                         });
                         $('select[name="edit_contract_id"]')
