@@ -360,6 +360,47 @@
                                 </a>
                             </li>
                     @endif
+                    @if($role->hasPermission('view_user'))
+                        <li class="nk-menu-heading">
+                            <h6 class="overline-title text-primary-alt">Reports</h6>
+                        </li>
+                        <li class="nk-menu-item has-sub">
+                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                <span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span>
+                                <span class="nk-menu-text">Reports</span>
+                            </a>
+                            <ul class="nk-menu-sub">
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.warehouse') }}" class="nk-menu-link"><span class="nk-menu-text">Warehouse Report</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.lead') }}" class="nk-menu-link"><span class="nk-menu-text">Leads Report</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.estimate') }}" class="nk-menu-link"><span class="nk-menu-text">Estimate Report</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.contract') }}" class="nk-menu-link"><span class="nk-menu-text">Contract Report</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.invoice') }}" class="nk-menu-link"><span class="nk-menu-text">Invoice Report</span></a>
+                                    </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('report.payment') }}" class="nk-menu-link"><span class="nk-menu-text">Payment Reports</span></a>
+                                    </li>
+{{--                                    <li class="nk-menu-item">--}}
+{{--                                        <a href="{{ route('location.index') }}" class="nk-menu-link"><span class="nk-menu-text">MoveIn Request Report</span></a>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="nk-menu-item">--}}
+{{--                                        <a href="{{ route('location.index') }}" class="nk-menu-link"><span class="nk-menu-text">MoveIn Report</span></a>--}}
+{{--                                    </li>--}}
+{{--                                    <li class="nk-menu-item">--}}
+{{--                                        <a href="{{ route('location.index') }}" class="nk-menu-link"><span class="nk-menu-text">MoveOut Report</span></a>--}}
+{{--                                    </li>--}}
+
+                            </ul><!-- .nk-menu-sub -->
+                        </li>
+                    @endif
                 </ul><!-- .nk-menu -->
             </div><!-- .nk-sidebar-menu -->
         </div><!-- .nk-sidebar-content -->

@@ -73,4 +73,11 @@ class AdminDashboardClass implements AdminDashboardInterface {
         $storageunits = $storageunits->count();
         return $storageunits;
     }
+
+    public function getLeadStat()
+    {
+        $leads = Lead::with('leadStatus')->get();
+//        $leads = $leads->where('is_deleted',0);
+        return $leads;
+    }
 }

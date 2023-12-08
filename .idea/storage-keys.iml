@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/package/installer/src" isTestSource="false" packagePrefix="Gainhq\Installer\" />
       <sourceFolder url="file://$MODULE_DIR$/package/installer/tests" isTestSource="false" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor/darryldecode/cart/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/altek/eventually" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/aws/aws-crt-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/aws/aws-sdk-php" />

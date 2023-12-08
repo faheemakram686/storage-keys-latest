@@ -41,12 +41,14 @@ use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Backend\EmailController;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use App\Http\Controllers\Backend\QuickBooksWebhookController;
+use App\Http\Controllers\Backend\ReportsController;
 
 require __DIR__.'/auth.php';
 
     // Admin Routes
     Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [Backend\DashboardController::class, 'index'])->name('admin.index');
+    Route::get('/get-lead-stat', [Backend\DashboardController::class, 'getLeadStat'])->name('admin.lead-stat');
 
     Route::resource('profile', Backend\ProfileController::class);
     Route::any('edit-profile', [Backend\ProfileController::class,'editProfile']);
@@ -475,11 +477,33 @@ require __DIR__.'/auth.php';
         Route::any('send-email', [EmailController::class,'sendEmail'])->name('email.send');
         Route::any('get-email-detail/{id}', [EmailController::class,'getEmailDetail'])->name('email.detail');
 
+        //Warehouse Report
+        Route::any('view-warehouse-report', [ReportsController::class,'viewWarehouseReport'])->name('report.warehouse');
+        Route::any('filter-warehouse-report', [ReportsController::class,'getWarehouseReport'])->name('report.get-warehouse-report');
+
+        //Leads Report
+        Route::any('view-lead-report', [ReportsController::class,'viewLeadReport'])->name('report.lead');
+        Route::any('filter-lead-report', [ReportsController::class,'getLeadReport'])->name('report.get-lead-report');
+
+        //Estiamte Report
+        Route::any('view-estimate-report', [ReportsController::class,'viewEstimateReport'])->name('report.estimate');
+        Route::any('filter-estimate-report', [ReportsController::class,'getEstimateReport'])->name('report.get-estimate-report');
+
+        //Contract Report
+        Route::any('view-contract-report', [ReportsController::class,'viewContractReport'])->name('report.contract');
+        Route::any('filter-contract-report', [ReportsController::class,'getContractReport'])->name('report.get-contract-report');
+
+        //Invoice Report
+        Route::any('view-invoice-report', [ReportsController::class,'viewInvoiceReport'])->name('report.invoice');
+        Route::any('filter-invoice-report', [ReportsController::class,'getInvoiceReport'])->name('report.get-invoice-report');
+
+        //Payment Report
+        Route::any('view-payment-report', [ReportsController::class,'viewPaymentReport'])->name('report.payment');
+        Route::any('filter-payment-report', [ReportsController::class,'getPaymentReport'])->name('report.get-payment-report');
 
 
 
-
-});
+    });
 
 
 Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice']);

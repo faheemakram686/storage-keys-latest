@@ -28,6 +28,10 @@ class Invoice extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+    public function userResponsible()
+    {
+        return $this->belongsTo(\App\Models\Core\Auth\User::class, 'user_id', 'id');
+    }
     public function contract()
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');

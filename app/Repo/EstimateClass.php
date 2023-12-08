@@ -54,7 +54,7 @@ class EstimateClass implements EstimateInterface {
         if($request->insurance == "cover" ){
             $estimate->goods=$request->goodsval;
         }
-        $estimate->status=0;
+        $estimate->status=$request->status;
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){
@@ -113,7 +113,7 @@ class EstimateClass implements EstimateInterface {
         if($request->insurance == "cover" ){
             $estimate->goods=$request->goodsval;
         }
-        $estimate->status=0;
+        $estimate->status=$request->status;
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){

@@ -75,7 +75,6 @@ class ContractClass implements ContractInterface {
 
     public function editContract($id)
     {
-
         $qry=Contract::query();
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');

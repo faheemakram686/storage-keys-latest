@@ -457,6 +457,7 @@
 
                 });
             }
+
             $('#countryTable').on('click', '.btn-delete', function() {
                 var id = $(this).attr('data');
                     $.ajax({

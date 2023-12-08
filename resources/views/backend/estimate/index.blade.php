@@ -30,17 +30,14 @@
                         <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">Sr no.</span></th>
-                            <th class="nk-tb-col"><span class="sub-text">Full Name</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Estimate</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Customer Name</span></th>
-{{--                            <th class="nk-tb-col"><span class="sub-text">Phone</span></th>--}}
                             <th class="nk-tb-col"><span class="sub-text">Email</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Unit-Price</span></th>
-
                             <th class="nk-tb-col"><span class="sub-text">Estimate Date</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Expiry Date</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Expire</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
-{{--                            <th class="nk-tb-col"><span class="sub-text">Estimated by</span></th>--}}
                             <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>
                         </tr>
                         </thead>
@@ -170,13 +167,7 @@
         </div><!-- .modla-dialog -->
     </div>
 
-    <script>
-        // ClassicEditor
-        //     .create( document.querySelector( '#editor' ) )
-        //     .catch( error => {
-        //         console.error( error );
-        //     } );
-    </script>
+
     <script>
         $(document).ready(function() {
 

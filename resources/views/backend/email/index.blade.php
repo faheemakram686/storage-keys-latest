@@ -61,7 +61,7 @@
                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#" class="btn-edit" data='' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                                    <li><a href="#" class="btn-edit" data='' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Replay</span></a></li>
                                                     <li><a href="#" class="btn-delete" data=''><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                                                 </ul>
                                             </div>

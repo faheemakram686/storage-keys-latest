@@ -42,7 +42,7 @@
                     </div>
                 @endif
                 <div class="card-inner">
-                    <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true"  id="datatable" >
+                    <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true"  id="" >
                         <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">ID</span></th>

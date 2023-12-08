@@ -64,11 +64,13 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware(['customer','set.guard']);
     Route::post('save-order', [OrderController::class, 'save'])->name('order.save');
 
-
-
-
 //lead save
     Route::any('/save-lead', [LeadController::class, 'saveLead'])->name('save-lead');
+
+
+Route::get("/test", function(){
+      return view("test");;
+});
 
     Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         return $request->user();

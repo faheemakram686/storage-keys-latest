@@ -51,6 +51,7 @@ use App\Repo\Interfaces\OrderInterface;
 use App\Repo\Interfaces\PaymentInterface;
 use App\Repo\Interfaces\ProductInterface;
 use App\Repo\Interfaces\ReminderInterface;
+use App\Repo\Interfaces\ReportInterface;
 use App\Repo\Interfaces\RequireDocumentInterface;
 use App\Repo\Interfaces\RoleInterface;
 use App\Repo\Interfaces\StorageTypeInterface;
@@ -76,6 +77,7 @@ use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\ProductClass;
 use App\Repo\ReminderClass;
+use App\Repo\ReportClass;
 use App\Repo\RequireDocumentClass;
 use App\Repo\RoleClass;
 use App\Repo\StorageTypeClass;
@@ -89,6 +91,7 @@ use App\Repo\WarehouseClass;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
+use PhpCsFixer\Console\Report\ListSetsReport\ReporterInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -140,6 +143,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(OrderInterface::class,OrderClass::class);
         $this->app->bind(CustomerDashboardInterface::class,CustomerDashboardClass::class);
         $this->app->bind(GoogleServiceGmailInterface::class,GoogleServiceGmail::class);
+        $this->app->bind(ReportInterface::class,ReportClass::class);
     }
 
 

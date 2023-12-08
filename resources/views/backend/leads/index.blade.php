@@ -34,8 +34,8 @@
                         <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">Sr no.</span></th>
-                            <th class="nk-tb-col"><span class="sub-text">Full Name</span></th>
-                            <th class="nk-tb-col"><span class="sub-text">Company Name</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Lead</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Customer Name</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Phone</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Email</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Lead Status</span></th>

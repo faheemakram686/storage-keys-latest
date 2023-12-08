@@ -12,8 +12,6 @@ class Estimate extends Model
         'created_at'  => 'datetime:Y-m-d H:00'
     ];
 
-
-
     public function storageunit()
     {
         return $this->belongsTo(StorageUnit::class, 'su_id', 'id');
@@ -43,6 +41,10 @@ class Estimate extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+    public function userResponsible()
+    {
+        return $this->belongsTo(\App\Models\Core\Auth\User::class, 'user_id', 'id');
     }
 
 

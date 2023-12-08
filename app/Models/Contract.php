@@ -13,6 +13,10 @@ class Contract extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+    public function userRensonsible()
+    {
+        return $this->belongsTo(\App\Models\Core\Auth\User::class, 'user_id', 'id');
+    }
 
     public function estimate()
     {

@@ -9,11 +9,15 @@ class Warehouse extends Model
 {
     use HasFactory;
 
+
     public function loc()
     {
         return $this->belongsTo(Location::class, 'loc_id', 'id')->select(['id', 'loc_name','city_id','country_id']);
     }
-
+    public function storageUnit()
+    {
+        return $this->hasMany(StorageUnit::class, 'wh_id', 'id');
+    }
     public function setStatusAttribute($value)
     {
         if($value==0){

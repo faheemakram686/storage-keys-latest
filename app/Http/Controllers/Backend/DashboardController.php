@@ -43,6 +43,11 @@ class DashboardController extends Controller
         return view('backend.dashboard')->with(compact('data'));
     }
 
+    public function getLeadStat()
+    {
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

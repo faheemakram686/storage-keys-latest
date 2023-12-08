@@ -25,7 +25,7 @@
                                     <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                            <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->company_name}}</option>
+                                            <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->customer_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -245,8 +245,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Status</label>
                                     <select class="form-control form-select " id="status" name="status" required>
-                                        <option value="0" {{(($data['invoice'][0]->status == 0)? 'selected':'')}}>Active</option>
-                                        <option value="1" {{(($data['invoice'][0]->status == 0)? 'selected':'')}} >In-Active</option>
+                                        <option value="1" {{(($data['invoice'][0]->status == 1)? 'selected':'')}}>Active</option>
+                                        <option value="0" {{(($data['invoice'][0]->status == 0)? 'selected':'')}} >In-Active</option>
                                     </select>
                                 </div>
                             </div>
