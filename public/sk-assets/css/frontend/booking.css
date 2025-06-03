@@ -1,0 +1,341 @@
+.list-of-cities {
+    padding: 20px 2px;
+}
+.city-name-option {
+    color: var(--ltn__secondary-color);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 0.5px;
+    font-weight: 800;
+    font-size: 1.3rem;
+    font-stretch: normal;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.selected-city {
+    text-decoration: underline;
+}
+.area-name{
+    color: var(--ltn__paragraph-color);
+    font-size: 1.0rem;;
+}
+
+.locations-section-header, .sizes-section-header, .units-section-header, .price-filter-header, .size-sqft-section-header, .add-ons-section-header {
+    font-family: sans-serif;
+    color: var(--ltn__secondary-color);
+    background-color: #E6E7E8;
+    border: 1px solid var(--border-color-7);
+    font-weight: bold;
+    z-index: 2;
+    text-align: center;
+    font-size: 1.0rem;
+}
+
+.locations-section-body, .sizes-section-body, .units-section-body, .price-filter-body, .size-sqft-section-body, .add-ons-section-body {
+    background: var(--white);
+    border: 1px solid var(--border-color-7);
+    border-radius: 5px;
+    padding-top: 20px;
+    padding-bottom: 12px;
+    margin-top: -17px;
+    padding-left: 23px;
+}
+.order-summary{
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+.check-container {
+    display: block;
+    position: relative;
+    padding-left: 3px;
+    padding-top: 2px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 0;
+    font-size: 0.8rem;
+}
+.check-container.indent-1 {
+    padding-left: 40px;
+}
+.check-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+input[type="checkbox"]
+{
+    border: 1px solid var(--border-color-4);
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    accent-color: var(--border-color-4);
+}
+.checkmark.indent-1 {
+    left: 20px;
+}
+
+.size-sqft-section-body {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.size-container.disabled {
+    background-color: #E6E7E8;
+}
+.size-container {
+    font-family: fantasy;
+    height: 25px;
+    position: relative;
+    color: var(--ltn__primary-color-2);
+    background: var(--silver);
+    border: 1px solid var(--ltn__secondary-color-2);
+    border-radius: 3px;
+    width: 40px;
+    height: 40px;
+    margin: 1% 3%;
+    cursor: pointer;
+}
+
+.size-container span {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding: 5px;
+}
+
+.apartment {
+    display: inline-flex;
+    background-color: var(--white-6);
+    /* border: 2px solid var(--border-color-1); */
+    border: 2px solid var(--border-color-4);
+    border-radius: 15px;
+    padding: 12px 5px;
+    margin-bottom: 20px;
+    width: inherit;
+    border: 2px solid var(--border-color-1);
+
+}
+
+.apartment-img {
+    padding: 5px 10px;
+    height: 180px;
+    max-height: 180px;
+    max-width: 100%;
+    width: 200px;
+    text-align: center;
+}
+
+.apartment-img>img {
+    border-radius: 10px;
+    height: 160px;
+    width: 180px;
+    min-height: 160px;
+    min-width: 180px;
+    border: 1px solid black;
+}
+
+.feature-name {
+    border: 1px solid var(--ltn__secondary-color);
+    width: fit-content;
+    padding: 1px 4px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.btn-check-map {
+    background-color: #d1d3d4;
+    border: 1px solid var(--border-color-6);
+    text-transform: uppercase;
+    margin-top: -20px;
+    font-family: 'Nunito Sans', sans-serif;;
+}
+
+.btn-reserve, .btn-qoutation {
+    background-color: var(--ltn__secondary-color);
+    border: 1px solid var(--border-color-6);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    text-transform: uppercase;
+    margin-top: -20px;
+    font-weight: 600;
+    font-family: 'Nunito Sans', sans-serif;;
+    font-size: 0.9rem;
+    border: 1px solid var(--ltn__secondary-color);
+}
+
+.apartment-size {
+    font-family: sans-serif;
+    font-weight: 600;
+}
+
+.apartment-description {
+    line-height: 1.3rem;
+    margin-top: 0.5rem;
+}
+
+.checkout-page {
+    background: url('http://127.0.0.1:8000/sk-assets/assets/images/frontend/Logo Background.png');
+    padding-top: 200px;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+}
+.booking-page {
+    background: url('http://127.0.0.1:8000/sk-assets/assets/images/frontend/Logo Background.png');
+    height: 100%;
+    padding-top: 50px;
+    min-height: 100%;
+    width: 100%;
+}
+
+.reservations-sections {
+    margin-bottom: 20px;
+}
+
+.term-section-header, .insurance-section-header, .terms-conditions-section-header, .padlock-section-header, .summary-section-header {
+    font-family: sans-serif;
+    color: var(--ltn__secondary-color);
+    background-color: #E6E7E8;
+    border: 2px solid var(--border-color-7);
+    font-weight: bold;
+    z-index: 2;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.term-section-body, .insurance-section-body, .terms-conditions-section-body, .padlock-section-body, .summary-section-body {
+    background: var(--border-color-8);
+    border: 2px solid var(--border-color-7);
+    border-radius: 5px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-top: -20px;
+    font-family: sans-serif;
+}
+.order-section-body{
+    background: var(--border-color-8);
+    border: 2px solid var(--border-color-7);
+    border-radius: 5px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-top: -20px;
+    font-family: sans-serif;
+}
+.order-section-header{
+    font-family: sans-serif;
+    color: var(--ltn__secondary-color);
+    background-color: #E6E7E8;
+    border: 2px solid var(--border-color-7);
+    font-weight: bold;
+    z-index: 2;
+    text-align: center;
+    font-size: 1.1rem;
+}
+.col-checkbox {
+    margin-bottom: 10px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 2px;
+}
+.separator {
+    border-top: 2px solid var(--border-color-12);
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    min-height: 2px;
+}
+.separator-item {
+    border-top: 2px solid var(--border-color-12);
+    margin-top: 5px !important;
+    margin-bottom: 1rem !important;
+    min-height: 2px;
+}
+
+.checkmark {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    border: 1px solid var(--border-color-4);
+    border-radius: 2px;
+}
+.checked {
+    background-color:  var(--ltn__secondary-color);
+    border: 1px solid var(--border-color-4);
+}
+.on-sale-text {
+    color: var(--ltn__secondary-color);
+}
+
+.insurance-sections, .terms-conditions-sections, .submission-sections, .continue-to-pay-sections {
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+input[name="goods_value"], input[name="padlock_value"], input[name="promocode_value"] {
+    height: 35px;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="submit"], textarea {
+    background-color: var(--white);
+    border: 2px solid;
+    border-color: var(--border-color-9);
+    height: 35px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding-left: 20px;
+    font-size: 16px;
+    color: var(--ltn__paragraph-color);
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 0;
+    padding-right: 40px;
+}
+.lbl{
+    display: inline-block;
+    color: #000000;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 1px;
+    text-transform: uppercase;
+}
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.hover-button {
+    background-color: var(--ltn__secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.hover-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.hover-button:hover + .hover-image {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: auto;
+}
