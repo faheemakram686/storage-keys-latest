@@ -16,10 +16,10 @@ class GoogleServiceGmail implements GoogleServiceGmailInterface
     public function getGmails()
     {
         $client = new Client();
-        $client->setApplicationName('StorageKeys');
-        $client->setClientId('636581395371-e8dvb1vhog2lfjlmlo5rc218c44vmimc.apps.googleusercontent.com');
-        $client->setClientSecret('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');
-        $client->setRedirectUri('http:localhost:8000/login/google/callback');
+        $client->setApplicationName(env('GOOGLE_PROJECT_ID'));
+        $client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI', 'APP_URL/login/google/callback'));
         $client->setScopes([Gmail::GMAIL_READONLY, Gmail::GMAIL_COMPOSE]);
 //       / $authUrl = $client->createAuthUrl();
 //        $authCode = urldecode($request->input('auth_code'));
