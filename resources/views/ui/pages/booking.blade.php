@@ -28,7 +28,7 @@
                                     <option value=""  >Choose One</option>
                                     @isset($data)
                                         @foreach ($data['loc'] as $country)
-                                            <option value="{{ $country->id }}" {{(($country->is_defult == 'Default')?  "selected" : "" )}}>{{$country->name }}</option>
+                                            <option value="{{ $country->id }}" {{(($country->is_default == 'Default')?  "selected" : "" )}}>{{$country->name }}</option>
                                         @endforeach
                                     @endisset
                                 </select>
@@ -136,7 +136,7 @@
                         if (data.length > 0) {
 
                             for (i = 0; i < data.length; i++) {
-                                html3 += '<option '+ ((data[i].is_defult == 'Default') ? 'selected' : '')+' value="' + data[i].id + '">' + data[i].city_name + '</option>';
+                                html3 += '<option '+ ((data[i].is_default == 'Default') ? 'selected' : '')+' value="' + data[i].id + '">' + data[i].city_name + '</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Cities Found</option>';
@@ -181,7 +181,7 @@
 
                             for (i = 0; i < data.length; i++) {
                                 c++;
-                                html3 += ' <option '+ ((data[i].is_defult == 'Default' )? 'selected' : '')+'  value="'+data[i].id+'"> '+data[i].loc_name+'</option>';
+                                html3 += ' <option '+ ((data[i].is_default == 'Default' )? 'selected' : '')+'  value="'+data[i].id+'"> '+data[i].loc_name+'</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Location Found</option>';

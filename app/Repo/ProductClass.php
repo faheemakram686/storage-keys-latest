@@ -44,51 +44,52 @@ class ProductClass implements ProductInterface {
         $sy->image=$name;
         $sy->status=$request->status;
         if($sy->save()){
-            $refreshtoken = $this->refreshToken();
-            $config = config('quickbooks');
-            $dataService = DataService::Configure([
-                'auth_mode' => 'oauth2',
-                'ClientID' => $config['client_id'],
-                'ClientSecret' => $config['client_secret'],
-                'RedirectURI' => $config['redirect_uri'],
-                'accessTokenKey' => $refreshtoken['access_token'],
-                'refreshTokenKey' => $refreshtoken['refresh_token'],
-                'QBORealmID' => $config['realm_id'],
-                'baseUrl' => $config['base_url'],
-            ]);
-            $dateTime = now();
-            $Item = Item::create([
-                "Name" => $sy->p_name,
-                "Description" => $sy->detail,
-                "Active" => true,
-                "FullyQualifiedName" => "Office Supplies",
-                "Taxable" => true,
-                "UnitPrice" => $sy->sell_price,
-                "Type" => "Inventory",
-                "IncomeAccountRef" => [
-                    "value" => 129,
-                    "name" => "Sales of Product Income"
-                ],
-                "PurchaseDesc" => "This is the purchasing description.",
-                "PurchaseCost" => $sy->pur_price,
-                "ExpenseAccountRef" => [
-                    "value" => 130,
-                    "name" => "Cost of Goods Sold"
-                ],
-                "AssetAccountRef" => [
-                    "value" => 131,
-                    "name" => "Inventory Asset"
-                ],
-                "TrackQtyOnHand" => true,
-                "QtyOnHand" => $sy->qty,
-                "InvStartDate" => $dateTime
-            ]);
-            $resultObj = $dataService->Add($Item);
-            if(isset($resultObj))
-            {
-                $mypro=Product::find($sy->id);
-                $mypro->q_product_id = $resultObj-> Id;
-                $mypro->save();
+            if(env('QUICKBOOKS_SYNC') == 'true') {
+                $refreshtoken = $this->refreshToken();
+                $config = config('quickbooks');
+                $dataService = DataService::Configure([
+                    'auth_mode' => 'oauth2',
+                    'ClientID' => $config['client_id'],
+                    'ClientSecret' => $config['client_secret'],
+                    'RedirectURI' => $config['redirect_uri'],
+                    'accessTokenKey' => $refreshtoken['access_token'],
+                    'refreshTokenKey' => $refreshtoken['refresh_token'],
+                    'QBORealmID' => $config['realm_id'],
+                    'baseUrl' => $config['base_url'],
+                ]);
+                $dateTime = now();
+                $Item = Item::create([
+                    "Name" => $sy->p_name,
+                    "Description" => $sy->detail,
+                    "Active" => true,
+                    "FullyQualifiedName" => "Office Supplies",
+                    "Taxable" => true,
+                    "UnitPrice" => $sy->sell_price,
+                    "Type" => "Inventory",
+                    "IncomeAccountRef" => [
+                        "value" => 129,
+                        "name" => "Sales of Product Income"
+                    ],
+                    "PurchaseDesc" => "This is the purchasing description.",
+                    "PurchaseCost" => $sy->pur_price,
+                    "ExpenseAccountRef" => [
+                        "value" => 130,
+                        "name" => "Cost of Goods Sold"
+                    ],
+                    "AssetAccountRef" => [
+                        "value" => 131,
+                        "name" => "Inventory Asset"
+                    ],
+                    "TrackQtyOnHand" => true,
+                    "QtyOnHand" => $sy->qty,
+                    "InvStartDate" => $dateTime
+                ]);
+                $resultObj = $dataService->Add($Item);
+                if (isset($resultObj)) {
+                    $mypro = Product::find($sy->id);
+                    $mypro->q_product_id = $resultObj->Id;
+                    $mypro->save();
+                }
             }
             return response()->json(['success' => 'Record save successfully'], 200);
         }

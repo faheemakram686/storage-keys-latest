@@ -45,7 +45,8 @@ class CustomerController extends Controller
 
     public function getAllCustomer()
     {
-        return $customer = $this->customer->getAllCustomer();
+         $customer = $this->customer->getAllCustomer();
+         return $customer;
     }
     public function deleteCustomer(Request $request)
     {

@@ -93,9 +93,14 @@
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].id + '>' + ((data[i].company_name == null) ? data[i].customer_name : data[i].company_name) + '</a></td>' +
-                                ' <td class="nk-tb-col nk-tb-col-tools">' +  ((data[i].primary_contact.first_name == null) ? ' ' : data[i].primary_contact.first_name) + ' ' + ((data[i].primary_contact.last_name == null) ? ' ' : data[i].primary_contact.last_name)  + '</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">' + ((data[i].email == null) ? ' ' : data[i].email) + '</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].phone == null) ? ' ' : data[i].phone) +'</td>'+
+                                '<td class="nk-tb-col nk-tb-col-tools">' +
+                                (data[i].primary_contact
+                                        ? ((data[i].primary_contact.first_name || '-') + ' ' + (data[i].primary_contact.last_name || '-'))
+                                        : '-'
+                                ) +
+                                '</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">' + ((data[i].email == null) ? '-' : data[i].email) + '</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].phone == null) ? '-' : data[i].phone) +'</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+
                                 ' </td>'+

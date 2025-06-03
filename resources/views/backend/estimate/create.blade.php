@@ -125,28 +125,51 @@
                                                 <div class="row">
                                                     <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
                                                         <p>Select longer periods to enjoy massive savings!</p>
-                                                        @isset($data['term_length'])
-                                                            @foreach($data['term_length'] as $term_length)
-                                                            <div class="row">
-                                                                <div class="col-9">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input" name="term_length" type="radio" value="{{$term_length->id}}"  id="flexCheckDefault" />
-                                                                        <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>
+{{--                                                        @isset($data['term_length'])--}}
+{{--                                                            @foreach($data['term_length'] as $term_length)--}}
+{{--                                                            <div class="row">--}}
+{{--                                                                <div class="col-9">--}}
+{{--                                                                    <div class="form-check">--}}
+{{--                                                                        <input class="form-check-input" name="term_length" type="radio" value="{{$term_length->id}}"  id="flexCheckDefault" />--}}
+{{--                                                                        <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>--}}
+{{--                                                                    </div>--}}
+{{--                                                                </div>--}}
+{{--                                                                @if($term_length->term_period ==1 )--}}
+{{--                                                                <div class="col-3 d-flex">--}}
+{{--                                                                    <span class="no-bottom-margin mt-1 text-right">AED</span>--}}
+{{--                                                                    <input type="text" class=" no-bottom-margin form-control" placeholder="Price" name="unit_price" value="" style="height:35px;width:100px;padding: 0px 8px">--}}
+{{--                                                                    <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
+{{--                                                                </div>--}}
+{{--                                                                @else--}}
+{{--                                                                <div class="col-3 d-flex">--}}
+{{--                                                                    <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>--}}
+{{--                                                                </div>--}}
+{{--                                                                @endif--}}
+{{--                                                            </div>--}}
+{{--                                                            <div class="separator"></div>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        @endisset--}}
+                                                        @isset($data['term_lengths'])
+                                                            @foreach($data['term_lengths'] as $term_length)
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" name="term_length" type="radio" value="{{$term_length->id}}"  {{ ($lead->term_length== $term_length->id)? "checked" : "" }}  id="flexCheckDefault"  />
+                                                                            <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>
+                                                                            <p class="no-bottom-margin text-left on-sale-text"><small>({{$term_length->description}})</small></p>
+                                                                        </div>
+                                                                    </div>
+                                                                    @php
+                                                                        $total2 = $data['su'][0]->price * $term_length->term_period;
+                                                                    @endphp
+                                                                    <div class="col-6">
+                                                                        <input type="hidden"   name="unit_price" value="{{$total2}}" >
+                                                                        <p class="no-bottom-margin text-right">AED {{$total2 - ($total2 * $term_length->discount_percentage/100)}}</p>
+                                                                        <p class="no-bottom-margin text-right"><del>AED {{$total2}}</del></p>
+                                                                        <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>
                                                                     </div>
                                                                 </div>
-                                                                @if($term_length->term_period ==1 )
-                                                                <div class="col-3 d-flex">
-                                                                    <span class="no-bottom-margin mt-1 text-right">AED</span>
-                                                                    <input type="text" class=" no-bottom-margin form-control" placeholder="Price" name="unit_price" value="" style="height:35px;width:100px;padding: 0px 8px">
-                                                                    <span class="no-bottom-margin mt-1 text-right">/mo</span>
-                                                                </div>
-                                                                @else
-                                                                <div class="col-3 d-flex">
-                                                                    <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>
-                                                                </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="separator"></div>
+                                                                <div class="separator-item"></div>
                                                             @endforeach
                                                         @endisset
                                                        

@@ -103,8 +103,9 @@ class EstimateController extends Controller
 
     public function getCustomerEstimates(Request $request)
     {
-        return $res=$this->estimate->getCustomerEstimates($request->customer_id);
+         $res=$this->estimate->getCustomerEstimates($request->customer_id);
 
+        return $res;
     }
 
     public function estimateToCustomer(Request $request)

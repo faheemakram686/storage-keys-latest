@@ -249,7 +249,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+data[i].storageunit.storage_unit_name+'/'+data[i].term_length.title+'</a></td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer.customer_name == null) ? ' ' : data[i].customer.customer_name)+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_price+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].storageunit.price+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools" >'+
                             ' <span class="badge '+((endDate < TodayDate ? "badge-danger":"badge-success"))+'">'+((endDate < TodayDate ? "Expired":"Active"))+'</span>'+
                             ' </td>'+

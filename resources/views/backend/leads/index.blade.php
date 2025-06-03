@@ -694,7 +694,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].phone+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
-                            ' <span class="badge badge-success">'+data[i].lead_status.title+'</span>'+
+                            ' <span class="badge badge-success">'+(data[i].lead_status ? data[i].lead_status.title : "-" )+'</span>'+
                             ' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].userresponsible.first_name+' '+data[i].userresponsible.last_name+'</td>'+

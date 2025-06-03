@@ -76,70 +76,72 @@ class ContactClass implements ContactInterface {
                 Notification::route('mail', $contact_email->email)->notify(new EmailNotification($passwordemail));
             }
 
-            $refreshtoken = $this->refreshToken();
-            $config = config('quickbooks');
-            $dataService = DataService::Configure([
-                'auth_mode' => 'oauth2',
-                'ClientID' => $config['client_id'],
-                'ClientSecret' => $config['client_secret'],
-                'RedirectURI' => $config['redirect_uri'],
-                'accessTokenKey' => $refreshtoken['access_token'],
-                'refreshTokenKey' => $refreshtoken['refresh_token'],
-                'QBORealmID' => $config['realm_id'],
-                'baseUrl' => $config['base_url'],
-            ]);
-            $displayname =  $contact->first_name.' '.$contact->last_name;
-            $query = "SELECT * FROM Customer WHERE DisplayName = '{$displayname}'";
-            $customer = $dataService->Query($query);
-
-            if (isset($customer) && !empty($customer) && count($customer) > 0){
-                $customer = $customer[0];
-                $customer->Id = $customer->Id;
-                $customer->GivenName = $displayname;
-                $customer -> DisplayName = $displayname;
-                $customer -> CompanyName = 'Mait';
-                $customer -> BusinessNumber = '1111111';
-                $customer -> Mobile = $contact->phone;
-                $customer -> PrimaryEmailAddr->Address = $contact->email;//$customer-PrimaryEmailAddr-Address;
-                $customer -> PrimaryPhone->FreeFormNumber = $contact->phone;
-                try {
-
-                    $result = $dataService->Update($customer);
-//                    echo 'Successfully update';
-                }catch (ServiceException $ex) {
-                    echo "Updation Error message: " . $ex->getMessage();
-                }
-
-            }else{
-                $mycustomer = \QuickBooksOnline\API\Facades\Customer::create([
-                    "GivenName" => $displayname,
-                    "DisplayName" => $displayname,
-                    "CompanyName" => "Test",
-                    "PrimaryEmailAddr" => [
-                        "Address" => $contact->email
-                    ],
-                    "BillAddr" => [
-                        "Line1" => "123 Main Street",
-                        "City" => "Mountain View",
-                        "Country" => "USA",
-                    ],
-                    "PrimaryPhone" => [
-                        "FreeFormNumber" => $contact->phone
-                    ]
+            if(env('QUICKBOOKS_SYNC') == 'true') {
+                $refreshtoken = $this->refreshToken();
+                $config = config('quickbooks');
+                $dataService = DataService::Configure([
+                    'auth_mode' => 'oauth2',
+                    'ClientID' => $config['client_id'],
+                    'ClientSecret' => $config['client_secret'],
+                    'RedirectURI' => $config['redirect_uri'],
+                    'accessTokenKey' => $refreshtoken['access_token'],
+                    'refreshTokenKey' => $refreshtoken['refresh_token'],
+                    'QBORealmID' => $config['realm_id'],
+                    'baseUrl' => $config['base_url'],
                 ]);
-                try {
-                    $result = $dataService->Add($mycustomer);
+                $displayname = $contact->first_name . ' ' . $contact->last_name;
+                $query = "SELECT * FROM Customer WHERE DisplayName = '{$displayname}'";
+                $customer = $dataService->Query($query);
 
-                    $customer=Customer::find($mycontract->customer_id);
-                    $customer->q_customer_id = $result-> Id;
-                    if($customer->save()){
-                        $contact=Contact::find($mycontract->id);
-                        $contact->q_customer_id = $result-> Id;
-                        $contact->save();
+                if (isset($customer) && !empty($customer) && count($customer) > 0) {
+                    $customer = $customer[0];
+                    $customer->Id = $customer->Id;
+                    $customer->GivenName = $displayname;
+                    $customer->DisplayName = $displayname;
+                    $customer->CompanyName = 'Mait';
+                    $customer->BusinessNumber = '1111111';
+                    $customer->Mobile = $contact->phone;
+                    $customer->PrimaryEmailAddr->Address = $contact->email;//$customer-PrimaryEmailAddr-Address;
+                    $customer->PrimaryPhone->FreeFormNumber = $contact->phone;
+                    try {
+
+                        $result = $dataService->Update($customer);
+//                    echo 'Successfully update';
+                    } catch (ServiceException $ex) {
+                        echo "Updation Error message: " . $ex->getMessage();
                     }
-                    return response()->json(['success' => "Data Inserted Successfully"], 200);
-                } catch (ServiceException $ex) {
-                    return response()->json(['errors' => $ex->getMessage()], 200);
+
+                } else {
+                    $mycustomer = \QuickBooksOnline\API\Facades\Customer::create([
+                        "GivenName" => $displayname,
+                        "DisplayName" => $displayname,
+                        "CompanyName" => "Test",
+                        "PrimaryEmailAddr" => [
+                            "Address" => $contact->email
+                        ],
+                        "BillAddr" => [
+                            "Line1" => "123 Main Street",
+                            "City" => "Mountain View",
+                            "Country" => "USA",
+                        ],
+                        "PrimaryPhone" => [
+                            "FreeFormNumber" => $contact->phone
+                        ]
+                    ]);
+                    try {
+                        $result = $dataService->Add($mycustomer);
+
+                        $customer = Customer::find($mycontract->customer_id);
+                        $customer->q_customer_id = $result->Id;
+                        if ($customer->save()) {
+                            $contact = Contact::find($mycontract->id);
+                            $contact->q_customer_id = $result->Id;
+                            $contact->save();
+                        }
+                        return response()->json(['success' => "Data Inserted Successfully"], 200);
+                    } catch (ServiceException $ex) {
+                        return response()->json(['errors' => $ex->getMessage()], 200);
+                    }
                 }
             }
 

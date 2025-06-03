@@ -41,7 +41,7 @@
                                             </div>
                                         </div>
                                             @php
-                                                $total2 = $data['lead'][0]->unit_price * $term_length->term_period;
+                                                $total2 = $data['su'][0]->price * $term_length->term_period;
                                             @endphp
                                             <div class="col-6">
                                                 <p class="no-bottom-margin text-right">AED {{$total2 - ($total2 * $term_length->discount_percentage/100)}}</p>
@@ -71,7 +71,7 @@
 
                                             @isset($data['su'])
                                                 @php
-                                                $storagetotal = $lead->unit_price * $lead->termLength->term_period;
+                                                $storagetotal = $data['su'][0]->price * $lead->termLength->term_period;
                                                  @endphp
                                             <span class="no-bottom-margin ml-1 mt-1 text-right st_amount"> {{$storagetotal - ($storagetotal * $lead->termLength->discount_percentage/100)}}</span>
 {{--                                            <span class="no-bottom-margin mt-1 text-right st_amount"> {{($lead->term_length == 'annual') ? (($lead->unit_price * 12) - ($lead->unit_price * 15/100)) : (($lead->term_length == 'bi-annual') ? (($lead->unit_price * 6) - ($lead->unit_price * 8/100)) : (($lead->term_length == 'quarterly') ? (($lead->unit_price * 3) - ($lead->unit_price * 4/100)) : (($lead->term_length =='monthly')?  $lead->unit_price:0 )  )) }}</span>--}}
