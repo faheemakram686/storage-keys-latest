@@ -21,6 +21,7 @@ class GoogleServiceGmail implements GoogleServiceGmailInterface
         $client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
         $client->setRedirectUri(env('GOOGLE_REDIRECT_URI', 'APP_URL/login/google/callback'));
         $client->setScopes([Gmail::GMAIL_READONLY, Gmail::GMAIL_COMPOSE]);
+        
 //       / $authUrl = $client->createAuthUrl();
 //        $authCode = urldecode($request->input('auth_code'));
 //        return $authUrl;
