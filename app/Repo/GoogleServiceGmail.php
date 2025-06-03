@@ -27,7 +27,7 @@ class GoogleServiceGmail implements GoogleServiceGmailInterface
 //        return $authUrl;
 //        $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
 // Set the access token obtained from the OAuth 2.0 flow
-        
+
         if(!$client->getAccessToken()){
             $accessToken = env('GOOGLE_ACCESS_TOKEN');
             $client->setAccessToken($accessToken);

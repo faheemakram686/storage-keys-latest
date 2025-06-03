@@ -24,5 +24,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
-/resources/lang/
 /.env
