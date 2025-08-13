@@ -34,7 +34,7 @@
                             <img src="{{ asset('sk-assets/assets/images/frontend/icons/10.png') }}" alt="Icon Image">
                         </div>
                         <h3>Email Address</h3>
-                        <p>info@stroagekeys.com<br></p>
+                        <p>info@storagekeys.com<br></p>
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -52,7 +52,7 @@
                             <img src="{{ asset('sk-assets/assets/images/frontend/icons/12.png') }}" alt="Icon Image">
                         </div>
                         <h3>Office Address</h3>
-                        <p>Storage Keys, Plot # 4202 - Sharjah - United Arab Emirates</p>
+                        <p>Storage Keys, Plot # 4202 - Sharjah - Dubai - United Arab Emirates</p>
                     </div>
                 </div>
             </div>

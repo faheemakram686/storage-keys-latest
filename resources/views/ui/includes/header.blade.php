@@ -20,10 +20,10 @@
                 <div class="col-md-7">
                     <div class="ltn__top-bar-menu">
                         <ul>
-                            <li><a href="mailto:info@stroagekeys.com?Subject=Flower%20greetings%20to%20you"><i
-                                            class="icon-mail"></i> info@stroagekeys.com</a></li>
+                            <li><a href="mailto:info@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
+                                            class="icon-mail"></i> info@storagekeys.com</a></li>
                             <li><a href="locations.html"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 -
-                                    Sharjah - Abu Dhabi - United Arab Emirates</a></li>
+                                    Sharjah - Dubai - United Arab Emirates</a></li>
                         </ul>
                     </div>
                 </div>
@@ -35,9 +35,7 @@
                                     <!-- ltn__social-media -->
                                     <div class="ltn__social-media">
                                         <ul>
-                                            {{--                                                @dd(Auth::getDefaultDriver())--}}
                                             @if (\Auth::user())
-                                                {{--                                                    <li><a href="/admin" title="Panel"><i class="fa fa-user"></i>Admin area</a></li>--}}
                                                 @if(Auth::getDefaultDriver() == 'contact')
                                                     <li><a href="{{route('customer.dashboard')}}" title="Panel"><i
                                                                     class="fa fa-user"></i> Dashboard</a></li>
@@ -84,7 +82,7 @@
                             </div>
                             <div class="get-support-info">
                                 <h6>Get Support</h6>
-                                <h4><a href="tel:+123456789">123-456-789-10</a></h4>
+                                <h4><a href="tel:+971 56 501 8785">+971 56 501 8785</a></h4>
                             </div>
                         </div>
                     </div>
@@ -158,14 +156,14 @@
             </ul>
         </div>
 
-{{--        <div class="ltn__social-media-2">--}}
-{{--            <ul>--}}
-{{--                <li><a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>--}}
-{{--                <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>--}}
-{{--                <li><a href="#" title="Linkedin"><i class="fab fa-linkedin"></i></a></li>--}}
-{{--                <li><a href="#" title="Instagram"><i class="fab fa-instagram"></i></a></li>--}}
-{{--            </ul>--}}
-{{--        </div>--}}
+        {{--        <div class="ltn__social-media-2">--}}
+        {{--            <ul>--}}
+        {{--                <li><a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>--}}
+        {{--                <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>--}}
+        {{--                <li><a href="#" title="Linkedin"><i class="fab fa-linkedin"></i></a></li>--}}
+        {{--                <li><a href="#" title="Instagram"><i class="fab fa-instagram"></i></a></li>--}}
+        {{--            </ul>--}}
+        {{--        </div>--}}
     </div>
 </div>
 <!-- Utilize Mobile Menu End -->

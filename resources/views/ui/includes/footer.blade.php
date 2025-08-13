@@ -55,7 +55,7 @@
                                             <i class="icon-placeholder"></i>
                                         </div>
                                         <div class="footer-address-info">
-                                            <p>Storage Keys, Plot # 4202 - Sharjah - Abu Dhabi - United Arab Emirates</p>
+                                            <p>Storage Keys, Plot # 4202 - Sharjah - Dubai - United Arab Emirates</p>
                                         </div>
                                     </li>
                                     <li>
@@ -71,7 +71,7 @@
                                             <i class="icon-mail"></i>
                                         </div>
                                         <div class="footer-address-info">
-                                            <p><a href="mailto:info@stroagekeys.com">info@stroagekeys.com</a></p>
+                                            <p><a href="mailto:info@storagekeys.com">info@storagekeys.com</a></p>
                                         </div>
                                     </li>
                                 </ul>
@@ -165,7 +165,7 @@
     <!--End of Tawk.to Script-->
     <script async src='https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js'></script>
     <script>
-        var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"left","whatsAppNumber":"911234567890","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
+        var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"left","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
         window.onload = () => {
             _waEmbed(wa_btnSetting);
         };
