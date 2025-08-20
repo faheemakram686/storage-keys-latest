@@ -64,6 +64,9 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware(['customer','set.guard']);
     Route::post('save-order', [OrderController::class, 'save'])->name('order.save');
 
+    Route::get('/redirectPaymentRef', [OrderController::class, 'handleRedirect'])->name('handle.redirect');
+
+
 //lead save
     Route::any('/save-lead', [LeadController::class, 'saveLead'])->name('save-lead');
 

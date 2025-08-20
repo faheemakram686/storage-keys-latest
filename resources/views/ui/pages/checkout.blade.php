@@ -33,10 +33,24 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ltn__checkout-inner">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <div class="ltn__checkout-single-content mt-50">
                             <h4 class="title-2">Billing Details</h4>
                             <div class="ltn__checkout-single-content-info">
-                                <form action="{{route('order.save')}}" method="post" id="place_order" >
+                                <form action="{{route('order.save')}}" method="post" id="place_order1" >
                                     @csrf
                                     <input type="hidden" name="customer_id" value="{{Auth::user()->customer_id}}">
                                     <h6>Personal Information</h6>
@@ -140,12 +154,25 @@
                         <div id="checkout_accordion_1">
                             <!-- card -->
                             <div class="card">
-                                <h5 class="ltn__card-title" data-toggle="collapse" data-target="#faq-item-2-2" aria-expanded="true">
+                                <h5 class="ltn__card-title" data-toggle="collapse" data-target="#faq-item-2-2" aria-expanded="false">
                                     Cash on delivery
                                 </h5>
-                                <div id="faq-item-2-2" class="collapse show" data-parent="#checkout_accordion_1">
+                                <div id="faq-item-2-2" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
                                         <p>Pay with cash upon delivery.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="checkout_accordion_2">
+                            <!-- card -->
+                            <div class="card">
+                                <h5 class="ltn__card-title" data-toggle="collapse" data-target="#faq-item-3-3" aria-expanded="false">
+                                   Online Payment
+                                </h5>
+                                <div id="faq-item-3-3" class="collapse" data-parent="#checkout_accordion_2">
+                                    <div class="card-body">
+                                        <p>Pay with network upon online payment.</p>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +180,7 @@
                         <div class="ltn__payment-note mt-30 mb-30">
                             <p>Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
                         </div>
-                        <button  form="place_order" class="btn btn-submit theme-btn-1 btn-effect-1 text-uppercase" type="submit">Place order</button>
+                        <button  form="place_order1" class="btn btn-submit theme-btn-1 btn-effect-1 text-uppercase" type="submit">Place order</button>
                     </div>
                 </div>
                 <div class="col-lg-6">

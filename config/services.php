@@ -30,6 +30,12 @@ return [
     'sparkpost' => [
         'secret' => env('SPARKPOST_SECRET'),
     ],
+    'ngenius' => [
+        'base_url' => env('NGENIUS_BASE_URL', 'https://api-gateway.sandbox.ngenius-payments.com'),
+        'outlet_reference' => env('NGENIUS_OUTLET_REFERENCE'),
+        'access_token' => env('NGENIUS_ACCESS_TOKEN'),
+        'callback_url' => env('NGENIUS_CALLBACK_URL'),
+    ],
 
     /*
      * Socialite Credentials

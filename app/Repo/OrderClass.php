@@ -27,7 +27,7 @@ class OrderClass implements OrderInterface {
         $order->payment_method = $request->payment_method;
         $order->sub_amount = $request->total_amount;
         $order->total_amount = $request->due_date;
-        $order->status = 1;
+        $order->status = 0;
         if($order->save()){
             $cartItems = \Cart::getContent();
                 if ($cartItems)
