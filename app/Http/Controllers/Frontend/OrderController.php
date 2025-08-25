@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Repo\Interfaces\OrderInterface;
 use App\Services\NgeniusPaymentService;
 use App\Services\NgeniusTokenService;
@@ -25,21 +26,26 @@ class OrderController extends Controller
     {
         try {
 
+            $paymentMethod = $request->payment_method;
 
-            // Create payment with Ngenius
-            $response = $this->paymentService->createOrder($request->total_amount);
-//            dd($response);
-            if (!$response) {
-                return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
+            if ($paymentMethod === 'online') {
+                $response = $this->paymentService->createOrder($request->total_amount);
+                if (!$response) {
+                    return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
+                }
+                if($response['_links']['payment']['href']){
+                    $request->orderRef = $response['reference'];
+                    $this->order->saveOrder($request);
+                    return redirect()->away($response['_links']['payment']['href']);
+                }
+            } elseif ($paymentMethod === 'cod') {
+                $request->orderRef = $request->note ?? "";
+                $this->order->saveOrder($request);
+                return redirect()->back()->with('success', 'Order placed successfully.');
             }
-            if($response['_links']['payment']['href']){
-                 $this->order->saveOrder($request);
-                return redirect()->away($response['_links']['payment']['href']);
-            }
-
 
         }catch (\Exception $e){
-            return back()->withErrors( $e->getMessage());
+            return back()->withErrors($e->getMessage());
         }
 
     }
@@ -87,37 +93,15 @@ class OrderController extends Controller
         if (!$ref) {
             return redirect()->route('checkout')->with('error', 'Invalid payment reference');
         }
-
-//        dd($this->tokenService->getAccessToken());
-
-        // Fetch payment status from N-Genius API
-        $url = env('NGENIUS_BASE_URL') . "/transactions/outlets/" . env('NGENIUS_OUTLET_REFERENCE') . "/orders/" . $ref;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $this->tokenService->getAccessToken(), // generate token
-            'Content-Type: application/vnd.ni-payment.v2+json'
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $responseData = curl_exec($ch);
-        curl_close($ch);
-        $response = json_decode($responseData, true);
-//        dd($responseData);
-
-        // Get latest payment state
-        $state = $response['_embedded']['payment'][0]['state'] ?? 'UNKNOWN';
-
         // Update your local DB
-//        $payment = Payment::where('order_reference', $ref)->first();
-//        if ($payment) {
-//            $payment->status = $state; // STARTED, SUCCESS, FAILED
-//            $payment->save();
-//        }
+        $payment = Order::where('notes', $ref)->first();
+        if ($payment) {
+            $payment->status = 1; // STARTED, SUCCESS, FAILED
+            $payment->save();
+        }
 
         // Redirect user with status
-        if ($state === 'SUCCESS') {
+        if ($payment) {
             return redirect()->route('checkout')->with('success', 'Payment successful!');
         } else {
             return redirect()->route('checkout')->with('error', 'Payment failed or cancelled.');

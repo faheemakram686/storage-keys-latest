@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController;
+use App\Http\Controllers\Backend\InquiryController;
 
 
 require __DIR__.'/auth.php';
@@ -43,6 +44,8 @@ Route::middleware(['set.guard'])->group(function () {
 //sign contract and download contract
     Route::post('sign-contract', [ContractController::class, 'signContract'])->name('contract.sign');
     Route::any('contract-pdf/{id}', [ContractController::class, 'contractPdf'])->name('contract-pdf');
+
+    Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('inquiry.store');
 
 //booking filter routes
     Route::any('/get-cities', [CityController::class, 'getCountryBaseCity'])->name('country-cities');

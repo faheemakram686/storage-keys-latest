@@ -23,7 +23,7 @@ class OrderClass implements OrderInterface {
 
         $order =new Order();
         $order->customer_id  = $request->customer_id;
-        $order->notes = $request->notes;
+        $order->notes = $request->orderRef;
         $order->payment_method = $request->payment_method;
         $order->sub_amount = $request->total_amount;
         $order->total_amount = $request->due_date;

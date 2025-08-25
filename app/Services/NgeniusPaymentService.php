@@ -36,11 +36,11 @@ class NgeniusPaymentService
                 'currencyCode' => $currency,
                 'value' => $amount * 100, // Convert to minor units
             ],
-            'emailAddress' => "xyz@test.com",
+            'emailAddress' => "test@gmail.com",
             'merchantAttributes' => [
                 'maskPaymentInfo' => true,
                 'paymentAttempts' => "3",
-                'redirectUrl' => route('shop'),
+                'redirectUrl' => route('handle.redirect'),
             ]
         ];
 
@@ -52,6 +52,10 @@ class NgeniusPaymentService
             ])->post($endpoint, $payload);
 
             if ($response->successful()) {
+                Log::error('Ngenius Order Creation successful', [
+                    'status' => $response->status(),
+                    'response' => $response->body(),
+                ]);
                 return $response->json();
             }
 
@@ -60,16 +64,18 @@ class NgeniusPaymentService
                 $this->tokenService->clearTokenCache();
                 return $this->createOrder($amount, $currency);
             }
-            dd( $response->json());
+
             Log::error('Ngenius Order Creation Failed', [
                 'status' => $response->status(),
                 'response' => $response->body(),
             ]);
+            dd( $response->json());
             return false;
 
         } catch (\Exception $e) {
             Log::error('Ngenius Order Creation Exception', ['error' => $e->getMessage()]);
-            return false;
+            return $e->getMessage();
+//            return false;
         }
     }
 

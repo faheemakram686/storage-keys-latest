@@ -42,6 +42,7 @@ use App\Http\Controllers\Backend\EmailController;
 use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use App\Http\Controllers\Backend\QuickBooksWebhookController;
 use App\Http\Controllers\Backend\ReportsController;
+use App\Http\Controllers\Backend\InquiryController;
 
 require __DIR__.'/auth.php';
 
@@ -343,6 +344,16 @@ require __DIR__.'/auth.php';
     Route::any('delete-contact', [ContactController::class,'deleteContact']);
     Route::any('edit-contact', [ContactController::class,'editContact']);
     Route::any('update-contact', [ContactController::class,'updateContact']);
+
+
+        //Customer contact routes
+//        Route::any('save-contact', [ContactController::class,'saveContact']);
+        Route::any('inquiry', [InquiryController::class,'index'])->name('inquiry.index');
+        Route::any('get-inquires', [InquiryController::class,'getInquires']);
+        Route::any('delete-Inquiry', [InquiryController::class,'deleteInquiry']);
+//        Route::any('delete-contact', [ContactController::class,'deleteContact']);
+//        Route::any('edit-contact', [ContactController::class,'editContact']);
+//        Route::any('update-contact', [ContactController::class,'updateContact']);
 
     //Task routes
     Route::any('save-task',[TaskController::class,'saveTask']);

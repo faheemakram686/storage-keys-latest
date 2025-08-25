@@ -67,6 +67,12 @@
                                 <span class="nk-menu-text">Orders</span>
                             </a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="{{route('inquiry.index')}}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                                <span class="nk-menu-text">Inquires</span>
+                            </a>
+                        </li>
                     @endif
                     @if( $role->hasPermission('view_lead','view_estimate','view_contract','view_invoice'))
                         <li class="nk-menu-heading">

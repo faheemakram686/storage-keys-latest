@@ -36,7 +36,88 @@
     </div>
 
 
+    <!-- CONTACT MESSAGE AREA START -->
+    <div class="ltn__contact-message-area mt-50 mb-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title-area ltn__section-title-2 text-center">
+                        <h6 class="section-subtitle ltn__secondary-color"><span><i class="fas fa-square-full"></i></span> Contact Us</h6>
+                        <h1 class="section-title">Get A Quote</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ltn__form-box contact-form-box box-shadow white-bg">
+                        <h4 class="title-2">Get A Quote</h4>
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
 
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form id="contact-form" action="{{ route('inquiry.store') }}" method="post">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-item input-item-name ltn__custom-icon">
+                                        <input type="text" name="name" placeholder="Enter your name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-item input-item-email ltn__custom-icon">
+                                        <input type="email" name="email" placeholder="Enter email address" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-item">
+                                        <select class="nice-select" name="storage_type" required>
+                                            <option value="">Select Storage Type</option>
+                                            <option value="Personal Storage">Personal Storage</option>
+                                            <option value="Business Storage">Business Storage</option>
+                                            <option value="Warehouse Storage">Warehouse Storage</option>
+                                            <option value="Moving">Moving</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-item input-item-phone ltn__custom-icon">
+                                        <input type="text" name="phone" placeholder="Enter phone number" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-item input-item-textarea ltn__custom-icon">
+                                <textarea name="message" placeholder="Enter message"></textarea>
+                            </div>
+                            <div class="btn-wrapper mt-0">
+                                <button class="btn theme-btn-1 btn-effect-1 text-uppercase" type="submit">get a free service</button>
+                            </div>
+                            <p class="form-messege mb-0 mt-20"></p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CONTACT MESSAGE AREA END -->
 
 
     <!-- ABOUT US AREA END -->
