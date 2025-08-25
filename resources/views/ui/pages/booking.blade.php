@@ -82,7 +82,7 @@
                             @isset($data)
                                 @foreach ($data['ss'] as $ss)
                                     <div class="size-container checked" data="{{ $ss->id }}">
-                                        <span>{{$ss->unit_type_name }}</span>
+                                        <span style="color: white;">{{$ss->unit_type_name }}</span>
                                     </div>
                                 @endforeach
                             @endisset
@@ -274,7 +274,7 @@
                                     ' <div class="col-12 city-name-option">' + data.su[i].warehouse.loc.city.city_name + ' <span class="area-name">' + data.su[i].warehouse.loc.loc_name + '</span></div>' +
                                     '<div class="col-12 apartment-size">' + data.su[i].storagesize.unit_type_name + ' (' + data.su[i].storagelevel.name + '/Unit No:' + data.su[i].storage_unit_name + ')</div>' +
                                     '  <p class="col-12 apartment-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel egestas dolor, nec dignissim metus. Donec augue elit, rhoncus ac sodales id, porttitor vitae est.</p>' +
-                                    '   <div class="col-12 apartment-reserve">' +
+                                    '   <div class="col-12 apartment-reserve"  >' +
                                     '   <a href="{{url('reservation')}}/' + data.su[i].id + '" class="btn btn-sm  btn-reserve active" role="button" aria-pressed="true">for enquiry</a>' +
                                     '</div>' +
                                     '</div>' +

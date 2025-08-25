@@ -166,7 +166,7 @@ input[type="checkbox"]
     padding: 5px 10px;
     color: white;
     text-transform: uppercase;
-    margin-top: -20px;
+    margin-top: 10px;
     font-weight: 600;
     font-family: 'Nunito Sans', sans-serif;;
     font-size: 0.9rem;
@@ -314,6 +314,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="sub
 .image-container {
     position: relative;
     display: inline-block;
+    margin-top: 15px;
 }
 
 .hover-button {
@@ -336,6 +337,7 @@ input[type="text"], input[type="email"], input[type="password"], input[type="sub
 
 .hover-button:hover + .hover-image {
     opacity: 1;
+    color: white;
     transform: translate(-50%, -50%) scale(2);
     z-index: auto;
 }

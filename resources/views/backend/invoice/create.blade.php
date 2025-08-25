@@ -20,10 +20,10 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Customer<span class="text-danger">*</span></label>
-                                        <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
+                                        <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['customers'] as $customer)
-                                                <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                                <option value="{{$customer->id}}">{{$customer->customer_name ?? "No Name"}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -31,7 +31,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Invoice Type <span class="text-danger">*</span></label>
-                                        <select name="invoice_type" id="invoice_type" class="form-control select2" data-live-search="true" required >
+                                        <select name="invoice_type" id="invoice_type" class="form-control " data-live-search="true" required >
                                             <option value="" selected>Choose One</option>
                                             <option value="contract" >Contract</option>
                                             <option value="order">Order</option>
@@ -41,13 +41,13 @@
                                 <div class="col-lg-6" >
                                     <div class="form-group contract-block " style="display: none;">
                                         <label>Contract<span class="text-danger ">*</span></label>
-                                        <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" >
+                                        <select name="contract_id" id="" class="form-control  ContractSection" data-live-search="true" >
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>
                                     <div class="form-group order-block " style="display: none;" >
                                         <label>Order<span class="text-danger">*</span></label>
-                                        <select name="order_id" id="order_id" class="form-control select2 OrderSection" data-live-search="true">
+                                        <select name="order_id" id="order_id" class="form-control  OrderSection" data-live-search="true">
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>
@@ -157,7 +157,7 @@
                                 <div class="col-lg-6 custom-recurring">
                                     <div class="form-group">
                                         <label>Duration Type<span class="text-danger"></span></label>
-                                        <select name="duration_type" id="" class="form-control select2" data-live-search="true" required>
+                                        <select name="duration_type" id="" class="form-control " data-live-search="true" required>
                                             <option value="days" selected>Days</option>
                                             <option value="weeks">Weeks</option>
                                             <option value="months">Months</option>
@@ -168,7 +168,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Sale Agent<span class="text-danger">*</span></label>
-                                        <select name="sale_agent" id="" class="form-control select2" data-live-search="true" required>
+                                        <select name="sale_agent" id="" class="form-control " data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['users'] as $user)
                                                 <option value="{{$user->id}}" {{(($user->id = auth()->id())? 'selected':'')}} >{{$user->first_name}} {{$user->last_name}}</option>
@@ -180,7 +180,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Products</label>
-                                        <select name="product_id" id="" class="form-control select2 ProductSection" data-live-search="true" >
+                                        <select name="product_id" id="" class="form-control  ProductSection" data-live-search="true" >
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>
@@ -258,11 +258,13 @@
 
     <script>
         $(document).ready(function() {
+
             var dr=0;
             $(".custom-recurring").css({display: "none"});
 
             $("#invoice_type").on('change', function() {
                 var type = $(this).val();
+
                 if(type == 'contract')
                 {
                     $(".contract-block").css({display: "block"});
@@ -386,7 +388,7 @@
                     dataType: 'json',
                     data: { customer_id: customer_id },
                     success: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         $('.ContractSection').empty();
                         var html3 = '';
                         var i;

@@ -382,8 +382,8 @@
                                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/1.jpg') }}" alt="#">
                                     </div>
                                     <div class="ltn__testimoni-name-designation">
-                                        <h5>Jacob William</h5>
-                                        <label>Selling Agents</label>
+                                        <h5>Nadeem Baig</h5>
+                                        <label>Local Guide</label>
                                     </div>
                                 </div>
                                 <div class="ltn__testimoni-rating">
@@ -398,13 +398,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <p> 
-                                Precious ipsum dolor sit amet
-                                consectetur adipisicing elit, sed dos
-                                mod tempor incididunt ut labore et
-                                dolore magna aliqua. Ut enim ad min
-                                veniam, quis nostrud Precious ips
-                                um dolor sit amet, consecte</p>
+                            <p>
+                                Best place to store your commercial and household items. Climate controlled environment, CCTV camera and above of all you can access your storage space 24/7 with nice and welcoming staff.</p>
                         </div>
                     </div>
                 </div>
@@ -417,8 +412,8 @@
                                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/2.jpg') }}" alt="#">
                                     </div>
                                     <div class="ltn__testimoni-name-designation">
-                                        <h5>Jacob William</h5>
-                                        <label>Selling Agents</label>
+                                        <h5>Ashik S</h5>
+                                        <label>Local Guide</label>
                                     </div>
                                 </div>
                                 <div class="ltn__testimoni-rating">
@@ -433,13 +428,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <p> 
-                                Precious ipsum dolor sit amet
-                                consectetur adipisicing elit, sed dos
-                                mod tempor incididunt ut labore et
-                                dolore magna aliqua. Ut enim ad min
-                                veniam, quis nostrud Precious ips
-                                um dolor sit amet, consecte</p>
+                            <p>
+                                I have been storing my business goods with them for over 6 months now. The staff at the location as well as the admin staffs are very friendly.
+                                The facility is well maintained and the location is great.</p>
                         </div>
                     </div>
                 </div>
@@ -452,8 +443,8 @@
                                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/3.jpg') }}" alt="#">
                                     </div>
                                     <div class="ltn__testimoni-name-designation">
-                                        <h5>Jacob William</h5>
-                                        <label>Selling Agents</label>
+                                        <h5>Muhammed Alshebli</h5>
+                                        <label>Local Guide</label>
                                     </div>
                                 </div>
                                 <div class="ltn__testimoni-rating">
@@ -468,13 +459,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p> 
-                                Precious ipsum dolor sit amet
-                                consectetur adipisicing elit, sed dos
-                                mod tempor incididunt ut labore et
-                                dolore magna aliqua. Ut enim ad min
-                                veniam, quis nostrud Precious ips
-                                um dolor sit amet, consecte</p>
+                            <p>The arrangement of the storage rooms is wonderful and clean, and the place is equipped with public safety means, in addition to observing the implementation of sterilization and spraying of pesticides as a proactive protection against insects.</p>
                         </div>
                     </div>
                 </div>
@@ -487,8 +472,8 @@
                                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/4.jpg') }}" alt="#">
                                     </div>
                                     <div class="ltn__testimoni-name-designation">
-                                        <h5>Jacob William</h5>
-                                        <label>Selling Agents</label>
+                                        <h5>pooja nayal</h5>
+                                        <label>Local Guide</label>
                                     </div>
                                 </div>
                                 <div class="ltn__testimoni-rating">
@@ -503,13 +488,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <p> 
-                                Precious ipsum dolor sit amet
-                                consectetur adipisicing elit, sed dos
-                                mod tempor incididunt ut labore et
-                                dolore magna aliqua. Ut enim ad min
-                                veniam, quis nostrud Precious ips
-                                um dolor sit amet, consecte</p>
+                            <p>
+                                We took the warehouse for a long time and their services are very good, fast and very friendly yet professional staff. Thank you</p>
                         </div>
                     </div>
                 </div>
