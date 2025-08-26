@@ -536,7 +536,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="#"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -546,7 +546,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">What You Need To Consider When Renting a Long-Term Storage Unit</a></h3>
+                            <h3 class="ltn__blog-title"><a href="#">What You Need To Consider When Renting a Long-Term Storage Unit</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -554,7 +554,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="{{url('/blog-details')}}">Read more</a>
+                                    <a href="#">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -564,7 +564,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="#"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -574,7 +574,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">Tips: How An Organized Home Can Build A Better Relationship</a></h3>
+                            <h3 class="ltn__blog-title"><a href="#">Tips: How An Organized Home Can Build A Better Relationship</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -582,7 +582,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="{{url('/blog-details')}}">Read more</a>
+                                    <a href="#">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -592,7 +592,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="#"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -602,7 +602,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">Why deep cleaning your new home before moving is important</a></h3>
+                            <h3 class="ltn__blog-title"><a href="#">Why deep cleaning your new home before moving is important</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -610,7 +610,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="{{url('/blog-details')}}">Read more</a>
+                                    <a href="#">Read more</a>
                                 </div>
                             </div>
                         </div>

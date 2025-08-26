@@ -8,15 +8,7 @@
     </div>
     <div class="row booking-section booking-page">
         <div class="container">
-            <div class="row">
-                <div class="offset-lg-3 col-9 col-md-9 col-lg-9 col-sm-12">
-                    <div class="row list-of-cities">
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-6">
-                            <div class="city-name-option" data-city-id="1" id="search_title"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-4 col-lg-3 filter-section">
                     <div class="row locations-section">
