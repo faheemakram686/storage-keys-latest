@@ -8,7 +8,7 @@
     </div>
     <div class="row booking-section booking-page">
         <div class="container">
-
+{{--            @dd($data);--}}
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-4 col-lg-3 filter-section">
                     <div class="row locations-section">
@@ -18,9 +18,10 @@
                             <div class="row">
                                 <select class="selectpicker form-control " name="country_id" id="country_id">
                                     <option value=""  >Choose One</option>
+
                                     @isset($data)
                                         @foreach ($data['loc'] as $country)
-                                            <option value="{{ $country->id }}" {{(($country->is_defult == 'Default')?  "selected" : "" )}}>{{$country->name }}</option>
+                                            <option value="{{ $country->id }}" {{(($country->is_defult == '1')?  "selected" : "" )}}>{{$country->name }}</option>
                                         @endforeach
                                     @endisset
                                 </select>
@@ -128,7 +129,7 @@
                         if (data.length > 0) {
 
                             for (i = 0; i < data.length; i++) {
-                                html3 += '<option '+ ((data[i].is_defult == 'Default') ? 'selected' : '')+' value="' + data[i].id + '">' + data[i].city_name + '</option>';
+                                html3 += '<option '+ ((data[i].is_defult == '1') ? 'selected' : '')+' value="' + data[i].id + '">' + data[i].city_name + '</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Cities Found</option>';
@@ -173,7 +174,7 @@
 
                             for (i = 0; i < data.length; i++) {
                                 c++;
-                                html3 += ' <option '+ ((data[i].is_defult == 'Default' )? 'selected' : '')+'  value="'+data[i].id+'"> '+data[i].loc_name+'</option>';
+                                html3 += ' <option '+ ((data[i].is_defult == '1' )? 'selected' : '')+'  value="'+data[i].id+'"> '+data[i].loc_name+'</option>';
                             }
                         } else {
                             var html3 = '<option value="">No Location Found</option>';
