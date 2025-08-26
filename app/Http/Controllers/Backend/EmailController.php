@@ -10,6 +10,7 @@ use Dacastro4\LaravelGmail\Services\Message\Attachment;
 use Dacastro4\LaravelGmail\Services\Message\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Google\Service\Exception as GoogleServiceException;
 
 class EmailController extends Controller
 {
@@ -26,41 +27,52 @@ class EmailController extends Controller
 
         public function index()
     {
+
         $data['emails'] = collect([]);
 
-        if (LaravelGmail::check()) {
-            $messages = LaravelGmail::message()->in('inbox')->preload()->all();
 
-            foreach ($messages as $message) {
-                // Skip invalid or unexpected message types
-                if (!($message instanceof \Dacastro4\LaravelGmail\Services\Message\Mail)) {
-                    continue;
+            try {
+                if (LaravelGmail::check()) {
+                    $messages = LaravelGmail::message()
+                        ->in('INBOX')
+                        ->take(20)
+                        ->preload()
+                        ->all();
+
+                    foreach ($messages as $message) {
+                        if (!($message instanceof Mail)) {
+                            continue;
+                        }
+
+                        $id = $message->getId();
+                        $subject = $message->getSubject();
+                        $from = $message->getFrom();
+                        $body = $message->getHtmlBody() ?: $message->getPlainTextBody();
+                        $date = $message->getDate();
+
+                        if (!$date) {
+                            continue;
+                        }
+
+                        $customDate = Carbon::parse($date);
+
+                        $data['emails']->push([
+                            'id' => $id,
+                            'subject' => $subject,
+                            'from' => $from,
+                            'body' => $body,
+                            'date' => $customDate,
+                        ]);
+                    }
                 }
+                return view('backend.email.index')->with(compact('data'));
+            } catch (GoogleServiceException $e) {
 
-                $id = $message->getId();
-                $body = $message->getHtmlBody();
-                $subject = $message->getSubject();
-                $from = $message->getFrom();
-                $date = $message->getDate();
-
-                // If date is empty or not parsable, skip this message
-                if (!$date) {
-                    continue;
-                }
-
-                $customDate = \Carbon\Carbon::parse($date);
-
-                $data['emails']->push([
-                    'id' => $id,
-                    'body' => $body,
-                    'subject' => $subject,
-                    'from' => $from,
-                    'date' => $customDate,
-                ]);
+                return back()->withErrors([$e->getMessage()]);
+//                logger()->error('Gmail API error: '.$e->getMessage());
             }
-        }
 
-        return view('backend.email.index')->with(compact('data'));
+
     }
 
     public function getEmails()

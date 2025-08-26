@@ -8,7 +8,8 @@
                     <div class="nk-block-head-content">
                         <h3 class="nk-block-title page-title">Email List</h3>
                         <div class="nk-block-des text-soft">
-                            <h5>{{ LaravelGmail::user() }}</h5>
+
+                            <h5>{{ LaravelGmail::user() ?? "" }}</h5>
                             @if(LaravelGmail::check())
 {{--                                    @dd($data);--}}
                                 <a href="{{ url('oauth/gmail/logout') }}">logout</a>
@@ -61,7 +62,7 @@
                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#" class="btn-edit" data='' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Replay</span></a></li>
+{{--                                                    <li><a href="#" class="btn-edit" data='' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Replay</span></a></li>--}}
                                                     <li><a href="#" class="btn-delete" data=''><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                                                 </ul>
                                             </div>
@@ -240,7 +241,6 @@
         </div><!-- .modla-dialog -->
     </div>
 
-
     <div class="modal fade" role="dialog" id="addCountry" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -261,12 +261,12 @@
                                 </div>
                                 <div class="nk-reply-form-input nk-reply-form-input-cc" data-content="mail-cc">
                                     <label class="label">Cc</label>
-                                    <input type="text" name="cc" class="input-mail tagify" required>
+                                    <input type="text" name="cc" class="input-mail tagify" >
                                     <a href="#" class="toggle-opt" data-target="mail-cc"><em class="icon ni ni-cross"></em></a>
                                 </div>
                                 <div class="nk-reply-form-input nk-reply-form-input-bcc" data-content="mail-bcc">
                                     <label class="label">Bcc</label>
-                                    <input type="text" name="bcc" class="input-mail tagify" required>
+                                    <input type="text" name="bcc" class="input-mail tagify" >
                                     <a href="#" class="toggle-opt" data-target="mail-bcc"><em class="icon ni ni-cross"></em></a>
                                 </div>
                             </div>
@@ -292,13 +292,13 @@
                                     <a class="btn btn-icon btn-sm" data-bs-toggle="dropdown" href="#"><em class="icon ni ni-hash" data-bs-toggle="tooltip" data-bs-placement="top" title="Template"></em></a>
                                     <div class="dropdown-menu">
                                         <ul class="link-list-opt no-bdr link-list-template">
-                                            <li class="opt-head"><span>Quick Insert</span></li>
-                                            <li><a href="#"><span>Thank you message</span></a></li>
-                                            <li><a href="#"><span>Your issues solved</span></a></li>
-                                            <li><a href="#"><span>Thank you message</span></a></li>
-                                            <li class="divider">
-                                            <li><a href="#"><em class="icon ni ni-file-plus"></em><span>Save as Template</span></a></li>
-                                            <li><a href="#"><em class="icon ni ni-notes-alt"></em><span>Manage Template</span></a></li>
+                                            <li class="opt-head"><span></span></li>
+{{--                                            <li><a href="#"><span>Thank you message</span></a></li>--}}
+{{--                                            <li><a href="#"><span>Your issues solved</span></a></li>--}}
+{{--                                            <li><a href="#"><span>Thank you message</span></a></li>--}}
+{{--                                            <li class="divider">--}}
+{{--                                            <li><a href="#"><em class="icon ni ni-file-plus"></em><span>Save as Template</span></a></li>--}}
+{{--                                            <li><a href="#"><em class="icon ni ni-notes-alt"></em><span>Manage Template</span></a></li>--}}
                                         </ul>
                                     </div>
                                 </div>
