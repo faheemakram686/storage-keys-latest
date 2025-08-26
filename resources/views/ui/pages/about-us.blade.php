@@ -80,11 +80,11 @@
                             <span><i class="flaticon-apartment"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Personal Storage</a></h3>
+                            <h3><a href="#">Personal Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -94,11 +94,11 @@
                             <span><i class="flaticon-excavator"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Business Storage</a></h3>
+                            <h3><a href="#">Business Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -108,11 +108,11 @@
                             <span><i class="icon-repair"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Warehouse Storage</a></h3>
+                            <h3><a href="#">Warehouse Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -122,11 +122,11 @@
                             <span><i class="flaticon-excavator"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Moving</a></h3>
+                            <h3><a href="#">Moving</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                             <p>We can help you realize your secure storage</p>
                         </div>
                         <div class="btn-wrapper">
-                            <a class="btn btn-effect-3 btn-white" href="contact.html">Get A Quote <i class="icon-next"></i></a>
+                            <a class="btn btn-effect-3 btn-white" href="{{url('booking')}}">Get A Quote <i class="icon-next"></i></a>
                         </div>
                     </div>
                 </div>
