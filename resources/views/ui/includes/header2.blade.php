@@ -7,8 +7,9 @@
                 <div class="col-md-7">
                     <div class="ltn__top-bar-menu">
                         <ul>
-                            <li><a href="mailto:info@stroagekeys.com?Subject=Flower%20greetings%20to%20you"><i class="icon-mail"></i> info@stroagekeys.com</a></li>
-                            <li><a href="locations.html"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 - Sharjah - United Arab Emirates</a></li>
+                            <li><a href="mailto:info@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i class="icon-mail"></i> info@storagekeys.com</a></li>
+                            <li><a href="#"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 -
+                                    Sharjah - Dubai - United Arab Emirates</a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,7 +61,7 @@
                             </div>
                             <div class="get-support-info">
                                 <h6>Get Support</h6>
-                                <h4><a href="tel:+123456789">123-456-789-10</a></h4>
+                                <h4><a href="tel:+971 56 501 8785">+971 56 501 8785</a></h4>
                             </div>
                         </div>
                     </div>

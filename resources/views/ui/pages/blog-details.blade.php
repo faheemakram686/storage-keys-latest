@@ -12,7 +12,7 @@
                         <h1 class="page-title">Blog Details</h1>
                         <div class="ltn__breadcrumb-list">
                             <ul>
-                                <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li><a href="{{url('/')}}"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
                                 <li>Blog Details</li>
                             </ul>
                         </div>
@@ -182,7 +182,7 @@
                         </div>
                         <!-- Banner Widget -->
                         <div class="widget ltn__banner-widget">
-                            <a href="shop.html"><img src="{{ asset('sk-assets/assets/images/frontend/banner/banner-4.jpg') }}" alt="Banner Image"></a>
+                            <a href="#"><img src="{{ asset('sk-assets/assets/images/frontend/banner/banner-4.jpg') }}" alt="Banner Image"></a>
                         </div>
                         
                     </aside>

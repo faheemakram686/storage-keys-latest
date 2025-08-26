@@ -6,32 +6,32 @@
             <div class="row ltn__brand-logo-active ltn__secondary-bg ltn__border-radius pt-30 pb-20">
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b11.png') }}" alt="Brand Logo">
+                        <img  src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-01.png') }}" alt="Brand Logo">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b12.png') }}" alt="Brand Logo">
+                        <img  src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-02.png') }}" alt="Brand Logo">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b13.png') }}" alt="Brand Logo">
+                        <img  src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-03.png') }}" alt="Brand Logo">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b14.png') }}" alt="Brand Logo">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-04.png') }}" alt="Brand Logo">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b15.png') }}" alt="Brand Logo">
+                        <img  src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-05.png') }}" alt="Brand Logo">
                     </div>
                 </div>
                 <div class="col-lg-12">
                     <div class="ltn__brand-logo-item">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/brand-logo/b13.png') }}" alt="Brand Logo">
+                        <img  src="{{ asset('sk-assets/assets/images/frontend/brand-logo/Logo-01-06.png') }}" alt="Brand Logo">
                     </div>
                 </div>
             </div>
@@ -83,10 +83,16 @@
                             <h4 class="footer-title">Company</h4>
                             <div class="footer-menu">
                                 <ul>
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="shop.html">Shop</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="{{ url('/') }}">Home</a></li>
+                                    <li><a href="{{ url('/about-us') }}">About Us</a></li>
+                                    <li><a href="{{ url('/storage-options') }}">Storage Options</a></li>
+                                    <li><a href="{{ url('/shop') }}">Shop</a></li>
+                                    <li><a href="{{ url('/booking') }}">Booking</a></li>
+                                    <li><a href="{{ url('/blogs') }}">Blogs</a></li>
+                                    <li><a href="{{ url('/contact-us') }}">Contact Us</a></li>
+                                    <li >
+                                        <a href="{{ url('/booking') }}">Book Now</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -96,10 +102,10 @@
                             <h4 class="footer-title">Services</h4>
                             <div class="footer-menu">
                                 <ul>
-                                    <li><a href="order-tracking.html">Personal Storage</a></li>
-                                    <li><a href="wishlist.html">Business Storage</a></li>
-                                    <li><a href="login.html">Warehouse Storage</a></li>
-                                    <li><a href="account.html">Moving</a></li>
+                                    <li><a href="#">Personal Storage</a></li>
+                                    <li><a href="#">Business Storage</a></li>
+                                    <li><a href="#">Warehouse Storage</a></li>
+                                    <li><a href="#">Moving</a></li>
                                 </ul>
                             </div>
                         </div>

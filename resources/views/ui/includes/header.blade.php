@@ -22,7 +22,7 @@
                         <ul>
                             <li><a href="mailto:info@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
                                             class="icon-mail"></i> info@storagekeys.com</a></li>
-                            <li><a href="locations.html"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 -
+                            <li><a href="#"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 -
                                     Sharjah - Dubai - United Arab Emirates</a></li>
                         </ul>
                     </div>
@@ -226,8 +226,8 @@
                 <h5>Subtotal: <span>$310.00</span></h5>
             </div>
             <div class="btn-wrapper">
-                <a href="cart.html" class="theme-btn-1 btn btn-effect-1">View Cart</a>
-                <a href="cart.html" class="theme-btn-2 btn btn-effect-2">Checkout</a>
+                <a href="#" class="theme-btn-1 btn btn-effect-1">View Cart</a>
+                <a href="#" class="theme-btn-2 btn btn-effect-2">Checkout</a>
             </div>
             <p>Free Shipping on All Orders Over $100!</p>
         </div>

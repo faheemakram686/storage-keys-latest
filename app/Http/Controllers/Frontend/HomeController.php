@@ -75,7 +75,7 @@ class HomeController extends Controller
             $userauth = auth()->user();
             Notification::send($userauth,new UserNotification($user));
 //            notify()->with($user)->send(UserNotification::class);
-            dd('done');
+
         }
 
 

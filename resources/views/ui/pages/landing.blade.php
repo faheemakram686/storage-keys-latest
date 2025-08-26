@@ -140,11 +140,11 @@
                             <span><i class="flaticon-apartment"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Personal Storage</a></h3>
+                            <h3><a href="#">Personal Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -154,11 +154,11 @@
                             <span><i class="flaticon-excavator"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Business Storage</a></h3>
+                            <h3><a href="#">Business Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -168,11 +168,11 @@
                             <span><i class="icon-repair"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Warehouse Storage</a></h3>
+                            <h3><a href="#">Warehouse Storage</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -182,11 +182,11 @@
                             <span><i class="flaticon-excavator"></i></span>
                         </div>
                         <div class="ltn__feature-info">
-                            <h3><a href="service-details.html">Moving</a></h3>
+                            <h3><a href="#">Moving</a></h3>
                             <p>over 1 million+ homes for sale available
                                 on the website, we can match you with a
                                 house you will want to call home.</p>
-                            <a class="ltn__service-btn ltn__service-btn-2" href="service-details.html">Service Details <i class="flaticon-right-arrow"></i></a>
+                            <a class="ltn__service-btn ltn__service-btn-2" href="#">Service Details <i class="flaticon-right-arrow"></i></a>
                         </div>
                     </div>
                 </div>
@@ -536,7 +536,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="blog-details.html"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -546,7 +546,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="blog-details.html">What You Need To Consider When Renting a Long-Term Storage Unit</a></h3>
+                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">What You Need To Consider When Renting a Long-Term Storage Unit</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -554,7 +554,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="blog-details.html">Read more</a>
+                                    <a href="{{url('/blog-details')}}">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -564,7 +564,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="blog-details.html"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -574,7 +574,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="blog-details.html">Tips: How An Organized Home Can Build A Better Relationship</a></h3>
+                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">Tips: How An Organized Home Can Build A Better Relationship</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -582,7 +582,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="blog-details.html">Read more</a>
+                                    <a href="{{url('/blog-details')}}">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -592,7 +592,7 @@
                 <div class="col-lg-12">
                     <div class="ltn__blog-item ltn__blog-item-3">
                         <div class="ltn__blog-img">
-                            <a href="blog-details.html"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
+                            <a href="{{url('/blog-details')}}"><img src="{{ asset('sk-assets/assets/images/frontend/blog/Image_8.png') }}" alt="#"></a>
                         </div>
                         <div class="ltn__blog-brief">
                             <div class="ltn__blog-meta">
@@ -602,7 +602,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <h3 class="ltn__blog-title"><a href="blog-details.html">Why deep cleaning your new home before moving is important</a></h3>
+                            <h3 class="ltn__blog-title"><a href="{{url('/blog-details')}}">Why deep cleaning your new home before moving is important</a></h3>
                             <div class="ltn__blog-meta-btn">
                                 <div class="ltn__blog-meta">
                                     <ul>
@@ -610,7 +610,7 @@
                                     </ul>
                                 </div>
                                 <div class="ltn__blog-btn">
-                                    <a href="blog-details.html">Read more</a>
+                                    <a href="{{url('/blog-details')}}">Read more</a>
                                 </div>
                             </div>
                         </div>
@@ -622,7 +622,7 @@
 
     <!-- BLOG AREA START (blog-3) -->
     <div class="ltn__blog-area pt-40 pb-20">
-        {{-- <div class="container">8 --}}
+         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title-area ltn__section-title-2 text-center">
@@ -635,7 +635,7 @@
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7211.064523474084!2d55.63168!3d25.353472!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x2db4222312dfc94f!2sStorage%20Keys%20Sharjah!5e0!3m2!1sen!2sus!4v1668893743747!5m2!1sen!2sus"
                 width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
-        {{-- </div> --}}
+         </div>
     </div>
 
     
@@ -671,7 +671,7 @@
                                                     <li class="review-total"> <a href="#"> ( 95 Reviews )</a></li>
                                                 </ul>
                                             </div>
-                                            <h3><a href="product-details.html">3 Rooms Manhattan</a></h3>
+                                            <h3><a href="#">3 Rooms Manhattan</a></h3>
                                             <div class="product-price">
                                                 <span>$34,900</span>
                                                 <del>$36,500</del>
@@ -736,7 +736,7 @@
                                                     
                                                 </ul>
                                             </div>
-                                            <label class="float-right mb-0"><a class="text-decoration" href="product-details.html"><small>View Details</small></a></label>
+                                            <label class="float-right mb-0"><a class="text-decoration" href="#"><small>View Details</small></a></label>
                                         </div>
                                     </div>
                                 </div>
@@ -768,7 +768,7 @@
                                             <img src="img/product/1.png" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="product-details.html">Brake Conversion Kit</a></h5>
+                                            <h5><a href="#">Brake Conversion Kit</a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Cart</p>
                                             <div class="btn-wrapper">
                                                 <a href="cart.html" class="theme-btn-1 btn btn-effect-1">View Cart</a>
@@ -812,7 +812,7 @@
                                             <img src="img/product/7.png" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="product-details.html">Brake Conversion Kit</a></h5>
+                                            <h5><a href="#">Brake Conversion Kit</a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Wishlist</p>
                                             <div class="btn-wrapper">
                                                 <a href="wishlist.html" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>
