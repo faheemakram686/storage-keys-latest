@@ -13,6 +13,7 @@ use App\Models\Core\Auth\Traits\Relationship\UserRelationship;
 use App\Models\Core\Auth\Traits\Rules\UserRules;
 use App\Models\Core\Auth\Traits\Scope\UserScope;
 use App\Models\Tenant\Traits\EmployeeMethods;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -107,5 +108,12 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()
             ->logOnly(['first_name', 'last_name', 'email']);
+    }
+
+
+    public function sendPasswordResetNotification($token)
+    {
+        \Log::info("Reset notification triggered for {$this->email}"); // debug log
+        $this->notify(new ResetPassword($token));
     }
 }

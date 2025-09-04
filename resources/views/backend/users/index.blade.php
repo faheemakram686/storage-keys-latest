@@ -102,7 +102,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Phone</label>
@@ -111,6 +110,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="password">Password</label>
+                                    <div class="form-control-wrap">
+                                        <input type="password" class="form-control" id="password" name="password" required="" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="password_confirmation">Confirm Password</label>
+                                    <div class="form-control-wrap">
+                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required="" value="">
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="address">Address</label>
@@ -210,7 +227,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Phone</label>
@@ -219,6 +235,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="password">Password</label>
+                                    <div class="form-control-wrap">
+                                        <input type="password" class="form-control" id="password" name="password" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="password_confirmation">Confirm Password</label>
+                                    <div class="form-control-wrap">
+                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" >
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="address">Address</label>
@@ -294,10 +328,22 @@
                         $(".btn-submit").prop("disabled", false);
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr, status, error) {
                         $('.btn-submit').text('Save');
                         $(".btn-submit").prop("disabled", false);
+
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            // Show all validation errors
+                            $.each(xhr.responseJSON.errors, function(key, value) {
+                                toastr.error(value);
+                            });
+                        } else if (xhr.responseJSON && xhr.responseJSON.error) {
+                            // Custom error from controller
+                            toastr.error(xhr.responseJSON.error);
+                        } else {
+                            // Fallback
+                            toastr.error("Something went wrong: " + xhr.status + " " + error);
+                        }
                     }
                 });
 
@@ -367,6 +413,7 @@
                     dataType: 'json',
                     data: { id: id},
                     success: function(data) {
+
                         if (data.success) {
                             getAllCities();
                             $('.close').click();
@@ -466,11 +513,24 @@
                         $(".btn-update").prop("disabled", false);
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr, status, error) {
                         $('.btn-update').text('Save Changes');
                         $(".btn-update").prop("disabled", false);
+
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            // Show all validation errors
+                            $.each(xhr.responseJSON.errors, function(key, value) {
+                                toastr.error(value);
+                            });
+                        } else if (xhr.responseJSON && xhr.responseJSON.error) {
+                            // Custom error from controller
+                            toastr.error(xhr.responseJSON.error);
+                        } else {
+                            // Fallback
+                            toastr.error("Something went wrong: " + xhr.status + " " + error);
+                        }
                     }
+
                 });
 
 

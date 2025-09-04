@@ -3,7 +3,6 @@ namespace App\Repo\Interfaces;
 
 interface UserInterface{
     public function saveUser($request);
-
     public function getUser();
     public function deleteUser($id);
     public function editUser($id);

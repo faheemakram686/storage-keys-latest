@@ -51,6 +51,28 @@
         });
         // Hide alert message if any
         $('div.alert').not('.alert-important').delay(3000).slideUp(350);
+
+        $(document).on("click", ".passcode-switch", function (e) {
+            e.preventDefault();
+
+            let target = $(this).data("target"); // e.g. "password"
+            let input = $("#" + target); // find the input field by ID
+            let showIcon = $(this).find(".icon-show");
+            let hideIcon = $(this).find(".icon-hide");
+
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+                showIcon.addClass("d-none");
+                hideIcon.removeClass("d-none");
+            } else {
+                input.attr("type", "password");
+                hideIcon.addClass("d-none");
+                showIcon.removeClass("d-none");
+            }
+        });
+
+
+
     </script>
 </body>
 

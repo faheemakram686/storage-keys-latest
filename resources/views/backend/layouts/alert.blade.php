@@ -10,17 +10,17 @@
             </ul>
         </div>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <i class="ri-close-line"></i>
+            <i class="ri-close-line"></i>
         </button>
     </div>
 @endif
 
 @if(\Session::has('status') || \Session::has('success'))
-<div class="alert text-white bg-success" role="alert">
-    <em class="icon ni ni-info-fill"></em>
-    <div class="text-success"><b>success</b> {{session()->get('status')}}</div>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <i class="ri-close-line"></i>
-    </button>
-</div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <em class="icon ni ni-info-fill"></em>
+        <span>{{ session('status') }}</span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="ri-close-line"></i>
+        </button>
+    </div>
 @endif

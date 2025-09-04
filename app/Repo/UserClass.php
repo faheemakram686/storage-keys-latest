@@ -11,52 +11,84 @@ use App\Repo\Interfaces\UserInterface;
 use App\Repo\Interfaces\WarehouseInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 
 class UserClass implements UserInterface {
 
     public function saveUser($request)
     {
-        $name = 0;
-        if ($request->hasFile('file')) {
-            $uniqueid = uniqid();
-            $original_name = $request->file('file')->getClientOriginalName();
-            $size = $request->file('file')->getSize();
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
-            $imagepath = url('/storage/uploads/user-images/' . $name);
-            $path = $request->file('file')->storeAs('public/uploads/user-images/', $name);
-        }else{
 
-            $name='no_avatar.png';
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'nullable|string|max:255',
+            'email'      => 'required|string|email|max:255|unique:users,email',
+            'password'   => 'required|string|min:8|confirmed',
+            'phone'      => 'nullable|string|max:20',
+            'address'    => 'nullable|string|max:255',
+            'role'       => 'required|integer|exists:roles,id',
+            'status'     => 'required|integer',
+            'file'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
         }
 
+        DB::beginTransaction();
 
-        // TODO: Implement saveUser() method.
-        $sy =new User();
-        $sy->first_name=$request->first_name;
-        $sy->last_name=$request->last_name;
-        $sy->password = Hash::make("12345678");
-        $sy->email =$request->email;
-        $sy->status_id =1;
-        $sy->is_in_employee =1;
-        $sy->phone=$request->phone;
-        $sy->address=$request->address;
-        if($name != 0)
-        {
-            $sy->avatar=$name;
-        }
-        $sy->user_type=$request->role;
-        $sy->status=$request->status;
-        if($sy->save()){
-            $role = Role::find($request->role);
-            $userrs = $sy->assignRole($role);
-            if($userrs)
-            {
-                return response()->json(['success' => 'Record save successfully'], 200);
+        try {
+            // Handle File Upload
+            $avatar = 'no_avatar.png';
+            if ($request->hasFile('file')) {
+                $uniqueId = uniqid();
+                $extension = $request->file('file')->getClientOriginalExtension();
+                $avatar = Carbon::now()->format('Ymd') . '_' . $uniqueId . '.' . $extension;
+                $request->file('file')->storeAs('public/uploads/user-images/', $avatar);
             }
 
+            // Create User
+            $user = new User();
+            $user->first_name    = $request->first_name;
+            $user->last_name     = $request->last_name;
+            $user->email         = $request->email;
+            $user->password      = Hash::make($request->password);
+            $user->status_id     = 1;
+            $user->is_in_employee= 1;
+            $user->phone         = $request->phone;
+            $user->address       = $request->address;
+            $user->avatar        = $avatar;
+            $user->user_type     = $request->role;
+            $user->status        = $request->status;
+            $user->save();
+
+            // Assign Role
+            $role = Role::findOrFail($request->role);
+            $user->assignRole($role);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => 'User created successfully'
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('User creation failed: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Something went wrong while creating the user.'
+            ], 500);
         }
+
+
     }
 
     public function getUser()
@@ -85,37 +117,79 @@ class UserClass implements UserInterface {
 
     public function updateUser($request)
     {
-        $name = 0;
-        if ($request->hasFile('e_file')) {
-            $uniqueid = uniqid();
-            $original_name = $request->file('e_file')->getClientOriginalName();
-            $size = $request->file('e_file')->getSize();
-            $extension = $request->file('e_file')->getClientOriginalExtension();
-            $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
-            $imagepath = url('/storage/uploads/user-images/' . $name);
-            $path = $request->file('e_file')->storeAs('public/uploads/user-images/', $name);
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'id'         => 'required|exists:users,id',
+            'e_first_name' => 'required|string|max:255',
+            'e_last_name'  => 'nullable|string|max:255',
+            'e_email'      => 'required|string|email|max:255|unique:users,email,' . $request->id,
+            'e_phone'      => 'nullable|string|max:20',
+            'e_address'    => 'nullable|string|max:255',
+            'e_role'       => 'required|integer|exists:roles,id',
+            'e_status'     => 'required|integer',
+            'e_file'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'password'     => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
         }
-        // TODO: Implement updateUser() method.
-        $sy=User::find($request->id);
-        $sy->first_name=$request->e_first_name;
-        $sy->last_name=$request->e_last_name;
-        $sy->email=$request->e_email;
-        $sy->phone=$request->e_phone;
-        if($name != 0)
-        {
-            $sy->avatar=$name;
-        }
-        $sy->address=$request->e_address;
-        $sy->user_type=$request->e_role;
-        $sy->status=$request->e_status;
-        if($sy->save()){
-            $role = Role::find($request->e_role);
-            $userrs = $sy->assignRole($role);
-            if($userrs)
-            {
-                return 1;
+
+        DB::beginTransaction();
+
+        try {
+            $user = User::findOrFail($request->id);
+
+            // Handle File Upload
+            if ($request->hasFile('e_file')) {
+                $uniqueId = uniqid();
+                $extension = $request->file('e_file')->getClientOriginalExtension();
+                $fileName = Carbon::now()->format('Ymd') . '_' . $uniqueId . '.' . $extension;
+
+                // Delete old avatar if not default
+                if ($user->avatar && $user->avatar !== 'no_avatar.png' && Storage::exists('public/uploads/user-images/' . $user->avatar)) {
+                    Storage::delete('public/uploads/user-images/' . $user->avatar);
+                }
+
+                $request->file('e_file')->storeAs('public/uploads/user-images/', $fileName);
+                $user->avatar = $fileName;
             }
 
+            // Update user fields
+            $user->first_name = $request->e_first_name;
+            $user->last_name  = $request->e_last_name;
+            $user->email      = $request->e_email;
+            $user->phone      = $request->e_phone;
+            $user->address    = $request->e_address;
+            $user->user_type  = $request->e_role;
+            $user->status     = $request->e_status;
+
+            // 👇 Only update if new password is given
+            if (!empty($request->password)) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->save();
+
+            // Assign Role (reset old roles first to avoid duplicates)
+            $role = Role::findOrFail($request->e_role);
+            $user->assignRole([$role->id]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => 'User updated successfully'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('User update failed: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Something went wrong while updating the user.'
+            ], 500);
         }
 
     }
