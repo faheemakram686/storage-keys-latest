@@ -16,6 +16,7 @@ use App\Models\Tenant\Traits\EmployeeMethods;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 //use Spatie\Permission\Traits\HasRoles;
@@ -34,14 +35,15 @@ class User extends Authenticatable
         HasRoles,
         UserMethod,
         UserScope,
-        UserBootTrait,
+//        UserBootTrait,
         LogsActivity,
         CausesActivity,
         UserStatus,
         EmployeeMethods,
         UserAttribute,
         UserRules,
-        Eventually;
+        Eventually,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

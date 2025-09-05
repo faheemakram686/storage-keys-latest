@@ -20,10 +20,10 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Customer<span class="text-danger">*</span></label>
-                                    <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
+                                    <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                        <option value="{{$customer->id}}">{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -31,7 +31,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Estimate <span class="text-danger">*</span></label>
-                                    <select name="estimate_id" id="" class="form-control select2 EstimateSection" data-live-search="true" required>
+                                    <select name="estimate_id" id="" class="form-control  EstimateSection" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                     </select>
                                 </div>

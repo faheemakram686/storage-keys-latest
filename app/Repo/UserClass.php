@@ -23,7 +23,6 @@ class UserClass implements UserInterface {
     public function saveUser($request)
     {
 
-        // Validation
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name'  => 'nullable|string|max:255',
@@ -45,7 +44,7 @@ class UserClass implements UserInterface {
         DB::beginTransaction();
 
         try {
-            // Handle File Upload
+
             $avatar = 'no_avatar.png';
             if ($request->hasFile('file')) {
                 $uniqueId = uniqid();
@@ -54,7 +53,7 @@ class UserClass implements UserInterface {
                 $request->file('file')->storeAs('public/uploads/user-images/', $avatar);
             }
 
-            // Create User
+
             $user = new User();
             $user->first_name    = $request->first_name;
             $user->last_name     = $request->last_name;
@@ -69,7 +68,7 @@ class UserClass implements UserInterface {
             $user->status        = $request->status;
             $user->save();
 
-            // Assign Role
+           
             $role = Role::findOrFail($request->role);
             $user->assignRole($role);
 
@@ -103,9 +102,10 @@ class UserClass implements UserInterface {
     public function deleteUser($id)
     {
         // TODO: Implement deleteUser() method.
-        $country=User::find($id);
-        $country->is_deleted=1;
-        $country->save();
+        $user=User::find($id);
+        $user->is_deleted=1;
+        $user->save();
+        $user->delete();
         return 1;
     }
 
@@ -142,13 +142,13 @@ class UserClass implements UserInterface {
         try {
             $user = User::findOrFail($request->id);
 
-            // Handle File Upload
+
             if ($request->hasFile('e_file')) {
                 $uniqueId = uniqid();
                 $extension = $request->file('e_file')->getClientOriginalExtension();
                 $fileName = Carbon::now()->format('Ymd') . '_' . $uniqueId . '.' . $extension;
 
-                // Delete old avatar if not default
+
                 if ($user->avatar && $user->avatar !== 'no_avatar.png' && Storage::exists('public/uploads/user-images/' . $user->avatar)) {
                     Storage::delete('public/uploads/user-images/' . $user->avatar);
                 }
@@ -157,7 +157,7 @@ class UserClass implements UserInterface {
                 $user->avatar = $fileName;
             }
 
-            // Update user fields
+
             $user->first_name = $request->e_first_name;
             $user->last_name  = $request->e_last_name;
             $user->email      = $request->e_email;
@@ -166,14 +166,14 @@ class UserClass implements UserInterface {
             $user->user_type  = $request->e_role;
             $user->status     = $request->e_status;
 
-            // 👇 Only update if new password is given
+
             if (!empty($request->password)) {
                 $user->password = Hash::make($request->password);
             }
 
             $user->save();
 
-            // Assign Role (reset old roles first to avoid duplicates)
+
             $role = Role::findOrFail($request->e_role);
             $user->assignRole([$role->id]);
 

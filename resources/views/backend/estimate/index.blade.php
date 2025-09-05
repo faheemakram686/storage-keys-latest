@@ -68,11 +68,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="lbl" >Select Customer</label>
-                                        <select class="form-control select2 " data-live-search="true" name="customer_id" >
+                                        <select class="form-control  " data-live-search="true" name="customer_id" >
                                             <option value="" selected >Select One</option>
                                             @isset($data)
                                                 @foreach($data['customer'] as $customer)
-                                                    <option value="{{$customer->id}}" >{{$customer->company_name}}</option>
+                                                    <option value="{{$customer->id}}" >{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
                                                 @endforeach
                                             @endisset
                                         </select>
@@ -83,11 +83,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="lbl" >Estimate</label>
-                                        <select class=" form-control select2 " data-live-search="true" name="estimate_id" >
+                                        <select class=" form-control  " data-live-search="true" name="estimate_id" >
                                             <option value="" selected >Select Estimate</option>
                                             @isset($data)
                                                 @foreach ($data['estimate'] as $estiamte)
-                                                    <option value="{{ $estiamte->id }}" selected > {{ $estiamte->id }} {{$estiamte->f_name }} {{$estiamte->l_name }}</option>
+                                                    <option value="{{ $estiamte->id }}" selected >{{ $estiamte->id }}# ({{$estiamte->f_name }} {{$estiamte->l_name }})</option>
                                                 @endforeach
                                             @endisset
                                         </select>
