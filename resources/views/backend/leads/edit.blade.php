@@ -340,7 +340,11 @@
     <script>
         $(document).ready(function() {
 
-            $("#companyfeild").hide();
+            if ($("#com").is(":checked")) {
+                $("#companyfeild").show();
+            } else {
+                $("#companyfeild").hide();
+            }
 
             $("input[name='type']").click(function() {
                 if ($("#com").is(":checked")) {

@@ -46,14 +46,8 @@
                                                 <div class="row mt-3">
                                                     <div class="col-6">
                                                         <div class="form-group">
-                                                            <label class="form-label">Requested date</label>
-                                                            <div class="form-control-wrap">
-                                                                <div class="form-icon form-icon-right">
-                                                                    <em class="icon ni ni-calendar-alt"></em>
-                                                                </div>
-                                                                <input type="text" name="r_date" class="form-control date-picker">
-                                                            </div>
-                                                            <div class="form-note">Date format <code>mm/dd/yyyy</code></div>
+                                                                <label class="">Requested date</label>
+                                                                <input type="date" class="form-control" name="r_date" value="" style="height:35px;" required>
                                                         </div>
 
                                                     </div>
@@ -149,7 +143,7 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <label class="">Mobile 2</label>
-                                                        <input type="text" class="form-control" name="mobile2" style="height:35px;" required>
+                                                        <input type="text" class="form-control" name="mobile2" style="height:35px;" >
                                                     </div>
                                                 </div>
                                             </div>

@@ -48,7 +48,7 @@ class LeadClass implements LeadInterface {
             $lead->email = $request->email;
             $lead->phone = $request->phone;
             $lead->mobile1 = $request->mobile1;
-            $lead->mobile2 = $request->mobile2;
+            $lead->mobile2 = $request->mobile2 ?? "";
             $lead->price = $request->price;
             $lead->addon = $request->addon ? implode(',', $request->addon) : null;
             $lead->insurence = $request->insurance;
@@ -131,7 +131,7 @@ class LeadClass implements LeadInterface {
         $lead->email=$request->email;
         $lead->phone=$request->phone;
         $lead->mobile1=$request->mobile1;
-        $lead->mobile2=$request->mobile2;
+        $lead->mobile2=$request->mobile2 ?? "";
         $lead->price= $request->term_length;
         $lead->addon= implode(',', $request->addon);
         $lead->insurence =  $request->insurance;
@@ -178,7 +178,7 @@ class LeadClass implements LeadInterface {
         $lead->email=$request->email;
         $lead->phone=$request->phone;
         $lead->mobile1=$request->mobile1;
-        $lead->mobile2=$request->mobile2;
+        $lead->mobile2=$request->mobile2 ?? "";
         $lead->price= $request->term_length;
         $lead->addon= implode(',', $request->addon);
         $lead->insurence =  $request->insurance;

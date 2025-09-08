@@ -54,7 +54,7 @@
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6">
-                                                                <label class="">Recust date</label>
+                                                                <label class="">Requested date</label>
                                                                 <input type="date" class="form-control" name="r_date" value="{{$lead->r_date}}" style="height:35px;" required>
                                                             </div>
                                                             <div class="col-6" id="companyfeild">
@@ -320,7 +320,12 @@
     <script>
         $(document).ready(function() {
 
-            $("#companyfeild").hide();
+            // $("#companyfeild").hide();
+            if ($("#com").is(":checked")) {
+                $("#companyfeild").show();
+            } else {
+                $("#companyfeild").hide();
+            }
 
             $("input[name='type']").click(function() {
                 if ($("#com").is(":checked")) {
