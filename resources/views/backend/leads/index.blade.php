@@ -179,7 +179,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" data-form="ajax-form-modal">
+                <div class="modal-body overflow-auto" style="max-height: 70vh;" data-form="ajax-form-modal">
                     <div class="nk-block nk-block-sm">
                         <form method="post" action="{{ url('admin/convert-customer') }}" id="CountryForm">
                             @csrf
