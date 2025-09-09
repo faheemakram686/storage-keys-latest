@@ -20,7 +20,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Customer<span class="text-danger">*</span></label>
-                                    <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
+                                    <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @isset($data['customers'])
                                         @foreach( $data['customers'] as $customer)
@@ -33,7 +33,7 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Contract<span class="text-danger">*</span></label>
-                                    <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" required>
+                                    <select name="contract_id" id="" class="form-control  ContractSection" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                     </select>
                                 </div>

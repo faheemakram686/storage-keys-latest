@@ -449,9 +449,11 @@ require __DIR__.'/auth.php';
         Route::any('create-move-out', [MoveOutController::class,'createMoveOut'])->name('move-out.create');
         Route::any('save-move-out', [MoveOutController::class,'saveMoveOut'])->name('move-out.save');
         Route::any('get-move-out', [MoveOutController::class,'getAllMoveOut'])->name('move-out.get');
+        Route::any('edit-move-out', [MoveOutController::class,'editMoveOut'])->name('move-in.edit');
         Route::any('edit-move-out/{id}', [MoveOutController::class,'getAllMoveOut'])->name('move-out.get');
         Route::any('delete-move-out', [MoveOutController::class,'deleteMoveOut'])->name('move-out.delete');
         Route::any('get-barcode-label-moved', [MoveInRequestController::class,'getBarcodeLableMoved']);
+        Route::any('view-move-out-items/{id}', [MoveOutController::class,'viewMoveOutItems']);
 
     //Notification Routes
         Route::any('notification', [NotificationController::class,'index'])->name('notification.index');

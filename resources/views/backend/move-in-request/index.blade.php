@@ -66,7 +66,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Customer<span class="text-danger">*</span></label>
-                                        <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
+                                        <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['customers'] as $customer)
                                                 <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
@@ -77,7 +77,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Contract<span class="text-danger">*</span></label>
-                                        <select name="contract_id" id="" class="form-control select2 ContractSection" data-live-search="true" required>
+                                        <select name="contract_id" id="" class="form-control  ContractSection" data-live-search="true" required>
                                             <option value="">Choose One</option>
                                         </select>
                                     </div>

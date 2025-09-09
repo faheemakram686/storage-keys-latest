@@ -110,4 +110,19 @@ class MoveOutClass implements MoveOutInterface {
         }
     }
 
+    public function getAllMovedOutItems($id)
+    {
+        $moveout = MoveOut::with(['customer','contract.barcode' => function($query) { $query->where('status', 2); }]);
+        $moveout = $moveout->where('contract_id',$id);
+        $moveout = $moveout->where('is_deleted',0);
+        $moveout = $moveout->get();
+        return $moveout;
+
+    }
+
+    public function editMoveOutBarcode($id)
+    {
+        return $country=BarcodeLabel::find($id)->first();
+    }
+
   }

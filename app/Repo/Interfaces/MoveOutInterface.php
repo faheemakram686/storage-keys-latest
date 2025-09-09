@@ -8,6 +8,8 @@ interface MoveOutInterface{
     public function deleteMoveOut($id);
     public function editMoveOut($id);
 
+    public function getAllMovedOutItems($id);
+
     public function updateMoveOut($request);
 
 

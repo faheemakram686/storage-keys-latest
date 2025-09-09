@@ -11,10 +11,9 @@
 
                             <h5>{{ LaravelGmail::user() ?? "" }}</h5>
                             @if(LaravelGmail::check())
-{{--                                    @dd($data);--}}
-                                <a href="{{ url('oauth/gmail/logout') }}">logout</a>
+                                <a href="{{ url('oauth/gmail/logout') }}" class="btn btn-primary btn-sm"  ><em class="icon ni ni-dash"></em><span>Logout Gmail</span></a>
                             @else
-                                <a href="{{ url('oauth/gmail') }}">login</a>
+                                <a href="{{ url('oauth/gmail') }}" class="btn btn-primary btn-sm"  ><em class="icon ni ni-plus"></em><span>Login Gmail</span></a>
                             @endif
                         </div>
                     </div>

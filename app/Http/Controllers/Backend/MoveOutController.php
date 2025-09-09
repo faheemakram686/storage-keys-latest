@@ -58,4 +58,16 @@ class MoveOutController extends Controller
             return response()->json(['success' => 'Record not deleted successfully'], 200);
         }
     }
+
+    public function viewMoveOutItems($id)
+    {
+        $data['moveout'] = $this->moveOut->getAllMovedOutItems($id);
+        return view('backend.move-out.show-move-out')->with(compact('data'));
+    }
+
+    public function editMoveOut(Request $request)
+    {
+        $data = $this->moveOut->editMoveOutBarcode($request);
+        return $data;
+    }
 }
