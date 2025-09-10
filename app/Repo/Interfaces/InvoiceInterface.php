@@ -8,6 +8,7 @@ interface InvoiceInterface{
     public function editInvoice($id);
     public function getInvoice($id);
     public function updateInvoice($request);
+    public function updateInvoiceRef($request);
     public function convertInvoice($request);
     public function getInvoiceItems($id);
     public function getCustomerInvoices($id);

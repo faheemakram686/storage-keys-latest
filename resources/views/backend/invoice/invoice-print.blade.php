@@ -22,8 +22,25 @@
 
 </head>
 
-<body class="bg-white" onload="printPromot()">
+{{--<body class="bg-white" onload="printPromot()">--}}
+<body class="bg-white">
+
 <div class="nk-block">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    @endif
     @isset($data)
     <div class="invoice invoice-print">
         @isset($data['invoice'][0])
@@ -37,10 +54,17 @@
                 <div class="col-4">
                     <h5 class="title">Storage Keys</h5>
                 </div>
-                <div class="col-4">
+                <div class="col-2">
                     <h5 class="title">Tax Invoice</h5>
                     <span >{{$data['invoice'][0]->invoice_no}}</span>
                 </div>
+
+                <div class="col-2">
+                    @if($data['invoice'][0]->payment_status == "UNPAID")
+                    <a href="{{url('pay-now/'.$data['invoice'][0]->id)}}" class="btn btn-primary" >Pay Now</a>
+                        @endif
+                </div>
+
             </div>
             <hr>
             <div class="invoice-head">
@@ -142,7 +166,11 @@
                                     </tr>
                                 </tobody>
                          </table>
+
                     </div>
+                    <div class="table-responsive">
+                    </div>
+
                 </div>
             </div><!-- .invoice-bills -->
 

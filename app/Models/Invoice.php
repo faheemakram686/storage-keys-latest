@@ -9,6 +9,8 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['invoice_ref'];
+
     public static function generateInvoiceNumber()
     {
         $lastInvoice = self::orderBy('id', 'desc')->first();

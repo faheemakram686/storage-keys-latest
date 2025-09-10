@@ -282,6 +282,14 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->save();
         return 1;
     }
+    public function updateInvoiceRef($invoiceReq)
+    {
+
+        $invoice =Invoice::find($invoiceReq->id);
+        $invoice->invoice_ref = $invoiceReq->invoice_ref;
+        $invoice->save();
+        return 1;
+    }
 
 
     public function generateOrderInvoice($id)

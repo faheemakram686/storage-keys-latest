@@ -519,7 +519,9 @@ require __DIR__.'/auth.php';
     });
 
 
-Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice']);
+    Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice']);
+    Route::any('pay-now/{id}',[InvoiceController::class,'payNowByCustomer']);
+    Route::any('/redirect-response',[InvoiceController::class,'saveResponse'])->name('invoice.redirect-response');
 
 Route::get('/oauth/gmail', function (){
     return LaravelGmail::redirect();

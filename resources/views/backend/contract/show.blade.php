@@ -76,7 +76,7 @@
                                                 <div class="col-md-11">
                                                     <div class="form-group">
                                                         <label>Select Template<span class="text-danger"> * </span></label>
-                                                        <select name="contract_temp_id" id="temp_id" class="form-control select2" data-live-search="true" required>
+                                                        <select name="contract_temp_id" id="temp_id" class="form-control " data-live-search="true" required>
                                                             <option value="">Choose One</option>
                                                             @isset($data['contract_template'])
                                                                 @foreach( $data['contract_template'] as $template)

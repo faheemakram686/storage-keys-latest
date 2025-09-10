@@ -35,7 +35,7 @@ class User extends Authenticatable
         HasRoles,
         UserMethod,
         UserScope,
-//        UserBootTrait,
+        UserBootTrait,
         LogsActivity,
         CausesActivity,
         UserStatus,
@@ -112,10 +112,8 @@ class User extends Authenticatable
             ->logOnly(['first_name', 'last_name', 'email']);
     }
 
-
     public function sendPasswordResetNotification($token)
     {
-        \Log::info("Reset notification triggered for {$this->email}"); // debug log
         $this->notify(new ResetPassword($token));
     }
 }

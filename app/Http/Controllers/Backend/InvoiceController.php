@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Order;
 use App\Models\Payment;
 use App\Repo\ContactClass;
 use App\Repo\ContractClass;
@@ -14,8 +16,10 @@ use App\Repo\Interfaces\InvoiceInterface;
 use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\UserClass;
+use App\Services\NgeniusPaymentService;
 use Illuminate\Http\Request;
 use PDF;
+use function PHPUnit\Framework\lessThanOrEqual;
 
 class InvoiceController extends Controller
 {
@@ -28,8 +32,9 @@ class InvoiceController extends Controller
     private $contact ;
     private $payment;
     private $order;
+    private $paymentService;
 
-    public function __construct(InvoiceInterface $invoice )
+    public function __construct(InvoiceInterface $invoice, NgeniusPaymentService $paymentService)
     {
         $this->invoice = $invoice;
         $this->customer = new CustomerClass();
@@ -40,6 +45,7 @@ class InvoiceController extends Controller
         $this->contract =  new ContractClass();
         $this->payment = new PaymentClass();
         $this->order = new OrderClass();
+        $this->paymentService = $paymentService;
     }
     public function index()
     {
@@ -135,8 +141,36 @@ class InvoiceController extends Controller
     public function viewAsCustomerInvoice($id)
     {
         $data['invoice'] = $this->invoice->getInvoice($id);
-        return view('backend.invoice.invoice-pdf')->with(compact('data'));
+        return view('backend.invoice.invoice-print')->with(compact('data'));
     }
+    public function payNowByCustomer($id)
+    {
+        $data['invoice'] = $this->invoice->getInvoice($id);
+        if($data['invoice']['0'])
+        {
+
+            $invoiceId = $data['invoice'][0]->id ?? null;
+            $grandTotal = $data['invoice'][0]->grand_total ?? 0;
+
+            $response = $this->paymentService->createOrder($grandTotal, 'AED', 1);
+
+
+            if (!$response || empty($response['_links']['payment']['href'])) {
+                return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
+            }
+
+            $this->invoice->updateInvoiceRef((object)[
+                'id'          => $invoiceId,
+                'invoice_ref' => $response['reference'] ?? null,
+            ]);
+
+            return redirect()->away($response['_links']['payment']['href']);
+        }else{
+                return back()->withErrors(['error' => 'There is issue in inovice. Please try again.']);
+             }
+
+    }
+
     public function getCustomerInvoicesApi(Request $request)
     {
         return $this->invoice->getCustomerInvoicesApi($request->customer_id);
@@ -145,5 +179,38 @@ class InvoiceController extends Controller
     {
         return $id;
         return $this->invoice->getCustomerInvoicesApi($request->customer_id);
+    }
+
+    public function saveResponse(Request $request)
+    {
+        $ref = $request->query('ref'); // The order reference
+        if (!$ref) {
+            return redirect()-back()->with('error', 'Invalid payment reference');
+        }
+        // Update your local DB
+        $invoice = Invoice::where('invoice_ref', $ref)->first();
+        if ($invoice) {
+            $invoice->payment_status = 1;
+            $invoice->save();
+            $inovicePayment = (object)[
+                'invoice_ref'   => $ref,
+                'invoice_id'    => $invoice->id,
+                'customer_id'   => $invoice->customer_id,
+                'contract_id'   => $invoice->contract_id,
+                'order_id'      => $invoice->order_id,
+                'payment_mode' => 3,
+                'payment_date'  => now(),
+                'amount_received'=> $invoice->grand_total,
+                'note'          => 'This invoice has been received via online payment method',
+            ];
+            $payment = $this->payment->savePayment($inovicePayment);
+        }
+        // Redirect user with status
+        if ($payment) {
+            return redirect('invoice-to-customer/'.$invoice->id)->with('success', 'Payment successful!');
+        } else {
+            return redirect('invoice-to-customer/'.$invoice->id)->with('error', 'Payment failed or cancelled.');
+        }
+
     }
 }

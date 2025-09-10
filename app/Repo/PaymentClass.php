@@ -20,6 +20,7 @@ class PaymentClass implements PaymentInterface {
 
     public function savePayment($request)
     {
+
         $payment =new Payment();
         $payment->customer_id =$request->customer_id;
 

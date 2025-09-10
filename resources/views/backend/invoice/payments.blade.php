@@ -158,7 +158,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].invoice.invoice_no + '</td>' +
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].payment_date + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+((data[i].payment_method == 1 )? 'Cash':'Bank')+'</span>'+
+                                ' <span class="badge badge-success">' + (data[i].payment_method == 1 ? 'Cash' : data[i].payment_method == 2 ? 'Bank' : 'Online') +'</span>'+
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].amount_received + '</td>'+
                                 // '<td class="nk-tb-col nk-tb-col-tools" >'+

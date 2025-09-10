@@ -18,7 +18,7 @@ class NgeniusPaymentService
         $this->tokenService = $tokenService;
     }
 
-    public function createOrder($amount, $currency = 'AED')
+    public function createOrder($amount, $currency = 'AED',$redirectUrl = null)
     {
         $token = $this->tokenService->getAccessToken();
 
@@ -40,7 +40,7 @@ class NgeniusPaymentService
             'merchantAttributes' => [
                 'maskPaymentInfo' => true,
                 'paymentAttempts' => "3",
-                'redirectUrl' => route('handle.redirect'),
+                'redirectUrl' => $redirectUrl!=null? route('invoice.redirect-response'):route('handle.redirect'),
             ]
         ];
 
