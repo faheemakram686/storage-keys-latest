@@ -148,7 +148,20 @@ class EstimateClass implements EstimateInterface {
 
     public function getAllEstimate()
     {
+        $user = Auth::user();
+        $appsettings = AppSettings::get();
         $qry=Estimate::with('storageunit','termLength','customer');
+        if(!$user->hasRole('App Admin')){
+            if($appsettings[0]->value == auth()->id()){
+                $qry=$qry->where('status', 0);
+            }elseif($appsettings[1]->value == auth()->id()){
+                $qry=$qry->where('status', 1);
+            }elseif($appsettings[2]->value == auth()->id()){
+                $qry=$qry->where('status', 2);
+            }else{
+                $qry=$qry->where('user_id', \Illuminate\Support\Facades\Auth::user()->id);
+            }
+        }
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;

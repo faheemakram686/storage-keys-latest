@@ -69,7 +69,7 @@
                                                         <div class="row">
                                                             <div class=" col-6">
                                                                 <label class="lbl" >Country</label>
-                                                                <select class="form-control select2" data-live-search="true" name="country_id" id="country_id">
+                                                                <select class="form-control " data-live-search="true" name="country_id" id="country_id">
                                                                     <option value="" selected >Choose One</option>
                                                                     @isset($data)
                                                                         @foreach ($data['loc'] as $country)
@@ -80,25 +80,25 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >City</label>
-                                                                <select name="city_id" class=" form-control  citySection select2" data-live-search="true" id="citySection" >
+                                                                <select name="city_id" class=" form-control  citySection " data-live-search="true" id="citySection" >
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Location</label>
-                                                                <select class="form-control loc_id select2" data-live-search="true" name="loc_id" id="loc_id">
+                                                                <select class="form-control loc_id " data-live-search="true" name="loc_id" id="loc_id">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Warehouse</label>
-                                                                <select class=" form-control warehouse_id select2" data-live-search="true" name="warehouse_id" id="warehouse_id">
+                                                                <select class=" form-control warehouse_id " data-live-search="true" name="warehouse_id" id="warehouse_id">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Storage Unit</label>
-                                                                <select class=" form-control su_id select2" data-live-search="true" name="su_id" id="su_id">
+                                                                <select class=" form-control su_id " data-live-search="true" name="su_id" id="su_id">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
@@ -452,7 +452,7 @@
                         if (data.success) {
                             // $('#EstimateForm')[0].reset();
                             toastr.success(data.success);
-
+                            window.location.href = "{{ url('admin/estimate')}}";
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
@@ -463,7 +463,7 @@
                     complete: function(data) {
                         $(".btn-submit").html("Save");
                         $(".btn-submit").prop("disabled", false);
-                        window.location.href = "{{ url('admin/estimate')}}";
+
                     },
                     error: function() {
                         toastr.error('any technical error');

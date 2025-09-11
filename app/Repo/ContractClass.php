@@ -119,8 +119,6 @@ class ContractClass implements ContractInterface {
 
         }
 
-
-
     }
 
     public function updateContract($request)

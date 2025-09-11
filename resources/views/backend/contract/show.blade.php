@@ -262,6 +262,7 @@
                             if (data && data.success) {
                                 $('.close').click();
                                 toastr.success(data.success);
+                                window.location.reload();
                             } else if (data && data.errors) {
                                 toastr.error(data.errors);
                             }
@@ -291,8 +292,10 @@
 
                 if (changetype == 'new' && newtitle) {
                     insertNew(newtitle, editor_data);
+
                 } else if (changetype == 'update' && temp_id) {
                     update(temp_id, temp_title, editor_data);
+
                 }
             });
 
@@ -306,6 +309,7 @@
                         if (data && data.success) {
                             $('.close').click();
                             toastr.success(data.success);
+                            $('#myModal').modal('hide');
                         } else if (data && data.errors) {
                             toastr.error(data.errors);
                         }
@@ -326,6 +330,7 @@
                         if (data && data.success) {
                             $('.close').click();
                             toastr.success(data.success);
+                            $('#myModal').modal('hide');
                         } else if (data && data.errors) {
                             toastr.error(data.errors);
                         }

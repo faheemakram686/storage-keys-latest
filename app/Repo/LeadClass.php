@@ -14,6 +14,7 @@ use App\Notifications\EmailNotification;
 use App\Repo\Interfaces\CountryInterface;
 use App\Repo\Interfaces\LeadInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
@@ -93,7 +94,11 @@ class LeadClass implements LeadInterface {
 
     public function getAllLead()
     {
+        $user = Auth::user();
         $qry=Lead::with('storageunit','userresponsible','leadStatus','termLength');
+        if(!$user->hasRole('App Admin')){
+            $qry=$qry->where('user_res_id',Auth::user()->id);
+        }
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;

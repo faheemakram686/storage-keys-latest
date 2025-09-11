@@ -72,7 +72,9 @@ class ContractTemplateClass implements ContractTemplateInterface {
     {
 
         $temp = ContractTemplate::find($request->id);
-        $temp->temp_title =$request->temp_title;
+        if($request->temp_title){
+            $temp->temp_title =$request->temp_title;
+        }
         $temp->temp_body = $request->temp_body;
         $temp->status=$request->status;
         $temp->save();
