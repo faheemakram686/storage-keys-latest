@@ -197,7 +197,9 @@
     @endisset
 {{--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>--}}
     <script type="text/javascript">
+
         var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG'});
+
         $('#clear').click(function(e) {
             e.preventDefault();
             sig.signature('clear');

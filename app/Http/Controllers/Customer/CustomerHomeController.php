@@ -39,7 +39,7 @@ class CustomerHomeController extends Controller
         $data['estimate'] = $this->estimate->getCustomerEstimates($customer_id);
         $data['contract'] = $this->contract->getCustomerContracts($customer_id);
         $data['invoice'] = $this->invoice->getCustomerInvoices($customer_id);
-
+//        dd($data);
         return view('ui.pages.customer.account')->with(compact('data'));
     }
 

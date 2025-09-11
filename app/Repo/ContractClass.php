@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ContractClass implements ContractInterface {
 
@@ -94,23 +95,29 @@ class ContractClass implements ContractInterface {
 
     public function signContact($request)
     {
-        $folderPath = public_path('upload/');
         $image_parts = explode(";base64,", $request->signed);
-        $image_type_aux = explode("image/", $image_parts[0]);
-        $image_type = $image_type_aux[1];
-        $image_base64 = base64_decode($image_parts[1]);
-        $image_name = uniqid() . '.'.$image_type;
-        $imagepath = storage_path('app/public/uploads/contract_sign_images/') . $image_name;
-//        $request->file('signed')->storeAs('public/uploads/product-images/', $image_name);
-//        $file = $folderPath . $image_name;
 
-        file_put_contents($imagepath, $image_base64);
-        $contract=Contract::find($request->id);
-        $contract->sign_image = $image_name;
-        $contract->is_signed = 1;
-        $contract->save();
-        return 1;
+        if (count($image_parts) === 2) {
+            $image_type_aux = explode("image/", $image_parts[0]);
+            $image_type = $image_type_aux[1] ?? 'png'; // default to png if missing
+            $image_base64 = base64_decode($image_parts[1]);
 
+            $image_name = uniqid() . '.' . $image_type;
+            $path = 'public/uploads/contract_sign_images/' . $image_name;
+
+            // Save using Laravel's Storage (recommended over file_put_contents)
+            Storage::put($path, $image_base64);
+
+            $contract = Contract::find($request->id);
+
+            if ($contract) {
+                $contract->sign_image = $image_name;
+                $contract->is_signed = 1;
+                $contract->save();
+                return 1;
+            }
+
+        }
 
 
 
@@ -145,7 +152,7 @@ class ContractClass implements ContractInterface {
     {
         $qry=Contract::with('estimate.storageunit','estimate.termLength');
         $qry=$qry->where('customer_id',$request);
-        $qry = $qry->where( 'status' , 3 );
+//        $qry = $qry->where( 'status' , 1 );
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
