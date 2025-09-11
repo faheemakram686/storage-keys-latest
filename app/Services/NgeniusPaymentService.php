@@ -52,7 +52,7 @@ class NgeniusPaymentService
             ])->post($endpoint, $payload);
 
             if ($response->successful()) {
-                Log::error('Ngenius Order Creation successful', [
+                Log::info('Ngenius Order Creation successful', [
                     'status' => $response->status(),
                     'response' => $response->body(),
                 ]);
