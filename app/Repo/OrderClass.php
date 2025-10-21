@@ -81,6 +81,14 @@ class OrderClass implements OrderInterface {
         $qry=$qry->get();
         return $qry;
     }
+    public function getCustomerOrders($customerid)
+    {
+        $qry=Order::with('customer.contact','orderItems');
+        $qry=$qry->where('customer_id',$customerid);
+        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=$qry->get();
+        return $qry;
+    }
     public function getCustomerOrderApi($customerid)
     {
         try {

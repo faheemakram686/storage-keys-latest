@@ -10,6 +10,7 @@ use App\Repo\CustomerDashboardClass;
 use App\Repo\EstimateClass;
 use App\Repo\Interfaces\CustomerDashboardInterface;
 use App\Repo\InvoiceClass;
+use App\Repo\OrderClass;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -21,12 +22,14 @@ class CustomerHomeController extends Controller
     private $estimate;
     private $contract;
     private $invoice;
+    private $order;
     private $dashboard;
     public function __construct(CustomerDashboardInterface $dashboard)
     {
         $this->estimate = new EstimateClass();
         $this->contract = new ContractClass();
         $this->invoice = new InvoiceClass();
+        $this->order = new OrderClass();
         $this->dashboard = $dashboard;
     }
 
@@ -36,10 +39,12 @@ class CustomerHomeController extends Controller
         $data['estimateCount'] = $this->dashboard->getEstimatesCount($customer_id);
         $data['contractCount'] = $this->dashboard->getContractsCount($customer_id);
         $data['invoiceCount'] = $this->dashboard->getInvoicesCount($customer_id);
+        $data['orderCount'] = $this->dashboard->getOrdersCount($customer_id);
         $data['estimate'] = $this->estimate->getCustomerEstimates($customer_id);
         $data['contract'] = $this->contract->getCustomerContracts($customer_id);
         $data['invoice'] = $this->invoice->getCustomerInvoices($customer_id);
-//        dd($data);
+        $data['order'] = $this->order->getCustomerOrders($customer_id);
+
         return view('ui.pages.customer.account')->with(compact('data'));
     }
 
@@ -60,10 +65,16 @@ class CustomerHomeController extends Controller
         $contact->last_name = $request->last_name;
         $contact->email = $request->email;
 
+
         if($request->password)
             $contact->password =  Hash::make($request->password);
 
         if($contact->save()){
+            $contact->customer()->update([
+                'address' => $request->address,
+                'city' => $request->city,
+                'country' => $request->country,
+            ]);
             Auth::guard()->login($contact);
             return redirect()->back()->withSuccess(['Record Updated successfully']);
         }else

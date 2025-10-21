@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Repo\Interfaces\OrderInterface;
 use App\Services\NgeniusPaymentService;
@@ -26,11 +28,14 @@ class OrderController extends Controller
     {
         try {
 
+
             $paymentMethod = $request->payment_method;
 
             if ($paymentMethod === 'online') {
-                $response = $this->paymentService->createOrder($request->total_amount);
-                if (!$response) {
+                $customerRef = Customer::find($request->customer_id);
+
+                $response = $this->paymentService->createOrder($request->total_amount,'AED',null,$customerRef);
+                if (!$response || empty($response['_links']['payment']['href'])) {
                     return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
                 }
                 if($response['_links']['payment']['href']){

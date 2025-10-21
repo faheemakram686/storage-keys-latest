@@ -64,7 +64,7 @@
                                             <a data-toggle="tab" href="#liton_tab_1_2">Estimates <i class="fas fa-file-alt"></i></a>
                                             <a data-toggle="tab" href="#liton_tab_1_3">Contracts <i class="fas fa-arrow-down"></i></a>
                                             <a data-toggle="tab" href="#liton_tab_1_4">Invoices <i class="fas fa-arrow-down"></i></a>
-{{--                                            <a data-toggle="tab" href="#liton_tab_1_5">Address <i class="fas fa-map-marker-alt"></i></a>--}}
+                                            <a data-toggle="tab" href="#liton_tab_1_5">Orders <i class="fas fa-map-marker-alt"></i></a>
                                             <a data-toggle="tab" href="#liton_tab_1_6">Account Details <i class="fas fa-user"></i></a>
                                             <a href="#"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" title="Logout">Logout <i class="fas fa-sign-out-alt"></i></a>
                                             <form id="logout-form" action="{{ route('all.logout') }}" method="POST" class="d-none">@csrf</form>
@@ -102,6 +102,15 @@
                                                             <div class="ltn__feature-info">
                                                                 <h5><a href="@"></a>Invoices</h5>
                                                                 <h3 class="mb-0 mt-2">{{($data['invoiceCount'])? :"0"}}</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-6 col-12 m-4">
+                                                        <div class="ltn__feature-item ltn__feature-item-6">
+
+                                                            <div class="ltn__feature-info">
+                                                                <h5><a href="@"></a>Orders</h5>
+                                                                <h3 class="mb-0 mt-2">{{($data['orderCount'])? :"0"}}</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -180,10 +189,9 @@
                                                         <table class="table">
                                                             <thead>
                                                             <tr>
-                                                                <th>Contract</th>
+                                                                <th>Contract/Order</th>
                                                                 <th>Invoice</th>
                                                                 <th>Date</th>
-{{--                                                                <th>Due Date</th>--}}
                                                                 <th>Total Amount</th>
                                                                 <th>Status</th>
                                                                 <th>Download</th>
@@ -192,13 +200,47 @@
                                                             <tbody>
                                                             @foreach($data['invoice'] as $invoice)
                                                                 <tr>
-                                                                    <td>{{(! empty($invoice->contract->subject) ? $invoice->contract->subject : ''); }}</td>
+                                                                    @if($invoice->type =='contract')
+                                                                    <td>{{(! empty($invoice->contract->subject) ? $invoice->contract->subject : '') }}</td>
+                                                                    @else
+                                                                        <td>{{(! empty($invoice->order) ?  'Order No#-'.$invoice->order->id : '') }}</td>
+                                                                        @endif
                                                                     <td>{{$invoice->invoice_no}}</td>
                                                                     <td>{{$invoice->invoice_date}}</td>
-{{--                                                                    <td>{{$invoice->due_date}}</td>--}}
                                                                     <td>{{$invoice->grand_total}}</td>
                                                                     <td>{{$invoice->payment_status}}</td>
                                                                     <td><a href="{{url('customer/pdf-invoice').'/'.$invoice->id}}"> Download</a><a href="{{url('customer/invoice-to-customer').'/'.$invoice->id}}"> View</a></td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endisset
+                                        @isset($data['order'])
+                                            <div class="tab-pane fade" id="liton_tab_1_5">
+                                                <div class="ltn__myaccount-tab-content-inner">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Order#</th>
+                                                                <th>Payment Method</th>
+                                                                <th>Date</th>
+                                                                <th>Total Amount</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            @foreach($data['order'] as $order)
+                                                                <tr>
+                                                                    <td>{{ 'Order No#-'.$order->id}}</td>
+                                                                    <td>{{$order->payment_method}}</td>
+                                                                    <td>{{$order->created_at}}</td>
+                                                                    <td>{{$order->sub_amount}}</td>
+                                                                    <td>{{$order->status}}</td>
+{{--                                                                    <td><a href="{{url('customer/pdf-order').'/'.$order->id}}"> Download</a><a href="{{url('customer/invoice-to-customer').'/'.$invoice->id}}"> View</a></td>--}}
                                                                 </tr>
                                                             @endforeach
                                                             </tbody>
@@ -251,6 +293,23 @@
                                                                 <input type="email" name="email" placeholder="example@example.com" value="{{Auth::user()->email}}">
                                                             </div>
                                                         </div>
+                                                        <fieldset>
+                                                            <legend>Billing Address</legend>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <label>Address:</label>
+                                                                    <input type="text" name="address">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>City:</label>
+                                                                    <input type="text" name="city">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label>Country:</label>
+                                                                    <input type="text" name="country">
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
                                                         <fieldset>
                                                             <legend>Password change</legend>
                                                             <div class="row">

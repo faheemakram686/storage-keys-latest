@@ -537,7 +537,7 @@
                                 '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data[i].productdetail.id + '" /><span>' + dr + '</span></td>' +
                                 '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>' +
                                 '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data[i].productdetail.p_name + '" /></td>' +
-                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>' +
+                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="' + data[i].qty + '" min="0" /></td>' +
                                 '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>' +
                                 '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" step="any" value="' + data[i].productdetail.sell_price + '" min="0.01" /></td>' +
                                 '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" step="any" value="' + data[i].productdetail.sell_price + '" min="0.01" /></td>' +

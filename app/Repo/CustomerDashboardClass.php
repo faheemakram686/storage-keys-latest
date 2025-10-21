@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Estimate;
 use App\Models\Invoice;
 use App\Models\Lead;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\StorageUnit;
 use App\Repo\Interfaces\AdminDashboardInterface;
@@ -41,6 +42,14 @@ class CustomerDashboardClass implements CustomerDashboardInterface {
         $invoices = $invoices->where('is_deleted',0);
         $invoices = $invoices->count();
         return $invoices;
+    }
+    public function getOrdersCount($id)
+    {
+        $order = Order::query();
+        $order = $order->where('customer_id',$id);
+        $order = $order->where('is_deleted',0);
+        $order = $order->count();
+        return $order;
     }
 
 }

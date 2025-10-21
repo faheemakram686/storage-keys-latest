@@ -151,8 +151,10 @@ class InvoiceController extends Controller
 
             $invoiceId = $data['invoice'][0]->id ?? null;
             $grandTotal = $data['invoice'][0]->grand_total ?? 0;
+            $customerRef = $data['invoice'][0]->customer ?? "";
 
-            $response = $this->paymentService->createOrder($grandTotal, 'AED', 1);
+
+            $response = $this->paymentService->createOrder($grandTotal, 'AED', 1,$customerRef);
 
 
             if (!$response || empty($response['_links']['payment']['href'])) {

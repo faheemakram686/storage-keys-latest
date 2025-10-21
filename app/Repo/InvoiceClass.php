@@ -154,7 +154,7 @@ class InvoiceClass implements InvoiceInterface {
     }
     public function getCustomerInvoices($customerid)
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract');
+        $qry=Invoice::with('customer','estimate.storageunit','contract','order');
         $qry=$qry->where('customer_id',$customerid);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();

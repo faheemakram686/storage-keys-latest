@@ -18,9 +18,16 @@ class NgeniusPaymentService
         $this->tokenService = $tokenService;
     }
 
-    public function createOrder($amount, $currency = 'AED',$redirectUrl = null)
+    public function createOrder($amount, $currency = 'AED',$redirectUrl = null,$customerRef = null)
     {
         $token = $this->tokenService->getAccessToken();
+
+        if($customerRef && $customerRef->customer_name){
+            $parts = explode(' ', trim($customerRef->customer_name), 2);
+
+            $first_name = $parts[0] ?? null;
+            $last_name  = $parts[1] ?? null;
+        }
 
 
         if (!$token) {
@@ -36,12 +43,20 @@ class NgeniusPaymentService
                 'currencyCode' => $currency,
                 'value' => $amount * 100, // Convert to minor units
             ],
-            'emailAddress' => "test@gmail.com",
+            'emailAddress' => $customerRef->email ?? "",
             'merchantAttributes' => [
                 'maskPaymentInfo' => true,
                 'paymentAttempts' => "3",
                 'redirectUrl' => $redirectUrl!=null? route('invoice.redirect-response'):route('handle.redirect'),
+            ],
+            'billingAddress' => [
+                    'firstName'=> $first_name ?? "",
+                    'lastName'=> $last_name ?? "",
+                    'address1'=> $customerRef->address ?? "",
+                    'city'=>$customerRef->city ?? "",
+                    'countryCode'=>$customerRef->country ?? "",
             ]
+
         ];
 
         try {
@@ -62,20 +77,19 @@ class NgeniusPaymentService
             // If token might be expired, clear cache and retry once
             if ($response->status() === 401) {
                 $this->tokenService->clearTokenCache();
-                return $this->createOrder($amount, $currency);
+                return $this->createOrder($amount, $currency,$redirectUrl,$customerRef);
             }
 
             Log::error('Ngenius Order Creation Failed', [
                 'status' => $response->status(),
                 'response' => $response->body(),
             ]);
-            dd( $response->json());
+
             return false;
 
         } catch (\Exception $e) {
             Log::error('Ngenius Order Creation Exception', ['error' => $e->getMessage()]);
             return $e->getMessage();
-//            return false;
         }
     }
 
