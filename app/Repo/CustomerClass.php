@@ -260,7 +260,7 @@ class CustomerClass implements CustomerInterface {
 //                        echo "Error message: " . $ex->getMessage();
 //                    }
 //                }
-
+//
 //                return response()->json(['success' => 'Record save successfully'], 200);
             }
 

@@ -29,6 +29,7 @@ use App\Http\Controllers\Backend\TaskController;
 use App\Http\Controllers\Backend\TermLengthController;
 use App\Http\Controllers\Backend\WarehouseController;
 use App\Http\Controllers\Frontend\LeadController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\MoveInRequestController;
@@ -43,6 +44,7 @@ use Dacastro4\LaravelGmail\Facade\LaravelGmail;
 use App\Http\Controllers\Backend\QuickBooksWebhookController;
 use App\Http\Controllers\Backend\ReportsController;
 use App\Http\Controllers\Backend\InquiryController;
+use App\Http\Controllers\WebhookController;
 
 require __DIR__.'/auth.php';
 
@@ -536,3 +538,18 @@ Route::get('/oauth/gmail/logout', function (){
     LaravelGmail::logout(); //It returns exception if fails
     return redirect()->to('/admin/emails');
 });
+Route::get('/test-create-customer', function () {
+    $customer = \App\Models\Customer::create([
+        'customer_name' => 'Abubakar',
+        'email' => 'Abubakar@example.com',
+        'phone' => '03156944685',
+        'address' => 'Lahore, Pakistan',
+        'status' => 1,
+    ]);
+
+    return response()->json([
+        'message' => 'Customer created successfully!',
+        'customer' => $customer
+    ]);
+});
+Route::post('/webhook/receive', [WebhookController::class, 'handle']);

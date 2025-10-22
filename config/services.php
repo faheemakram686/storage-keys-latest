@@ -36,6 +36,9 @@ return [
         'access_token' => env('NGENIUS_ACCESS_TOKEN'),
         'callback_url' => env('NGENIUS_CALLBACK_URL'),
     ],
+    'zapier' => [
+        'customer_webhook_url' => env('ZAPIER_CUSTOMER_WEBHOOK_URL'),
+    ],
 
     /*
      * Socialite Credentials
