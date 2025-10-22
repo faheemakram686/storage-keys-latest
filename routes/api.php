@@ -16,6 +16,7 @@ use App\Http\Controllers\Tenant\Attendance\AttendanceLogController;
 use App\Http\Controllers\Tenant\Attendance\AttendanceStatusController;
 use App\Http\Controllers\Tenant\Employee\EmployeeLeaveAllowanceController;
 use App\Http\Controllers\Tenant\Employee\DocumentController;
+use App\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,8 @@ use App\Http\Controllers\Tenant\Employee\DocumentController;
 //auth api
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
+
+Route::post('/webhook/receive', [WebhookController::class, 'handle']);
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');

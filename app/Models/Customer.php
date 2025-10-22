@@ -13,7 +13,7 @@ class Customer extends Model
 
     protected $table = 'customers';
 
-    protected $fillable = ['email','customer_name','password','company_name','phone','status'];
+    protected $fillable = ['email','customer_name','password','q_customer_id','company_name','phone','status'];
 
     protected $hidden = ['password',  'remember_token'];
 

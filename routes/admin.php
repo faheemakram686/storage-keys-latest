@@ -552,4 +552,3 @@ Route::get('/test-create-customer', function () {
         'customer' => $customer
     ]);
 });
-Route::post('/webhook/receive', [WebhookController::class, 'handle']);
