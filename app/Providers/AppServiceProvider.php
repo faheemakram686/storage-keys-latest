@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\Product;
+use App\Observers\CustomerObserver;
+use App\Observers\InvoiceObserver;
+use App\Observers\ProductObserver;
 use App\Repo\AddonClass;
 use App\Repo\AdminDashboardClass;
 use App\Repo\AppSettingsClass;
@@ -182,5 +188,9 @@ class AppServiceProvider extends ServiceProvider
                 session()->forget('lang-rtl');
             }
         }
+
+        Customer::observe(CustomerObserver::class);
+        Product::observe(ProductObserver::class);
+        Invoice::observe(InvoiceObserver::class);
     }
 }

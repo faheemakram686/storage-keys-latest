@@ -36,8 +36,10 @@ return [
         'access_token' => env('NGENIUS_ACCESS_TOKEN'),
         'callback_url' => env('NGENIUS_CALLBACK_URL'),
     ],
-    'zapier' => [
-        'customer_webhook_url' => env('ZAPIER_CUSTOMER_WEBHOOK_URL'),
+    'webhooks' => [
+        'customer' => env('ZAPIER_WEBHOOK_CUSTOMER'),
+        'product' => env('ZAPIER_WEBHOOK_PRODUCT'),
+        'invoice' => env('ZAPIER_WEBHOOK_INVOICE'),
     ],
 
     /*

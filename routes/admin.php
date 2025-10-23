@@ -539,10 +539,10 @@ Route::get('/oauth/gmail/logout', function (){
     return redirect()->to('/admin/emails');
 });
 Route::get('/test-create-customer', function () {
-    $customer = \App\Models\Customer::create([
-        'customer_name' => 'Abubakar',
-        'email' => 'Abubakar@example.com',
-        'phone' => '03156944685',
+    $customer  = Customer::create([
+        'customer_name' => 'Ali Khan',
+        'email' => 'ali@example.com',
+        'phone' => '123456789',
         'address' => 'Lahore, Pakistan',
         'status' => 1,
     ]);

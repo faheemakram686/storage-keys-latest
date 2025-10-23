@@ -7,9 +7,23 @@ use App\Services\ZapierService;
 
 class CustomerObserver
 {
+    protected $zapier;
+
+    public function __construct(ZapierService $zapier)
+    {
+        $this->zapier = $zapier;
+    }
+
     public function created(Customer $customer)
     {
-        (new ZapierService())->sendCustomerCreated($customer);
+        $this->zapier->send('customer', [
+            'id' => $customer->id,
+            'name' => $customer->customer_name,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'address' => $customer->address,
+            'status' => $customer->status,
+            'created_at' => $customer->created_at,
+        ]);
     }
 }
-

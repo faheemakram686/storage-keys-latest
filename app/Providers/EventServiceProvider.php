@@ -20,9 +20,7 @@ class EventServiceProvider extends ServiceProvider
         //
     ];
 
-    protected $observers = [
-        Customer::class => CustomerObserver::class,
-    ];
+
 
     /**
      * Class event subscribers.

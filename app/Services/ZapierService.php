@@ -4,47 +4,34 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\Customer;
 
 class ZapierService
 {
     /**
-     * Send new customer data to Zapier
+     * Send any data to Zapier based on the given type (customer, invoice, etc.)
      */
-    public function sendCustomerCreated(Customer $customer)
+    public function send(string $type, array $data): bool
     {
+        $webhook = config("zapier.webhooks.{$type}");
 
-        $url = config('services.zapier.customer_webhook_url');
-
-        $payload = [
-            'event' => 'customer_created',
-            'data' => [
-                'id' => $customer->id,
-                'customer_name' => $customer->customer_name,
-                'email' => $customer->email,
-                'phone' => $customer->phone,
-                'address' => $customer->address,
-                'created_at' => $customer->created_at,
-            ],
-        ];
+        if (!$webhook) {
+            Log::warning("No Zapier webhook configured for type: {$type}");
+            return false;
+        }
 
         try {
-            $response = Http::post($url, $payload);
+            $response = Http::post($webhook, $data);
 
-            Log::info('✅ Customer sent to Zapier', [
-                'status' => $response->status(),
-                'url' => $url,
-                'payload' => $payload,
-                'response' => $response->body(),
-            ]);
+            if ($response->failed()) {
+                Log::error("Zapier Webhook Error ({$type}): " . $response->body());
+                return false;
+            }
 
-            return $response->successful();
+            Log::info("Zapier Webhook Success ({$type})", $data);
+            return true;
+
         } catch (\Throwable $e) {
-            Log::error('❌ Failed to send customer to Zapier', [
-                'error' => $e->getMessage(),
-                'payload' => $payload,
-            ]);
-
+            Log::error("Zapier Exception ({$type}): " . $e->getMessage());
             return false;
         }
     }
