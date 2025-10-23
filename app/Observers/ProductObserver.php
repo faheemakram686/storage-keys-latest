@@ -18,10 +18,15 @@ class ProductObserver
     {
         $this->zapier->send('product', [
             'id' => $product->id,
-            'name' => $product->name,
-            'sku' => $product->sku,
-            'price' => $product->price,
-            'stock' => $product->stock,
+            'p_name' => $product->p_name,
+            'detail' => $product->detail,
+            'pur_price' => $product->pur_price,
+            'sell_price' => $product->sell_price,
+            'disc_type' => $product->disc_type,
+            'disc_amount' => $product->disc_amount,
+            'qty' => $product->qty,
+            'image' => $product->image,
+            'status' => $product->status,
         ]);
     }
 }

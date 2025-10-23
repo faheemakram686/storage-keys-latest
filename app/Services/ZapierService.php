@@ -22,6 +22,7 @@ class ZapierService
         }
 
         try {
+
             $response = Http::post($webhook, $data);
 
             if ($response->failed()) {

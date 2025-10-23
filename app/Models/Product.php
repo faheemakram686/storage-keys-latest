@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'p_name',
+        'detail',
+        'pur_price',
+        'sell_price',
+        'disc_type',
+        'disc_amount',
+        'qty',
+        'image',
+        'status',
+    ];
 
     public function setStatusAttribute($value)
     {

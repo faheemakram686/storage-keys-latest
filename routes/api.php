@@ -32,7 +32,8 @@ use App\Http\Controllers\WebhookController;
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
-Route::post('/webhook/receive', [WebhookController::class, 'handle']);
+Route::post('/webhook/receive-customer', [WebhookController::class, 'handleCustomerResponse']);
+Route::post('/webhook/receive-product', [WebhookController::class, 'handleProductResponse']);
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');
