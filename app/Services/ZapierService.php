@@ -12,6 +12,7 @@ class ZapierService
      */
     public function send(string $type, array $data): bool
     {
+
         $webhook = config("zapier.webhooks.{$type}");
 
         if (!$webhook) {
