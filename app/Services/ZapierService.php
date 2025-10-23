@@ -14,7 +14,7 @@ class ZapierService
     {
 
         $webhook = config("zapier.webhooks.{$type}");
-        dd($webhook);
+
 
         if (!$webhook) {
             Log::warning("No Zapier webhook configured for type: {$type}");
