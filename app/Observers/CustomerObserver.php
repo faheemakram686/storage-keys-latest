@@ -18,7 +18,7 @@ class CustomerObserver
     {
         $this->zapier->send('customer', [
             'id' => $customer->id,
-            'name' => $customer->customer_name,
+            'customer_name' => $customer->customer_name,
             'email' => $customer->email,
             'phone' => $customer->phone,
             'address' => $customer->address,
