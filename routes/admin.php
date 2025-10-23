@@ -552,3 +552,23 @@ Route::get('/test-create-customer', function () {
         'customer' => $customer
     ]);
 });
+
+Route::get('/test-product-create', function () {
+    $product = \App\Models\Product::create([
+        'p_name' => 'Test Product',
+        'detail' => 'This is a sample test product.',
+        'pur_price' => 100,
+        'sell_price' => 150,
+        'disc_type' => 'percent',
+        'disc_amount' => 10,
+        'qty' => 50,
+        'image' => 'test_image.jpg',
+        'status' => 1,
+    ]);
+
+    return response()->json([
+        'message' => 'Product created successfully!',
+        'customer' => $product
+    ]);
+
+});
