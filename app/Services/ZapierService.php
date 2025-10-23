@@ -29,8 +29,15 @@ class ZapierService
                 return false;
             }
 
-            Log::info("Zapier Webhook Success ({$type})", $data);
-            return true;
+            Log::info('Zapier Webhook Success', [
+                'status' => $response->status(),
+                'type' => $type,
+                'url' => $webhook,
+                'payload' => $data,
+                'response' => $response->body(),
+            ]);
+
+            return $response->successful();
 
         } catch (\Throwable $e) {
             Log::error("Zapier Exception ({$type}): " . $e->getMessage());
