@@ -17,15 +17,41 @@ class InvoiceObserver
     public function created(Invoice $invoice)
     {
         $this->zapier->send('invoice', [
-            'id' => $invoice->id,
-            'invoice_no' => $invoice->invoice_no,
-            'customer_id' => $invoice->customer_id,
-            'sub_total' => $invoice->sub_total,
-            'vat' => $invoice->vat,
-            'grand_total' => $invoice->grand_total,
-            'invoice_date' => $invoice->invoice_date,
-            'due_date' => $invoice->due_date,
-            'status' => $invoice->status,
+            'invoice' => [
+                'id' => $invoice->id,
+                'customer_id' => $invoice->customer_id,
+                'type' => $invoice->type,
+                'contract_id' => $invoice->contract_id,
+                'order_id' => $invoice->order_id,
+                'recurring' => $invoice->recurring,
+                'no_cycle' => $invoice->no_cycle,
+                'duration' => $invoice->duration,
+                'duration_type' => $invoice->duration_type,
+                'invoice_date' => $invoice->invoice_date,
+                'invoice_no' => $invoice->invoice_no,
+                'user_id' => $invoice->user_id,
+                'sub_total' => $invoice->sub_total,
+                'vat' => $invoice->vat,
+                'grand_total' => $invoice->grand_total,
+                'due_date' => $invoice->due_date,
+                'note' => $invoice->note,
+                'currency' => 'USD',
+                'payment_method' => $invoice->payment_method,
+                'status' => $invoice->status,
+            ],
+            'invoiceItems' => $invoice->invoiceItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'invoice_id' => $item->invoice_id,
+                    'item_id' => $item->item_id,
+                    'category' => $item->category,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'unit' => $item->unit,
+                    'unit_price' => $item->unit_price,
+                    'total_price' => $item->total_price,
+                ];
+            }),
         ]);
     }
 }

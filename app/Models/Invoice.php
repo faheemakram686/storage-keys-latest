@@ -9,7 +9,28 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['invoice_ref'];
+    protected $fillable = [
+        'customer_id',
+        'type',
+        'contract_id',
+        'order_id',
+        'recurring',
+        'no_cycle',
+        'duration',
+        'duration_type',
+        'invoice_date',
+        'invoice_no',
+        'user_id',
+        'sub_total',
+        'vat',
+        'grand_total',
+        'due_date',
+        'note',
+        'payment_method',
+        'status',
+        'invoice_ref',
+    ];
+
 
     public static function generateInvoiceNumber()
     {

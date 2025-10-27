@@ -45,6 +45,7 @@ class WebhookController extends Controller
             // Update the customer attributes
             $product->update([
                 'q_product_id' => $data['quickbook_product_id'] ?? null,
+                'sku' => $data['quickbook_sku'] ?? null,
                 'status' => $data['status']=='success'? 1 : 0,
             ]);
 
