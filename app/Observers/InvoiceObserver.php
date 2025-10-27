@@ -19,7 +19,7 @@ class InvoiceObserver
         $this->zapier->send('invoice', [
             'invoice' => [
                 'id' => $invoice->id,
-                'customer_id' => $invoice->customer_id,
+                'customer_id' => $invoice->customer->q_customer_id,
                 'type' => $invoice->type,
                 'contract_id' => $invoice->contract_id,
                 'order_id' => $invoice->order_id,
@@ -35,7 +35,6 @@ class InvoiceObserver
                 'grand_total' => $invoice->grand_total,
                 'due_date' => $invoice->due_date,
                 'note' => $invoice->note,
-                'currency' => 'USD',
                 'payment_method' => $invoice->payment_method,
                 'status' => $invoice->status,
             ],
@@ -43,7 +42,7 @@ class InvoiceObserver
                 return [
                     'id' => $item->id,
                     'invoice_id' => $item->invoice_id,
-                    'item_id' => $item->item_id,
+                    'item_id' => $item->productdetail->q_product_id,
                     'category' => $item->category,
                     'item_name' => $item->item_name,
                     'quantity' => $item->quantity,
