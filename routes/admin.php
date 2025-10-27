@@ -576,7 +576,8 @@ Route::get('/test-product-create', function () {
 Route::get('/test-zapier-invoice', function (\App\Services\ZapierService $zapier) {
 
     // Get a sample invoice with items (make sure invoice with items exists)
-    $invoice = \App\Models\Invoice::with('invoiceItems')->first();
+    $invoice = \App\Models\Invoice::with('invoiceItems.productdetail','customer')->first();
+
 
     if (!$invoice) {
         return response()->json(['error' => 'No invoice found for testing.'], 404);
@@ -586,7 +587,7 @@ Route::get('/test-zapier-invoice', function (\App\Services\ZapierService $zapier
     $zapier->send('invoice', [
         'invoice' => [
             'id' => $invoice->id,
-            'customer_id' => $invoice->customer_id,
+            'customer_id' => $invoice->customer->q_customer_id,
             'type' => $invoice->type,
             'contract_id' => $invoice->contract_id,
             'order_id' => $invoice->order_id,
@@ -602,7 +603,6 @@ Route::get('/test-zapier-invoice', function (\App\Services\ZapierService $zapier
             'grand_total' => $invoice->grand_total,
             'due_date' => $invoice->due_date,
             'note' => $invoice->note,
-            'currency' => 'USD',
             'payment_method' => $invoice->payment_method,
             'status' => $invoice->status,
         ],
@@ -610,7 +610,7 @@ Route::get('/test-zapier-invoice', function (\App\Services\ZapierService $zapier
             return [
                 'id' => $item->id,
                 'invoice_id' => $item->invoice_id,
-                'item_id' => $item->item_id,
+                'item_id' => $item->productdetail->q_product_id,
                 'category' => $item->category,
                 'item_name' => $item->item_name,
                 'quantity' => $item->quantity,
