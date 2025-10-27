@@ -61,6 +61,8 @@ class InvoiceClass implements InvoiceInterface {
                     }
                 }
 
+
+
 //            $refreshtoken = $this->refreshToken();
 //                $config = config('quickbooks');
 //                $dataService = DataService::Configure([
