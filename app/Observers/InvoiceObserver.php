@@ -16,10 +16,10 @@ class InvoiceObserver
 
     public function created(Invoice $invoice)
     {
-        $this->zapier->send('invoice', [
+        $payload = [
             'invoice' => [
                 'id' => $invoice->id,
-                'customer_id' => $invoice->customer->q_customer_id,
+                'customer_id' => optional($invoice->customer)->q_customer_id,
                 'type' => $invoice->type,
                 'contract_id' => $invoice->contract_id,
                 'order_id' => $invoice->order_id,
@@ -42,7 +42,7 @@ class InvoiceObserver
                 return [
                     'id' => $item->id,
                     'invoice_id' => $item->invoice_id,
-                    'item_id' => $item->productdetail->q_product_id,
+                    'item_id' => optional($item->productdetail)->q_product_id,
                     'category' => $item->category,
                     'item_name' => $item->item_name,
                     'quantity' => $item->quantity,
@@ -51,6 +51,9 @@ class InvoiceObserver
                     'total_price' => $item->total_price,
                 ];
             }),
-        ]);
+        ];
+
+        // Send test data to Zapier
+        $this->zapier->send('invoice', $payload);
     }
 }
