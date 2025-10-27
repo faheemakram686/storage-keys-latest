@@ -573,10 +573,10 @@ Route::get('/test-product-create', function () {
 
 });
 
-Route::get('/test-zapier-invoice', function (\App\Services\ZapierService $zapier) {
+Route::get('/test-zapier-invoice/{id}', function (\App\Services\ZapierService $zapier,\Illuminate\Http\Request $request) {
 
     // Get a sample invoice with items (make sure invoice with items exists)
-    $invoice = \App\Models\Invoice::with('invoiceItems.productdetail','customer')->first();
+    $invoice = \App\Models\Invoice::with('invoiceItems.productdetail','customer')->find($request);
 
 
     if (!$invoice) {
