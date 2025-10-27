@@ -19,7 +19,7 @@ class InvoiceObserver
     {
         dispatch(function () use ($inv) {
             $invoice = Invoice::with('invoiceItems.productdetail', 'customer')->find($inv->id);
-
+            \Log::info('$invoice'.$invoice);
             if ($invoice->invoiceItems->isEmpty()) {
                 \Log::info("Invoice #{$invoice->id} has no items yet. Zapier sync skipped.");
                 return;
