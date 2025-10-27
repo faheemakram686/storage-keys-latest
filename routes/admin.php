@@ -573,21 +573,20 @@ Route::get('/test-product-create', function () {
 
 });
 
-Route::get('/test-zapier-invoice/{id}', function (\App\Services\ZapierService $zapier,\Illuminate\Http\Request $request) {
+Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierService $zapier, \Illuminate\Http\Request $request) {
 
-    // Get a sample invoice with items (make sure invoice with items exists)
-    $invoice = \App\Models\Invoice::with('invoiceItems.productdetail','customer')->find($request);
-
+    // Get invoice with related items, product details, and customer
+    $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'customer'])->find($id);
 
     if (!$invoice) {
         return response()->json(['error' => 'No invoice found for testing.'], 404);
     }
 
-    // Send test data to Zapier
-    $zapier->send('invoice', [
+    // Prepare payload
+    $payload = [
         'invoice' => [
             'id' => $invoice->id,
-            'customer_id' => $invoice->customer->q_customer_id,
+            'customer_id' => optional($invoice->customer)->q_customer_id,
             'type' => $invoice->type,
             'contract_id' => $invoice->contract_id,
             'order_id' => $invoice->order_id,
@@ -610,7 +609,7 @@ Route::get('/test-zapier-invoice/{id}', function (\App\Services\ZapierService $z
             return [
                 'id' => $item->id,
                 'invoice_id' => $item->invoice_id,
-                'item_id' => $item->productdetail->q_product_id,
+                'item_id' => optional($item->productdetail)->q_product_id,
                 'category' => $item->category,
                 'item_name' => $item->item_name,
                 'quantity' => $item->quantity,
@@ -619,10 +618,14 @@ Route::get('/test-zapier-invoice/{id}', function (\App\Services\ZapierService $z
                 'total_price' => $item->total_price,
             ];
         }),
-    ]);
+    ];
+
+    // Send test data to Zapier
+    $zapier->send('invoice', $payload);
 
     return response()->json([
         'message' => 'Test invoice sent to Zapier successfully!',
         'invoice_id' => $invoice->id,
+        'sent_payload' => $payload, // optional: to verify what was sent
     ]);
 });
