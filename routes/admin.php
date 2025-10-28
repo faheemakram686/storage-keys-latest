@@ -629,3 +629,91 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
         'sent_payload' => $payload, // optional: to verify what was sent
     ]);
 });
+
+Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierService $zapier) {
+
+    // Get invoice with related items, product details, and customer
+    $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'customer'])->find($id);
+
+    if (!$invoice) {
+        return response()->json(['error' => 'No invoice found for testing.'], 404);
+    }
+
+    $payload = [
+        'payment' => [
+            'TotalAmt' => $invoice->amount,
+            'TxnDate' => $invoice->payment_date,
+            'Customer' => [
+                'DisplayName' => $invoice->customer->customer_name,
+                'Id' => $invoice->customer->q_customer_id,
+            ],
+            'Line' => [
+                [
+                    'Invoice' => [
+                        'Id' => $invoice->q_invoice_id,
+                        'DocNumber' => $invoice->invoice_no,
+                        'CustomerRef' => [
+                            'name' => $invoice->customer->customer_name,
+                            'value' => $invoice->customer->q_customer_id,
+                        ],
+                        'TotalAmt' => $invoice->sub_total,
+                        'Balance' => $invoice->grand_total - $invoice->sub_total,
+                        'BillEmail' => [
+                            'Address' => $invoice->customer->email,
+                        ],
+                        'DueDate' => $invoice->due_date,
+                        'TxnDate' => $invoice->invoice_date,
+                    ],
+                ],
+            ],
+            'PaymentMethod' => $invoice->payment_method,
+            'PaymentReference' => $invoice->invoice_ref,
+            'Status' => $invoice->status,
+        ],
+    ];
+    dd($payload);
+
+    $this->zapier->send('add_payment', $payload);
+
+
+//    $payload = [
+//        'payment' => [
+//            'TotalAmt' => 5000.00,
+//            'TxnDate' => '2024-01-15',
+//            'Customer' => [
+//                'DisplayName' => 'John Smith',
+//                'Id' => '64',
+//            ],
+//            'Line' => [
+//                [
+//                    'Invoice' => [
+//                        'Id' => '165',
+//                        'DocNumber' => 'INV-0007',
+//                        'CustomerRef' => [
+//                            'name' => 'John Smith',
+//                            'value' => '64',
+//                        ],
+//                        'TotalAmt' => 5000.00,
+//                        'Balance' => 5000.00,
+//                        'BillEmail' => [
+//                            'Address' => 'john.smith@example.com',
+//                        ],
+//                        'DueDate' => '2024-01-30',
+//                        'TxnDate' => '2024-01-15',
+//                    ],
+//                ],
+//            ],
+//            'PaymentMethod' => 'Credit Card',
+//            'PaymentReference' => 'PAY-123456',
+//            'Status' => 'completed',
+//        ],
+//    ];
+//
+//    $zapier->send('add_payment', $payload);
+
+    return response()->json([
+        'message' => '✅ Test payment sent successfully to Zapier!',
+        'payload' => $payload,
+    ]);
+});
+
