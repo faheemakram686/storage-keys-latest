@@ -641,7 +641,6 @@ Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierServi
     }
 
     $payload = [
-        'payment' => [
             'TotalAmt' => $invoice->sub_total,
             'TxnDate' => $invoice->invoice_date,
             'Customer' => [
@@ -670,7 +669,6 @@ Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierServi
             'PaymentMethod' => $invoice->payment_method,
             'PaymentReference' => $invoice->invoice_ref,
             'Status' => $invoice->status,
-        ],
     ];
     Log::info('Webhook Sent:',$payload);
 
