@@ -642,8 +642,8 @@ Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierServi
 
     $payload = [
         'payment' => [
-            'TotalAmt' => $invoice->amount,
-            'TxnDate' => $invoice->payment_date,
+            'TotalAmt' => $invoice->sub_total,
+            'TxnDate' => $invoice->invoice_date,
             'Customer' => [
                 'DisplayName' => $invoice->customer->customer_name,
                 'Id' => $invoice->customer->q_customer_id,
