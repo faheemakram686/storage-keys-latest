@@ -55,6 +55,27 @@ class WebhookController extends Controller
 
         return response()->json(['error' => 'Product not found'], 404);
     }
+    public function handlePaymentResponse(Request $request)
+    {
+        Log::info('Webhook received:', $request->all());
+//        $data = $request->all();
+//
+//        // Find the customer based on the original ID
+//        $product = Product::where('id', $data['original_id'])->first();
+//
+//        if ($product) {
+//            // Update the customer attributes
+//            $product->update([
+//                'q_product_id' => $data['quickbook_product_id'] ?? null,
+//                'sku' => $data['quickbook_sku'] ?? null,
+//                'status' => $data['status']=='success'? 1 : 0,
+//            ]);
+
+            return response()->json(['message' => 'Product updated successfully']);
+//        }
+
+//        return response()->json(['error' => 'Product not found'], 404);
+    }
     public function handleInvoiceResponse(Request $request)
     {
         Log::info('Webhook received For Invoice:', $request->all());

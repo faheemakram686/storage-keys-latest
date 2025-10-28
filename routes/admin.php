@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\TermLengthController;
 use App\Http\Controllers\Backend\WarehouseController;
 use App\Http\Controllers\Frontend\LeadController;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\MoveInRequestController;
@@ -671,9 +672,9 @@ Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierServi
             'Status' => $invoice->status,
         ],
     ];
-    dd($payload);
+    Log::info('Webhook Sent:',$payload);
 
-    $this->zapier->send('add_payment', $payload);
+    $zapier->send('add_payment', $payload);
 
 
 //    $payload = [
