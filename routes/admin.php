@@ -540,8 +540,8 @@ Route::get('/oauth/gmail/logout', function (){
 });
 Route::get('/test-create-customer', function () {
     $customer  = Customer::create([
-        'customer_name' => 'Ali Khan',
-        'email' => 'ali@example.com',
+        'customer_name' => 'Muhammad Aleem Akram',
+        'email' => 'Aleem@example.com',
         'phone' => '123456789',
         'address' => 'Lahore, Pakistan',
         'status' => 1,
@@ -555,7 +555,7 @@ Route::get('/test-create-customer', function () {
 
 Route::get('/test-product-create', function () {
     $product = \App\Models\Product::create([
-        'p_name' => 'Test Product',
+        'p_name' => 'Test Product new',
         'detail' => 'This is a sample test product.',
         'pur_price' => 100,
         'sell_price' => 150,

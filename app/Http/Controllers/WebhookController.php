@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -53,5 +54,20 @@ class WebhookController extends Controller
         }
 
         return response()->json(['error' => 'Product not found'], 404);
+    }
+    public function handleInvoiceResponse(Request $request)
+    {
+        Log::info('Webhook received For Invoice:', $request->all());
+        $data = $request->all();
+        $invoice = Invoice::where('id', $data['original_invoice_id'])->first();
+        if ($invoice) {
+            $invoice->update([
+                'q_invoice_id' => $data['quickbooks_invoice_id'] ?? null,
+                'status' => $data['status']=='success'? 1 : 0,
+            ]);
+
+            return response()->json(['message' => 'Invoice updated successfully']);
+        }
+        return response()->json(['error' => 'Invoice not found'], 404);
     }
 }

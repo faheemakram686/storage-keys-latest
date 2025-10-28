@@ -34,6 +34,7 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::post('/webhook/receive-customer', [WebhookController::class, 'handleCustomerResponse']);
 Route::post('/webhook/receive-product', [WebhookController::class, 'handleProductResponse']);
+Route::post('/webhook/receive-invoice', [WebhookController::class, 'handleInvoiceResponse']);
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');
