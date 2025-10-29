@@ -203,7 +203,7 @@ class InvoiceController extends Controller
                 'customer_id'   => $invoice->customer_id,
                 'contract_id'   => $invoice->contract_id,
                 'order_id'      => $invoice->order_id,
-                'payment_mode' => 3,
+                'payment_method' => 3,
                 'payment_date'  => now(),
                 'amount_received'=> $invoice->grand_total,
                 'note'          => 'This invoice has been received via online payment method',
