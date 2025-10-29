@@ -209,7 +209,7 @@ class InvoiceController extends Controller
                 'note'          => 'This invoice has been received via online payment method',
             ];
             $payment = $this->payment->savePayment($inovicePayment);
-            $payload = $this->payment->savePaymentToQuickbook($payment);
+            $payload = $this->payment->savePaymentToQuickbook($payment['data']);
             if ($payload){
                 $this->zapier->send('add_payment', $payload);
             }

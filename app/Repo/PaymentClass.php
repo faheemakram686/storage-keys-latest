@@ -37,7 +37,7 @@ class PaymentClass implements PaymentInterface {
         $payment->status=1;
         $payment->note=$request->note;
         if($payment->save()){
-            return response()->json(['success' => 'Record save successfully'], 200);
+            return response()->json(['success' => 'Record save successfully','data'=>$payment], 200);
         }
     }
     public function savePaymentToQuickbook($request)
