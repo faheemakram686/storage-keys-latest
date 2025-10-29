@@ -78,7 +78,7 @@ class PaymentClass implements PaymentInterface {
             'PaymentReference' => $invoice->invoice_ref,
             'Status' => $invoice->status,
         ];
-        Log::info('Webhook Sent:',$payload);
+        \Log::info('Webhook Sent:',$payload);
 
         return $payload;
 
