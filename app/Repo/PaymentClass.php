@@ -40,6 +40,49 @@ class PaymentClass implements PaymentInterface {
             return response()->json(['success' => 'Record save successfully'], 200);
         }
     }
+    public function savePaymentToQuickbook($request)
+    {
+
+        $invoice = Invoice::with(['invoiceItems.productdetail', 'customer'])->find($request->invoice_id);
+        if (!$invoice) {
+            return response()->json(['error' => 'No invoice found for testing.'], 404);
+        }
+
+        $payload = [
+            'TotalAmt' => $request->amount_received,
+            'TxnDate' => $request->payment_date,
+            'Customer' => [
+                'DisplayName' => $invoice->customer->customer_name,
+                'Id' => $invoice->customer->q_customer_id,
+            ],
+            'Line' => [
+                [
+                    'Invoice' => [
+                        'Id' => $invoice->q_invoice_id,
+                        'DocNumber' => $invoice->invoice_no,
+                        'CustomerRef' => [
+                            'name' => $invoice->customer->customer_name,
+                            'value' => $invoice->customer->q_customer_id,
+                        ],
+                        'TotalAmt' => $request->amount_received,
+                        'Balance' => $invoice->grand_total -$request->amount_received,
+                        'BillEmail' => [
+                            'Address' => $invoice->customer->email,
+                        ],
+                        'DueDate' => $invoice->due_date,
+                        'TxnDate' => $request->payment_date,
+                    ],
+                ],
+            ],
+            'PaymentMethod' => $request->payment_mode,
+            'PaymentReference' => $invoice->invoice_ref,
+            'Status' => $invoice->status,
+        ];
+        Log::info('Webhook Sent:',$payload);
+
+        return $payload;
+
+    }
 
     public function getPayment()
     {

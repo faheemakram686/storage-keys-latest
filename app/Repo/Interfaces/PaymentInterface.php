@@ -3,6 +3,7 @@ namespace App\Repo\Interfaces;
 
 interface PaymentInterface{
     public function savePayment($request);
+    public function savePaymentToQuickbook($request);
 
     public function getPayment();
     public function deletePayment($id);

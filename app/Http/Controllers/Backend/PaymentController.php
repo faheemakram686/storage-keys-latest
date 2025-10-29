@@ -5,22 +5,30 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Repo\Interfaces\PaymentInterface;
 use App\Repo\InvoiceClass;
+use App\Services\ZapierService;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
     private $payment;
     private $invoice;
+    private $zapier;
 
-    public function __construct(PaymentInterface $payment)
+    public function __construct(PaymentInterface $payment,ZapierService $zapier)
     {
         $this->payment = $payment;
+        $this->zapier = $zapier;
         $this->invoice = new InvoiceClass();
     }
 
     public function savePayment(Request $request)
     {
         $invoice = $this->invoice->getInvoice($request->invoice_id);
+        if (!$invoice) {
+            return response()->json(['error' => 'No invoice found for testing.'], 404);
+        }
+
+
         if($invoice[0]->type == 'contract'){
             $request->merge([
                 "customer_id"=>$invoice[0]->customer_id,
@@ -35,11 +43,16 @@ class PaymentController extends Controller
         }
 
         $data = $this->payment->savePayment($request);
+        $payload = $this->payment->savePaymentToQuickbook($request);
+        if ($payload) {
+            $this->zapier->send('add_payment', $payload);
+        }
         $invoice = $this->invoice->getInvoice($request->invoice_id);
         if(($invoice[0]->grand_total - $request->amount_received) == 0)
         {
             $status = $this->invoice->changePaymentStatus($request->invoice_id,1);
         }
+
         return $data;
     }
     public function invoiceWisePayments(Request $request)
