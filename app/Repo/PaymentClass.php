@@ -32,7 +32,7 @@ class PaymentClass implements PaymentInterface {
 
         $payment->invoice_id =$request->invoice_id;
         $payment->amount_received=$request->amount_received;
-        $payment->payment_method=$request->payment_mode;
+        $payment->payment_method=$request->payment_method;
         $payment->payment_date=$request->payment_date;
         $payment->status=1;
         $payment->note=$request->note;
@@ -74,7 +74,7 @@ class PaymentClass implements PaymentInterface {
                     ],
                 ],
             ],
-            'PaymentMethod' => $request->payment_mode,
+            'PaymentMethod' => $request->payment_method,
             'PaymentReference' => $invoice->invoice_ref,
             'Status' => $invoice->status,
         ];

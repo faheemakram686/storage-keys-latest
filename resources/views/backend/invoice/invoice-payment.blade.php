@@ -52,9 +52,9 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label class="form-label" for="payment_mode">Payment Mode <span class="text-danger">*</span></label>
+                                                                <label class="form-label" for="payment_method">Payment Mode <span class="text-danger">*</span></label>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-control select2" name="payment_mode" id="payment_mode" required>
+                                                                    <select class="form-control select2" name="payment_method" id="payment_method" required>
                                                                         <option>Choose One</option>
                                                                         <option value="1" >Cash</option>
                                                                         <option value="2" >Bank</option>
