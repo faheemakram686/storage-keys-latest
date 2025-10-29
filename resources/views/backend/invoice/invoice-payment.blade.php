@@ -119,7 +119,8 @@
                     if (data.success) {
                         $('#PaymentForm')[0].reset();
                         toastr.success(data.success);
-
+                        let invoiceId = data.data.invoice_id;
+                        window.location.href = '/admin/invoice/detail/' + invoiceId;
                     }
                     if (data.errors) {
                         toastr.error(data.errors);
