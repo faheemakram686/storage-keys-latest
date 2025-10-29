@@ -17,6 +17,7 @@ use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\UserClass;
 use App\Services\NgeniusPaymentService;
+use App\Services\ZapierService;
 use Illuminate\Http\Request;
 use PDF;
 use function PHPUnit\Framework\lessThanOrEqual;
@@ -33,10 +34,12 @@ class InvoiceController extends Controller
     private $payment;
     private $order;
     private $paymentService;
+    private $zapier;
 
-    public function __construct(InvoiceInterface $invoice, NgeniusPaymentService $paymentService)
+    public function __construct(InvoiceInterface $invoice, NgeniusPaymentService $paymentService,ZapierService $zapier)
     {
         $this->invoice = $invoice;
+        $this->zapier = $zapier;
         $this->customer = new CustomerClass();
         $this->estimate = new EstimateClass();
         $this->user = new UserClass();
@@ -206,6 +209,10 @@ class InvoiceController extends Controller
                 'note'          => 'This invoice has been received via online payment method',
             ];
             $payment = $this->payment->savePayment($inovicePayment);
+            $payload = $this->payment->savePaymentToQuickbook($payment);
+            if ($payload){
+                $this->zapier->send('add_payment', $payload);
+            }
         }
         // Redirect user with status
         if ($payment) {
