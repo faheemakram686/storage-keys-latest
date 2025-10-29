@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\TermLength;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Customer;
@@ -54,6 +55,28 @@ class WebhookController extends Controller
         }
 
         return response()->json(['error' => 'Product not found'], 404);
+    }
+    public function handleServiceResponse(Request $request)
+    {
+        Log::info('Webhook received:', $request->all());
+
+        $data = $request->all();
+
+        // Find the customer based on the original ID
+        $term = TermLength::where('id', $data['original_id'])->first();
+
+        if ($term) {
+            // Update the customer attributes
+            $term->update([
+                'q_service_id' => $data['quickbook_service_id'] ?? null,
+                'sku' => $data['quickbook_sku'] ?? null,
+                'status' => $data['status']=='success'? 1 : 0,
+            ]);
+
+            return response()->json(['message' => 'Service updated successfully']);
+        }
+
+        return response()->json(['error' => 'Service not found'], 404);
     }
     public function handlePaymentResponse(Request $request)
     {

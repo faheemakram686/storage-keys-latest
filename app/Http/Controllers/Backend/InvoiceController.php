@@ -132,6 +132,7 @@ class InvoiceController extends Controller
     public function printInvoice($id)
     {
         $data['invoice'] = $this->invoice->getInvoice($id);
+        $data['payment'] = $this->payment->getPaymentSum($id);
         return view('backend.invoice.invoice-print')->with(compact('data'));
     }
     public function pdfInvoice($id)
@@ -149,11 +150,12 @@ class InvoiceController extends Controller
     public function payNowByCustomer($id)
     {
         $data['invoice'] = $this->invoice->getInvoice($id);
+        $data['payment'] = $this->payment->getPaymentSum($id);
         if($data['invoice']['0'])
         {
 
             $invoiceId = $data['invoice'][0]->id ?? null;
-            $grandTotal = $data['invoice'][0]->grand_total ?? 0;
+            $grandTotal = $data['invoice'][0]->grand_total - $data['payment'] ?? 0;
             $customerRef = $data['invoice'][0]->customer ?? "";
 
 
@@ -171,7 +173,7 @@ class InvoiceController extends Controller
 
             return redirect()->away($response['_links']['payment']['href']);
         }else{
-                return back()->withErrors(['error' => 'There is issue in inovice. Please try again.']);
+                return back()->withErrors(['error' => 'There is issue in invoice. Please try again.']);
              }
 
     }

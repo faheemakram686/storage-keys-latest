@@ -574,6 +574,22 @@ Route::get('/test-product-create', function () {
 
 });
 
+Route::get('/test-service-create', function () {
+    $product = \App\Models\TermLength::create([
+        'title' => 'Test Service new',
+        'description' => 'This is a sample test product.',
+        'term_period' => 3,
+        'discount_percentage' => 0,
+        'status' => 1,
+    ]);
+
+    return response()->json([
+        'message' => 'Service created successfully!',
+        'customer' => $product
+    ]);
+
+});
+
 Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierService $zapier, \Illuminate\Http\Request $request) {
 
     // Get invoice with related items, product details, and customer

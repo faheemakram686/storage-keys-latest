@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\TermLength;
 use App\Observers\CustomerObserver;
 use App\Observers\InvoiceObserver;
 use App\Observers\ProductObserver;
+use App\Observers\ServiceObserver;
 use App\Repo\AddonClass;
 use App\Repo\AdminDashboardClass;
 use App\Repo\AppSettingsClass;
@@ -192,5 +194,6 @@ class AppServiceProvider extends ServiceProvider
         Customer::observe(CustomerObserver::class);
         Product::observe(ProductObserver::class);
         Invoice::observe(InvoiceObserver::class);
+        TermLength::observe(ServiceObserver::class);
     }
 }

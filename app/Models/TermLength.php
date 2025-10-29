@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TermLength extends Model
 {
     use HasFactory;
+    protected $fillable = ['q_service_id', 'sku','status','title','description'];
 
 
     public function setStatusAttribute($value)
