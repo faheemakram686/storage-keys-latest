@@ -208,8 +208,10 @@ class InvoiceController extends Controller
                 'amount_received'=> $invoice->grand_total,
                 'note'          => 'This invoice has been received via online payment method',
             ];
-            $payment = $this->payment->savePayment($inovicePayment);
-            $payload = $this->payment->savePaymentToQuickbook($payment['data']);
+            $paymentResponse = $this->payment->savePayment($inovicePayment);
+            $responseData = $paymentResponse->getData();
+            $payment = $responseData->data;
+            $payload = $this->payment->savePaymentToQuickbook($payment);
             if ($payload){
                 $this->zapier->send('add_payment', $payload);
             }
