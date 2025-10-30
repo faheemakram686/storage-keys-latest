@@ -152,7 +152,7 @@
                                                             <tr>
                                                                 <td colspan="2"></td>
                                                                 <td colspan="2">Grand Total</td>
-                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurance !='nothanks')? 25:0)}} AED</td>
+                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0)}} AED</td>
                                                             </tr>
                                                             </tfoot>
                                                         </table>
