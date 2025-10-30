@@ -660,7 +660,7 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
         }),
     ];
 
-    dd($payload);
+//    dd($payload);
 
     // Send test data to Zapier
     $zapier->send('invoice', $payload);

@@ -62,11 +62,13 @@ class InvoiceClass implements InvoiceInterface {
                     }
                 }
 
-            $invoice = Invoice::with('invoiceItems.productdetail', 'customer')->find($invoice->id);
+            $invoice = Invoice::with(['invoiceItems.productdetail', 'invoiceItems.termsdetail','invoiceItems.addOndetail','customer'])->find($invoice->id);
+
             if ($invoice->invoiceItems->isEmpty()) {
                 \Log::info("Invoice #{$invoice->id} has no items yet. Zapier sync skipped.");
                 return;
             }
+
             $payload = [
                 'invoice' => [
                     'id' => $invoice->id,
@@ -90,10 +92,16 @@ class InvoiceClass implements InvoiceInterface {
                     'status' => $invoice->status,
                 ],
                 'invoiceItems' => $invoice->invoiceItems->map(function ($item) {
+                    $itemId = match ($item->category) {
+                        'product'       => optional($item->productdetail)->q_product_id,
+                        'addon'         => optional($item->addOndetail)->q_service_id,
+                        'storage_unit'  => optional($item->termsdetail)->q_service_id,
+                        default         => null,
+                    };
                     return [
                         'id' => $item->id,
                         'invoice_id' => $item->invoice_id,
-                        'item_id' => optional($item->productdetail)->q_product_id,
+                        'item_id' => $itemId,
                         'category' => $item->category,
                         'item_name' => $item->item_name,
                         'quantity' => $item->quantity,
@@ -105,69 +113,6 @@ class InvoiceClass implements InvoiceInterface {
             ];
 
             app(ZapierService::class)->send('invoice', $payload);
-
-
-
-//            $refreshtoken = $this->refreshToken();
-//                $config = config('quickbooks');
-//                $dataService = DataService::Configure([
-//                    'auth_mode' => 'oauth2',
-//                    'ClientID' => $config['client_id'],
-//                    'ClientSecret' => $config['client_secret'],
-//                    'RedirectURI' => $config['redirect_uri'],
-//                    'accessTokenKey' => $refreshtoken['access_token'],
-//                    'refreshTokenKey' => $refreshtoken['refresh_token'],
-//                    'QBORealmID' => $config['realm_id'],
-//                    'baseUrl' => $config['base_url'],
-//                ]);
-//                $myinvoice = Invoice::find($invoice->id)->first();
-//                $items = InvoiceItem::query();
-//                $items = $items->where('invoice_id',$invoice->id);
-//                $items = $items->get();
-//
-//        $invoiceObj = \QuickBooksOnline\API\Facades\Invoice::create([
-//            "Line" => [
-//                [
-//                "Amount" => $myinvoice->_total,
-//                "DetailType" => "SalesItemLineDetail",
-//                "SalesItemLineDetail" => [
-//                    "Qty" => 2,
-//                    "ItemRef" => [
-//                        "value" => 42
-//                    ]
-//                ]
-//            ],
-////                [
-////                    "Amount" => $myinvoice->grand_total,
-////                    "DetailType" => "SalesItemLineDetail",
-////                    "SalesItemLineDetail" => [
-////                        "Qty" => 3,
-////                        "ItemRef" => [
-////                            "value" => 41
-////                        ]
-////                    ]
-////                ],
-//            ],
-//            "CustomerRef"=> [
-//                "value"=> $myinvoice->customer->q_customer_id,
-//            ],
-//            "BillEmail" => [
-//                "Address" => "author@intuit.com"
-//            ]
-//        ]);
-//        $resultingInvoiceObj = $dataService->Add($invoiceObj);
-//            $error = $dataService->getLastError();
-//            if ($error) {
-//                echo "The Status code is: " . $error->getHttpStatusCode() . "\n";
-//                echo "The Helper message is: " . $error->getOAuthHelperError() . "\n";
-//                echo "The Response message is: " . $error->getResponseBody() . "\n";
-//            }
-//            else {
-//
-//                echo "Created Id={$resultingInvoiceObj->Id}. Reconstructed response body:\n\n";
-//            }
-
-
 
             return response()->json(['success' => 'Record save successfully'], 200);
 
