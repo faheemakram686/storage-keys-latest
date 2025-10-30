@@ -343,7 +343,7 @@
                                             $i = $key+2;
                                          @endphp
                                         <tr>
-                                            <td>{{$addon->id}}</td>
+                                            <td>{{$i}}</td>
                                             <td>{{$addon->addon->name}}</td>
                                             <td></td>
                                             <td></td>
