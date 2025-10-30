@@ -584,11 +584,11 @@
                         dr++;
                         $('input[name=invoice_value]').val();
                         var   html = '<tr id="row'+dr+'" class="dynamic-added">'+
-                            '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.contract[0].estimate.storageunit.id + '" /><span>' + dr + '</span></td>'+
+                            '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.contract[0].estimate.term_length.id + '" /><span>' + dr + '</span></td>'+
                             '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="storage_unit" /></td>'+
                             '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.contract[0].estimate.storageunit.storage_unit_name +' / '+  data.contract[0].estimate.term_length.title + '" /></td>'+
-                            '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0"/></td>'+
-                            '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
+                            '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="'+  data.contract[0].estimate.term_length.term_period + '" min="0"/></td>'+
+                            '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="'+  data.contract[0].estimate.term_length.title + '" /></td>'+
                             '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
                             '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
                             '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+

@@ -126,7 +126,7 @@
                                                                 <td>{{$item->item_name}}</td>
                                                                 <td></td>
                                                                 <td>{{$item->quantity}}</td>
-                                                                <td>{{$item->unit}}</td>
+                                                                <td>{{$item->unit ?? "-"}}</td>
                                                                 <td>{{$item->unit_price}}</td>
                                                                 <td>{{$item->total_price}}</td>
                                                             </tr>

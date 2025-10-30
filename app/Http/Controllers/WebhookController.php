@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addon;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\TermLength;
@@ -59,20 +60,25 @@ class WebhookController extends Controller
     public function handleServiceResponse(Request $request)
     {
         Log::info('Webhook received:', $request->all());
-
         $data = $request->all();
-
-        // Find the customer based on the original ID
-        $term = TermLength::where('id', $data['original_id'])->first();
-
-        if ($term) {
-            // Update the customer attributes
-            $term->update([
-                'q_service_id' => $data['quickbook_service_id'] ?? null,
-                'sku' => $data['quickbook_sku'] ?? null,
-                'status' => $data['status']=='success'? 1 : 0,
-            ]);
-
+        if($data['type'] =='Addon'){
+            $addon = Addon::where('id', $data['original_id'])->first();
+            if ($addon) {
+                $addon->update([
+                    'q_service_id' => $data['quickbook_service_id'] ?? null,
+                    'sku' => $data['quickbook_sku'] ?? null,
+                    'status' => $data['status'] == 'success' ? 1 : 0,
+                ]);
+            }
+        }else{
+            $term = TermLength::where('id', $data['original_id'])->first();
+            if ($term) {
+                $term->update([
+                    'q_service_id' => $data['quickbook_service_id'] ?? null,
+                    'sku' => $data['quickbook_sku'] ?? null,
+                    'status' => $data['status']=='success'? 1 : 0,
+                ]);
+        }
             return response()->json(['message' => 'Service updated successfully']);
         }
 

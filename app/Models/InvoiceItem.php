@@ -22,4 +22,12 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo(Product::class, 'item_id', 'id');
     }
+    public function termsdetail()
+    {
+        return $this->belongsTo(TermLength::class, 'item_id', 'id');
+    }
+    public function addOndetail()
+    {
+        return $this->belongsTo(Addon::class, 'item_id', 'id');
+    }
 }

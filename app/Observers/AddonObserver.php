@@ -2,11 +2,12 @@
 
 namespace App\Observers;
 
+use App\Models\Addon;
 use App\Models\Product;
 use App\Models\TermLength;
 use App\Services\ZapierService;
 
-class ServiceObserver
+class AddonObserver
 {
     protected $zapier;
 
@@ -15,14 +16,14 @@ class ServiceObserver
         $this->zapier = $zapier;
     }
 
-    public function created(TermLength $termLength)
+    public function created(Addon $addon)
     {
         $this->zapier->send('service', [
-            'id' => $termLength->id,
-            'p_name' => $termLength->title,
-            'detail' => $termLength->description,
-            'type' =>'service',
-            'status' => $termLength->status,
+            'id' => $addon->id,
+            'p_name' => $addon->name,
+            'detail' => $addon->category,
+            'type' =>'Addon',
+            'status' => $addon->status,
         ]);
     }
 }

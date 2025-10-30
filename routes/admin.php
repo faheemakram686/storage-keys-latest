@@ -590,10 +590,26 @@ Route::get('/test-service-create', function () {
 
 });
 
+Route::get('/test-addon-create', function () {
+    $product = \App\Models\Addon::create([
+        'name' => 'Addon',
+        'price' => 200,
+        'category' => 3,
+        'status' => 1,
+    ]);
+
+    return response()->json([
+        'message' => 'Addon created successfully!',
+        'customer' => $product
+    ]);
+
+});
+
 Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierService $zapier, \Illuminate\Http\Request $request) {
 
     // Get invoice with related items, product details, and customer
-    $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'customer'])->find($id);
+    $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'invoiceItems.termsdetail','invoiceItems.addOndetail','customer'])->find($id);
+    dd($invoice);
 
     if (!$invoice) {
         return response()->json(['error' => 'No invoice found for testing.'], 404);
@@ -651,6 +667,7 @@ Route::get('/test-invoice-payment/{id}', function ($id,\App\Services\ZapierServi
 
     // Get invoice with related items, product details, and customer
     $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'customer'])->find($id);
+
 
     if (!$invoice) {
         return response()->json(['error' => 'No invoice found for testing.'], 404);
