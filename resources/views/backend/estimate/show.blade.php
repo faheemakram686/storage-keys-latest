@@ -108,7 +108,7 @@
                                                             @endphp
                                                             <tbody>
                                                             <tr>
-                                                                <td>{{$data['estimate'][0]->id}}</td>
+                                                                <td>1</td>
                                                                 <td>{{$data['estimate'][0]->storageunit->storage_unit_name}}/{{$data['estimate'][0]->termLength->title}}</td>
                                                                 <td></td>
                                                                 <td></td>
@@ -118,9 +118,10 @@
                                                                 @foreach($data['estimate'][0]->estimateAddon as $key => $addon)
                                                                     @php
                                                                         $addonAmount += $addon->price;
+                                                                        $i = $key+2;
                                                                     @endphp
                                                                     <tr>
-                                                                        <td>{{++$key}}</td>
+                                                                        <td>{{$i}}</td>
                                                                         <td>{{$addon->addon->name}}</td>
                                                                         <td></td>
                                                                         <td></td>
@@ -130,7 +131,7 @@
                                                             @endif
                                                             @if($data['estimate'][0]->insurence !='nothanks')
                                                                 <tr>
-                                                                    <td>{{$data['estimate'][0]->id}}</td>
+                                                                    <td>3</td>
                                                                     <td>Insurance</td>
                                                                     <td></td>
                                                                     <td></td>
