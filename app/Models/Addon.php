@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Addon extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','category','price','status'];
+    protected $fillable = ['name','category','price','status','q_service_id','sku'];
 
     public function setStatusAttribute($value)
     {
