@@ -643,7 +643,7 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
             $itemId = match ($item->category) {
                 'product'       => optional($item->productdetail)->q_product_id,
                 'addon'         => optional($item->addOndetail)->q_service_id,
-                'storage_unit'  => optional($item->termlenghtdetail)->q_service_id,
+                'storage_unit'  => optional($item->termsdetail)->q_service_id,
                 default         => null,
             };
             return [
