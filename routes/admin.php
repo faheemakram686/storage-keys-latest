@@ -609,11 +609,12 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
 
     // Get invoice with related items, product details, and customer
     $invoice = \App\Models\Invoice::with(['invoiceItems.productdetail', 'invoiceItems.termsdetail','invoiceItems.addOndetail','customer'])->find($id);
-    dd($invoice);
 
     if (!$invoice) {
         return response()->json(['error' => 'No invoice found for testing.'], 404);
     }
+
+
 
     // Prepare payload
     $payload = [
@@ -639,10 +640,16 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
             'status' => $invoice->status,
         ],
         'invoiceItems' => $invoice->invoiceItems->map(function ($item) {
+            $itemId = match ($item->category) {
+                'product'       => optional($item->productdetail)->q_product_id,
+                'addon'         => optional($item->addOndetail)->q_service_id,
+                'storage_unit'  => optional($item->termlenghtdetail)->q_service_id,
+                default         => null,
+            };
             return [
                 'id' => $item->id,
                 'invoice_id' => $item->invoice_id,
-                'item_id' => optional($item->productdetail)->q_product_id,
+                'item_id' => $itemId,
                 'category' => $item->category,
                 'item_name' => $item->item_name,
                 'quantity' => $item->quantity,
@@ -652,6 +659,8 @@ Route::get('/test-zapier-invoice/{id}', function ($id, \App\Services\ZapierServi
             ];
         }),
     ];
+
+    dd($payload);
 
     // Send test data to Zapier
     $zapier->send('invoice', $payload);
