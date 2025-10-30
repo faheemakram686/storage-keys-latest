@@ -20,10 +20,9 @@
                 <div class="col-md-7">
                     <div class="ltn__top-bar-menu">
                         <ul>
-                            <li><a href="mailto:info@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
-                                            class="icon-mail"></i> info@storagekeys.com</a></li>
-                            <li><a href="#"><i class="icon-placeholder"></i> Storage Keys, Plot # 4202 -
-                                    Sharjah - Dubai - United Arab Emirates</a></li>
+                            <li><a href="mailto:sales@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
+                                            class="icon-mail"></i> sales@storagekeys.com</a></li>
+                            <li><a href="#"><i class="icon-placeholder"></i> Storage Keys - Sharjah - Dubai - United Arab Emirates</a></li>
                         </ul>
                     </div>
                 </div>
