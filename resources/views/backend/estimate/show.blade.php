@@ -128,7 +128,7 @@
                                                                     </tr>
                                                                 @endforeach
                                                             @endif
-                                                            @if($data['estimate'][0]->insurace !='nothanks')
+                                                            @if($data['estimate'][0]->insurence !='nothanks')
                                                                 <tr>
                                                                     <td>{{$data['estimate'][0]->id}}</td>
                                                                     <td>Insurance</td>
