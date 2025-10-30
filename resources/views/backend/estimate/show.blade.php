@@ -86,7 +86,7 @@
                                                     <div class="invoice-desc">
                                                         <h4 class="title">Estimate</h4>
                                                         <ul class="list-plain">
-                                                            <li class="invoice-id"><span>Estiamte ID</span>:<span>{{$data['estimate'][0]->id}}</span></li>
+                                                            <li class="invoice-id"><span>Estimate ID</span>:<span>{{$data['estimate'][0]->id}}</span></li>
                                                             <li class="invoice-date"><span>Date</span>:<span>{{$data['estimate'][0]->created_at}}</span></li>
                                                         </ul>
                                                     </div>
@@ -96,7 +96,7 @@
                                                         <table class="table table-striped">
                                                             <thead>
                                                             <tr>
-                                                                <th class="w-150px">Item ID</th>
+                                                                <th class="w-150px">Item Sr.</th>
                                                                 <th class="w-60">Description</th>
                                                                 <th></th>
                                                                 <th></th>

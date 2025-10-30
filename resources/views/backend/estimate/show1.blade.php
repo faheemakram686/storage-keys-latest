@@ -93,7 +93,7 @@
         }
         .invoice-desc {
             width: 210px;
-            padding-top: 1.5rem;
+            padding-top: 1rem;
         }
         .invoice-bills {
             font-size: 12px;
@@ -310,8 +310,8 @@
                         <div class="invoice-desc">
                             <h4 class="title">Estimate</h4>
                             <ul class="list-plain">
-                                <li class="invoice-id"><span>Estiamte ID</span>:<span>{{$data['estimate'][0]->id}}</span></li>
-                                <li class="invoice-date"><span>Date</span>:<span>{{$data['estimate'][0]->created_at}}</span></li>
+                                <li class="invoice-id"><span>Estimate ID: {{$data['estimate'][0]->id}}</span></li>
+                                <li class="invoice-date"><span>Date: {{$data['estimate'][0]->created_at}}</span></li>
                             </ul>
                         </div>
                     </div><!-- .invoice-head -->
@@ -337,9 +337,10 @@
                                 </tr>
                                 @if($data['estimate'][0]->estimateAddon)
                                         @php $addonAmount = 0; @endphp
-                                    @foreach($data['estimate'][0]->estimateAddon as $addon)
+                                    @foreach($data['estimate'][0]->estimateAddon as $key => $addon)
                                         @php
                                             $addonAmount += $addon->price;
+                                            $i = $key+2;
                                          @endphp
                                         <tr>
                                             <td>{{$addon->id}}</td>
@@ -350,7 +351,7 @@
                                         </tr>
                                     @endforeach
                                 @endif
-                                @if($data['estimate'][0]->insurace !='nothanks')
+                                @if($data['estimate'][0]->insurence !='nothanks')
                                         <tr>
                                             <td>{{$data['estimate'][0]->id}}</td>
                                             <td>Insurance</td>
@@ -363,18 +364,18 @@
                                 <tfoot>
                                 <tr>
                                     <td colspan="2"></td>
-                                    <td colspan="2">Subtotal</td>
-                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurance !='nothanks')? 25:0) }} AED</td>
+                                    <td colspan="2" align="right">Subtotal</td>
+                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0) }} AED</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2"></td>
-                                    <td colspan="2">TAX</td>
+                                    <td colspan="2"  align="right">TAX</td>
                                     <td>0.00 AED</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2"></td>
-                                    <td colspan="2">Grand Total</td>
-                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurance !='nothanks')? 25:0)}} AED</td>
+                                    <td colspan="2" align="right">Grand Total</td>
+                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0)}} AED</td>
                                 </tr>
                                 </tfoot>
                             </table>
