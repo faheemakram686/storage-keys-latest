@@ -72,7 +72,7 @@
                                             <option value="" selected >Select One</option>
                                             @isset($data)
                                                 @foreach($data['customer'] as $customer)
-                                                    <option value="{{$customer->id}}" {{}} >{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
+                                                    <option value="{{$customer->id}}" >{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
                                                 @endforeach
                                             @endisset
                                         </select>
