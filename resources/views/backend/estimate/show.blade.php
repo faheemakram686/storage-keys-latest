@@ -115,12 +115,12 @@
                                                                 <td id="storageTotal">{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)}} </td>
                                                             @if($data['estimate'][0]->estimateAddon)
                                                                 @php $addonAmount = 0; @endphp
-                                                                @foreach($data['estimate'][0]->estimateAddon as $addon)
+                                                                @foreach($data['estimate'][0]->estimateAddon as $key => $addon)
                                                                     @php
                                                                         $addonAmount += $addon->price;
                                                                     @endphp
                                                                     <tr>
-                                                                        <td>{{$addon->id}}</td>
+                                                                        <td>{{++$key}}</td>
                                                                         <td>{{$addon->addon->name}}</td>
                                                                         <td></td>
                                                                         <td></td>
@@ -142,7 +142,7 @@
                                                             <tr>
                                                                 <td colspan="2"></td>
                                                                 <td colspan="2">Subtotal</td>
-                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurance !='nothanks')? 25:0) }} AED</td>
+                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0) }} AED</td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="2"></td>
