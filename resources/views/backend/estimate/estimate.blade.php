@@ -337,8 +337,6 @@
     <script>
         $(document).ready(function() {
 
-
-
             if ($("#com").is(":checked")) {
                 $("#companyfeild").show();
             } else {
