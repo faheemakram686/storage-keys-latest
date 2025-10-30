@@ -589,7 +589,7 @@
                             '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.contract[0].estimate.storageunit.storage_unit_name +' / '+  data.contract[0].estimate.term_length.title + '" /></td>'+
                             '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="'+  data.contract[0].estimate.term_length.term_period + '" min="0"/></td>'+
                             '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="'+  data.contract[0].estimate.term_length.title + '" /></td>'+
-                            '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + (data.contract[0].estimate.unit_price *  data.contract[0].estimate.term_length.discount_percentage / 100) + '" min="0.00" /></td>'+
+                            '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + (data.contract[0].estimate.unit_price * 100 /  data.contract[0].estimate.term_length.discount_percentage ) + '" min="0.00" /></td>'+
                             '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
                             '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                             '</tr>';
