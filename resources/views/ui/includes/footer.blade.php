@@ -156,6 +156,7 @@
 
     <script src="{{ asset('sk-assets/js/common.js') }}"></script>
     <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>
+
     <!--Start of Tawk.to Script-->
 {{--    <script type="text/javascript">--}}
 {{--        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();--}}
@@ -169,6 +170,7 @@
 {{--        })();--}}
 {{--    </script>--}}
     <!--End of Tawk.to Script-->
+
     <script async src='https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js'></script>
     <script>
         var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"left","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};

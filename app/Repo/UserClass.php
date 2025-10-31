@@ -102,7 +102,7 @@ class UserClass implements UserInterface {
     public function deleteUser($id)
     {
         // TODO: Implement deleteUser() method.
-        $user=User::find($id);
+        $user=\App\Models\Core\Auth\User::find($id);
         $user->is_deleted=1;
         $user->save();
         $user->delete();
