@@ -115,6 +115,7 @@ class UserClass implements UserInterface {
         return $country = User::find($id);
     }
 
+
     public function updateUser($request)
     {
         // Validation
