@@ -101,7 +101,7 @@ class WebhookController extends Controller
 //                'status' => $data['status']=='success'? 1 : 0,
 //            ]);
 
-            return response()->json(['message' => 'Product updated successfully']);
+            return response()->json(['message' => 'Payment updated successfully']);
 //        }
 
 //        return response()->json(['error' => 'Product not found'], 404);
