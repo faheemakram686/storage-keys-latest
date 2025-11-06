@@ -70,6 +70,7 @@ class WebhookController extends Controller
                     'status' => $data['status'] == 'success' ? 1 : 0,
                 ]);
             }
+            return response()->json(['message' => 'Service updated successfully']);
         }else{
             $term = TermLength::where('id', $data['original_id'])->first();
             if ($term) {
