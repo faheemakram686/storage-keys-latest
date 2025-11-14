@@ -107,11 +107,11 @@
                                         <div class="row mt-3">
                                             <div class="col-6">
                                                 <label class="">Home</label>
-                                                <input type="text" class="form-control" name="home" style="height:35px;" required>
+                                                <input type="text" class="form-control" name="home" style="height:35px;" >
                                             </div>
                                             <div class="col-6">
                                                 <label class="">Mobile</label>
-                                                <input type="text" class="form-control" name="mobile" style="height:35px;" required>
+                                                <input type="text" class="form-control" name="mobile" style="height:35px;" >
                                             </div>
                                         </div>
                                     </div>
