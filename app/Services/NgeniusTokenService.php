@@ -33,7 +33,8 @@ class NgeniusTokenService
                 'authorization' => 'Basic ' . $this->apiKey,
                 'content-type' => 'application/vnd.ni-identity.v1+json',
             ])->post($this->authUrl, [
-                'realmName' => 'ni'
+//                'realmName' => 'ni'
+                'grant_type' => 'client_credentials'
             ]);
 
             if ($response->successful()) {
