@@ -45,7 +45,7 @@ class LeadClass implements LeadInterface {
             $lead->l_name = $request->l_name;
             $lead->lead_source = 1;
             $lead->lead_rating = 0;
-            $lead->user_res_id = 1;
+            $lead->user_res_id = $assignUser[6]->value? $assignUser[6]->value : 1;
             $lead->email = $request->email;
             $lead->phone = $request->phone;
             $lead->mobile1 = $request->mobile1;
