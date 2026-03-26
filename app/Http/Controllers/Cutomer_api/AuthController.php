@@ -110,6 +110,62 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+     public function registerCustomer(Request $request)
+    {
+        try {
+
+            $validated = Validator::make($request->all(),
+            [
+                'first_name'    => 'required',
+                'last_name'     => 'required',
+                'company_name'  => 'required',
+                'email'         => 'required|email|unique:contacts,email',
+                'password'      => 'required|confirmed|min:8',
+            ]);
+              if($validated->fails()){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validated->errors()
+                ], 401);
+            }
+
+
+            DB::transaction(function () use ($validated) {
+                $customer = Customer::create([
+                    'company_name' => $validated['company_name'],
+                    'status'       => 1,
+                ]);
+
+
+                Contact::create([
+                    'customer_id' => $customer->id,
+                    'first_name'  => $validated['first_name'],
+                    'last_name'   => $validated['last_name'],
+                    'email'       => $validated['email'],
+                    'password'    => Hash::make($validated['password']),
+                    'status'      => 1,
+                ]);
+            });
+
+            return response()->json([
+                            'user' => $user,
+                            'status' => true,
+                            'message' => ' Your Account Registered Successfully',
+                            'token' => $user->createToken("API TOKEN")->plainTextToken
+                        ], 200);
+        
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
+    }
+
+
     public function loginCustomer(Request $request)
     {
         try {

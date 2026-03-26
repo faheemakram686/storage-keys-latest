@@ -23,7 +23,7 @@ use App\Http\Controllers\Customer\CustomerHomeController;
 |
 */
 //auth api
-Route::post('/customer/register', [AuthController::class, 'createCustomer']);
+Route::post('/customer/register', [AuthController::class, 'registerCustomer']);
 Route::post('/customer/login', [AuthController::class, 'loginCustomer']);
 
 
