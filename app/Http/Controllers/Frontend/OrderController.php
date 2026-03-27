@@ -86,6 +86,10 @@ class OrderController extends Controller
     {
         return $this->order->getCustomerOrder($request->customer_id);
     }
+      public function getCustomerOrdersAPI(Request $request)
+    {
+        return $this->order->getCustomerOrderApi($request->customer_id);
+    }
     public function getOrderProducts(Request $request)
     {
         return $this->order->getOrderProducts($request->order_id);

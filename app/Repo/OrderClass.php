@@ -92,15 +92,15 @@ class OrderClass implements OrderInterface {
     public function getCustomerOrderApi($customerid)
     {
         try {
-            $qry=Invoice::with('invoiceItems','payments','customer','estimate.storageunit','contract');
+            $qry=Order::with('customer.contact');
             $qry=$qry->where('customer_id',$customerid);
             $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
             $qry=$qry->get();
 
             return response()->json([
-                'Invoices' => $qry,
+                'Orders' => $qry,
                 'status' => true,
-                'message' => 'Customer Invoices',
+                'message' => 'Customer Orders',
             ], 200);
 
         } catch (\Throwable $th) {

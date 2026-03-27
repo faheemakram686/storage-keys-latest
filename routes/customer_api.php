@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\InvoiceController;
 use App\Http\Controllers\Backend\MoveInRequestController;
 use App\Http\Controllers\Backend\PaymentController;
 use App\Http\Controllers\Customer\CustomerHomeController;
+use App\Http\Controllers\Frontend\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/update-profile',[CustomerHomeController::class, 'updateProfileApi']);
     Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi']);
     Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi']);
+    Route::post('/order-list',[OrderController::class, 'getCustomerOrdersApi']);
     Route::post('/payment-list',[PaymentController::class, 'getCustomerPaymentsApi']);
     Route::post('/move-in-request',[MoveInRequestController::class, 'saveMoveInRequestApi']);
     Route::post('/move-out-request',[MoveInRequestController::class, 'saveMoveInRequestApi']);
