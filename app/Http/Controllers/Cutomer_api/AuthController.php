@@ -151,10 +151,8 @@ class AuthController extends Controller
             });
 
             return response()->json([
-                            'user' => $customer,
                             'status' => true,
-                            'message' => ' Your Account Registered Successfully',
-                        ], 200);
+                            'message' => ' Your Account Registered Successfully',], 200);
         
         } catch (\Throwable $th) {
             return response()->json([
