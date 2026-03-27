@@ -12,6 +12,7 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -132,28 +133,27 @@ class AuthController extends Controller
             }
 
 
-            DB::transaction(function () use ($validated) {
+            DB::transaction(function () use ($request, $validated) {
                 $customer = Customer::create([
-                    'company_name' => $validated['company_name'],
+                    'company_name' => $request->company_name,
                     'status'       => 1,
                 ]);
 
 
                 Contact::create([
                     'customer_id' => $customer->id,
-                    'first_name'  => $validated['first_name'],
-                    'last_name'   => $validated['last_name'],
-                    'email'       => $validated['email'],
-                    'password'    => Hash::make($validated['password']),
+                    'first_name'  => $request->first_name,
+                    'last_name'   =>$request->last_name,
+                    'email'       => $request->email,
+                    'password'    => Hash::make($request->password),
                     'status'      => 1,
                 ]);
             });
 
             return response()->json([
-                            'user' => $user,
+                            'user' => $customer,
                             'status' => true,
                             'message' => ' Your Account Registered Successfully',
-                            'token' => $user->createToken("API TOKEN")->plainTextToken
                         ], 200);
         
         } catch (\Throwable $th) {
