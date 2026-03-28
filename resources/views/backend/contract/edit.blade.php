@@ -181,7 +181,10 @@
                         $('.EstimateSection').html('<option value="">Select Estimate</option>');
                         if (data.length > 0) {
                             for (i = 0; i < data.length; i++) {
-                                html3 += '<option  value="' + data[i].id + ' " '+ ((data[i].id == estimate_id)? 'selected':'') +'>' + data[i].id+' - '+ data[i].storageunit.storage_unit_name + ' / '+ data[i].term_length.title + ' </option>';
+                                var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
+                                var storageUnitName = (data[i].storageunit && data[i].storageunit.storage_unit_name) ? data[i].storageunit.storage_unit_name : 'N/A';
+
+                                html3 += '<option  value="' + data[i].id + ' " '+ ((data[i].id == estimate_id)? 'selected':'') +'>' + data[i].id+' - '+ storageUnitName + ' / '+ termLengthTitle + ' </option>';
                             }
                         } else {
                             var html3 = '<option value="">No Contract Found</option>';

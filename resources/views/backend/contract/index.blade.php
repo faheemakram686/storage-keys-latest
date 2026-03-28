@@ -136,11 +136,15 @@
 
                         for (i = 0; i < data.length; i++) {
                             c++;
+                            var termLengthTitle = (data[i].estimate && data[i].estimate.term_length && data[i].estimate.term_length.title) ? data[i].estimate.term_length.title : 'N/A';
+                            var storageUnitName = (data[i].estimate && data[i].estimate.storageunit && data[i].estimate.storageunit.storage_unit_name) ? data[i].estimate.storageunit.storage_unit_name : 'N/A';
+                            var estimateId = (data[i].estimate && data[i].estimate.id) ? data[i].estimate.id : 'N/A';
+
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/contract/detail')}}/' + data[i].id + '>'+data[i].subject+'</a></td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a></td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].estimate.id + '>'+data[i].estimate.id+'-'+data[i].estimate.storageunit.storage_unit_name+'/'+data[i].estimate.term_length.title+'</a></td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].estimate.id + '>'+estimateId+'-'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_value+'</td>'+
                                 // ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_type+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].start_date+'</td>'+

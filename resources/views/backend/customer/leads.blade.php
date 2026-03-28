@@ -342,10 +342,13 @@
 
                         for (i = 0; i < data.length; i++) {
                             c++;
+                            var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
+                            var storageUnitName = (data[i].storageunit && data[i].storageunit.storage_unit_name) ? data[i].storageunit.storage_unit_name : 'N/A';
+
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + ' class="btn-edit" data='+data[i].id+'>' + data[i].storageunit.storage_unit_name + '/' + data[i].term_length.title + '</a></td>' +
-                                // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry">' + data[i].storageunit.storage_unit_name + '/' + data[i].term_length.title + '</a></td>' +
+                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + ' class="btn-edit" data='+data[i].id+'>' + storageUnitName + '/' + termLengthTitle + '</a></td>' +
+                                // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry">' + storageUnitName + '/' + termLengthTitle + '</a></td>' +
                                 // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#">' + data[i].first_name + ' ' + data[i].last_name + '</a></td>' +
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].lead_source.title + '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].userresponsible.first_name + ' ' + data[i].userresponsible.last_name + '</td>'+

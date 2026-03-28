@@ -139,10 +139,13 @@
                             for (i = 0; i < data.length; i++) {
                                 c++;
                                 var endDate= new Date(Date.parse(data[i].expiry_date));
+                                var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
+                                var storageUnitName = (data[i].storageunit && data[i].storageunit.storage_unit_name) ? data[i].storageunit.storage_unit_name : 'N/A';
+
                                 html += ' <tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer.customer_name == null) ? ' ' : data[i].customer.customer_name)+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+data[i].storageunit.storage_unit_name+'/'+data[i].term_length.title+'</a></td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_price+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+

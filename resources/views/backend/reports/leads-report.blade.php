@@ -125,11 +125,13 @@
                         if (data.length > 0) {
                             for (i = 0; i < data.length; i++) {
                                 c++;
+                                var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
+                                var storageUnitName = (data[i].storageunit && data[i].storageunit.storage_unit_name) ? data[i].storageunit.storage_unit_name : 'N/A';
 
                                 html += ' <tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? data[i].f_name+' '+data[i].l_name : data[i].company_name)+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+data[i].storageunit.storage_unit_name+'/'+data[i].term_length.title+'</a></td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lead_type+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lead_source.title+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools" >'+
