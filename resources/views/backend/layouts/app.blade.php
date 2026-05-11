@@ -104,6 +104,60 @@
             // });
         } );
 
+        // Show real server-side errors instead of generic "any technical error"
+        window.showAjaxError = function (xhr, fallbackMessage) {
+            fallbackMessage = fallbackMessage || 'any technical error';
+
+            try {
+                // Laravel JSON responses: { error: "..."} or { errors: "..."} or { errors: {field:[...]} }
+                if (xhr && xhr.responseJSON) {
+                    var rj = xhr.responseJSON;
+                    var msg = rj.error || rj.errors;
+
+                    if (msg && typeof msg === 'object') {
+                        // Flatten validation errors object into a string
+                        var parts = [];
+                        Object.keys(msg).forEach(function (k) {
+                            var v = msg[k];
+                            if (Array.isArray(v)) parts = parts.concat(v);
+                            else if (v) parts.push(v);
+                        });
+                        msg = parts.join('\\n');
+                    }
+
+                    if (msg) {
+                        toastr.error(msg);
+                        return;
+                    }
+                }
+
+                // If server returned HTML (like 500 debug page), show a short snippet.
+                if (xhr && xhr.responseText && typeof xhr.responseText === 'string') {
+                    var text = xhr.responseText.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();
+                    if (text) {
+                        toastr.error(text.substring(0, 200));
+                        return;
+                    }
+                }
+            } catch (e) {
+                // ignore and fallback
+            }
+
+            toastr.error(fallbackMessage);
+        };
+
+        // Global handler: if a page forgets to parse xhr, still show real error.
+        // (Many Blade pages currently hardcode toastr.error('any technical error').)
+        $(document).ajaxError(function (event, xhr) {
+            // Ignore aborted requests
+            if (xhr && (xhr.status === 0 || xhr.statusText === 'abort')) return;
+            // Skip when page-level handler already showed this error.
+            if (xhr && xhr._handledByPage) return;
+            if (typeof window.showAjaxError === 'function') {
+                window.showAjaxError(xhr, 'any technical error');
+            }
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

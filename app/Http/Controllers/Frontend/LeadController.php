@@ -104,11 +104,12 @@ class LeadController extends Controller
     public function viewLead($request)
     {
         $data['lead']=$this->lead->getLead($request);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
         $data['user'] = $this->user->getUser();
@@ -120,11 +121,12 @@ class LeadController extends Controller
     {
 
         $data['lead'] = $this->lead->getLead($request->id);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         return $data;
     }
     public function editLead($id)
@@ -132,11 +134,12 @@ class LeadController extends Controller
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->lead->getLead($id);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         $data['user'] = $this->user->getUser();
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
@@ -148,6 +151,9 @@ class LeadController extends Controller
     public function updateLead(Request $request)
     {
         $res=$this->lead->updateLead($request);
+        if (!$res) {
+            return response()->json(['error' => 'Lead not found'], 404);
+        }
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 

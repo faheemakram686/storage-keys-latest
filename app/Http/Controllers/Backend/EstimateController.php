@@ -90,11 +90,12 @@ class EstimateController extends Controller
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->lead->getLead($id);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
         $data['req_docs'] = $this->require_document->getAllRequireDocument();
         $data['term_length'] = $this->term_length->getAllTermLength();
@@ -112,15 +113,16 @@ class EstimateController extends Controller
 
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->estimate->getEstimate($request->id);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         $data['term_lengths'] = $this->term_length->getAllTermLength();
 
 
-        if ( $data['lead'] && Carbon::now()->gt( $data['lead'][0]->expiry_date)) {
+        if (!empty($data['lead']) && Carbon::now()->gt($data['lead'][0]->expiry_date)) {
             $expire = array('title' => 'Link Expired','code'=>'419','messege'=>'This link is expired please contect to admin for extend estiamte date');
             return view('backend.layouts.error')->with(compact('expire'));
         } else {
@@ -146,11 +148,12 @@ class EstimateController extends Controller
     {
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->estimate->getEstimate($request->id);
+        $su_id = null;
         foreach ($data['lead'] as $item) {
-            $data['leadaddon'] = explode(',', $item['addon']);
+            $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
             $su_id = $item['su_id'];
         }
-        $data['su'] = $this->su->leadStorageUnit($su_id);
+        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
         return $data;
     }
 
@@ -210,13 +213,16 @@ class EstimateController extends Controller
     public function showUploadDocuments($id)
     {
         $data['estimate'] = $this->estimate->getEstimateReqDocs($id);
+        $data['req_docs'] = [];
         foreach ($data['estimate'] as $item) {
-            $data['req_docs'] = explode(',', $item['require_documents']);
+            $data['req_docs'] = !empty($item['require_documents']) ? explode(',', $item['require_documents']) : [];
         }
         $data['req_documents'] = collect([]);
         foreach($data['req_docs'] as $doc => $v)
         {
-            $data['req_documents']->push($this->require_document->getRequireDocument($v));
+            if ($v !== '' && $v !== null) {
+                $data['req_documents']->push($this->require_document->getRequireDocument($v));
+            }
         }
         return view('backend.estimate.estimate-upload-documents')->with(compact('data'));
 
@@ -278,7 +284,10 @@ class EstimateController extends Controller
 
     public function deleteEstimate(Request $request)
     {
-        $this->estimate->deleteEstimate($request->id);
+        $deleted = $this->estimate->deleteEstimate($request->id);
+        if (!$deleted) {
+            return response()->json(['error' => 'Estimate not found'], 404);
+        }
         return response()->json(['success' => 'Record deleted successfully'], 200);
     }
 

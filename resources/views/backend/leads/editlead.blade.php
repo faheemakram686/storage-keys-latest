@@ -15,6 +15,13 @@
                 <div class="card-inner">
                     @isset($data)
                     <div class="container">
+                        @php
+                            $selectedSu = isset($data['su'][0]) ? $data['su'][0] : null;
+                            $selectedCountryId = optional(optional(optional($selectedSu)->warehouse)->loc)->city->country->id ?? '';
+                            $selectedCityId = optional(optional(optional($selectedSu)->warehouse)->loc)->city->id ?? '';
+                            $selectedLocationId = optional(optional($selectedSu)->warehouse)->loc->id ?? '';
+                            $selectedWarehouseId = optional($selectedSu)->warehouse->id ?? '';
+                        @endphp
                         @foreach ($data['su'] as $su)
                             <div class="row">
                                 <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 greeting-user">
@@ -170,32 +177,32 @@
                                                                     <option value="" selected >Choose One</option>
                                                                     @isset($data)
                                                                         @foreach ($data['loc'] as $country)
-                                                                            <option value="{{ $country->id }}" {{ ($su->warehouse->loc->city->country->id == $country->id) ? "selected" : "" }} >{{$country->name }}</option>
+                                                                            <option value="{{ $country->id }}" {{ ($selectedCountryId == $country->id) ? "selected" : "" }} >{{$country->name }}</option>
                                                                         @endforeach
                                                                     @endisset
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >City</label>
-                                                                <select name="city_id" class=" selectpicker form-control  citySection" id="citySection" >
+                                                                <select name="city_id" class=" selectpicker form-control  citySection" id="citySection" data="{{ $selectedCityId }}" >
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Location</label>
-                                                                <select class="selectpicker form-control loc_id" name="loc_id" id="loc_id">
+                                                                <select class="selectpicker form-control loc_id" name="loc_id" id="loc_id" data="{{ $selectedLocationId }}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Warehouse</label>
-                                                                <select class="selectpicker form-control warehouse_id" name="warehouse_id" id="warehouse_id">
+                                                                <select class="selectpicker form-control warehouse_id" name="warehouse_id" id="warehouse_id" data="{{ $selectedWarehouseId }}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Storage Unit</label>
-                                                                <select class="selectpicker form-control su_id" name="su_id" id="su_id">
+                                                                <select class="selectpicker form-control su_id" name="su_id" id="su_id" data="{{ $lead->su_id }}">
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
@@ -335,151 +342,113 @@
                 }
             });
 
-            var country_id=$('select[name=country_id]').val();
-            getCities(country_id);
-            var city_id = $('.citySection').val();
-            getLocations(city_id);
+            function showReqError(xhr) {
+                if (typeof window.showAjaxError === 'function') {
+                    window.showAjaxError(xhr, 'any technical error');
+                } else {
+                    toastr.error('any technical error');
+                }
+            }
 
-            $("#country_id").on('change', function() {
-                var country_id = $(this).val();
-                getCities(country_id);
+            function populateSelect($el, items, valueKey, labelKey, selectedValue, emptyLabel) {
+                var html = '<option value="">' + emptyLabel + '</option>';
+                if (items && items.length > 0) {
+                    for (var i = 0; i < items.length; i++) {
+                        var selected = (String(items[i][valueKey]) === String(selectedValue)) ? 'selected' : '';
+                        html += '<option ' + selected + ' value="' + items[i][valueKey] + '">' + items[i][labelKey] + '</option>';
+                    }
+                }
+                $el.html(html);
+                if ($el.hasClass('selectpicker') && typeof $el.selectpicker === 'function') {
+                    $el.selectpicker('refresh');
+                }
+            }
 
-            });
-
-            function getCities(country_id) {
-                $.ajax({
+            function getCities(country_id, selectedCityId) {
+                return $.ajax({
                     url: '{{ url('get-cities') }}',
                     type: 'get',
-                    async: false,
                     dataType: 'json',
-                    data: { country_id: country_id },
-                    success: function(data) {
-                        $('.citySection').empty();
-                        getLocations();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.citySection').html('<option value="">Select City</option>');
-                        if (data.length > 0) {
-
-                            for (i = 0; i < data.length; i++) {
-                                html3 += '<option  value="' + data[i].id + '">' + data[i].city_name + '</option>';
-                            }
-                        } else {
-                            var html3 = '<option value="">No Cities Found</option>';
-                        }
-                        $('.citySection').append(html3);
-                    },
-                    error: function() {
-                        toastr.error('any technical error');
-                    }
-                });
+                    data: { country_id: country_id }
+                }).done(function(data) {
+                    populateSelect($('.citySection'), data, 'id', 'city_name', selectedCityId, 'Select City');
+                }).fail(showReqError);
             }
+
+            function getLocations(city_id, selectedLocationId) {
+                return $.ajax({
+                    url: '{{ url('get-locations') }}',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { city_id: city_id }
+                }).done(function(data) {
+                    populateSelect($('.loc_id'), data, 'id', 'loc_name', selectedLocationId, 'Select Location');
+                }).fail(showReqError);
+            }
+
+            function getWharehouse(loc_id, selectedWarehouseId) {
+                return $.ajax({
+                    url: '{{ url('get-warehouse') }}',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { loc_id: loc_id }
+                }).done(function(data) {
+                    populateSelect($('.warehouse_id'), data, 'id', 'name', selectedWarehouseId, 'Select Warehouse');
+                }).fail(showReqError);
+            }
+
+            function getStorageUnit(warehouse_id, selectedSuId) {
+                return $.ajax({
+                    url: '{{ url('get-storageunit') }}',
+                    type: 'get',
+                    dataType: 'json',
+                    data: { warehouse_id: warehouse_id }
+                }).done(function(data) {
+                    populateSelect($('.su_id'), data, 'id', 'storage_unit_name', selectedSuId, 'Select Storage Unit');
+                }).fail(showReqError);
+            }
+
+            var country_id = $('select[name=country_id]').val();
+            var selectedCityId = $('#citySection').attr("data") || '';
+            var selectedLocationId = $('#loc_id').attr("data") || '';
+            var selectedWarehouseId = $('#warehouse_id').attr("data") || '';
+            var selectedSuId = $('#su_id').attr("data") || '';
+
+            if (country_id) {
+                getCities(country_id, selectedCityId)
+                    .then(function() { return getLocations(selectedCityId, selectedLocationId); })
+                    .then(function() { return getWharehouse(selectedLocationId, selectedWarehouseId); })
+                    .then(function() { return getStorageUnit(selectedWarehouseId, selectedSuId); });
+            }
+
+            $("#country_id").on('change', function() {
+                var cid = $(this).val();
+                getCities(cid, '').then(function() {
+                    populateSelect($('.loc_id'), [], 'id', 'loc_name', '', 'Select Location');
+                    populateSelect($('.warehouse_id'), [], 'id', 'name', '', 'Select Warehouse');
+                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
+                });
+            });
 
             $(".citySection").on('change', function() {
                 var city_id = $(this).val();
-                getLocations(city_id);
-            });
-
-            function getLocations(city_id) {
-                $.ajax({
-                    url: '{{ url('get-locations') }}',
-                    type: 'get',
-                    async: false,
-                    dataType: 'json',
-                    data: { city_id: city_id },
-                    success: function(data) {
-                        $('.loc_id').empty();
-                        getWharehouse();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.loc_id').html('<option value="">Select Location</option>');
-                        if (data.length > 0) {
-
-                            for (i = 0; i < data.length; i++) {
-                                c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].loc_name+'</option>';
-                            }
-                        } else {
-                            var html3 = '<option value="">No Location Found</option>';
-                        }
-                        $('.loc_id').append(html3);
-                    },
-                    error: function() {
-                        toastr.error('any technical error');
-                    }
+                getLocations(city_id, '').then(function() {
+                    populateSelect($('.warehouse_id'), [], 'id', 'name', '', 'Select Warehouse');
+                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
                 });
-            }
+            });
 
             $(".loc_id").on('change', function() {
                 var loc_id = $(this).val();
-                getWharehouse(loc_id);
-            });
-
-            function getWharehouse(loc_id) {
-                $.ajax({
-                    url: '{{ url('get-warehouse') }}',
-                    type: 'get',
-                    async: false,
-                    dataType: 'json',
-                    data: { loc_id: loc_id },
-                    success: function(data) {
-                        $('.warehouse_id').empty();
-                        getStorageUnit();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.warehouse_id').html('<option value="">Select Warehouse</option>');
-                        if (data.length > 0) {
-
-                            for (i = 0; i < data.length; i++) {
-                                c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].name+'</option>';
-                            }
-                        } else {
-                            var html3 = '<option value="">No Warehouse Found</option>';
-                        }
-                        $('.warehouse_id').append(html3);
-                    },
-                    error: function() {
-                        toastr.error('any technical error');
-                    }
+                getWharehouse(loc_id, '').then(function() {
+                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
                 });
-            }
+            });
 
             $(".warehouse_id").on('change', function() {
                 var warehouse_id = $(this).val();
-                getStorageUnit(warehouse_id);
+                getStorageUnit(warehouse_id, '');
             });
-            function getStorageUnit(warehouse_id) {
-                $.ajax({
-                    url: '{{ url('get-storageunit') }}',
-                    type: 'get',
-                    async: false,
-                    dataType: 'json',
-                    data: { warehouse_id: warehouse_id },
-                    success: function(data) {
-                        $('.su_id').empty();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.su_id').html('<option value="">Select Storage Unit</option>');
-                        if (data.length > 0) {
-                            for (i = 0; i < data.length; i++) {
-                                c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].storage_unit_name+'</option>';
-                            }
-                        } else {
-                            var html3 = '<option value="">No Storage Unit Found</option>';
-                        }
-                        $('.su_id').append(html3);
-                    },
-                    error: function() {
-                        toastr.error('any technical error');
-                    }
-                });
-            }
 
 
 

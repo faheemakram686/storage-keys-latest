@@ -64,18 +64,13 @@
                 <div class="modal-body" data-form="ajax-form-modal">
                         <form method="post" action="{{ url('admin/save-contract') }}" id="TaskForm">
                             @csrf
+                            <input type="hidden" name="customer_id" id="contract_customer_id">
+                            <input type="hidden" name="estimate_id" id="contract_estimate_id">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label class="lbl" >Select Customer</label>
-                                        <select class="form-control  " data-live-search="true" name="customer_id" >
-                                            <option value="" selected >Select One</option>
-                                            @isset($data)
-                                                @foreach($data['customer'] as $customer)
-                                                    <option value="{{$customer->id}}" >{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
+                                        <label class="lbl">Customer</label>
+                                        <input type="text" class="form-control" id="contract_customer_name" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -83,14 +78,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="lbl" >Estimate</label>
-                                        <select class=" form-control  " data-live-search="true" name="estimate_id" >
-                                            <option value="" selected >Select Estimate</option>
-                                            @isset($data)
-                                                @foreach ($data['estimate'] as $estiamte)
-                                                    <option value="{{ $estiamte->id }}" selected >{{ $estiamte->id }}# ({{$estiamte->f_name }} {{$estiamte->l_name }})</option>
-                                                @endforeach
-                                            @endisset
-                                        </select>
+                                        <input type="text" class="form-control" id="contract_estimate_label" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -174,6 +162,10 @@
             $('#TaskForm').on('submit', function(e) {
 
                 e.preventDefault();
+                if (!$('#contract_customer_id').val() || !$('#contract_estimate_id').val()) {
+                    toastr.error('Customer and estimate are required to create contract.');
+                    return;
+                }
                 var formData=$('#TaskForm').serialize()
                 $.ajax({
                     type: "get",
@@ -249,7 +241,7 @@
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer.customer_name == null) ? ' ' : data[i].customer.customer_name)+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer && data[i].customer.customer_name != null) ? data[i].customer.customer_name : ((data[i].f_name || "") + " " + (data[i].l_name || "")).trim())+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_price+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+ ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools" >'+
@@ -268,7 +260,7 @@
                             // ' <li><a href="#" class="btn-approve" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Approve</span></a></li>'+
                             ' <li><a href={{url('/estimatetocustomer')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as customer</span></a></li>'+
                             ' <li><a href={{url('/admin/estimatePdf')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
-                            ' <li><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#addCountry"><em class="icon ni ni-edit"></em><span>Create Contract</span></a></li>'+
+                            ' <li><a href="#" class="btn-edit" data='+data[i].id+' data-estimate-id="'+data[i].id+'" data-customer-id="'+(data[i].customer_id || '')+'" data-customer-name="'+(((data[i].customer && data[i].customer.customer_name != null) ? data[i].customer.customer_name : ((data[i].f_name || "") + " " + (data[i].l_name || "")).trim()).replace(/"/g, '&quot;'))+'" data-toggle="modal" data-target="#addCountry"><em class="icon ni ni-edit"></em><span>Create Contract</span></a></li>'+
                             ' <li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                             ' </ul>'+
                             ' </div>'+
@@ -312,6 +304,17 @@
 
                 });
 
+            });
+
+            $('#countryTable').on('click', '.btn-edit', function() {
+                var estimateId = $(this).attr('data-estimate-id') || '';
+                var customerId = $(this).attr('data-customer-id') || '';
+                var customerName = $(this).attr('data-customer-name') || '';
+
+                $('#contract_estimate_id').val(estimateId);
+                $('#contract_customer_id').val(customerId);
+                $('#contract_customer_name').val(customerName);
+                $('#contract_estimate_label').val(estimateId ? ('Estimate #' + estimateId) : '');
             });
 
         });

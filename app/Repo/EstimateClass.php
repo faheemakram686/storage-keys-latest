@@ -72,6 +72,31 @@ class EstimateClass implements EstimateInterface {
 
         return [$value];
     }
+
+    private function toCsvOrNull($value): ?string
+    {
+        $items = $this->toArray($value);
+        return !empty($items) ? implode(',', $items) : null;
+    }
+
+    private function buildAddonPriceEstimateRows(int $estimateId, array $addonIds, array $addonPrices): array
+    {
+        $rows = [];
+        for ($i = 0; $i < count($addonIds); $i++) {
+            $addonId = $addonIds[$i] ?? null;
+            if ($addonId === null || $addonId === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'estimate_id' => $estimateId,
+                'addon_id' => $addonId,
+                'price' => (string)($addonPrices[$i] ?? ''),
+            ];
+        }
+
+        return $rows;
+    }
     public function saveEstimate($request)
     {
         $estimate=new Estimate();
@@ -101,8 +126,8 @@ class EstimateClass implements EstimateInterface {
         $estimate->user_id =Auth::id();
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= $request->unit_price;
-        $estimate->addon = implode(',', $addonIds);
-        $estimate->require_documents = implode(',', $requireDocIds);
+        $estimate->addon = $this->toCsvOrNull($addonIds);
+        $estimate->require_documents = $this->toCsvOrNull($requireDocIds);
         $estimate->email_template =  $request->email_template;
         $estimate->insurence =  $request->insurance;
         if($request->insurance == "cover" ){
@@ -112,32 +137,28 @@ class EstimateClass implements EstimateInterface {
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){
-            $addonpriceestimate = [];
-            for ($i = 0; $i < count($addonIds); $i++) {
-                $addonId = $addonIds[$i] ?? null;
-                if ($addonId === null || $addonId === '') {
-                    continue;
-                }
-
-                $addonpriceestimate[] = [
-                    'estimate_id' => $estimate->id,
-                    'addon_id' => $addonId,
-                    'price' => (string)($addonPrices[$i] ?? ''),
-                ];
-            }
+            $addonpriceestimate = $this->buildAddonPriceEstimateRows($estimate->id, $addonIds, $addonPrices);
 
             if (!empty($addonpriceestimate)) {
                 AddonPriceEstimate::insert($addonpriceestimate);
             }
 
             $lead = Lead::find($request->lead_id);
-            $lead->changeStatus(4);
+            if ($lead) {
+                $lead->changeStatus(4);
+            }
 
             $estimate_email = Estimate::with('emailTemplate')->find($estimate->id);
+            $templateBody = optional($estimate_email->emailTemplate)->temp_body;
+            if (!$templateBody) {
+                return response()->json([
+                    'errors' => 'Email template not found for this estimate. Please select an email template and try again.'
+                ], 422);
+            }
 
             $email = [
                 'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
-                'body' => html_entity_decode($estimate_email->emailTemplate->temp_body),
+                'body' => html_entity_decode($templateBody),
                 'thanks' => 'Thank you this Estimate from storage Key',
                 'actionText' => 'View Estimate',
                 'actionURL' => url('estimatetocustomer').'/'.$estimate_email->id,
@@ -156,6 +177,11 @@ class EstimateClass implements EstimateInterface {
     {
         $this->contact = new ContactClass();
         $data['contact'] = $this->contact->getCustomerPrimaryContect($request->customer_id);
+        if (!$data['contact']) {
+            return response()->json([
+                'errors' => 'Customer primary contact not found.'
+            ], 422);
+        }
 
         $estimate=new Estimate();
 
@@ -175,8 +201,8 @@ class EstimateClass implements EstimateInterface {
         $estimate->phone=$data['contact']->phone;
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= $request->unit_price;
-        $estimate->addon = implode(',', $addonIds);
-        $estimate->require_documents = implode(',', $requireDocIds);
+        $estimate->addon = $this->toCsvOrNull($addonIds);
+        $estimate->require_documents = $this->toCsvOrNull($requireDocIds);
         $estimate->email_template =  $request->email_template;
         $estimate->insurence =  $request->insurance;
         if($request->insurance == "cover" ){
@@ -186,28 +212,26 @@ class EstimateClass implements EstimateInterface {
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){
-            $addonpriceestimate = [];
-            for ($i = 0; $i < count($addonIds); $i++) {
-                $addonId = $addonIds[$i] ?? null;
-                if ($addonId === null || $addonId === '') {
-                    continue;
-                }
-
-                $addonpriceestimate[] = [
-                    'estimate_id' => $estimate->id,
-                    'addon_id' => $addonId,
-                    'price' => (string)($addonPrices[$i] ?? ''),
-                ];
-            }
+            $addonpriceestimate = $this->buildAddonPriceEstimateRows($estimate->id, $addonIds, $addonPrices);
 
             if (!empty($addonpriceestimate)) {
                 AddonPriceEstimate::insert($addonpriceestimate);
             }
 
             $appsettings = AppSettings::get();
-            $user = User::find($appsettings[0]->value);
+            $user = !empty($appsettings[0]->value) ? User::find($appsettings[0]->value) : null;
+            if (!$user) {
+                return response()->json([
+                    'errors' => 'Approval user not configured. Please configure app settings and try again.'
+                ], 422);
+            }
             $template = new EmailTemplateClass();
             $notification = $template->getTemplateByName('estimate','email','Estimate_approval_email');
+            if (empty($notification) || empty($notification[0]) || empty($notification[0]->temp_body)) {
+                return response()->json([
+                    'errors' => 'Approval email template (Estimate_approval_email) not found. Please configure email templates and try again.'
+                ], 422);
+            }
             $email2 = [
                 'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
                 'body' => $notification[0]->temp_body,
@@ -249,6 +273,9 @@ class EstimateClass implements EstimateInterface {
     public function deleteEstimate($id)
     {
         $country=Estimate::find($id);
+        if (!$country) {
+            return 0;
+        }
         $country->is_deleted=1;
         $country->save();
         return 1;
@@ -296,17 +323,30 @@ class EstimateClass implements EstimateInterface {
     {
         $appsettings = AppSettings::get();
         $estimate = Estimate::find($id);
+        if (!$estimate) {
+            return response()->json(['error' => 'Estimate not found'], 404);
+        }
         if($estimate->status == 'Not Approved')
         {
-            if($appsettings[0]->value == auth()->id())
+            if(!empty($appsettings[0]->value) && $appsettings[0]->value == auth()->id())
             {
                 $estimate->status = 1;
                 if($estimate->save())
                 {
                     $appsettings = AppSettings::get();
-                    $user = User::find($appsettings[1]->value);
+                    $user = !empty($appsettings[1]->value) ? User::find($appsettings[1]->value) : null;
+                    if (!$user) {
+                        return response()->json([
+                            'error' => 'Next approval user is not configured in app settings.'
+                        ], 422);
+                    }
                     $template = new EmailTemplateClass();
                     $notification = $template->getTemplateByName('estimate','email','Estimate_approval_email');
+                    if (empty($notification) || empty($notification[0]) || empty($notification[0]->temp_body)) {
+                        return response()->json([
+                            'error' => 'Approval email template (Estimate_approval_email) not found. Please configure email templates and try again.'
+                        ], 422);
+                    }
                     $email2 = [
                         'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
                         'body' => $notification[0]->temp_body,
@@ -327,14 +367,24 @@ class EstimateClass implements EstimateInterface {
 
         }elseif ($estimate->status == 'Approved Level 1')
         {
-            if($appsettings[1]->value == auth()->id())
+            if(!empty($appsettings[1]->value) && $appsettings[1]->value == auth()->id())
             {
                 $estimate->status = 2;
                 if($estimate->save()) {
                     $appsettings = AppSettings::get();
-                    $user = User::find($appsettings[2]->value);
+                    $user = !empty($appsettings[2]->value) ? User::find($appsettings[2]->value) : null;
+                    if (!$user) {
+                        return response()->json([
+                            'error' => 'Next approval user is not configured in app settings.'
+                        ], 422);
+                    }
                     $template = new EmailTemplateClass();
                     $notification = $template->getTemplateByName('estimate', 'email', 'Estimate_approval_email');
+                    if (empty($notification) || empty($notification[0]) || empty($notification[0]->temp_body)) {
+                        return response()->json([
+                            'error' => 'Approval email template (Estimate_approval_email) not found. Please configure email templates and try again.'
+                        ], 422);
+                    }
                     $email2 = [
                         'greeting' => 'Hi ' . $user->first_name . ' ' . $user->last_name . ',',
                         'body' => $notification[0]->temp_body,
@@ -353,16 +403,22 @@ class EstimateClass implements EstimateInterface {
             }
         }elseif ($estimate->status == 'Approved Level 2')
         {
-            if($appsettings[2]->value == auth()->id())
+            if(!empty($appsettings[2]->value) && $appsettings[2]->value == auth()->id())
             {
                 $estimate->status = 3;
                 $estimate->save();
 
                 $estimate_email = Estimate::with('emailTemplate')->find($estimate->id);
+                $templateBody = optional($estimate_email->emailTemplate)->temp_body;
+                if (!$templateBody) {
+                    return response()->json([
+                        'error' => 'Email template not found for this estimate. Please select an email template and try again.'
+                    ], 422);
+                }
 
                 $email = [
                     'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
-                    'body' => html_entity_decode($estimate_email->emailTemplate->temp_body),
+                    'body' => html_entity_decode($templateBody),
                     'thanks' => 'Thank you this Estimate from storage Key',
                     'actionText' => 'View Estimate',
                     'actionURL' => url('estimatetocustomer').'/'.$estimate_email->id,
@@ -386,6 +442,11 @@ class EstimateClass implements EstimateInterface {
 
     public function declineEstimate($request)
     {
+        $estimate = Estimate::find($request->id);
+        if (!$estimate) {
+            return response()->json(['error' => 'Estimate not found'], 404);
+        }
+
         $note = new Note();
         $note->type = 'estimate';
         $note->type_id = $request->id;
@@ -394,10 +455,12 @@ class EstimateClass implements EstimateInterface {
         $note->status = 1;
         if($note->save())
         {
-            $estimate = Estimate::find($request->id);
             if($estimate->user_id)
             {
                 $user = User::find($estimate->user_id);
+                if (!$user) {
+                    return response()->json(['success' => 'Estimate Declined successfully'], 200);
+                }
                 $email2 = [
                     'greeting' => 'Hi ' . $user->first_name . ' ' . $user->last_name . ',',
                     'body' => $request->decline_reason,

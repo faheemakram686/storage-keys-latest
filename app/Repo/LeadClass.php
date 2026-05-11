@@ -20,6 +20,87 @@ use Illuminate\Support\Facades\Notification;
 
 class LeadClass implements LeadInterface {
 
+    private function toArray($value): array
+    {
+        if ($value === null) {
+            return [];
+        }
+
+        if (is_array($value)) {
+            return array_values($value);
+        }
+
+        if (is_string($value)) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                return [];
+            }
+
+            if (strlen($trimmed) > 0 && $trimmed[0] === '[') {
+                $decoded = json_decode($trimmed, true);
+                if (is_array($decoded)) {
+                    return array_values($decoded);
+                }
+            }
+
+            if (strpos($trimmed, ',') !== false) {
+                return array_values(array_filter(
+                    array_map('trim', explode(',', $trimmed)),
+                    function ($v) { return $v !== ''; }
+                ));
+            }
+
+            return [$trimmed];
+        }
+
+        return [$value];
+    }
+
+    private function toCsvOrNull($value): ?string
+    {
+        $items = $this->toArray($value);
+        return !empty($items) ? implode(',', $items) : null;
+    }
+
+    private function applyLeadAttributes(Lead $lead, $request, bool $isUpdate = false): void
+    {
+        if ($isUpdate) {
+            if ($request->su_id) {
+                $lead->su_id = $request->su_id;
+            } else {
+                $lead->su_id = $request->u_su_id;
+            }
+        } else {
+            $lead->su_id = $request->id;
+        }
+
+        if (!empty($request->customer_id)) {
+            $lead->customer_id = $request->customer_id;
+        }
+
+        $lead->lead_type = $request->type;
+        $lead->r_date = $request->r_date;
+        $lead->company_name = $request->company_name;
+        $lead->f_name = $request->f_name;
+        $lead->l_name = $request->l_name;
+        $lead->lead_source = $request->lead_source ?? $lead->lead_source ?? 1;
+        $lead->lead_rating = $request->lead_rating ?? $lead->lead_rating ?? 0;
+        $lead->user_res_id = $request->user_res ?? $lead->user_res_id;
+        $lead->email = $request->email;
+        $lead->phone = $request->phone;
+        $lead->mobile1 = $request->mobile1;
+        $lead->mobile2 = $request->mobile2 ?? "";
+        $lead->price = $request->term_length ?? $request->price;
+        $lead->addon = $this->toCsvOrNull($request->addon);
+        $lead->insurence = $request->insurance;
+        $lead->goods = $request->insurance === 'cover' ? $request->goodsval : null;
+        $lead->term = $request->terms;
+
+        if (!$isUpdate && empty($lead->status)) {
+            $lead->status = 1;
+        }
+    }
+
     public function saveLead($request)
     {
         try {
@@ -37,25 +118,10 @@ class LeadClass implements LeadInterface {
             DB::beginTransaction();
 
             $lead = new Lead();
-            $lead->su_id = $request->id;
-            $lead->lead_type = $request->type;
-            $lead->r_date = $request->r_date;
-            $lead->company_name = $request->company_name;
-            $lead->f_name = $request->f_name;
-            $lead->l_name = $request->l_name;
             $lead->lead_source = 1;
             $lead->lead_rating = 0;
-            $lead->user_res_id = $assignUser[6]->value? $assignUser[6]->value : 1;
-            $lead->email = $request->email;
-            $lead->phone = $request->phone;
-            $lead->mobile1 = $request->mobile1;
-            $lead->mobile2 = $request->mobile2 ?? "";
-            $lead->price = $request->price;
-            $lead->addon = $request->addon ? implode(',', $request->addon) : null;
-            $lead->insurence = $request->insurance;
-            $lead->goods = $request->insurance === 'cover' ? $request->goodsval : null;
-            $lead->term = $request->terms;
-            $lead->status = 1;
+            $lead->user_res_id = !empty($assignUser[6]->value) ? $assignUser[6]->value : 1;
+            $this->applyLeadAttributes($lead, $request);
 
             $lead->save();
 
@@ -73,6 +139,9 @@ class LeadClass implements LeadInterface {
             // Notify assigned users
             foreach ($userarray as $userid) {
                 $user = User::find($userid);
+                if (!$user) {
+                    continue;
+                }
                 $email2 = [
                     'greeting' => 'Hi ' . $user->first_name . ' ' . $user->last_name . ',',
                     'body' => "You have received a new lead. Please respond as soon as possible.",
@@ -107,6 +176,9 @@ class LeadClass implements LeadInterface {
     public function deleteLead($id)
     {
         $country=Lead::find($id);
+        if (!$country) {
+            return 0;
+        }
         $country->is_deleted=1;
         $country->save();
         return 1;
@@ -120,31 +192,11 @@ class LeadClass implements LeadInterface {
     public function updateLead($request)
     {
         $lead=Lead::find($request->lead_id);
-        if($request->su_id){
-            $lead->su_id=$request->su_id;
-        }else{
-            $lead->su_id=$request->u_su_id;
+        if (!$lead) {
+            return 0;
         }
-        $lead->lead_type=$request->type;
-        $lead->r_date=$request->r_date;
-        $lead->company_name=$request->company_name;
-        $lead->f_name=$request->f_name;
-        $lead->l_name=$request->l_name;
-        $lead->lead_source=$request->lead_source;
-        $lead->lead_rating=$request->lead_rating;
-        $lead->user_res_id =$request->user_res;
-        $lead->email=$request->email;
-        $lead->phone=$request->phone;
-        $lead->mobile1=$request->mobile1;
-        $lead->mobile2=$request->mobile2 ?? "";
-        $lead->price= $request->term_length;
-        $lead->addon= implode(',', $request->addon);
-        $lead->insurence =  $request->insurance;
-        if($request->insurance == "cover" ){
-            $lead->goods=$request->goodsval;
-        }
-        $lead->term=$request->terms;
-        $lead->status=$request->lead_status;
+        $this->applyLeadAttributes($lead, $request, true);
+        $lead->status = $request->lead_status;
         $lead->save();
         return 1;
     }
@@ -168,29 +220,7 @@ class LeadClass implements LeadInterface {
     public function saveLeadBackend($request)
     {
         $lead=new Lead();
-        $lead->su_id=$request->id;
-        if($request->customer_id){
-            $lead->customer_id=$request->customer_id;
-        }
-        $lead->lead_type=$request->type;
-        $lead->r_date=$request->r_date;
-        $lead->company_name=$request->company_name;
-        $lead->f_name=$request->f_name;
-        $lead->l_name=$request->l_name;
-        $lead->lead_source=$request->lead_source;
-        $lead->lead_rating=$request->lead_rating;
-        $lead->user_res_id =$request->user_res;
-        $lead->email=$request->email;
-        $lead->phone=$request->phone;
-        $lead->mobile1=$request->mobile1;
-        $lead->mobile2=$request->mobile2 ?? "";
-        $lead->price= $request->term_length;
-        $lead->addon= implode(',', $request->addon);
-        $lead->insurence =  $request->insurance;
-        if($request->insurance == "cover" ){
-            $lead->goods=$request->goodsval;
-        }
-        $lead->term=$request->terms;
+        $this->applyLeadAttributes($lead, $request);
         $lead->status=$request->lead_status;
         if($lead->save()){
 
@@ -210,6 +240,7 @@ class LeadClass implements LeadInterface {
             Notification::route('mail', $lead->email)->notify(new LeadNotification($email1));
 
             $user = User::find($lead->user_res_id);
+            if ($user) {
 
                 $email2 = [
                     'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
@@ -221,6 +252,7 @@ class LeadClass implements LeadInterface {
 
                 ];
                 Notification::send($user, new EmailNotification($email2,$lead));
+            }
 
 
 
@@ -232,6 +264,9 @@ class LeadClass implements LeadInterface {
     {
 
         $lead=Lead::find($request->lead_id);
+        if (!$lead) {
+            return response()->json(['error' => 'Lead not found'], 404);
+        }
         $lead->status=$request->lead_status;
         if($lead->save()){
             return response()->json(['success' => 'Lead status change successfully'], 200);
@@ -241,6 +276,9 @@ class LeadClass implements LeadInterface {
     public function changeSource($request)
     {
         $lead=Lead::find($request->lead_id);
+        if (!$lead) {
+            return response()->json(['error' => 'Lead not found'], 404);
+        }
         $lead->lead_source=$request->lead_source;
         if($lead->save()){
             return response()->json(['success' => 'Lead source change successfully'], 200);
@@ -250,9 +288,15 @@ class LeadClass implements LeadInterface {
     public function changeAssignee($request)
     {
         $lead=Lead::find($request->lead_id);
+        if (!$lead) {
+            return response()->json(['error' => 'Lead not found'], 404);
+        }
         $lead->user_res_id=$request->lead_assignee;
         if($lead->save()){
             $user = User::find($request->lead_assignee);
+            if (!$user) {
+                return response()->json(['success' => 'Lead user Responsible change successfully'], 200);
+            }
             $email2 = [
                 'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
                 'body' => "You have received a lead respond the lead as soon as possible",

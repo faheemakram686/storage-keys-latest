@@ -537,8 +537,12 @@
                         $(".btn-submit").prop("disabled", false);
 
                     },
-                    error: function() {
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        if (xhr) xhr._handledByPage = true;
+                        var msg =
+                            (xhr && xhr.responseJSON && (xhr.responseJSON.errors || xhr.responseJSON.error)) ||
+                            'any technical error';
+                        toastr.error(msg);
                         $('.btn-submit').text('Save');
                         $(".btn-submit").prop("disabled", false);
                     }

@@ -9,6 +9,18 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="{{ asset('sk-assets/js/frontend/jquery.signature.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/jquery.signature.css') }}">
+    <style>
+        #sig {
+            border: 1px solid #d5d5d5;
+            border-radius: 4px;
+            min-height: 200px;
+            background: #fff;
+        }
+        #sig canvas {
+            width: 100% !important;
+            height: 200px !important;
+        }
+    </style>
     @isset($data)
 {{--    {{dd($data)}}--}}
     <div class="justify-content-center checkout-page">
@@ -196,19 +208,87 @@
     </div>
     @endisset
 {{--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>--}}
-    <script type="text/javascript">
-
-        var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG'});
-
-        $('#clear').click(function(e) {
-            e.preventDefault();
-            sig.signature('clear');
-            $("#signature64").val('');
-        });
-    </script>
-
     <script>
         $(document).ready(function() {
+            var sig = null;
+            var fallbackCanvas = null;
+            var fallbackCtx = null;
+            var isDrawing = false;
+            var usingFallbackPad = false;
+            var hasFallbackStroke = false;
+
+            function getCanvasPoint(e) {
+                var rect = fallbackCanvas.getBoundingClientRect();
+                var source = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+                return {
+                    x: source.clientX - rect.left,
+                    y: source.clientY - rect.top
+                };
+            }
+
+            function beginDraw(e) {
+                e.preventDefault();
+                isDrawing = true;
+                hasFallbackStroke = true;
+                var p = getCanvasPoint(e);
+                fallbackCtx.beginPath();
+                fallbackCtx.moveTo(p.x, p.y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                var p = getCanvasPoint(e);
+                fallbackCtx.lineTo(p.x, p.y);
+                fallbackCtx.stroke();
+                $("#signature64").val(fallbackCanvas.toDataURL("image/png"));
+            }
+
+            function endDraw(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                isDrawing = false;
+                fallbackCtx.closePath();
+                $("#signature64").val(fallbackCanvas.toDataURL("image/png"));
+            }
+
+            function initFallbackSignaturePad() {
+                if (fallbackCanvas) return true;
+
+                var $sig = $('#sig');
+                $sig.html('<canvas id="sig-canvas" width="600" height="200"></canvas>');
+                fallbackCanvas = document.getElementById('sig-canvas');
+                if (!fallbackCanvas) return false;
+
+                fallbackCtx = fallbackCanvas.getContext('2d');
+                fallbackCtx.strokeStyle = '#111';
+                fallbackCtx.lineWidth = 2;
+                fallbackCtx.lineCap = 'round';
+                fallbackCtx.lineJoin = 'round';
+
+                fallbackCanvas.addEventListener('mousedown', beginDraw, { passive: false });
+                fallbackCanvas.addEventListener('mousemove', draw, { passive: false });
+                fallbackCanvas.addEventListener('mouseup', endDraw, { passive: false });
+                fallbackCanvas.addEventListener('mouseleave', endDraw, { passive: false });
+                fallbackCanvas.addEventListener('touchstart', beginDraw, { passive: false });
+                fallbackCanvas.addEventListener('touchmove', draw, { passive: false });
+                fallbackCanvas.addEventListener('touchend', endDraw, { passive: false });
+
+                usingFallbackPad = true;
+                return true;
+            }
+
+            function initSignaturePad() {
+                if (typeof $.fn.signature !== 'function') {
+                    return initFallbackSignaturePad();
+                }
+                if ($('#sig').data('signature')) {
+                    return true;
+                }
+                sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG'});
+                usingFallbackPad = false;
+                return true;
+            }
 
 
 
@@ -216,9 +296,46 @@
 
                 $('#myModal').modal('show');
             });
+
+            $('#myModal').on('shown.bs.modal', function () {
+                var ready = initSignaturePad();
+                // Ensure canvas is visible and responsive inside modal
+                if (ready && $('#sig').data('signature')) {
+                    $('#sig').signature('resize');
+                }
+            });
+
+            $('#clear').click(function(e) {
+                e.preventDefault();
+                if (usingFallbackPad && fallbackCanvas && fallbackCtx) {
+                    fallbackCtx.clearRect(0, 0, fallbackCanvas.width, fallbackCanvas.height);
+                    hasFallbackStroke = false;
+                } else if ($('#sig').data('signature')) {
+                    $('#sig').signature('clear');
+                }
+                $("#signature64").val('');
+            });
+
             $('#ContractSignForm').on('submit', function(e) {
 
                 e.preventDefault();
+                if (!$('#sig').data('signature') && !usingFallbackPad) {
+                    var ready = initSignaturePad();
+                    if (!ready) {
+                        toastr.error('Signature pad is not ready. Please refresh and try again.');
+                        return;
+                    }
+                }
+
+                if (usingFallbackPad && !hasFallbackStroke) {
+                    toastr.error('Please add your signature before submitting.');
+                    return;
+                }
+
+                if (!$("#signature64").val()) {
+                    toastr.error('Please add your signature before submitting.');
+                    return;
+                }
 
                 let formData = new FormData($('#ContractSignForm')[0])
 
