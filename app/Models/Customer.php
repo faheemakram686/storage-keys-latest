@@ -14,6 +14,8 @@ class Customer extends Model
     protected $table = 'customers';
 
     protected $fillable = ['email','customer_name','password','q_customer_id','company_name','phone','status'];
+    
+    protected $appends = ['full_display_name'];
 
     protected $hidden = ['password',  'remember_token'];
 
@@ -43,10 +45,15 @@ class Customer extends Model
 
     public function getFullDisplayNameAttribute()
     {
-        if ($this->primaryContact) {
-            return ($this->company_name ? $this->company_name : 'Individual') . ' (' . $this->primaryContact->first_name . ' ' . $this->primaryContact->last_name . ')';
+        if ($this->customer_type == 'company') {
+            $displayName = $this->company_name ?? 'No Company Name';
+            if ($this->primaryContact) {
+                $displayName .= ' (' . $this->primaryContact->first_name . ' ' . $this->primaryContact->last_name . ')';
+            }
+            return $displayName;
         }
-        return 'Individual - ' . $this->customer_name;
+        
+        return $this->customer_name ?? 'No Name';
     }
 
     public function getStatusAttribute($value)

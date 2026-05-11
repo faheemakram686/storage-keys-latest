@@ -71,8 +71,12 @@
                 <div class="invoice-contact">
                     <span class="overline-title">Bill To</span>
                     <div class="invoice-contact-info">
-                        <h6 class="title">{{$data['invoice'][0]->customer->customer_name}}</h6>
-                        <h6 class="title">{{$data['invoice'][0]->customer->primaryContact->first_name}} {{$data['invoice'][0]->customer->primaryContact->last_name}}</h6>
+                        @if($data['invoice'][0]->customer->customer_type == 'company')
+                            <h6 class="title">{{$data['invoice'][0]->customer->company_name}}</h6>
+                            <h6 class="title">{{$data['invoice'][0]->customer->primaryContact->first_name}} {{$data['invoice'][0]->customer->primaryContact->last_name}}</h6>
+                        @else
+                            <h6 class="title">{{$data['invoice'][0]->customer->customer_name}}</h6>
+                        @endif
                         <ul class="list-plain">
                             <li><em class="icon ni ni-map-pin-fill fs-18px"></em><span>@isset($data['invoice'][0]->customer->address){{$data['invoice'][0]->customer->address}}@endisset<br>{{$data['invoice'][0]->customer->city}}, {{$data['invoice'][0]->customer->country}}</span></li>
                             <li><em class="icon ni ni-call-fill fs-14px"></em><span>{{$data['invoice'][0]->customer->phone}}</span></li>

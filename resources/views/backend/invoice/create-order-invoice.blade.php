@@ -61,7 +61,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Invoice Date <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="date" name="invoice_date" placeholder="Invoice Date" required >
+                                        <input class="form-control" type="date" name="invoice_date" value="{{date('Y-m-d')}}" placeholder="Invoice Date" required >
                                     </div>
                                 </div>
                                 <div class="col-lg-6" >
@@ -171,7 +171,7 @@
                                         <select name="sale_agent" id="" class="form-control select2" data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['users'] as $user)
-                                                <option value="{{$user->id}}" {{(($user->id = auth()->id())? 'selected':'')}} >{{$user->first_name}} {{$user->last_name}}</option>
+                                                <option value="{{$user->id}}" {{(($user->id == auth()->id())? 'selected':'')}} >{{$user->first_name}} {{$user->last_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -673,6 +673,18 @@
 
             });
 
+
+            @if(isset($data['order']) && count($data['order']) > 0)
+                var autofill_customer_id = "{{$data['order'][0]->customer_id}}";
+                var autofill_order_id = "{{$data['order'][0]->id}}";
+
+                $('#customer_id').val(autofill_customer_id).trigger('change');
+                $('#invoice_type').val('order').trigger('change');
+                
+                // Wait for getOrders to finish and then set order_id
+                // Since getOrders is async: false, it should be fine.
+                $('#order_id').val(autofill_order_id).trigger('change');
+            @endif
 
         });
     </script>

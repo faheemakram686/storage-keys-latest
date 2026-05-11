@@ -61,7 +61,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Invoice Date <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="date" name="invoice_date" placeholder="Invoice Date" required >
+                                        <input class="form-control" type="date" name="invoice_date" value="{{date('Y-m-d')}}" placeholder="Invoice Date" required >
                                     </div>
                                 </div>
                                 <div class="col-lg-6" >
@@ -171,7 +171,7 @@
                                         <select name="sale_agent" id="" class="form-control " data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['users'] as $user)
-                                                <option value="{{$user->id}}" {{(($user->id = auth()->id())? 'selected':'')}} >{{$user->first_name}} {{$user->last_name}}</option>
+                                                <option value="{{$user->id}}" {{(($user->id == auth()->id())? 'selected':'')}} >{{$user->first_name}} {{$user->last_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>

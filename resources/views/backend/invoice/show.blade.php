@@ -82,8 +82,12 @@
                                                     <div class="invoice-contact">
                                                         <span class="overline-title">Invoice To</span>
                                                         <div class="invoice-contact-info">
-                                                            <h4 class="title">{{$data['invoice'][0]->customer->customer_name}}</h4>
-                                                            <h5 class="title">{{$data['invoice'][0]->customer->primaryContact->first_name}} {{$data['invoice'][0]->customer->primaryContact->last_name}}</h5>
+                                                            @if($data['invoice'][0]->customer->customer_type == 'company')
+                                                                <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
+                                                                <h5 class="title">{{$data['invoice'][0]->customer->primaryContact->first_name}} {{$data['invoice'][0]->customer->primaryContact->last_name}}</h5>
+                                                            @else
+                                                                <h4 class="title">{{$data['invoice'][0]->customer->customer_name}}</h4>
+                                                            @endif
                                                             <ul class="list-plain">
                                                                 <li><em class="icon ni ni-emails-fill"></em><span>{{$data['invoice'][0]->customer->primaryContact->email}}</span></li>
                                                                 <li><em class="icon ni ni-call-fill"></em><span>{{$data['invoice'][0]->customer->primaryContact->phone}}</span></li>

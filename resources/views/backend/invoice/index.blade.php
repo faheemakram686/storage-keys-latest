@@ -139,7 +139,7 @@
                             var contract = data[i].contract || null;
                             var order = data[i].order || null;
                             var customerId = customer ? customer.id : '';
-                            var customerName = customer ? (customer.customer_name || customer.company_name || 'N/A') : 'N/A';
+                            var customerName = customer ? (customer.full_display_name || 'N/A') : 'N/A';
                             var contractOrOrderHtml = 'N/A';
                             if (contract) {
                                 contractOrOrderHtml = '<a href={{url('admin/contract/detail')}}/' + contract.id + '>' + (contract.subject || ('Contract #' + contract.id)) + '</a>';
