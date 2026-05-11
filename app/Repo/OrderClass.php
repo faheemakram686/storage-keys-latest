@@ -114,16 +114,16 @@ class OrderClass implements OrderInterface {
     }
     public function deleteOrder($id)
     {
-        $country=Invoice::find($id);
-        $country->is_deleted=1;
-        $country->save();
+        $order=Order::find($id);
+        $order->is_deleted=1;
+        $order->save();
         return 1;
 
     }
 
     public function editOrder($id)
     {
-        $qry=Invoice::with('customer.primaryContact','contract','invoiceItems');
+        $qry=Order::with('customer.contact','orderItems');
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
@@ -140,60 +140,49 @@ class OrderClass implements OrderInterface {
 
     public function updateOrder($request)
     {
-        $invoice =Invoice::find($request->invoice_id);
-        $invoice->customer_id = $request->customer_id;
-        $invoice->contract_id = $request->contract_id;
-        $invoice->estimate_id = 1;
-        $invoice->invoice_date = $request->invoice_date;
-        $invoice->invoice_no = $request->invoice_no;
-        $invoice->user_id = $request->sale_agent;
-        $invoice->sub_total = $request->sub_total;
-        $invoice->vat = $request->vat;
-        $invoice->grand_total = $request->grand_total;
-        $invoice->due_date = $request->due_date;
-        $invoice->note = $request->note;
-        $invoice->payment_method = $request->note;
-        $invoice->status = $request->status;
-        if($invoice->save()){
+        $order =Order::find($request->order_id);
+        $order->customer_id = $request->customer_id;
+        $order->notes = $request->note;
+        $order->payment_method = $request->payment_method;
+        $order->sub_amount = $request->sub_total;
+        $order->total_amount = $request->grand_total;
+        $order->status = $request->status;
+        if($order->save()){
             if ($request->invoiceItems)
             {
-                    $items = InvoiceItem::query();
-                    $items = $items->where('invoice_id',$invoice->id);
+                    $items = OrderItem::query();
+                    $items = $items->where('order_id',$order->id);
                     $items->delete();
 
                 for($i =0; $i < count($request->invoiceItems['id']);$i++)
                 {
-                    $invoiceItem = new InvoiceItem();
-                    $invoiceItem->invoice_id  = $invoice->id;
-                    $invoiceItem->item_id = $request->invoiceItems['id'][$i];
-                    $invoiceItem->category = $request->invoiceItems['cat'][$i];
-                    $invoiceItem->item_name = $request->invoiceItems['name'][$i];
-                    $invoiceItem->quantity = $request->invoiceItems['qty'][$i];
-                    $invoiceItem->unit = $request->invoiceItems['unit'][$i];
-                    $invoiceItem->unit_price = (float)$request->invoiceItems['amount'][$i];
-                    $invoiceItem->total_price = (float)$request->invoiceItems['total'][$i];
-                    $invoiceItem->save();
+                    $orderItem = new OrderItem();
+                    $orderItem->order_id  = $order->id;
+                    $orderItem->product_id = $request->invoiceItems['id'][$i];
+                    $orderItem->qty = $request->invoiceItems['qty'][$i];
+                    $orderItem->price = (float)$request->invoiceItems['amount'][$i];
+                    $orderItem->total = (float)$request->invoiceItems['total'][$i];
+                    $orderItem->status = 1;
+                    $orderItem->save();
                 }
                 return 1;
 
             }
         }
-//        return 1;
     }
 
     public function getOrderItems($id)
     {
-        $qry=InvoiceItem::query();
-        $qry=$qry->where('invoice_id',$id);
-//        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
+        $qry=OrderItem::query();
+        $qry=$qry->where('order_id',$id);
         $qry=$qry->get();
         return $qry;
     }
     public function changeStatus($id,$status)
     {
-        $invoice =Invoice::find($id);
-        $invoice->status = 1;
-        $invoice->save();
+        $order =Order::find($id);
+        $order->status = $status;
+        $order->save();
         return 1;
     }
 

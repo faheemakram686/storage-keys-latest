@@ -470,6 +470,10 @@ require __DIR__.'/auth.php';
     //Orders
         Route::any('order', [OrderController::class,'index'])->name('order.index');
         Route::any('get-orders', [OrderController::class,'getOrders'])->name('order.get');
+        Route::any('delete-order', [OrderController::class,'deleteOrder']);
+        Route::any('edit-order/{id}', [OrderController::class,'editOrder']);
+        Route::any('update-order', [OrderController::class,'updateOrder']);
+        Route::any('get-order-items', [OrderController::class,'getOrderItems']);
         Route::any('order/detail/{id}', [OrderController::class, 'detailOrder'])->name('detail-order');
         Route::any('generate/invoice/{id}', [InvoiceController::class, 'createOrderInvoice'])->name('order-invoice');
         Route::any('print-order/{id}',[OrderController::class,'printOrder']);

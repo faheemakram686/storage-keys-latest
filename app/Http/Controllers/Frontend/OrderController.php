@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Repo\Interfaces\OrderInterface;
 use App\Services\NgeniusPaymentService;
 use App\Services\NgeniusTokenService;
+use App\Repo\CustomerClass;
+use App\Repo\UserClass;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -17,11 +19,15 @@ class OrderController extends Controller
     private $order;
     private $paymentService;
     private $tokenService;
+    private $customer;
+    private $user;
     public function __construct(OrderInterface $order, NgeniusPaymentService  $paymentService,NgeniusTokenService $tokenService)
     {
         $this->order = $order;
         $this->paymentService = $paymentService;
         $this->tokenService = $tokenService;
+        $this->customer = new CustomerClass();
+        $this->user = new UserClass();
     }
 
     public function save(Request $request)
@@ -62,6 +68,11 @@ class OrderController extends Controller
     {
         return $this->order->getAllOrders();
     }
+    public function deleteOrder(Request $request)
+    {
+        $this->order->deleteOrder($request->id);
+        return response()->json(['success' => 'Record deleted successfully'], 200);
+    }
 
     public function detailOrder($id)
     {
@@ -93,6 +104,22 @@ class OrderController extends Controller
     public function getOrderProducts(Request $request)
     {
         return $this->order->getOrderProducts($request->order_id);
+    }
+    public function editOrder($id)
+    {
+        $data['customers'] = $this->customer->getAllCustomer();
+        $data['users'] = $this->user->getUser();
+        $data['invoice'] = $this->order->editOrder($id);
+        return view('backend.order.edit')->with(compact('data'));
+    }
+    public function updateOrder(Request $request)
+    {
+        $this->order->updateOrder($request);
+        return response()->json(['success' => 'Record updated successfully'], 200);
+    }
+    public function getOrderItems(Request $request)
+    {
+        return $this->order->getOrderItems($request->id);
     }
 
 

@@ -52,7 +52,7 @@
                             <th class="nk-tb-col"><span class="sub-text">Email</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Amount</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
-{{--                            <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>--}}
+                            <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>
                         </tr>
                         </thead>
                         <tbody id="countryTable">
@@ -145,23 +145,24 @@
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+
                                 ' </td>'+
-                                {{--'  <td class="nk-tb-col nk-tb-col-tools">'+--}}
-                                {{--' <ul class="nk-tb-actions gx-1">'+--}}
-                                {{--'  <li>'+--}}
-                                {{--' <div class="drodown">'+--}}
-                                {{--'  <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>'+--}}
-                                {{--' <div class="dropdown-menu dropdown-menu-right">'+--}}
-                                {{--'<ul class="link-list-opt no-bdr">'+--}}
-                                {{--'<li><a href={{url('/invoice-to-customer')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+--}}
-                                {{--'<li><a href={{url('admin/pdf-invoice')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+--}}
-                                {{--'<li><a href={{url('admin/edit-invoice')}}/'+data[i].id+' class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+--}}
-                                {{--'<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+--}}
-                                {{--'</ul>'+--}}
-                                {{--' </div>'+--}}
-                                {{--'</div>'+--}}
-                                {{--' </li>'+--}}
-                                {{--' </ul>'+--}}
-                                {{--'</td>'+--}}
+                                '  <td class="nk-tb-col nk-tb-col-tools">'+
+                                ' <ul class="nk-tb-actions gx-1">'+
+                                '  <li>'+
+                                ' <div class="drodown">'+
+                                '  <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>'+
+                                ' <div class="dropdown-menu dropdown-menu-right">'+
+                                '<ul class="link-list-opt no-bdr">'+
+                                '<li><a href={{url('admin/order/detail')}}/'+data[i].id +' ><em class="icon ni ni-eye"></em><span>View Order</span></a></li>'+
+                                '<li><a href={{url('admin/edit-order')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>Edit Order</span></a></li>'+
+                                '<li><a href={{url('admin/print-order')}}/'+data[i].id +' ><em class="icon ni ni-printer"></em><span>Print Order</span></a></li>'+
+                                '<li><a href={{url('admin/generate/invoice')}}/'+data[i].id +' ><em class="icon ni ni-file-text"></em><span>Generate Invoice</span></a></li>'+
+                                '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
+                                '</ul>'+
+                                ' </div>'+
+                                '</div>'+
+                                ' </li>'+
+                                ' </ul>'+
+                                '</td>'+
                                 '</tr>';
                         }
 
@@ -177,7 +178,7 @@
             $('#countryTable').on('click', '.btn-delete', function() {
                 var id = $(this).attr('data');
                 $.ajax({
-                    url: '{{ url('admin/delete-invoice') }}',
+                    url: '{{ url('admin/delete-order') }}',
                     type: 'get',
                     async: false,
                     dataType: 'json',

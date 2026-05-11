@@ -1,22 +1,22 @@
 @extends('backend.layouts.app')
-@section('title', '| Edit Invoice')
+@section('title', '| Edit Order')
 @section('content')
     <div class="components-preview wide-md mx-auto">
         <div class="nk-block nk-block-lg">
             <div class="nk-block-head">
                 <div class="nk-block-between">
                     <div class="nk-block-head-content">
-                        <h4 class="title nk-block-title">Edit Invoice</h4>
+                        <h4 class="title nk-block-title">Edit Order</h4>
                     </div>
-                    <a href="{{url("admin/invoices")}}" class="btn btn-primary btn-sm d-none d-md-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></a>
+                    <a href="{{url("admin/order")}}" class="btn btn-primary btn-sm d-none d-md-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></a>
                 </div>
             </div>
             @isset($data)
             <div class="card">
                 <div class="card-inner">
-                    <form class="gy-3 form-validate is-alter" action="{{url("admin/update-invoice")}}"  method="post" enctype="multipart/form-data" id="InvoiceUpdateForm">
+                    <form class="gy-3 form-validate is-alter" action="{{url("admin/update-order")}}"  method="post" enctype="multipart/form-data" id="InvoiceUpdateForm">
                         @csrf
-                        <input type="hidden" value="{{$data['invoice'][0]->id}}" name="invoice_id" id="invoice_id">
+                        <input type="hidden" value="{{$data['invoice'][0]->id}}" name="order_id" id="order_id">
                         <div class="row g-4">
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -24,7 +24,7 @@
                                     <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->company_name}}</option>
+                                        <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->full_display_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -36,8 +36,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Invoice No. <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="text" name="invoice_no" value="{{$data['invoice'][0]->invoice_no}}" placeholder="Contract Value" required>
+                                    <label>Order No. <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="order_no" value="{{$data['invoice'][0]->id}}" placeholder="Order No" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -51,8 +51,8 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Invoice Value <span class="text-danger"></span></label>
-                                    <input class="form-control" type="number" name="invoice_value" id="invoice_value" placeholder="Invoice Value" >
+                                    <label>Order Value <span class="text-danger"></span></label>
+                                    <input class="form-control" type="number" name="invoice_value" id="invoice_value" placeholder="Order Value" >
                                 </div>
                                 <div class="form-group">
                                     <label>Sale Agent<span class="text-danger">*</span></label>
@@ -138,7 +138,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="reviewer">Client Note</label>
                                     <div class="form-control-wrap">
-                                        <textarea class="form-control"  name="note">{{$data['invoice'][0]->note}}</textarea>
+                                        <textarea class="form-control"  name="note">{{$data['invoice'][0]->notes}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -169,9 +169,9 @@
         $(document).ready(function() {
             var dr=0;
             var customer_id=$('select[name=customer_id]').val();
-            var invoice_id=$('input[name=invoice_id]').val();
+            var order_id=$('input[name=order_id]').val();
             getContracts(customer_id);
-            getInvoiceItems(invoice_id);
+            getInvoiceItems(order_id);
             getProducts();
 
             $('#add').click(function(){
@@ -406,29 +406,29 @@
 
             }
 
-            function getInvoiceItems(invoice_id) {
+            function getInvoiceItems(order_id) {
                 $.ajax({
-                    url: '{{ url('admin/get-invoice-items') }}',
+                    url: '{{ url('admin/get-order-items') }}',
                     type: 'get',
                     async: false,
                     dataType: 'json',
-                    data: { invoice_id: invoice_id },
+                    data: { id: order_id },
                     success: function(data) {
-                    console.log(data.invoiceItems)
+                    console.log(data)
                         var html = '';
                         var i;
                         var c = 0;
 
-                        for (i = 0; i < data.invoiceItems.length; i++) {
+                        for (i = 0; i < data.length; i++) {
                             dr++
                             html += '<tr id="row'+dr+'" class="dynamic-added">'+
-                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.invoiceItems[i].item_id + '" /><span>' + dr + '</span></td>'+
-                                '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="' + data.invoiceItems[i].category + '" /></td>'+
-                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.invoiceItems[i].item_name + '" /></td>'+
-                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="' + data.invoiceItems[i].quantity + '" min="0" /></td>'+
-                                '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="' + data.invoiceItems[i].unit + '" /></td>'+
-                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.invoiceItems[i].unit_price + '" min="0.00" /></td>'+
-                                '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.invoiceItems[i].total_price + '"  min="0.00" /></td>'+
+                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data[i].product_id + '" /><span>' + dr + '</span></td>'+
+                                '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>'+
+                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + (data[i].productdetail ? data[i].productdetail.p_name : 'Product') + '" /></td>'+
+                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="' + data[i].qty + '" min="0" /></td>'+
+                                '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
+                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data[i].price + '" min="0.00" /></td>'+
+                                '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data[i].total + '"  min="0.00" /></td>'+
                                 '<td><button type="button" name="remove" id="'+dr+'" class="btn btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                                 '</tr>';
 
@@ -456,7 +456,7 @@
                 var formData=$('#InvoiceUpdateForm').serialize()
                 $.ajax({
                     type: "get",
-                    url: '{{ url('admin/update-invoice') }}',
+                    url: '{{ url('admin/update-order') }}',
                     data: formData,
                     contentType: false,
                     processData: false,
@@ -482,7 +482,7 @@
                     complete: function(data) {
                         $(".btn-update").html("Update");
                         $(".btn-update").prop("disabled", false);
-                        {{--window.location.href = "{{ url('admin/invoices')}}";--}}
+                        window.location.href = "{{ url('admin/order')}}";
                     },
 
                     error: function() {;
