@@ -306,6 +306,36 @@
 
             });
 
+            $('#countryTable').on('click', '.btn-delete', function() {
+                var id = $(this).attr('data');
+                $.ajax({
+                    url: '{{ url('admin/delete-estimate') }}',
+                    type: 'get',
+                    async: false,
+                    dataType: 'json',
+                    data: { id: id},
+                    success: function(data) {
+                        if (data.success) {
+                            getCountries();
+                            $('.close').click();
+                            toastr.success(data.success);
+                        } else if (data.error) {
+                            toastr.error(data.error);
+                        } else {
+                            toastr.error('Record not deleted');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (typeof window.showAjaxError === 'function') {
+                            window.showAjaxError(xhr, 'something went wrong');
+                        } else {
+                            toastr.error('something went wrong');
+                        }
+                    }
+                });
+
+            });
+
             $('#countryTable').on('click', '.btn-edit', function() {
                 var estimateId = $(this).attr('data-estimate-id') || '';
                 var customerId = $(this).attr('data-customer-id') || '';
