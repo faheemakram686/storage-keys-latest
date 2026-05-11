@@ -300,10 +300,13 @@
                         <div class="invoice-contact">
                             <span class="overline-title">Estimate To</span>
                             <div class="invoice-contact-info">
-                                <h4 class="title">{{$data['estimate'][0]->f_name}} {{$data['estimate'][0]->l_name}}</h4>
+                                @if($data['estimate'][0]->customer->customer_type == 'company')
+                                    <h4 class="title">{{$data['estimate'][0]->customer->company_name}}</h4>
+                                @endif
+                                <h4 class="title">{{$data['estimate'][0]->customer->customer_name}}</h4>
                                 <ul class="list-plain">
-                                    <li><em class="icon ni ni-emails-fill"></em><span>{{$data['estimate'][0]->email}}</span></li>
-                                    <li><em class="icon ni ni-call-fill"></em><span>{{$data['estimate'][0]->phone}}</span></li>
+                                    <li><em class="icon ni ni-emails-fill"></em><span>{{$data['estimate'][0]->customer->email}}</span></li>
+                                    <li><em class="icon ni ni-call-fill"></em><span>{{$data['estimate'][0]->customer->phone}}</span></li>
                                 </ul>
                             </div>
                         </div>

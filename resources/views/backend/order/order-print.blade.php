@@ -30,11 +30,13 @@
                 <div class="invoice-contact">
                     <span class="overline-title">Order From</span>
                     <div class="invoice-contact-info">
-                        <h4 class="title">{{$data['invoice'][0]->email}}</h4>
-                        <h4 class="title">{{$data['invoice'][0]->first_name}} {{$data['invoice'][0]->last_name}}</h4>
+                        @if($data['invoice'][0]->customer->customer_type == 'company')
+                            <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
+                        @endif
+                        <h4 class="title">{{$data['invoice'][0]->customer->customer_name}}</h4>
                         <ul class="list-plain">
-                            <li><em class="icon ni ni-map-pin-fill fs-18px"></em><span>@isset($data['invoice'][0]->address){{$data['invoice'][0]->address}}@endisset<br>{{$data['invoice'][0]->city}}, {{$data['invoice'][0]->country}}</span></li>
-                            <li><em class="icon ni ni-call-fill fs-14px"></em><span>{{$data['invoice'][0]->phone}}</span></li>
+                            <li><em class="icon ni ni-map-pin-fill fs-18px"></em><span>@isset($data['invoice'][0]->customer->address){{$data['invoice'][0]->customer->address}}@endisset<br>{{$data['invoice'][0]->customer->city}}, {{$data['invoice'][0]->customer->country}}</span></li>
+                            <li><em class="icon ni ni-call-fill fs-14px"></em><span>{{$data['invoice'][0]->customer->phone}}</span></li>
                         </ul>
                     </div>
                 </div>

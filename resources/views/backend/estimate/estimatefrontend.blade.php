@@ -262,9 +262,9 @@
                                 <div class="row">
                                     <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox"  name="terms" value="agree"  id="flexCheckDefault" />
+                                            <input class="form-check-input" type="checkbox"  name="terms" value="agree"  id="flexCheckDefault" required />
                                             <label class="check-container" for="flexCheckDefault">I agree to the standard terms and conditions of storage
-                                                keys<a href="#" class="form-link"> (click here)</a></label>
+                                                keys<a href="#" data-toggle="modal" data-target="#quick_view_modal" class="form-link"> (click here)</a></label>
                                         </div>
                                     </div>
                                 </div>
@@ -302,8 +302,83 @@
 
             }
 
+            $('.btn-qoutation').on('click', function(e) {
+                if ($(this).text().trim() === 'Accept') {
+                    if (!$('input[name="terms"]').is(':checked')) {
+                        e.preventDefault();
+                        if (typeof toastr !== 'undefined') {
+                            toastr.error('Please agree to the terms and conditions before accepting.');
+                        } else {
+                            alert('Please agree to the terms and conditions before accepting.');
+                        }
+                    }
+                }
+            });
+
 
         });
     </script>
 
+    <!-- PREMIUM TERMS MODAL -->
+    <div class="modal fade" id="quick_view_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content" style="border: none; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; font-family: 'Inter', sans-serif;">
+                <div class="modal-header" style="background: linear-gradient(135deg, #FF8820 0%, #FF6B00 100%); border: none; padding: 25px 30px; position: relative;">
+                    <h4 class="modal-title" style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.4rem; letter-spacing: -0.02em;">Terms & Conditions</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.3s ease; cursor: pointer;">
+                        <span aria-hidden="true" style="font-size: 24px; line-height: 1;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 40px; background: #ffffff;">
+                    <div style="max-height: 450px; overflow-y: auto; padding-right: 15px; custom-scrollbar;">
+                        <div style="font-size: 15px; line-height: 1.8; color: #4A5568; text-align: justify;">
+                            @isset($data['terms_conditions'][9])
+                                <div class="terms-content">
+                                    {!! $data['terms_conditions'][9]->value !!}
+                                </div>
+                            @else
+                                <div style="text-align: center; padding: 40px; color: #A0AEC0;">
+                                    <em class="icon ni ni-info-fill" style="font-size: 48px; display: block; margin-bottom: 15px;"></em>
+                                    <p>Terms and conditions content is currently unavailable.</p>
+                                </div>
+                            @endisset
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background: #F7FAFC; border-top: 1px solid #EDF2F7; padding: 20px 40px; display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn" data-dismiss="modal" style="background: #2D3748; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none; transition: background 0.3s ease;">Close Document</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Custom Scrollbar for Premium Feel */
+        [custom-scrollbar]::-webkit-scrollbar {
+            width: 6px;
+        }
+        [custom-scrollbar]::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        [custom-scrollbar]::-webkit-scrollbar-thumb {
+            background: #CBD5E0;
+            border-radius: 10px;
+        }
+        [custom-scrollbar]::-webkit-scrollbar-thumb:hover {
+            background: #A0AEC0;
+        }
+        .modal-content {
+            animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .terms-content p { margin-bottom: 15px; }
+        .terms-content ul, .terms-content ol { margin-bottom: 15px; padding-left: 20px; }
+        .terms-content li { margin-bottom: 8px; }
+        .terms-content h1, .terms-content h2, .terms-content h3 { margin-top: 20px; margin-bottom: 10px; color: #2D3748; }
+    </style>
+    <!-- MODAL AREA END -->
 @endsection
