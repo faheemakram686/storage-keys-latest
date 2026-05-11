@@ -255,7 +255,7 @@
                 if (temp_data === editor_data) {
                     $.ajax({
                         url: '{{ url('admin/update-contract-id') }}',
-                        type: 'get',
+                        type: 'post',
                         dataType: 'json',
                         data: formData,
                         success: function(data) {
@@ -302,7 +302,7 @@
             function insertNew(title, body) {
                 $.ajax({
                     url: '{{ url('admin/save-contract-template') }}',
-                    type: 'get',
+                    type: 'post',
                     dataType: 'json',
                     data: { temp_title: title, temp_body: body, status: 1 },
                     success: function(data) {
@@ -323,7 +323,7 @@
             function update(id, title, body) {
                 $.ajax({
                     url: '{{ url('admin/update-contract-template') }}',
-                    type: 'get',
+                    type: 'post',
                     dataType: 'json',
                     data: { id: id, temp_title: title, temp_body: body, status: 1 },
                     success: function(data) {

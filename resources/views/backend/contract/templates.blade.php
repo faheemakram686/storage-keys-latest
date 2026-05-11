@@ -192,7 +192,7 @@
                 e.preventDefault();
                 var formData=$('#CountryForm').serialize()
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: '{{ url('admin/save-contract-template') }}',
                     data: formData,
                     contentType: false,
