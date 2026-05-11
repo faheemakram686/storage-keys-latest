@@ -23,9 +23,63 @@ use Auth;
 class EstimateClass implements EstimateInterface {
 
     private $contact ;
+
+    /**
+     * Normalize incoming request values to an array.
+     *
+     * Some request flows may send a single string (e.g. "1,2,3") instead of
+     * `field[]`, or may omit the field entirely (null). This helper prevents
+     * TypeErrors like:
+     *   implode(): Argument #1 ($array) must be of type array, string given
+     */
+    private function toArray($value): array
+    {
+        if ($value === null) {
+            return [];
+        }
+
+        if (is_array($value)) {
+            return array_values($value);
+        }
+
+        if (is_string($value)) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                return [];
+            }
+
+            // JSON-encoded arrays (rare, but supported).
+            if (strlen($trimmed) > 0 && $trimmed[0] === '[') {
+                $decoded = json_decode($trimmed, true);
+                if (is_array($decoded)) {
+                    return array_values($decoded);
+                }
+            }
+
+            // Comma-separated list like "1,2,3".
+            if (strpos($trimmed, ',') !== false) {
+                return array_values(array_filter(
+                    array_map('trim', explode(',', $trimmed)),
+                    function ($v) {
+                        return $v !== '';
+                    }
+                ));
+            }
+
+            // Fallback: treat as a single item.
+            return [$trimmed];
+        }
+
+        return [$value];
+    }
     public function saveEstimate($request)
     {
         $estimate=new Estimate();
+
+        $addonIds = $this->toArray($request->addon);
+        $addonPrices = $this->toArray($request->addonprice);
+        $requireDocIds = $this->toArray($request->require_document);
+
         if($request->ssu_id){
             $estimate->su_id=$request->ssu_id;
         }else{
@@ -47,8 +101,8 @@ class EstimateClass implements EstimateInterface {
         $estimate->user_id =Auth::id();
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= $request->unit_price;
-        $estimate->addon= implode(',', $request->addon);
-        $estimate->require_documents = implode(',', $request->require_document);
+        $estimate->addon = implode(',', $addonIds);
+        $estimate->require_documents = implode(',', $requireDocIds);
         $estimate->email_template =  $request->email_template;
         $estimate->insurence =  $request->insurance;
         if($request->insurance == "cover" ){
@@ -58,14 +112,24 @@ class EstimateClass implements EstimateInterface {
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){
-            for ($i = 0; $i < count($request->addon); $i++) {
+            $addonpriceestimate = [];
+            for ($i = 0; $i < count($addonIds); $i++) {
+                $addonId = $addonIds[$i] ?? null;
+                if ($addonId === null || $addonId === '') {
+                    continue;
+                }
+
                 $addonpriceestimate[] = [
                     'estimate_id' => $estimate->id,
-                    'addon_id' => $request->addon[$i],
-                    'price' => $request->addonprice[$i],
+                    'addon_id' => $addonId,
+                    'price' => (string)($addonPrices[$i] ?? ''),
                 ];
             }
-            AddonPriceEstimate::insert($addonpriceestimate);
+
+            if (!empty($addonpriceestimate)) {
+                AddonPriceEstimate::insert($addonpriceestimate);
+            }
+
             $lead = Lead::find($request->lead_id);
             $lead->changeStatus(4);
 
@@ -94,6 +158,11 @@ class EstimateClass implements EstimateInterface {
         $data['contact'] = $this->contact->getCustomerPrimaryContect($request->customer_id);
 
         $estimate=new Estimate();
+
+        $addonIds = $this->toArray($request->addon);
+        $addonPrices = $this->toArray($request->addonprice);
+        $requireDocIds = $this->toArray($request->require_document);
+
         $estimate->su_id=$request->su_id;
         $estimate->customer_id=$request->customer_id;
         $estimate->user_id =Auth::id();
@@ -106,8 +175,8 @@ class EstimateClass implements EstimateInterface {
         $estimate->phone=$data['contact']->phone;
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= $request->unit_price;
-        $estimate->addon= implode(',', $request->addon);
-        $estimate->require_documents = implode(',', $request->require_document);
+        $estimate->addon = implode(',', $addonIds);
+        $estimate->require_documents = implode(',', $requireDocIds);
         $estimate->email_template =  $request->email_template;
         $estimate->insurence =  $request->insurance;
         if($request->insurance == "cover" ){
@@ -117,14 +186,24 @@ class EstimateClass implements EstimateInterface {
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
         if($estimate->save()){
-            for ($i = 0; $i < count($request->addon); $i++) {
+            $addonpriceestimate = [];
+            for ($i = 0; $i < count($addonIds); $i++) {
+                $addonId = $addonIds[$i] ?? null;
+                if ($addonId === null || $addonId === '') {
+                    continue;
+                }
+
                 $addonpriceestimate[] = [
                     'estimate_id' => $estimate->id,
-                    'addon_id' => $request->addon[$i],
-                    'price' => $request->addonprice[$i],
+                    'addon_id' => $addonId,
+                    'price' => (string)($addonPrices[$i] ?? ''),
                 ];
             }
-            AddonPriceEstimate::insert($addonpriceestimate);
+
+            if (!empty($addonpriceestimate)) {
+                AddonPriceEstimate::insert($addonpriceestimate);
+            }
+
             $appsettings = AppSettings::get();
             $user = User::find($appsettings[0]->value);
             $template = new EmailTemplateClass();
