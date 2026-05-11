@@ -18,15 +18,27 @@
                         <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
                             <form method="post" action="{{ url('admin/save-lead') }}" id="LeadForm">
                                 @csrf
-                                @isset($id)
-                                    <input type="hidden" name="customer_id" value="{{$id}}">
-                                @endisset
                                 <div class="row reservations-sections">
                                     <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
                                         Lead Information</div>
                                     <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
                                         <div class="row">
                                             <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
+                                                <div class="row mt-3">
+                                                    <div class="col-12">
+                                                        <label class="lbl">Existing Customer (Optional)</label>
+                                                        <select class="selectpicker form-control form-select" name="customer_id" id="customer_id" data-live-search="true">
+                                                            <option value="">New Customer</option>
+                                                            @isset($data['customer'])
+                                                                @foreach ($data['customer'] as $customer)
+                                                                    <option value="{{ $customer->id }}" {{ (isset($id) && (int)$id === (int)$customer->id) ? 'selected' : '' }}>
+                                                                        {{ $customer->customer_name ?? $customer->company_name ?? ('Customer #' . $customer->id) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endisset
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-6">
                                                         <div class="form-check">
@@ -53,7 +65,7 @@
                                                     </div>
                                                     <div class="col-6" id="companyfeild">
                                                         <label class="">Company Name</label>
-                                                        <input type="text" class="form-control" name="company_name" style="height:35px;" >
+                                                        <input type="text" class="form-control" name="company_name" id="company_name" style="height:35px;" >
                                                     </div>
 
                                                 </div>
@@ -61,11 +73,11 @@
                                                 <div class="row mt-3">
                                                     <div class="col-6">
                                                         <label class="">First Name</label>
-                                                        <input type="text" class="form-control" name="f_name" style="height:35px;" required>
+                                                        <input type="text" class="form-control" name="f_name" id="f_name" style="height:35px;" required>
                                                     </div>
                                                     <div class="col-6">
                                                         <label class="">Last Name</label>
-                                                        <input type="text" class="form-control" name="l_name" style="height:35px;" required>
+                                                        <input type="text" class="form-control" name="l_name" id="l_name" style="height:35px;" required>
                                                     </div>
                                                 </div>
 
@@ -128,22 +140,22 @@
                                                 <div class="row mt-3">
                                                     <div class="col-6">
                                                         <label class="">Email</label>
-                                                        <input type="email" class="form-control" name="email" style="height:35px;" required>
+                                                        <input type="email" class="form-control" name="email" id="email" style="height:35px;" required>
                                                     </div>
                                                     <div class="col-6">
                                                         <label class="">Phone</label>
-                                                        <input type="text" class="form-control" name="phone" style="height:35px;" required>
+                                                        <input type="text" class="form-control" name="phone" id="phone" style="height:35px;" required>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mt-3">
                                                     <div class="col-6">
                                                         <label class="">Mobile 1</label>
-                                                        <input type="text" class="form-control" name="mobile1" style="height:35px;" required>
+                                                        <input type="text" class="form-control" name="mobile1" id="mobile1" style="height:35px;" required>
                                                     </div>
                                                     <div class="col-6">
                                                         <label class="">Mobile 2</label>
-                                                        <input type="text" class="form-control" name="mobile2" style="height:35px;" >
+                                                        <input type="text" class="form-control" name="mobile2" id="mobile2" style="height:35px;" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -325,6 +337,58 @@
 
     <script>
         $(document).ready(function() {
+            @php
+                $customerMap = collect($data['customer'] ?? [])->mapWithKeys(function ($c) {
+                    $pc = $c->primaryContact ?? null;
+                    return [
+                        $c->id => [
+                            'id' => $c->id,
+                            'customer_type' => $c->customer_type ?? '',
+                            'company_name' => $c->company_name ?? '',
+                            'customer_name' => $c->customer_name ?? '',
+                            'email' => $pc->email ?? ($c->email ?? ''),
+                            'phone' => $pc->phone ?? ($c->phone ?? ''),
+                            'first_name' => $pc->first_name ?? '',
+                            'last_name' => $pc->last_name ?? '',
+                        ],
+                    ];
+                })->toArray();
+            @endphp
+            var customerMap = @json($customerMap);
+
+            function clearCustomerFields() {
+                $('#company_name').val('');
+                $('#f_name').val('');
+                $('#l_name').val('');
+                $('#email').val('');
+                $('#phone').val('');
+                $('#mobile1').val('');
+                $('#mobile2').val('');
+            }
+
+            function applyCustomerData(customerId) {
+                if (!customerId || !customerMap[customerId]) {
+                    clearCustomerFields();
+                    return;
+                }
+
+                var c = customerMap[customerId];
+                if (c.customer_type === 'company') {
+                    $('#com').prop('checked', true);
+                    $('#companyfeild').show();
+                } else if (c.customer_type === 'individual') {
+                    $('#ind').prop('checked', true);
+                    $('#companyfeild').hide();
+                }
+
+                $('#company_name').val(c.company_name || '');
+                $('#f_name').val(c.first_name || '');
+                $('#l_name').val(c.last_name || '');
+                $('#email').val(c.email || '');
+                $('#phone').val(c.phone || '');
+                $('#mobile1').val(c.phone || '');
+                $('#mobile2').val('');
+            }
 
             $("#companyfeild").hide();
 
@@ -335,6 +399,15 @@
                     $("#companyfeild").hide();
                 }
             });
+
+            $('#customer_id').on('change', function() {
+                var customerId = $(this).val();
+                applyCustomerData(customerId);
+            });
+
+            if ($('#customer_id').val()) {
+                applyCustomerData($('#customer_id').val());
+            }
 
             $("#country_id").on('change', function() {
                 var country_id = $(this).val();

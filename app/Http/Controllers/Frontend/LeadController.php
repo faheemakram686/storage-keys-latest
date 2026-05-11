@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Repo\AddonClass;
 use App\Repo\CountryClass;
+use App\Repo\CustomerClass;
 use App\Repo\Interfaces\LeadInterface;
 use App\Repo\LeadSourceClass;
 use App\Repo\LeadStatusClass;
@@ -26,6 +27,7 @@ class LeadController extends Controller
     private $term_length;
 
     private $su;
+    private $customer;
     public function __construct(LeadInterface $lead )
     {
         $this->lead = $lead;
@@ -33,6 +35,7 @@ class LeadController extends Controller
         $this->country = new CountryClass();
         $this->user = new UserClass();
         $this->su = new StorageUnitClass();
+        $this->customer = new CustomerClass();
         $this->lead_status = new LeadStatusClass();
         $this->lead_source = new LeadSourceClass();
         $this->term_length = new TermLengthClass();
@@ -49,6 +52,7 @@ class LeadController extends Controller
     {
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
+        $data['customer'] = $this->customer->getAllCustomer();
         $data['user'] = $this->user->getUser();
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
@@ -59,6 +63,7 @@ class LeadController extends Controller
     {
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
+        $data['customer'] = $this->customer->getAllCustomer();
         $data['user'] = $this->user->getUser();
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
