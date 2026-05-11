@@ -123,7 +123,7 @@
     <!-- ABOUT US AREA END -->
 
     <!-- FEATURE START -->
-    <div class="ltn__feature-area section-bg-1 bg-image pt-120">
+    <div class="ltn__feature-area section-bg-1 bg-image pt-50">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -196,7 +196,7 @@
     <!-- FEATURE END -->
 
     <!-- PROGRESS BAR AREA START -->
-    <div class="ltn__progress-bar-area section-bg-1 pt-120 pb-10">
+    <div class="ltn__progress-bar-area section-bg-1 pt-50 pb-10">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -297,7 +297,7 @@
     <!-- PROGRESS BAR AREA END -->
 
     <!-- IMAGE SLIDER AREA START (img-slider-3) -->
-    <div class="ltn__img-slider-area pb-100">
+    <div class="ltn__img-slider-area pb-20">
         <div class="container-fluid">
             <div class="row ltn__image-slider-3-active slick-arrow-1 slick-arrow-1-inner">
                 <div class="col-lg-12">
@@ -362,7 +362,7 @@
     <!-- IMAGE SLIDER AREA END -->
 
     <!-- TESTIMONIAL AREA START (testimonial-8) -->
-    <div class="ltn__testimonial-area section-bg-1--- pt-115--- pb-75">
+    <div class="ltn__testimonial-area section-bg-1--- pt-50--- pb-50">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">

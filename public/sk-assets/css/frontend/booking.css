@@ -135,7 +135,7 @@ input[type="checkbox"]
 .apartment-img>img {
     border-radius: 10px;
     height: 160px;
-    width: 180px;
+    width: 400px;
     min-height: 160px;
     min-width: 180px;
     border: 1px solid black;
@@ -193,13 +193,14 @@ input[type="checkbox"]
 .booking-page {
     background: url('http://127.0.0.1:8000/sk-assets/assets/images/frontend/Logo Background.png');
     height: 100%;
-    padding-top: 50px;
+    padding-top: 50px !important;
+    padding-left: 30px !important;
     min-height: 100%;
     width: 100%;
 }
 
 .reservations-sections {
-    margin-bottom: 20px;
+    padding: 10px;
 }
 
 .term-section-header, .insurance-section-header, .terms-conditions-section-header, .padlock-section-header, .summary-section-header {
@@ -221,6 +222,7 @@ input[type="checkbox"]
     padding-bottom: 20px;
     margin-top: -20px;
     font-family: sans-serif;
+    padding: 30px;
 }
 .order-section-body{
     background: var(--border-color-8);
@@ -280,8 +282,15 @@ input[type="checkbox"]
 }
 
 .insurance-sections, .terms-conditions-sections, .submission-sections, .continue-to-pay-sections {
-    margin-top: 40px;
-    margin-bottom: 20px;
+    padding: 10px;
+}
+@media(max-width: 768px){
+    .insurance-sections, .terms-conditions-sections, .submission-sections, .continue-to-pay-sections {
+    justify-content: center;
+    }
+    input.form-control {
+        margin: 0px !important;
+    }
 }
 
 input[name="goods_value"], input[name="padlock_value"], input[name="promocode_value"] {
@@ -340,4 +349,100 @@ input[type="text"], input[type="email"], input[type="password"], input[type="sub
     color: white;
     transform: translate(-50%, -50%) scale(2);
     z-index: auto;
+}
+
+/*new*/
+
+/* Tablet to Mobile Responsive */
+@media (max-width: 991px) {
+
+  .apartment {
+    display: flex;
+    flex-direction: column;
+    border-width: 1px;
+  }
+
+
+
+  .apartment-img {
+    padding: 5px 10px;
+    height: 180px;
+    max-height: 180px;
+    max-width: 100%;
+    width: 326px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+  .apartment-details {
+    padding: 10px 0;
+    text-align: left;
+  }
+
+  .city-name-option {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .area-name {
+    display: block;
+    font-size: 14px;
+  }
+
+  .apartment-size {
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .apartment-description {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .apartment-reserve {
+    margin-top: 10px;
+  }
+
+  .apartment-features {
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .feature-name {
+    font-size: 14px;
+  }
+
+  .image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .hover-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Extra small mobile fine tuning */
+@media (max-width: 576px) {
+  .city-name-option {
+    font-size: 15px;
+  }
+
+  .apartment-description {
+    font-size: 12px;
+  }
+
+  .btn-reserve {
+    width: 100%;
+  }
+}
+
+.padlock-sections {
+    padding: 10px;
+}
+.btn:last-child{
+    padding: 12px 70px !important;
+    border-radius: 20px;
 }

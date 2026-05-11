@@ -14,7 +14,12 @@
             <div class="nk-content-body">
                 <div class="nk-block">
                     @isset($data)
-{{--                    {{dd($data)}}--}}
+                        @php
+                            $lead = $data['lead'][0] ?? null;
+                            $su   = $data['su'][0]   ?? null;
+                        @endphp
+
+                        @if($lead)
                     <div class="card">
                         <div class="card-aside-wrap">
                             <div class="card-inner card-inner-lg">
@@ -28,7 +33,7 @@
                                         </div>
                                         <div class="d-flex align-center">
                                             <div class="nk-tab-actions me-n1">
-                                                <a class="btn btn-icon btn-trigger" title="Edit Lead"  href={{url('admin/edit-lead/'.$data['lead'][0]->id)}}><em class="icon ni ni-edit"></em></a>
+                                                <a class="btn btn-icon btn-trigger" title="Edit Lead" href="{{ url('admin/edit-lead/'.$lead->id) }}"><em class="icon ni ni-edit"></em></a>
                                             </div>
                                             <div class="nk-block-head-content align-self-start d-lg-none">
                                                 <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -41,52 +46,78 @@
                                         <div class="data-head">
                                             <h6 class="overline-title">Lead Information</h6>
                                         </div>
-                                        @if($data['lead'][0]->company_name != null)
+                                        @if(!empty($lead->company_name))
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Company Name</span>
-                                                <span class="data-value">{{$data['lead'][0]->company_name}}</span>
+                                                <span class="data-value">{{ $lead->company_name }}</span>
                                             </div>
                                         </div><!-- data-item -->
                                         @endif
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Full Name</span>
-                                                <span class="data-value">{{$data['lead'][0]->f_name}} {{$data['lead'][0]->l_name}}</span>
+                                                <span class="data-value">{{ trim(($lead->f_name ?? '').' '.($lead->l_name ?? '')) ?: 'N/A' }}</span>
                                             </div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Email</span>
-                                                <span class="data-value">{{$data['lead'][0]->email}}</span>
+                                                <span class="data-value">{{ $lead->email ?? 'N/A' }}</span>
                                             </div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Phone Number</span>
-                                                <span class="data-value text-soft">{{$data['lead'][0]->phone}}</span>
+                                                <span class="data-value text-soft">{{ $lead->phone ?? 'N/A' }}</span>
                                             </div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Requested Date</span>
-                                                <span class="data-value">{{$data['lead'][0]->r_date}}</span>
+                                                <span class="data-value">{{ $lead->r_date ?? 'N/A' }}</span>
                                             </div>
                                         </div><!-- data-item -->
                                         @php
-                                         $totalprice = $data['su'][0]->price * $data['lead'][0]->termLength->term_period;
+                                            $term         = $lead->termLength ?? null;
+                                            $unitPrice    = $su->price ?? 0;
+                                            $termPeriod   = $term->term_period ?? 0;
+                                            $discountPct  = $term->discount_percentage ?? 0;
+                                            $totalPrice   = $unitPrice * $termPeriod;
+                                            $finalPrice   = $totalPrice - ($totalPrice * $discountPct / 100);
                                         @endphp
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Lead Cost</span>
-                                                <span class="data-value">{{$data['lead'][0]->termLength->title}} - {{$totalprice -  ( $totalprice *  $data['lead'][0]->termLength->discount_percentage / 100 )}}/mo AED</span>
-{{--                                                <span class="data-value">{{$data['lead'][0]->termLength->title}} - {{($data['lead'][0]->unit_price * 3) - ($data['lead'][0]->unit_price * 4/100)}}/mo AED</span>--}}
+                                                <span class="data-value">
+                                                    @if($term)
+                                                        {{ $term->title ?? 'N/A' }} - {{ number_format($finalPrice, 2) }}/mo AED
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div><!-- data-item -->
                                         <div class="data-item" data-tab-target="#address">
                                             <div class="data-col">
                                                 <span class="data-label">Storage Unit:</span>
-                                                <span class="data-value">{{$data['su'][0]->storage_unit_name}} , {{$data['su'][0]->warehouse->name}}<br>{{$data['su'][0]->warehouse->loc->loc_name}}, {{$data['su'][0]->warehouse->loc->city->city_name}}, {{$data['su'][0]->warehouse->loc->city->country->name}}</span>
+                                                <span class="data-value">
+                                                    @if($su)
+                                                        {{ $su->storage_unit_name ?? 'N/A' }}
+                                                        @if(!empty($su->warehouse))
+                                                            , {{ $su->warehouse->name ?? '' }}<br>
+                                                            @if(!empty($su->warehouse->loc))
+                                                                {{ $su->warehouse->loc->loc_name ?? '' }}@if(!empty($su->warehouse->loc->city)),
+                                                                    {{ $su->warehouse->loc->city->city_name ?? '' }}@if(!empty($su->warehouse->loc->city->country)),
+                                                                        {{ $su->warehouse->loc->city->country->name ?? '' }}
+                                                                    @endif
+                                                                @endif
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div><!-- data-item -->
                                     </div><!-- data-list -->
@@ -97,35 +128,45 @@
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Status</span>
-                                                <span class="data-value"><p class="badge rounded-pill text-white bg-success">{{$data['lead'][0]->leadStatus->title}}</p></span>
+                                                <span class="data-value">
+                                                    <p class="badge rounded-pill text-white bg-success">
+                                                        {{ optional($lead->leadStatus)->title ?? 'N/A' }}
+                                                    </p>
+                                                </span>
                                             </div>
                                             <div class="data-col data-col-end"><a data-toggle="modal" href="#changeinfo" class="link link-primary">Change Status</a></div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Lead Source</span>
-                                                <span class="data-value">{{$data['lead'][0]->leadsource->title}}</span>
+                                                <span class="data-value">{{ optional($lead->leadsource)->title ?? 'N/A' }}</span>
                                             </div>
                                             <div class="data-col data-col-end"><a data-toggle="modal" href="#changesource" class="link link-primary">Change</a></div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Created At</span>
-                                                <span class="data-value">{{$data['lead'][0]->created_at}}</span>
+                                                <span class="data-value">{{ $lead->created_at ?? 'N/A' }}</span>
                                             </div>
                                             <div class="data-col data-col-end"><a data-bs-toggle="modal" href="#modalDate" class="link link-primary"></a></div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Responsible User</span>
-                                                <span class="data-value">{{$data['lead'][0]->userresponsible->first_name}} {{$data['lead'][0]->userresponsible->last_name}}</span>
+                                                <span class="data-value">
+                                                    @if(!empty($lead->userresponsible))
+                                                        {{ trim(($lead->userresponsible->first_name ?? '').' '.($lead->userresponsible->last_name ?? '')) ?: 'N/A' }}
+                                                    @else
+                                                        Not Assigned
+                                                    @endif
+                                                </span>
                                             </div>
                                             <div class="data-col data-col-end"><a data-toggle="modal" href="#changeassignee" class="link link-primary">Change</a></div>
                                         </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Lead Rating</span>
-                                                <span class="data-value">{{$data['lead'][0]->rating}}</span>
+                                                <span class="data-value">{{ $lead->rating ?? 'N/A' }}</span>
                                             </div>
                                             <div class="data-col data-col-end"><a data-bs-toggle="modal" href="#modalDate" class="link link-primary"></a></div>
                                         </div><!-- data-item -->
@@ -137,11 +178,16 @@
                         </div>
                         <!-- .card-aside-wrap -->
                     </div>
+                        @else
+                            <div class="alert alert-warning">No lead information found.</div>
+                        @endif
                     @endisset
                     <!-- .card -->
                 </div>
                 <!-- .nk-block -->
             </div>
+
+            @isset($lead)
             <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" id="changeinfo" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -155,29 +201,28 @@
                             <form method="post" action="{{ url('admin/change-lead-status') }}" id="changeStatus">
                                 @csrf
                                 <div class="row">
-                                    <input class="form-control" type="hidden" name="lead_id" value="{{$data['lead'][0]->id}}" required>
+                                    <input class="form-control" type="hidden" name="lead_id" value="{{ $lead->id }}" required>
                                     <div class="col-md-12">
-                                        <label class="lbl" >Lead Status</label>
-                                        <select class="selectpicker form-control  form-select" name="lead_status" id="lead_status">
+                                        <label class="lbl">Lead Status</label>
+                                        <select class="selectpicker form-control form-select" name="lead_status" id="lead_status">
                                             <option value="">Select Lead Status</option>
-                                            @isset($data)
+                                            @isset($data['status'])
                                                 @foreach ($data['status'] as $sl)
-                                                    <option value="{{ $sl->id }}" {{$sl->id == $data['lead'][0]->leadStatus->id  ? 'selected' : ' '}} >{{ $sl->title }}</option>
+                                                    <option value="{{ $sl->id }}" {{ optional($lead->leadStatus)->id == $sl->id ? 'selected' : '' }}>{{ $sl->title }}</option>
                                                 @endforeach
                                             @endisset
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="float-right">
                                     <button class="btn btn-primary mt-2 btn-submit" type="submit">Save Changes</button>
                                 </div>
                             </form>
-
                         </div>
-                    </div><!-- .modal-content -->
-                </div><!-- .modla-dialog -->
+                    </div>
+                </div>
             </div>
+
             <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" id="changesource" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -191,29 +236,28 @@
                             <form method="post" action="{{ url('admin/change-lead-source') }}" id="changeSource">
                                 @csrf
                                 <div class="row">
-                                    <input class="form-control" type="hidden" name="lead_id" value="{{$data['lead'][0]->id}}" required>
+                                    <input class="form-control" type="hidden" name="lead_id" value="{{ $lead->id }}" required>
                                     <div class="col-md-12">
-                                        <label class="lbl" >Lead Status</label>
-                                        <select class="selectpicker form-control  form-select" name="lead_source" id="lead_source">
+                                        <label class="lbl">Lead Source</label>
+                                        <select class="selectpicker form-control form-select" name="lead_source" id="lead_source">
                                             <option value="">Select Lead Source</option>
-                                            @isset($data)
+                                            @isset($data['source'])
                                                 @foreach ($data['source'] as $sl)
-                                                    <option value="{{ $sl->id }}" {{$sl->id == $data['lead'][0]->leadSource->id  ? 'selected' : ' '}} >{{ $sl->title }}</option>
+                                                    <option value="{{ $sl->id }}" {{ optional($lead->leadsource)->id == $sl->id ? 'selected' : '' }}>{{ $sl->title }}</option>
                                                 @endforeach
                                             @endisset
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="float-right">
                                     <button class="btn btn-primary mt-2 btn-submit" type="submit">Save Changes</button>
                                 </div>
                             </form>
-
                         </div>
-                    </div><!-- .modal-content -->
-                </div><!-- .modla-dialog -->
+                    </div>
+                </div>
             </div>
+
             <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" id="changeassignee" aria-hidden="true">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -227,37 +271,35 @@
                             <form method="post" action="{{ url('admin/change-lead-assignee') }}" id="changeAssigneeForm">
                                 @csrf
                                 <div class="row">
-                                    <input class="form-control" type="hidden" name="lead_id" value="{{$data['lead'][0]->id}}" required>
+                                    <input class="form-control" type="hidden" name="lead_id" value="{{ $lead->id }}" required>
                                     <div class="col-md-12">
-                                        <label class="lbl" >User responsible</label>
-                                        <select class="selectpicker form-control  form-select" name="lead_assignee" id="lead_assignee">
+                                        <label class="lbl">User responsible</label>
+                                        <select class="selectpicker form-control form-select" name="lead_assignee" id="lead_assignee">
                                             <option value="">Choose One</option>
-                                            @isset($data)
+                                            @isset($data['user'])
                                                 @foreach ($data['user'] as $sl)
-                                                    <option value="{{ $sl->id }}" {{$sl->id == $data['lead'][0]->user_res_id  ? 'selected' : ' '}} >{{ $sl->first_name }} {{ $sl->last_name }}</option>
+                                                    <option value="{{ $sl->id }}" {{ ($lead->user_res_id ?? null) == $sl->id ? 'selected' : '' }}>{{ $sl->first_name }} {{ $sl->last_name }}</option>
                                                 @endforeach
                                             @endisset
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="float-right">
                                     <button class="btn btn-primary mt-2 btn-submit" type="submit">Save Changes</button>
                                 </div>
                             </form>
-
                         </div>
-                    </div><!-- .modal-content -->
-                </div><!-- .modla-dialog -->
+                    </div>
+                </div>
             </div>
+            @endisset
         </div>
     </div>
 
     <script>
         $('#changeStatus').on('submit', function(e) {
-
             e.preventDefault();
-            var formData=$('#changeStatus').serialize()
+            var formData = $('#changeStatus').serialize();
             $.ajax({
                 type: "get",
                 url: '{{ url('admin/change-lead-status') }}',
@@ -269,13 +311,10 @@
                     $(".btn-submit").prop("disabled", true);
                 },
                 success: function(data) {
-
                     if (data.success) {
-
                         $('#changeStatus')[0].reset();
                         $('.close').click();
                         toastr.success(data.success);
-
                     }
                     if (data.errors) {
                         toastr.error(data.errors);
@@ -283,27 +322,22 @@
                         $(".btn-submit").prop("disabled", false);
                     }
                 },
-
                 complete: function(data) {
                     $(".btn-submit").html("Save");
                     $(".btn-submit").prop("disabled", false);
                     location.reload();
                 },
-
-                error: function() {;
+                error: function() {
                     toastr.error('any technical error');
                     $('.btn-submit').text('Save');
                     $(".btn-submit").prop("disabled", false);
                 }
             });
-
-
         });
 
         $('#changeSource').on('submit', function(e) {
-
             e.preventDefault();
-            var formData=$('#changeSource').serialize()
+            var formData = $('#changeSource').serialize();
             $.ajax({
                 type: "get",
                 url: '{{ url('admin/change-lead-source') }}',
@@ -315,13 +349,10 @@
                     $(".btn-submit").prop("disabled", true);
                 },
                 success: function(data) {
-
                     if (data.success) {
-
                         $('#changeSource')[0].reset();
                         $('.close').click();
                         toastr.success(data.success);
-
                     }
                     if (data.errors) {
                         toastr.error(data.errors);
@@ -329,27 +360,22 @@
                         $(".btn-submit").prop("disabled", false);
                     }
                 },
-
                 complete: function(data) {
                     $(".btn-submit").html("Save");
                     $(".btn-submit").prop("disabled", false);
                     location.reload();
                 },
-
-                error: function() {;
+                error: function() {
                     toastr.error('any technical error');
                     $('.btn-submit').text('Save');
                     $(".btn-submit").prop("disabled", false);
                 }
             });
-
-
         });
 
         $('#changeAssigneeForm').on('submit', function(e) {
-
             e.preventDefault();
-            var formData=$('#changeAssigneeForm').serialize()
+            var formData = $('#changeAssigneeForm').serialize();
             $.ajax({
                 type: "get",
                 url: '{{ url('admin/change-lead-assignee') }}',
@@ -361,13 +387,10 @@
                     $(".btn-submit").prop("disabled", true);
                 },
                 success: function(data) {
-
                     if (data.success) {
-
                         $('#changeAssigneeForm')[0].reset();
                         $('.close').click();
                         toastr.success(data.success);
-
                     }
                     if (data.errors) {
                         toastr.error(data.errors);
@@ -375,24 +398,17 @@
                         $(".btn-submit").prop("disabled", false);
                     }
                 },
-
                 complete: function(data) {
                     $(".btn-submit").html("Save");
                     $(".btn-submit").prop("disabled", false);
                     location.reload();
                 },
-
-                error: function() {;
+                error: function() {
                     toastr.error('any technical error');
                     $('.btn-submit').text('Save');
                     $(".btn-submit").prop("disabled", false);
                 }
             });
-
-
         });
     </script>
 @endsection
-
-
-
