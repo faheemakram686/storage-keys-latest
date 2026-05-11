@@ -41,6 +41,14 @@ class Customer extends Model
         $this->attributes['status'] =$value;
     }
 
+    public function getFullDisplayNameAttribute()
+    {
+        if ($this->primaryContact) {
+            return ($this->company_name ? $this->company_name : 'Individual') . ' (' . $this->primaryContact->first_name . ' ' . $this->primaryContact->last_name . ')';
+        }
+        return 'Individual - ' . $this->customer_name;
+    }
+
     public function getStatusAttribute($value)
     {
         if($value==1){

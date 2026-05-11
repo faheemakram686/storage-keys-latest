@@ -23,7 +23,7 @@
                                         <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
                                             <option value="">Choose One</option>
                                             @foreach( $data['customers'] as $customer)
-                                                <option value="{{$customer->id}}">{{$customer->customer_name ?? "No Name"}}</option>
+                                                <option value="{{$customer->id}}">{{$customer->full_display_name}}</option>
                                             @endforeach
                                         </select>
                                     </div>

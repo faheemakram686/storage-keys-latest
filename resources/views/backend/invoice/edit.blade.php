@@ -25,7 +25,7 @@
                                     <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                            <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->customer_name}}</option>
+                                            <option value="{{$customer->id}}" {{ (($customer->id == $data['invoice'][0]->customer_id)? 'selected':'') }} >{{$customer->full_display_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
