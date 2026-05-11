@@ -244,6 +244,8 @@ require __DIR__.'/auth.php';
     Route::any('estimate/tasks/{id}', [EstimateController::class,'showTasks'])->name('estimate-tasks');
     Route::any('estimate/reminders/{id}', [EstimateController::class,'showReminders'])->name('estimate-reminders');
     Route::any('estimate/notes/{id}', [EstimateController::class,'showNotes'])->name('estimate-notes');
+    Route::any('edit-estimate/{id}', [EstimateController::class,'editEstimate'])->name('edit-estimate');
+    Route::any('update-estimate', [EstimateController::class,'updateEstimate'])->name('update-estimate');
 
     Route::any('get-estimate-attachments',[AttachmentController::class,'getRelatedAttachment']);
     Route::any('estimatePdf/{id}', [EstimateController::class,'estimateToCustomerPDF'])->name('estimate-tasks');

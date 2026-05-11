@@ -283,12 +283,57 @@ class EstimateClass implements EstimateInterface {
 
     public function editEstimate($id)
     {
-        // TODO: Implement editEstimate() method.
+        $qry = Estimate::with('storageunit.warehouse.loc.city.country','estimateAddon.addon','requireDocument','termLength','customer');
+        $qry = $qry->where( 'id' , $id );
+        $qry = $qry->get();
+        return $qry;
     }
 
-    public function updateUpdate($request)
+    public function updateEstimate($request)
     {
-        // TODO: Implement updateUpdate() method.
+        $estimate = Estimate::find($request->estimate_id);
+        if (!$estimate) {
+            return response()->json(['errors' => 'Estimate not found.'], 404);
+        }
+
+        $addonIds = $this->toArray($request->addon);
+        $addonPrices = $this->toArray($request->addonprice);
+        $requireDocIds = $this->toArray($request->require_document);
+
+        if($request->su_id){
+            $estimate->su_id=$request->su_id;
+        }
+
+        $estimate->customer_id=$request->customer_id;
+        $estimate->r_date=$request->r_date;
+        $estimate->term_length= $request->term_length;
+        $estimate->unit_price= $request->unit_price;
+        $estimate->addon = $this->toCsvOrNull($addonIds);
+        $estimate->require_documents = $this->toCsvOrNull($requireDocIds);
+        $estimate->email_template =  $request->email_template;
+        $estimate->insurence =  $request->insurance;
+        if($request->insurance == "cover" ){
+            $estimate->goods=$request->goodsval;
+        }else{
+            $estimate->goods = null;
+        }
+        $estimate->status=$request->status;
+        $estimate->estimate_date=$request->estimate_date;
+        $estimate->expiry_date=$request->expiry_date;
+        
+        if($estimate->save()){
+            // Update addon prices
+            AddonPriceEstimate::where('estimate_id', $estimate->id)->delete();
+            $addonpriceestimate = $this->buildAddonPriceEstimateRows($estimate->id, $addonIds, $addonPrices);
+
+            if (!empty($addonpriceestimate)) {
+                AddonPriceEstimate::insert($addonpriceestimate);
+            }
+
+            return response()->json(['success' => 'Estimate updated successfully'], 200);
+        }
+
+        return response()->json(['errors' => 'Failed to update estimate.'], 500);
     }
 
     public function getEstimate($id)

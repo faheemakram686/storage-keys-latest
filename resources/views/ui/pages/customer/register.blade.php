@@ -67,12 +67,107 @@
                     <div class="account-login-inner">
                         <form action="{{route('customer.register')}}" method="post" class="ltn__form-box contact-form-box">
                             @csrf
-                            <input type="text" name="company_name" placeholder="Company Name" required>
+                            <style>
+                                .customer-type-selection {
+                                    display: flex;
+                                    gap: 20px;
+                                    margin-bottom: 25px;
+                                    background: #f8f9fa;
+                                    padding: 15px;
+                                    border-radius: 8px;
+                                    border: 1px solid #e9ecef;
+                                }
+                                .type-option {
+                                    flex: 1;
+                                    position: relative;
+                                }
+                                .type-option input[type="radio"] {
+                                    position: absolute;
+                                    opacity: 0;
+                                    width: 0;
+                                    height: 0;
+                                }
+                                .type-option label {
+                                    display: block;
+                                    padding: 12px 15px;
+                                    text-align: center;
+                                    background: #fff;
+                                    border: 2px solid #e9ecef;
+                                    border-radius: 6px;
+                                    cursor: pointer;
+                                    font-weight: 600;
+                                    color: #495057;
+                                    transition: all 0.3s ease;
+                                    margin-bottom: 0;
+                                }
+                                .type-option input[type="radio"]:checked + label {
+                                    border-color: #f7941d; /* Using an orange/yellow tone common in many themes */
+                                    background: #fff9f2;
+                                    color: #f7941d;
+                                }
+                                .type-option label:hover {
+                                    background: #fdfdfd;
+                                    border-color: #ced4da;
+                                }
+                                .type-option input[type="radio"]:checked + label:after {
+                                    content: '\f058'; /* FontAwesome check-circle icon */
+                                    font-family: 'Font Awesome 5 Free';
+                                    font-weight: 900;
+                                    position: absolute;
+                                    top: -10px;
+                                    right: -5px;
+                                    background: #fff;
+                                    border-radius: 50%;
+                                    font-size: 18px;
+                                    line-height: 1;
+                                }
+                            </style>
+
+                            <div class="customer-type-selection">
+                                <div class="type-option">
+                                    <input type="radio" name="customer_type" value="individual" checked id="type_individual">
+                                    <label for="type_individual">Individual</label>
+                                </div>
+                                <div class="type-option">
+                                    <input type="radio" name="customer_type" value="company" id="type_company">
+                                    <label for="type_company">Company</label>
+                                </div>
+                            </div>
+                            
+                            <div id="company_name_div" style="display: none;">
+                                <input type="text" name="company_name" id="company_name" placeholder="Company Name">
+                            </div>
                             <input type="text" name="first_name" placeholder="First Name" required>
                             <input type="text" name="last_name" placeholder="Last Name" required>
                             <input type="text" name="email" placeholder="Email*" required>
                             <input type="password" name="password" placeholder="Password*" required>
                             <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const typeIndividual = document.getElementById('type_individual');
+                                    const typeCompany = document.getElementById('type_company');
+                                    const companyDiv = document.getElementById('company_name_div');
+                                    const companyInput = document.getElementById('company_name');
+
+                                    function toggleCompany() {
+                                        if (typeCompany.checked) {
+                                            companyDiv.style.display = 'block';
+                                            companyInput.setAttribute('required', 'required');
+                                        } else {
+                                            companyDiv.style.display = 'none';
+                                            companyInput.removeAttribute('required');
+                                            companyInput.value = '';
+                                        }
+                                    }
+
+                                    typeIndividual.addEventListener('change', toggleCompany);
+                                    typeCompany.addEventListener('change', toggleCompany);
+                                    
+                                    // Initial check
+                                    toggleCompany();
+                                });
+                            </script>
 
                             <div class="btn-wrapper">
                                 <button class="theme-btn-1 btn reverse-color btn-block" type="submit">CREATE ACCOUNT</button>

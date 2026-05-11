@@ -33,17 +33,20 @@ class CustomerRegisterController extends Controller
         try {
 
             $validated = $request->validate([
+                'customer_type' => 'required|in:individual,company',
                 'first_name'    => 'required',
                 'last_name'     => 'required',
-                'company_name'  => 'required',
+                'company_name'  => 'required_if:customer_type,company',
                 'email'         => 'required|email|unique:contacts,email',
                 'password'      => 'required|confirmed|min:8',
             ]);
 
             DB::transaction(function () use ($validated) {
                 $customer = Customer::create([
-                    'company_name' => $validated['company_name'],
-                    'status'       => 1,
+                    'customer_type' => $validated['customer_type'],
+                    'customer_name' => $validated['first_name'] . ' ' . $validated['last_name'],
+                    'company_name'  => $validated['customer_type'] == 'company' ? $validated['company_name'] : null,
+                    'status'        => 1,
                 ]);
 
 
@@ -54,6 +57,7 @@ class CustomerRegisterController extends Controller
                     'email'       => $validated['email'],
                     'password'    => Hash::make($validated['password']),
                     'status'      => 1,
+                    'contact_type' => 'primary',
                 ]);
             });
 

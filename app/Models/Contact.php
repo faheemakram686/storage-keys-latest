@@ -19,7 +19,7 @@ class Contact extends Authenticatable
     protected $guard = "contact";
 
     protected $fillable = [
-        'customer_id', 'first_name', 'last_name', 'email', 'password', 'status'
+        'customer_id', 'first_name', 'last_name', 'email', 'password', 'status', 'contact_type'
     ];
 
     protected $hidden = ['password',  'remember_token'];

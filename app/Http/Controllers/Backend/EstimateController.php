@@ -200,6 +200,24 @@ class EstimateController extends Controller
         return $this->estimate->addEstimate($request);
     }
 
+    public function editEstimate($id)
+    {
+        $data['customer']=$this->customer->getAllCustomer();
+        $data['loc'] =  $this->country->getAllCountry();
+        $data['term_length'] = $this->term_length->getAllTermLength();
+        $data['addon'] = $this->addon->getAllAddon();
+        $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
+        $data['req_docs'] = $this->require_document->getAllRequireDocument();
+        $data['estimate'] = $this->estimate->editEstimate($id);
+
+        return view("backend.estimate.edit")->with(compact('data'));
+    }
+
+    public function updateEstimate(Request $request)
+    {
+        return $this->estimate->updateEstimate($request);
+    }
+
     public function getEstimates()
     {
         return $this->estimate->getAllEstimate();

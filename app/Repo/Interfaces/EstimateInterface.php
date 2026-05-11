@@ -7,7 +7,7 @@ interface EstimateInterface{
     public function getAllEstimate();
     public function deleteEstimate($id);
     public function editEstimate($id);
-    public function updateUpdate($request);
+    public function updateEstimate($request);
 
 
     public function getEstimate($id);
