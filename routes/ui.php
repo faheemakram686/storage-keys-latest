@@ -83,7 +83,7 @@ Route::get("/test", function(){
     });
 
 
-    Route::get('contact-setpassword/{id}', [ContactController::class, 'setPassword'])
+    Route::get('contact-setpassword/{token}', [ContactController::class, 'setPassword'])
         ->name('contact.password.reset');
     Route::any('contact-savepassword', [ContactController::class, 'savePassword'])
         ->name('password.save');

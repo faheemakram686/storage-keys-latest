@@ -114,53 +114,15 @@ class ContractController extends Controller
     public function contractToCustomer(Request $request)
     {
         $data['contract'] = $this->contract->getContract($request->id);
-        $variables = $data['contract'][0]->customer;
+        $this->applyContractTemplateVariables($data['contract']);
 
-        if( $data['contract'][0]->contractTemplate){
-        $templateContent = $data['contract'][0]->contractTemplate->temp_body;
-        foreach ($variables->toArray() as $key => $value ) {
-                $templateContent = str_replace('{{'.$key.'}}', $value, $templateContent);
-        }
-            $contact = $this->contact->getPrimaryContect($variables->id);
-            foreach ($contact->toArray() as $key => $value ) {
-                $templateContent = str_replace('{{contact.'.$key.'}}', $value, $templateContent);
-            }
-            $estimate = $data['contract'][0];
-            $addonprice =$data['contract'][0]->estimate->estimateAddon->sum('price');
-            $storagetotal = $data['contract'][0]->estimate->unit_price * $data['contract'][0]->estimate->termLength->term_period;
-            $totelCost = $storagetotal - ($storagetotal * $data['contract'][0]->estimate->termLength->discount_percentage/100);
-            $storage = $data['contract'][0]->estimate->storageunit;
-                $templateContent = str_replace('{{unit_no}}', $storage->storage_unit_name, $templateContent);
-                $templateContent = str_replace('{{storage_fee}}',$totelCost , $templateContent);
-                $templateContent = str_replace('{{addon_fee}}',$addonprice , $templateContent);
-        $data['contract'][0]->contractTemplate->temp_body = $templateContent;
-        }
         return view('backend.contract.contract-customer-view')->with(compact('data'));
     }
 
     public function contractPdf(Request $request)
     {
         $data['contract'] = $this->contract->getContract($request->id);
-        $variables = $data['contract'][0]->customer;
-        if( $data['contract'][0]->contractTemplate){
-            $templateContent = $data['contract'][0]->contractTemplate->temp_body;
-            foreach ($variables->toArray() as $key => $value ) {
-                $templateContent = str_replace('{{'.$key.'}}', $value, $templateContent);
-            }
-            $contact = $this->contact->getPrimaryContect($variables->id);
-            foreach ($contact->toArray() as $key => $value ) {
-                $templateContent = str_replace('{{contact.'.$key.'}}', $value, $templateContent);
-            }
-            $estimate = $data['contract'][0];
-            $addonprice =$data['contract'][0]->estimate->estimateAddon->sum('price');
-            $storagetotal = $data['contract'][0]->estimate->unit_price * $data['contract'][0]->estimate->termLength->term_period;
-            $totelCost = $storagetotal - ($storagetotal * $data['contract'][0]->estimate->termLength->discount_percentage/100);
-            $storage = $data['contract'][0]->estimate->storageunit;
-            $templateContent = str_replace('{{unit_no}}', $storage->storage_unit_name, $templateContent);
-            $templateContent = str_replace('{{storage_fee}}',$totelCost , $templateContent);
-            $templateContent = str_replace('{{addon_fee}}',$addonprice , $templateContent);
-            $data['contract'][0]->contractTemplate->temp_body = $templateContent;
-        }
+        $this->applyContractTemplateVariables($data['contract']);
 //        return view('backend.contract.contract-customer-pdf', compact('data'));
         $reportHtml = view('backend.contract.contract-customer-pdf', compact('data'))->render();
         $arabic = new Arabic();
@@ -224,6 +186,59 @@ class ContractController extends Controller
         $data['contract']=$this->contract->getContract($request);
         $data['users']=$this->user->getUser();
         return view('backend.contract.notes')->with(compact('data'));
+    }
+
+    protected function applyContractTemplateVariables($contract): void
+    {
+        if (empty($contract[0]) || !$contract[0]->contractTemplate) {
+            return;
+        }
+
+        $variables = $contract[0]->customer;
+        $templateContent = $contract[0]->contractTemplate->temp_body;
+
+        foreach ($variables->toArray() as $key => $value) {
+            $templateContent = str_replace('{{'.$key.'}}', $this->formatTemplateValue($value), $templateContent);
+        }
+
+        $contact = $this->contact->getPrimaryContect($variables->id);
+        if ($contact) {
+            foreach ($contact->toArray() as $key => $value) {
+                $templateContent = str_replace('{{contact.'.$key.'}}', $this->formatTemplateValue($value), $templateContent);
+            }
+        }
+
+        $addonprice = $contract[0]->estimate->estimateAddon->sum('price');
+        $storagetotal = $contract[0]->estimate->unit_price * $contract[0]->estimate->termLength->term_period;
+        $totelCost = $storagetotal - ($storagetotal * $contract[0]->estimate->termLength->discount_percentage / 100);
+        $storage = $contract[0]->estimate->storageunit;
+
+        $templateContent = str_replace('{{unit_no}}', $this->formatTemplateValue($storage->storage_unit_name ?? ''), $templateContent);
+        $templateContent = str_replace('{{storage_fee}}', $this->formatTemplateValue($totelCost), $templateContent);
+        $templateContent = str_replace('{{addon_fee}}', $this->formatTemplateValue($addonprice), $templateContent);
+
+        $contract[0]->contractTemplate->temp_body = $templateContent;
+    }
+
+    protected function formatTemplateValue($value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format('Y-m-d H:i:s');
+        }
+
+        return '';
     }
 
 }

@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <div class="form-label-group">
                         <label class="form-label" for="password">Password</label>
-                        <a class="link link-primary link-sm" href="{{ route('password.request') }}">Forgot Password?</a>
+                        <a class="link link-primary link-sm" href="{{ route('customer.password.request') }}">Forgot Password?</a>
                     </div>
                     <div class="form-control-wrap">
                         <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">

@@ -234,8 +234,8 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Password <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="password" name="edit_password" placeholder="Password" >
+                                            <label>Password</label>
+                                            <input class="form-control" type="password" name="edit_password" placeholder="Leave blank to keep current password" >
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -266,6 +266,44 @@
                         </div>
                     </div><!-- .modal-content -->
                 </div><!-- .modla-dialog -->
+            </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" id="setPasswordModal" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-capitalize">Set Password</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" id="setPasswordForm">
+                                @csrf
+                                <input type="hidden" name="contact_id" id="set_password_contact_id">
+                                <div class="form-group">
+                                    <label>Contact</label>
+                                    <input class="form-control" type="text" id="set_password_contact_name" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" id="set_password_contact_email" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirm Password <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password" required>
+                                </div>
+                                <div class="float-right">
+                                    <button class="btn btn-primary mt-2 btn-set-password-submit" type="submit">Save Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -359,7 +397,7 @@
                                 '  <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>'+
                                 ' <div class="dropdown-menu dropdown-menu-right">'+
                                 '<ul class="link-list-opt no-bdr">'+
-                                '<li><a href={{url('contact-setpassword')}}/'+data[i].id+'><em class="icon ni ni-edit"></em><span>Set Password</span></a></li>'+
+                                '<li><a href="#" class="btn-set-password" data-id="'+data[i].id+'" data-name="'+data[i].first_name+' '+data[i].last_name+'" data-email="'+data[i].email+'" data-toggle="modal" data-target="#setPasswordModal"><em class="icon ni ni-lock"></em><span>Set Password</span></a></li>'+
                                  '<li><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+
                                 '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                                 '</ul>'+
@@ -452,6 +490,61 @@
                     },
                     error: function() {
                         toastr.error('any technical error');
+                    }
+                });
+            });
+
+            $('#countryTable').on('click', '.btn-set-password', function() {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var email = $(this).data('email');
+
+                $('#set_password_contact_id').val(id);
+                $('#set_password_contact_name').val(name);
+                $('#set_password_contact_email').val(email);
+                $('#setPasswordForm')[0].reset();
+                $('#set_password_contact_id').val(id);
+                $('#set_password_contact_name').val(name);
+                $('#set_password_contact_email').val(email);
+            });
+
+            $('#setPasswordForm').on('submit', function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('admin/contact-set-password') }}',
+                    data: formData,
+                    beforeSend: function() {
+                        $('.btn-set-password-submit').text('Saving...');
+                        $('.btn-set-password-submit').prop('disabled', true);
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            $('#setPasswordForm')[0].reset();
+                            $('#setPasswordModal .close').click();
+                            toastr.success(data.message);
+                        } else {
+                            toastr.error(data.message || 'Unable to set password.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            var messages = [];
+                            $.each(xhr.responseJSON.errors, function(key, value) {
+                                messages.push(value[0]);
+                            });
+                            toastr.error(messages.join('<br>'));
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            toastr.error(xhr.responseJSON.message);
+                        } else {
+                            toastr.error('any technical error');
+                        }
+                    },
+                    complete: function() {
+                        $('.btn-set-password-submit').text('Save Password');
+                        $('.btn-set-password-submit').prop('disabled', false);
                     }
                 });
             });

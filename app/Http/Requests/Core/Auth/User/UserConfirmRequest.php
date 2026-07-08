@@ -18,7 +18,7 @@ class UserConfirmRequest extends BaseRequest
         return [
             'invitation_token' => 'required|min:10',
             'first_name' => 'required|min:2',
-            'password' => ['required', 'confirmed', 'regex:/^(?=[^\d]*\d)(?=[A-Z\d ]*[^A-Z\d ]).{8,}$/i']
+            'password' => ['required', 'confirmed', 'min:8']
         ];
     }
 }

@@ -26,7 +26,7 @@ class UserTag extends Tag
     {
         return array_merge([
             '{name}' => optional($this->user)->full_name,
-            '{reset_password_url}' => URL::signedRoute('reset-password.index', ['token' => $token, 'email' => $this->user->email])
+            '{reset_password_url}' => URL::signedRoute('admin.password.reset', ['token' => $token, 'email' => $this->user->email])
         ], $this->common());
     }
 

@@ -29,7 +29,7 @@
             @endif
             <form method="POST" action="{{ route('password.save') }}">
                 @csrf
-                <input type="hidden" name="id" value="{{$id}}">
+                <input type="hidden" name="token" value="{{ $token }}">
                 <div class="form-group">
                     <div class="form-label-group">
                         <label class="form-label" for="password">Password</label>

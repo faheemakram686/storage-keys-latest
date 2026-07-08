@@ -340,6 +340,7 @@ require __DIR__.'/auth.php';
     Route::any('customer/contacts/{id}', [CustomerController::class,'showContacts'])->name('customer-contacts');
     Route::any('customer/leads/{id}', [CustomerController::class,'showLeads'])->name('customer-leads');
     Route::any('customer/estimates/{id}', [CustomerController::class,'showEstimates'])->name('customer-estimates');
+    Route::any('customer/invoices/{id}', [CustomerController::class,'showInvoices'])->name('customer-invoices');
     Route::any('customer/reminders/{id}', [CustomerController::class,'showReminders'])->name('customer-reminders');
 
 
@@ -349,9 +350,7 @@ require __DIR__.'/auth.php';
     Route::any('delete-contact', [ContactController::class,'deleteContact']);
     Route::any('edit-contact', [ContactController::class,'editContact']);
     Route::any('update-contact', [ContactController::class,'updateContact']);
-
-
-        //Customer contact routes
+    Route::post('contact-set-password', [ContactController::class,'saveContactPassword']);
 //        Route::any('save-contact', [ContactController::class,'saveContact']);
         Route::any('inquiry', [InquiryController::class,'index'])->name('inquiry.index');
         Route::any('get-inquires', [InquiryController::class,'getInquires']);
@@ -402,6 +401,7 @@ require __DIR__.'/auth.php';
    Route::any('save-invoice',[InvoiceController::class,'saveInvoice']);
    Route::any('convert-invoice/{id}',[InvoiceController::class,'convertInvoice']);
    Route::any('get-invoices',[InvoiceController::class,'getAllInvoices']);
+   Route::any('get-customer-invoices',[InvoiceController::class,'getCustomerInvoices']);
    Route::any('edit-invoice/{id}',[InvoiceController::class,'editInvoice']);
    Route::any('get-invoice-items',[InvoiceController::class,'getInvoiceItems']);
    Route::any('update-invoice',[InvoiceController::class,'updateInvoice']);

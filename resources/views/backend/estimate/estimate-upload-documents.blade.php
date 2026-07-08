@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-4 d-flex">
                                             <input type="hidden" name="id[]" value="{{$doc->id}}">
-                                            <input type="file" class=" no-bottom-margin form-control" name="files[]" style="padding: 0px 0px;height: 32px;" >
+                                            <input type="file" class="no-bottom-margin form-control required-document" name="files[]" data-title="{{ $doc->title }}" required style="padding: 0px 0px;height: 32px;">
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
@@ -54,15 +54,26 @@
         $(document).ready(function() {
 
             $('#AttachmentForm').on('submit', function(e) {
-
                 e.preventDefault();
 
-                let formData = new FormData($('#AttachmentForm')[0])
+                let missing = [];
+                $('input.required-document').each(function() {
+                    if (!this.files || !this.files.length) {
+                        missing.push($(this).data('title'));
+                    }
+                });
+
+                if (missing.length) {
+                    toastr.error('Please upload the following documents: ' + missing.join(', '));
+                    return;
+                }
+
+                let formData = new FormData($('#AttachmentForm')[0]);
 
                 $.ajax({
                     type: "POST",
                     url: '{{ url('upload-estimate-documents') }}',
-                    data: formData ,
+                    data: formData,
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
@@ -70,35 +81,31 @@
                         $(".btn-submit").prop("disabled", true);
                     },
                     success: function(data) {
-                        console.log(data);
                         if (data.success) {
                             $('#AttachmentForm')[0].reset();
-                            $('.close').click();
                             toastr.success(data.success);
-
+                            setTimeout(function() {
+                                window.location.href = "{{ url('/') }}";
+                            }, 1500);
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
-                            $('.btn-submit').text('Upload Documents');
-                            $(".btn-submit").prop("disabled", false);
                         }
                     },
-
-                    complete: function(data) {
+                    complete: function() {
                         $(".btn-submit").html("Upload Documents");
                         $(".btn-submit").prop("disabled", false);
-                        window.location.href = "{{ url('/')}}";
                     },
-
-                    error: function() {
-
-                        toastr.error('any technical error');
-                        $('.btn-submit').text('Upload Documents');
-                        $(".btn-submit").prop("disabled", false);
+                    error: function(xhr) {
+                        let message = 'A technical error occurred. Please try again.';
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            message = typeof xhr.responseJSON.errors === 'string'
+                                ? xhr.responseJSON.errors
+                                : Object.values(xhr.responseJSON.errors).flat().join(' ');
+                        }
+                        toastr.error(message);
                     }
                 });
-
-
             });
 
         });

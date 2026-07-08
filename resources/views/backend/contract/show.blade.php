@@ -10,7 +10,14 @@
                     <div class="nk-block-head-content">
                         <h4 class="title nk-block-title">Contract Information</h4>
                     </div>
-                    <a href="{{url("admin/contract")}}" class="btn btn-primary btn-sm d-none d-md-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></a>
+                    <div class="d-flex align-items-center" style="gap: 8px;">
+                        @isset($data['contract'][0])
+                            <a href="{{ route('contract-customer', $data['contract'][0]->id) }}" class="btn btn-outline-primary btn-sm d-none d-md-inline-flex" target="_blank">
+                                <em class="icon ni ni-eye"></em><span>View as Customer</span>
+                            </a>
+                        @endisset
+                        <a href="{{url("admin/contract")}}" class="btn btn-primary btn-sm d-none d-md-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></a>
+                    </div>
                 </div>
             </div>
             <div class="nk-content-body">

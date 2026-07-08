@@ -26,8 +26,11 @@
                         <label class="form-label" for="default-01">Email</label>
                     </div>
                     <div class="form-control-wrap">
-                        <input type="email" class="form-control form-control-lg" id="default-01" name="email"
-                            placeholder="Enter your email address">
+                        <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" id="default-01" name="email"
+                            value="{{ old('email') }}" placeholder="Enter your email address" required>
+                        @error('email')
+                            <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="form-group">

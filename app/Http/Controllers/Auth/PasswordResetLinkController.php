@@ -3,11 +3,21 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Core\User\PasswordResetMail;
+use App\Models\Core\Auth\User;
+use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordResetLinkController extends Controller
 {
+    protected PasswordResetService $passwordResetService;
+
+    public function __construct(PasswordResetService $passwordResetService)
+    {
+        $this->passwordResetService = $passwordResetService;
+    }
+
     /**
      * Display the password reset link request view.
      *
@@ -23,8 +33,6 @@ class PasswordResetLinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -32,16 +40,29 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
+        $user = $this->passwordResetService->findUserByEmail(
+            $request->email,
+            User::class
         );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+        if (!$user) {
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => __('passwords.user')]);
+        }
+
+        $token = $this->passwordResetService->createToken($request->email);
+
+        try {
+            Mail::to($user)->send(new PasswordResetMail($user, $token));
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => 'Unable to send password reset email. Please try again later.']);
+        }
+
+        return back()->with('status', __('passwords.sent'));
     }
 }

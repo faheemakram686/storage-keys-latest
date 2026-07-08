@@ -11,7 +11,7 @@ trait UserRules
         return [
             'first_name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => ['required', 'min:8', 'regex:/^(?=[^\d]*\d)(?=[A-Z\d ]*[^A-Z\d ]).{8,}$/i'],
+            'password' => ['required', 'min:8'],
             'roles' => ['nullable', 'array'],
         ];
     }
@@ -52,7 +52,7 @@ trait UserRules
     {
         return [
             'old_password' => 'required|min:6',
-            'password' => 'required|min:8|confirmed|regex:/^(?=[^\d]*\d)(?=[A-Z\d ]*[^A-Z\d ]).{8,}$/i',
+            'password' => 'required|min:8|confirmed',
         ];
     }
 
@@ -67,7 +67,7 @@ trait UserRules
     public function resetPasswordRules()
     {
         return [
-            'password' => 'required|min:8|confirmed|regex:/^(?=[^\d]*\d)(?=[A-Z\d ]*[^A-Z\d ]).{8,}$/i',
+            'password' => 'required|min:8|confirmed',
             'token' => 'required|min:10',
             'email' => 'required|email'
         ];

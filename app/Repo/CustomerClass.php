@@ -198,7 +198,7 @@ class CustomerClass implements CustomerInterface {
                         'body' => "Welcome to Storage Keys Please Set Your Password",
                         'thanks' => 'Thank you this is from storage Keys',
                         'actionText' => 'Set Password',
-                        'actionURL' => url('contact-setpassword').'/'.$contact_email->id,
+                        'actionURL' => \App\Helpers\ContactPasswordToken::url($contact_email->id),
                         'id' => $contact_email->id,
                     ];
                     Notification::route('mail', $contact_email->email)->notify(new SetPasswordNotification($passwordemail));

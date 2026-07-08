@@ -9,14 +9,20 @@ use App\Http\Requests\Core\Auth\User\PasswordResetRequest as Request;
 use App\Http\Requests\Core\Auth\User\ResetPasswordRequest;
 use App\Mail\Core\User\PasswordResetMail;
 use App\Models\Core\Auth\User;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request as BaseRequest;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
 {
     use PasswordResetTrait;
+
+    protected PasswordResetService $passwordResetService;
+
+    public function __construct(PasswordResetService $passwordResetService)
+    {
+        $this->passwordResetService = $passwordResetService;
+    }
 
     public function index()
     {
@@ -25,26 +31,25 @@ class PasswordResetController extends Controller
 
     public function store(Request $request)
     {
-        /** @var User $user*/
+        /** @var User $user */
         ['user' => $user] = $this->tokenAndUser($request->get('email'));
 
-        if (!$user)
+        if (!$user) {
             return response()->json(['status' => false, 'message' => trans('default.no_user_found_on_that_email')], 404);
+        }
 
-        $token = base64_encode(microtime(true));
+        $token = $this->passwordResetService->createToken($request->get('email'));
 
-        DB::table('password_resets')->insert([
-            'email' => $request->get('email'),
-            'token' => $token,
-            'created_at' => Carbon::now()
-        ]);
+        try {
+            Mail::to($user)->send(new PasswordResetMail($user, $token));
+        } catch (\Throwable $exception) {
+            report($exception);
 
-        Mail::to($user)
-            ->send(
-                (new PasswordResetMail($user, $token))
-                    ->onQueue('high')
-                    ->delay(5)
-            );
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to send password reset email. Please try again later.',
+            ], 500);
+        }
 
         return response()->json(['status' => true, 'message' => trans('default.password_reset_mail_has_been_sent_successfully')]);
     }
@@ -53,43 +58,39 @@ class PasswordResetController extends Controller
     {
         $request->validate([
             'token' => 'required|min:10',
-            'email' => 'required|email'
+            'email' => 'required|email',
         ]);
 
         ['user' => $user, 'token' => $token] = $this->tokenAndUser($request->get('email'), $request->get('token'));
 
-        throw_if(!($token && $user), new GeneralException(trans('default.invalid_token')));
-
-        if (Carbon::parse($token->created_at)->diffInMinutes(Carbon::now()) >= 20) {
-            throw_if(!($token && $user), new GeneralException(trans('default.invalid_token')));
+        if (!$token || !$user || !$this->passwordResetService->tokenIsValid($token)) {
+            throw new GeneralException(trans('default.invalid_token'));
         }
 
         return view('frontend.user.reset_password', ['user' => $user, 'token' => $request->get('token')]);
-
     }
 
     public function update(ResetPasswordRequest $request)
     {
-        /** @var User $user*/
+        /** @var User $user */
         ['user' => $user, 'token' => $token] = $this->tokenAndUser($request->get('email'), $request->get('token'));
 
-        throw_if(!($token && $user), new GeneralException(trans('default.invalid_token')));
-
-        if (Carbon::parse($token->created_at)->diffInMinutes(Carbon::now()) >= 20) {
-            throw_if(!($token && $user), new GeneralException(trans('default.invalid_token')));
+        if (!$token || !$user || !$this->passwordResetService->tokenIsValid($token)) {
+            throw new GeneralException(trans('default.invalid_token'));
         }
 
         $user->update([
-           'password' => $request->get('password')
+            'password' => $request->get('password'),
         ]);
+
+        $this->passwordResetService->deleteToken($request->get('email'));
 
         auth()->login($user);
 
         return response()->json([
             'status' => true,
             'message' => trans('default.password_has_been_reset_successfully'),
-            'redirect' => route(home_route()['route_name'], ['params' => home_route()['route_params']])
+            'redirect' => route(home_route()['route_name'], ['params' => home_route()['route_params']]),
         ]);
-
     }
 }

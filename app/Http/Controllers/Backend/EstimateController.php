@@ -248,36 +248,37 @@ class EstimateController extends Controller
 
     public function uploadDocuments(Request $request)
     {
+        $ids = $request->input('id', []);
+        $images = $request->file('files', []);
 
-        if ($request->hasFile('files')) {
-            $images = $request->file('files');
-            $id = $request->input('id');
-            for ($c = 0; $c < count($images); $c++) {
-                if ($images[$c]->isValid()) {
-
-                    $uniqueid = uniqid();
-                    $original_name = $images[$c]->getClientOriginalName();
-                    $size = $images[$c]->getSize();
-                    $extension = $images[$c]->getClientOriginalExtension();
-                    $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
-                    $path = $images[$c]->storeAs('public/files', $name);
-
-                        $items = array(
-                            'type' => 'estimate',
-                            'type_id' => $request->estimate_id,
-                            'req_doc_id' => $id[$c],
-                            'name' => $name,
-                            'path' => $path,
-                            'status' => 1,
-                        );
-                     $this->attachment->saveAttachment($items);
-                }
-
-                }
-            return response()->json(['success' => 'Documents uploaded successfully'], 200);
+        if (empty($ids) || count($images) !== count($ids)) {
+            return response()->json(['errors' => 'Please upload all required documents.'], 422);
         }
 
-        return response()->json(['success' => 'No images were uploaded.'], 200);
+        foreach ($images as $image) {
+            if (!$image || !$image->isValid()) {
+                return response()->json(['errors' => 'Please upload all required documents.'], 422);
+            }
+        }
+
+        for ($c = 0; $c < count($images); $c++) {
+            $uniqueid = uniqid();
+            $extension = $images[$c]->getClientOriginalExtension();
+            $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
+            $path = $images[$c]->storeAs('public/files', $name);
+
+            $items = array(
+                'type' => 'estimate',
+                'type_id' => $request->estimate_id,
+                'req_doc_id' => $ids[$c],
+                'name' => $name,
+                'path' => $path,
+                'status' => 1,
+            );
+            $this->attachment->saveAttachment($items);
+        }
+
+        return response()->json(['success' => 'Documents uploaded successfully'], 200);
     }
 
 

@@ -34,6 +34,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if ($request->loggedInViaContactGuard()) {
+            return redirect()->intended('/customer/dashboard');
+        }
+
         return redirect()->intended(\Session::get(RouteServiceProvider::HOME.'redirect_url', RouteServiceProvider::HOME));
     }
 

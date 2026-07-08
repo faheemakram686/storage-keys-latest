@@ -84,6 +84,11 @@ class InvoiceController extends Controller
         $data = $this->invoice->getAllInvoices();
         return $data;
     }
+
+    public function getCustomerInvoices(Request $request)
+    {
+        return $this->invoice->getCustomerInvoices($request->customer_id);
+    }
     public function deleteInvoice(Request $request)
     {
         $this->invoice->deleteInvoice($request->id);

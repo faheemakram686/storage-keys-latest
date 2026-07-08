@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Helpers\ContactPasswordToken;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Repo\CustomerClass;
@@ -27,7 +28,9 @@ class ContactController extends Controller
     }
     public function getContacts(Request $request)
     {
-        return $res = $this->contact->getCustomerContacts($request->customer_id);
+        $contacts = $this->contact->getCustomerContacts($request->customer_id);
+
+        return $contacts;
     }
     public function deleteContact(Request $request)
     {
@@ -47,22 +50,70 @@ class ContactController extends Controller
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 
-    public function setPassword($id)
+    public function setPassword($token)
     {
-        return view('auth.contact-setpassword')->with(compact('id'));
+        $contactId = ContactPasswordToken::decode($token);
+
+        if (!$contactId || !Contact::where('id', $contactId)->where('is_deleted', 0)->exists()) {
+            abort(404);
+        }
+
+        return view('auth.contact-setpassword', compact('token'));
     }
+
     public function savePassword(Request $request)
     {
-
         $request->validate([
-            'id' => 'required',
+            'token' => 'required',
             'password' => 'required|confirmed|min:8',
         ]);
-        Contact::whereId($request->id)->update([
-            'password' => Hash::make($request->password)
+
+        $contactId = ContactPasswordToken::decode($request->token);
+
+        if (!$contactId) {
+            return back()->withErrors(['password' => 'Invalid or expired password setup link.']);
+        }
+
+        $contact = $this->updateContactPassword($contactId, $request->password);
+
+        if (!$contact) {
+            return back()->withErrors(['password' => 'Contact not found.']);
+        }
+
+        return redirect()
+            ->route('customer-profile', $contact->customer_id)
+            ->with('status', 'Password set successfully.');
+    }
+
+    public function saveContactPassword(Request $request)
+    {
+        $request->validate([
+            'contact_id' => 'required|integer',
+            'password' => 'required|confirmed|min:8',
         ]);
 
-        return redirect(route('customer.login'));
+        $contact = $this->updateContactPassword($request->contact_id, $request->password);
+
+        if (!$contact) {
+            return response()->json(['success' => false, 'message' => 'Contact not found.'], 404);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Password set successfully.']);
+    }
+
+    protected function updateContactPassword(int $contactId, string $password): ?Contact
+    {
+        $contact = Contact::where('id', $contactId)->where('is_deleted', 0)->first();
+
+        if (!$contact) {
+            return null;
+        }
+
+        $contact->password = Hash::make($password);
+        $contact->status = 1;
+        $contact->save();
+
+        return $contact;
     }
 
     public function syncCustomerQuickbook()

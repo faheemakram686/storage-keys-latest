@@ -120,4 +120,10 @@ class CustomerController extends Controller
         return view('backend.customer.contracts')->with(compact('data'));
     }
 
+    public function showInvoices($request)
+    {
+        $data['customer'] = $this->customer->getCustomer($request);
+        return view('backend.customer.invoices')->with(compact('data'));
+    }
+
 }

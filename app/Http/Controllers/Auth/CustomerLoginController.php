@@ -19,7 +19,6 @@ class CustomerLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
         $this->middleware('guest:contact')->except('logout');
     }
 
