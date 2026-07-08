@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Order Value <span class="text-danger"></span></label>
-                                    <input class="form-control" type="number" name="invoice_value" id="invoice_value" placeholder="Order Value" >
+                                    <input class="form-control" type="number" step="any" name="invoice_value" id="invoice_value" placeholder="Order Value" >
                                 </div>
                                 <div class="form-group">
                                     <label>Sale Agent<span class="text-danger">*</span></label>
@@ -116,17 +116,17 @@
                                             <tr>
                                                 <td colspan="4"></td>
                                                 <td colspan="2">Subtotal</td>
-                                                <td ><input class="form-control d-inline" name="sub_total" type="number" id="subtotal" value="0.00" min="0.00" readonly />AED</td>
+                                                <td ><input class="form-control d-inline" name="sub_total" type="number" step="any" id="subtotal" value="0.00" min="0.00" readonly />AED</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4"></td>
                                                 <td colspan="2">VAT</td>
-                                                <td ><input class="form-control d-inline" type="number" id="vat" name="vat" value="{{$data['invoice'][0]->vat}}" min="0">%</td>
+                                                <td ><input class="form-control d-inline" type="number" step="any" id="vat" name="vat" value="{{$data['invoice'][0]->vat}}" min="0">%</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4"></td>
                                                 <td colspan="2">Grand Total</td>
-                                                 <td ><input class="form-control d-inline" name="grand_total"  type="number" id="grandtotal" value="0.00" min="0.00" readonly />AED</td>
+                                                 <td ><input class="form-control d-inline" name="grand_total"  type="number" step="any" id="grandtotal" value="0.00" min="0.00" readonly />AED</td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -315,10 +315,10 @@
                             '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.id + '" /><span>' + dr + '</span></td>'+
                             '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>'+
                             '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.p_name + '" /></td>'+
-                            '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
+                            '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
                             '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
-                            '<td><input type="number" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.sell_price + '" min="0.01" /></td>'+
-                            '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.sell_price + '" min="0.01" /></td>'+
+                            '<td><input type="number" step="any" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.sell_price + '" min="0.01" /></td>'+
+                            '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.sell_price + '" min="0.01" /></td>'+
                             '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                             '</tr>';
                         // total = parseFloat(data.sell_price);
@@ -367,10 +367,10 @@
                             '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + storageUnitId + '" /><span>' + dr + '</span></td>'+
                             '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="storage_unit" /></td>'+
                             '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + storageUnitName +' / '+  termLengthTitle + '" /></td>'+
-                            '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0"/></td>'+
+                            '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0"/></td>'+
                             '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
                             '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
-                            '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
+                            '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
                             '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                             '</tr>';
                         // total = parseFloat(data.contract[0].estimate.unit_price);
@@ -381,10 +381,10 @@
                                 '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.contract[0].estimate.estimate_addon[i].addon.id + '" /><span>' + dr + '</span></td>'+
                                 '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="addon" /></td>'+
                                 '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.contract[0].estimate.estimate_addon[i].addon.name + '" /></td>'+
-                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
                                 '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
                                 '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.contract[0].estimate.estimate_addon[i].price + '" min="0.00" /></td>'+
-                                '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.estimate_addon[i].price + '"  min="0.00" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.estimate_addon[i].price + '"  min="0.00" /></td>'+
                                 '<td><button type="button" name="remove" id="'+dr+'" class="btn btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                                 '</tr>';
                             // total = total +  parseFloat( data.contract[0].estimate.estimate_addon[i].price);
@@ -425,10 +425,10 @@
                                 '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data[i].product_id + '" /><span>' + dr + '</span></td>'+
                                 '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="product" /></td>'+
                                 '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + (data[i].productdetail ? data[i].productdetail.p_name : 'Product') + '" /></td>'+
-                                '<td><input type="number" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="' + data[i].qty + '" min="0" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="' + data[i].qty + '" min="0" /></td>'+
                                 '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
                                 '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data[i].price + '" min="0.00" /></td>'+
-                                '<td><input type="number" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data[i].total + '"  min="0.00" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data[i].total + '"  min="0.00" /></td>'+
                                 '<td><button type="button" name="remove" id="'+dr+'" class="btn btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                                 '</tr>';
 

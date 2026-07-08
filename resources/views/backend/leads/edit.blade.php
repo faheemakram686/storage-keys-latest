@@ -93,7 +93,7 @@
                                                 <div class="row mt-3">
                                                     <div class="col-6">
                                                         <label class="">Lead Rating</label>
-                                                        <input type="number" class="form-control" name="lead_rating" style="height:35px;" required>
+                                                        <input type="number" step="any" class="form-control" name="lead_rating" style="height:35px;" required>
                                                     </div>
                                                     <div class="col-6">
                                                         <label class="lbl" >Lead Source</label>

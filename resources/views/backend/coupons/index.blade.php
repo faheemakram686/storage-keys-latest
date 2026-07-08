@@ -98,7 +98,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Amount <span class="text-danger"></span></label>
-                                        <input class="form-control" type="number" name="amount" placeholder="Amount" required>
+                                        <input class="form-control" type="number" step="any" name="amount" placeholder="Amount" required>
                                     </div>
                                 </div>
 
@@ -173,7 +173,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Amount <span class="text-danger"></span></label>
-                                    <input class="form-control" type="number" name="e_amount" placeholder="Amount" required>
+                                    <input class="form-control" type="number" step="any" name="e_amount" placeholder="Amount" required>
                                 </div>
                             </div>
 

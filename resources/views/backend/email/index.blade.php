@@ -363,7 +363,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Monthly Amount</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_monthly_amount" placeholder="Monthly Amount" required>
+                                        <input class="form-control" type="number" step="any" name="e_monthly_amount" placeholder="Monthly Amount" required>
                                     </div>
 
                                 </div>

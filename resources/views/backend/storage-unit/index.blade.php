@@ -282,7 +282,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Width</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_width" placeholder="Width" required>
+                                        <input class="form-control" type="number" step="any" name="e_width" placeholder="Width" required>
                                     </div>
 
                                 </div>
@@ -292,7 +292,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Length</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_length" placeholder="Length" required>
+                                        <input class="form-control" type="number" step="any" name="e_length" placeholder="Length" required>
                                     </div>
 
                                 </div>
@@ -302,7 +302,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Height</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_height" placeholder="Height" required>
+                                        <input class="form-control" type="number" step="any" name="e_height" placeholder="Height" required>
                                     </div>
 
                                 </div>
@@ -311,7 +311,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Price</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_price" placeholder="Price" required>
+                                        <input class="form-control" type="number" step="any" name="e_price" placeholder="Price" required>
                                     </div>
 
                                 </div>

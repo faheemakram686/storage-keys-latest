@@ -119,7 +119,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label> Lead Rating <span class="text-danger"></span></label>
-                                            <input class="form-control" type="number" name="lead_rating" placeholder="Lead Rating" required>
+                                            <input class="form-control" type="number" step="any" name="lead_rating" placeholder="Lead Rating" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

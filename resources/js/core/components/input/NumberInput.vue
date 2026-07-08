@@ -4,6 +4,7 @@
            :class="'form-control '+data.inputClass"
            :max="data.maxNumber"
            :min="data.minNumber"
+           step="any"
            :placeholder="data.placeholder"
            :readonly="data.readOnly"
            :disabled="data.disabled"

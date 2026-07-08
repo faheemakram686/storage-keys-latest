@@ -62,7 +62,7 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $item->id}}" >
                                         <div class="cart-plus-minus">
-                                            <input type="number" value="{{ $item->quantity }}" name="quantity" min="1" class="cart-plus-minus-box">
+                                            <input type="number" step="any" value="{{ $item->quantity }}" name="quantity" min="1" class="cart-plus-minus-box">
 
                                         </div>
                                         </form>

@@ -41,7 +41,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Enter Or Scan Barcode<span class="text-danger">*</span></label>
-                                    <input type="number" name="barcode_no" id="barcode_no" class="form-control" placeholder="Scan or Enter Barcode to add in list......">
+                                    <input type="number" step="any" name="barcode_no" id="barcode_no" class="form-control" placeholder="Scan or Enter Barcode to add in list......">
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -68,17 +68,17 @@
 {{--                                            <tr>--}}
 {{--                                                <td colspan="7"></td>--}}
 {{--                                                <td colspan="">Barcode Labels</td>--}}
-{{--                                                <td ><input class="form-control d-inline" name="sub_total" type="number" id="subtotal" value="0" readonly /></td>--}}
+{{--                                                <td ><input class="form-control d-inline" name="sub_total" type="number" step="any" id="subtotal" value="0" readonly /></td>--}}
 {{--                                            </tr>--}}
 {{--                                            <tr>--}}
 {{--                                                <td colspan="7"></td>--}}
 {{--                                                <td colspan="">Move-In</td>--}}
-{{--                                                <td ><input class="form-control d-inline" type="number" id="moveinItems" name="moveinItems" value="0" readonly></td>--}}
+{{--                                                <td ><input class="form-control d-inline" type="number" step="any" id="moveinItems" name="moveinItems" value="0" readonly></td>--}}
 {{--                                            </tr>--}}
 {{--                                            <tr>--}}
 {{--                                                <td colspan="7"></td>--}}
 {{--                                                <td colspan="">Total</td>--}}
-{{--                                                 <td ><input class="form-control d-inline" name="grand_total"  type="number" id="grandtotal" value="0" readonly /></td>--}}
+{{--                                                 <td ><input class="form-control d-inline" name="grand_total"  type="number" step="any" id="grandtotal" value="0" readonly /></td>--}}
 {{--                                            </tr>--}}
 {{--                                            </tfoot>--}}
                                         </table>

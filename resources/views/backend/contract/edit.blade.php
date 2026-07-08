@@ -50,7 +50,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Contract Value <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="number" name="contract_value"  value="{{$data['contract'][0]->contract_value}}" placeholder="Contract Value" required>
+                                    <input class="form-control" type="number" step="any" name="contract_value"  value="{{$data['contract'][0]->contract_value}}" placeholder="Contract Value" required>
                                 </div>
                             </div>
                             <div class="col-lg-12">

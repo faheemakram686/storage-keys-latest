@@ -41,7 +41,7 @@
                                                                 <label class="form-label" for="amount_received">Amount Received <span class="text-danger">*</span></label>
                                                                 <div class="form-control-wrap">
                                                                     @isset($data['payment'])
-                                                                    <input type="number" class="form-control" value="{{$data['invoice'][0]->grand_total - $data['payment']}}" name="amount_received" id="amount_received" required>
+                                                                    <input type="number" step="any" class="form-control" value="{{$data['invoice'][0]->grand_total - $data['payment']}}" name="amount_received" id="amount_received" required>
                                                                     @endisset
                                                                 </div>
                                                             </div>

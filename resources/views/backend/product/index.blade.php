@@ -103,7 +103,7 @@
                                 <div class="form-group">
                                     <label>Purchase Price <span class="text-danger"></span></label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="p_price" placeholder="Purchase Price" required>
+                                        <input class="form-control" type="number" step="any" name="p_price" placeholder="Purchase Price" required>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 <div class="form-group">
                                     <label>Sale Price <span class="text-danger"></span></label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="s_price" placeholder="Sale Price" required>
+                                        <input class="form-control" type="number" step="any" name="s_price" placeholder="Sale Price" required>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Discount Amount</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="dis_amount" placeholder="Discount Amount" required>
+                                        <input class="form-control" type="number" step="any" name="dis_amount" placeholder="Discount Amount" required>
                                     </div>
 
                                 </div>
@@ -140,7 +140,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Quantity</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="qty" placeholder="Quantity" required>
+                                        <input class="form-control" type="number" step="any" name="qty" placeholder="Quantity" required>
                                     </div>
 
                                 </div>
@@ -222,7 +222,7 @@
                                 <div class="form-group">
                                     <label>Purchase Price <span class="text-danger"></span></label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_p_price" placeholder="Purchase Price" required>
+                                        <input class="form-control" type="number" step="any" name="e_p_price" placeholder="Purchase Price" required>
                                     </div>
                                 </div>
                             </div>
@@ -230,7 +230,7 @@
                                 <div class="form-group">
                                     <label>Sale Price <span class="text-danger"></span></label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_s_price" placeholder="Sale Price" required>
+                                        <input class="form-control" type="number" step="any" name="e_s_price" placeholder="Sale Price" required>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +249,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Discount Amount</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_dis_amount" placeholder="Discount Amount" required>
+                                        <input class="form-control" type="number" step="any" name="e_dis_amount" placeholder="Discount Amount" required>
                                     </div>
 
                                 </div>
@@ -258,7 +258,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Quantity</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="e_qty" placeholder="Quantity" required>
+                                        <input class="form-control" type="number" step="any" name="e_qty" placeholder="Quantity" required>
                                     </div>
 
                                 </div>

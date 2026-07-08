@@ -85,7 +85,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="amount_received">Amount Received <span class="text-danger">*</span></label>
                                         <div class="form-control-wrap">
-                                            <input type="number" class="form-control"  name="amount_received" id="amount_received" required>
+                                            <input type="number" step="any" class="form-control"  name="amount_received" id="amount_received" required>
                                         </div>
                                     </div>
                                     <div class="form-group">

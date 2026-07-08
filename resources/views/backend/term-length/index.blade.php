@@ -71,13 +71,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label> Term Period <span class="text-danger">*</span> (in months)</label>
-                                        <input class="form-control" type="number" name="term_period" placeholder="Term Period" required>
+                                        <input class="form-control" type="number" step="any" name="term_period" placeholder="Term Period" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label> Discount %age <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="number" name="discount_percentage" placeholder="Discount %age" required>
+                                        <input class="form-control" type="number" step="any" name="discount_percentage" placeholder="Discount %age" required>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -131,13 +131,13 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label> Term Period <span class="text-danger">*</span>(in months)</label>
-                                    <input class="form-control" type="number" name="edit_term_period" placeholder="Term Period" required>
+                                    <input class="form-control" type="number" step="any" name="edit_term_period" placeholder="Term Period" required>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label> Discount %age <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="number" name="edit_discount_percentage" placeholder="Discount %age" required>
+                                    <input class="form-control" type="number" step="any" name="edit_discount_percentage" placeholder="Discount %age" required>
                                 </div>
                             </div>
                             <div class="col-md-12">

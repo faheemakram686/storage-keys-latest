@@ -378,3 +378,30 @@ $(document).on('click', '.reset_filters', function() {
     $(".select2").not('.reset-disable').val('').trigger('change');
     $('.toggle-date').val('');
 });
+
+// Allow decimal values in all number inputs (HTML default step=1 only allows integers)
+window.enableDecimalNumberInputs = function (context) {
+    var root = context || document;
+    $(root).find('input[type="number"]').each(function () {
+        if (!$(this).attr('step')) {
+            $(this).attr('step', 'any');
+        }
+    });
+};
+
+$(document).ready(function () {
+    window.enableDecimalNumberInputs();
+
+    if (typeof MutationObserver !== 'undefined') {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node.nodeType === 1) {
+                        window.enableDecimalNumberInputs(node);
+                    }
+                });
+            });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+});

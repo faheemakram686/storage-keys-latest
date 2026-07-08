@@ -41,7 +41,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Enter Or Scan Barcode<span class="text-danger">*</span></label>
-                                        <input type="number" name="barcode_no" id="barcode_no" class="form-control" placeholder="Scan or Enter Barcode to add in list......">
+                                        <input type="number" step="any" name="barcode_no" id="barcode_no" class="form-control" placeholder="Scan or Enter Barcode to add in list......">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">

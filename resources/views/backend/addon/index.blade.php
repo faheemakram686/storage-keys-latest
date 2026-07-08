@@ -70,7 +70,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label> Price <span class="text-danger"></span></label>
-                                    <input class="form-control" type="number" name="addon_price" placeholder="Price" required>
+                                    <input class="form-control" type="number" step="any" name="addon_price" placeholder="Price" required>
                                 </div>
                             </div>
 
@@ -130,7 +130,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label> Price <span class="text-danger"></span></label>
-                                    <input class="form-control" type="number" name="edit_addon_price" placeholder="Price" required>
+                                    <input class="form-control" type="number" step="any" name="edit_addon_price" placeholder="Price" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mt-3">

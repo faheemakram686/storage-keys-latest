@@ -101,14 +101,14 @@
                                     <div class="form-group">
                                         <label>Latitude <span class="text-danger"></span></label>
 
-                                        <input type="number" class="form-control" name="lat" placeholder="Latitude">
+                                        <input type="number" step="any" class="form-control" name="lat" placeholder="Latitude">
                                     </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Longitude <span class="text-danger"></span></label>
-                                        <input type="number" class="form-control" name="lang" placeholder="Longitude">
+                                        <input type="number" step="any" class="form-control" name="lang" placeholder="Longitude">
                                     </div>
                                 </div>
 
@@ -188,13 +188,13 @@
                                 <div class="form-group">
                                     <label>Latitude <span class="text-danger"></span></label>
 
-                                    <input type="number" class="form-control" name="e_lat" placeholder="Latitude">
+                                    <input type="number" step="any" class="form-control" name="e_lat" placeholder="Latitude">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Longitude <span class="text-danger"></span></label>
-                                    <input type="number" class="form-control" name="e_lang" placeholder="Longitude">
+                                    <input type="number" step="any" class="form-control" name="e_lang" placeholder="Longitude">
                                 </div>
                             </div>
                             <div class="col-md-6">

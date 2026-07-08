@@ -47,7 +47,7 @@
             <label for="database_port">
                 {{ trans('installer_messages.environment.wizard.form.db_port_label') }}
             </label>
-            <input type="number" name="database_port" id="database_port" value="3306" placeholder="{{ trans('installer_messages.environment.wizard.form.db_port_placeholder') }}" />
+            <input type="number" step="any" name="database_port" id="database_port" value="3306" placeholder="{{ trans('installer_messages.environment.wizard.form.db_port_placeholder') }}" />
             @if ($errors->has('database_port'))
                 <span class="error-block">
                             {{ $errors->first('database_port') }}
