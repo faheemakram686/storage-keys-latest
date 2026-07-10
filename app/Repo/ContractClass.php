@@ -163,7 +163,6 @@ class ContractClass implements ContractInterface {
         try {
             $qry=Contract::with('estimate.storageunit','estimate.termLength');
             $qry=$qry->where('customer_id',$request);
-            $qry = $qry->where( 'status' , 3 );
             $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
             $qry=$qry->get();
 
