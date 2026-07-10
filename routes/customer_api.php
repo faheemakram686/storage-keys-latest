@@ -26,6 +26,7 @@ use App\Http\Controllers\Frontend\OrderController;
 //auth api
 Route::post('/customer/register', [AuthController::class, 'registerCustomer']);
 Route::post('/customer/login', [AuthController::class, 'loginCustomer']);
+Route::post('/customer/forgot-password', [AuthController::class, 'forgotPasswordCustomer']);
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');

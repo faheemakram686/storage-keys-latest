@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cutomer_api;
 
+use App\Mail\Contact\ContactPasswordResetMail;
 use App\Models\Contact;
 use App\Models\Contract;
 use App\Models\Core\Auth\Profile;
@@ -9,11 +10,14 @@ use App\Models\Core\Auth\Profile;
 use App\Models\Core\Auth\User;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -163,6 +167,58 @@ class AuthController extends Controller
 
     }
 
+
+    /**
+     * Mobile API: send a password reset email to a customer.
+     * Reuses the web reset flow - the emailed link opens the existing
+     * customer reset-password web page.
+     */
+    public function forgotPasswordCustomer(Request $request, PasswordResetService $passwordResetService)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'email'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validator->errors(),
+                ], 401);
+            }
+
+            $contact = $passwordResetService->findUserByEmail($request->email, Contact::class);
+
+            // Always return a generic success to avoid leaking which emails exist.
+            if (!$contact) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'If the email exists, a password reset link has been sent.',
+                ], 200);
+            }
+
+            $token = $passwordResetService->createToken($contact->email);
+
+            $resetUrl = URL::signedRoute('customer.password.reset', [
+                'token' => $token,
+                'email' => $contact->email,
+            ]);
+
+            Mail::to($contact)->send(new ContactPasswordResetMail($contact, $resetUrl));
+
+            return response()->json([
+                'status' => true,
+                'message' => 'If the email exists, a password reset link has been sent.',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 
     public function loginCustomer(Request $request)
     {
