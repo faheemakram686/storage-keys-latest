@@ -93,6 +93,73 @@ class NgeniusPaymentService
         }
     }
 
+    /**
+     * Fetch the current status of an Ngenius order by its reference.
+     * Returns the decoded order array on success, or false on failure.
+     */
+    public function getOrderStatus($reference)
+    {
+        $token = $this->tokenService->getAccessToken();
+
+        if (!$token) {
+            Log::error('Failed to get Ngenius access token for order status');
+            return false;
+        }
+
+        $endpoint = $this->baseUrl . '/transactions/outlets/' . $this->outletReference . '/orders/' . $reference;
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Accept' => 'application/vnd.ni-payment.v2+json',
+            ])->get($endpoint);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            // Token may be expired: clear cache and retry once.
+            if ($response->status() === 401) {
+                $this->tokenService->clearTokenCache();
+                return $this->getOrderStatus($reference);
+            }
+
+            Log::error('Ngenius Order Status Failed', [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error('Ngenius Order Status Exception', ['error' => $e->getMessage()]);
+            return false;
+        }
+    }
+
+    /**
+     * Extract the payment state (e.g. PURCHASED, CAPTURED, FAILED) from an order response.
+     */
+    public function extractPaymentState($orderResponse)
+    {
+        return $orderResponse['_embedded']['payment'][0]['state'] ?? null;
+    }
+
+    /**
+     * Extract the captured amount in minor units from an order response.
+     */
+    public function extractCapturedAmount($orderResponse)
+    {
+        return $orderResponse['_embedded']['payment'][0]['amount']['value'] ?? null;
+    }
+
+    /**
+     * Whether the given order response represents a successfully paid order.
+     */
+    public function isPaid($orderResponse)
+    {
+        return in_array($this->extractPaymentState($orderResponse), ['PURCHASED', 'CAPTURED'], true);
+    }
+
     public function getPaymentUrl($orderResponse)
     {
         if (isset($orderResponse['_links']['payment']['href'])) {

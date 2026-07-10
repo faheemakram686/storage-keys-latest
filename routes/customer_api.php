@@ -44,6 +44,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/update-profile',[CustomerHomeController::class, 'updateProfileApi']);
     Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi']);
     Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi']);
+    Route::post('/pay-invoice',[InvoiceController::class, 'payInvoiceApi']);
+    Route::post('/verify-payment',[InvoiceController::class, 'verifyPaymentApi']);
     Route::post('/order-list',[OrderController::class, 'getCustomerOrdersApi']);
     Route::post('/payment-list',[PaymentController::class, 'getCustomerPaymentsApi']);
     Route::post('/move-in-request',[MoveInRequestController::class, 'saveMoveInRequestApi']);
