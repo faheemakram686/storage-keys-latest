@@ -20,9 +20,9 @@ class AppSettingsClass implements AppSettingsInterface {
 
     public function getAppSettings()
     {
-        $qry= AppSettings::query();
-        $qry= $qry->select('id','key','value');
-        $data = $qry->get();
-        return $data;
+        return AppSettings::query()
+            ->select('id', 'key', 'value')
+            ->orderBy('id')
+            ->get();
     }
 }

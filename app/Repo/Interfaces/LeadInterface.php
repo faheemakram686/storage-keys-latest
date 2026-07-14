@@ -12,6 +12,8 @@ interface LeadInterface{
     public function deleteLead($id);
     public function editLead($id);
     public function updateLead($request);
+    public function approveLead($id);
+    public function declineLead($request);
 
 
 }

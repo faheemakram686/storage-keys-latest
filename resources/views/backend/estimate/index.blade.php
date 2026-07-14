@@ -234,7 +234,16 @@
 
                             var endDate= new Date(Date.parse(data[i].expiry_date));
                             var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
-                            var storageUnitName = (data[i].storageunit && data[i].storageunit.storage_unit_name) ? data[i].storageunit.storage_unit_name : 'N/A';
+                            var storageUnitName = 'N/A';
+                            if (data[i].storage_units && data[i].storage_units.length > 0) {
+                                storageUnitName = data[i].storage_units.map(function(u) { return u.storage_unit_name; }).join(', ');
+                            } else if (data[i].estimate_storage_units && data[i].estimate_storage_units.length > 0) {
+                                storageUnitName = data[i].estimate_storage_units.map(function(u) {
+                                    return (u.storageunit && u.storageunit.storage_unit_name) ? u.storageunit.storage_unit_name : ('#'+u.storage_unit_id);
+                                }).join(', ');
+                            } else if (data[i].storageunit && data[i].storageunit.storage_unit_name) {
+                                storageUnitName = data[i].storageunit.storage_unit_name;
+                            }
 
 
 

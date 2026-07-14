@@ -189,14 +189,12 @@
 
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label class="form-label" for="status">Status</label>
-                                    <select class="form-control form-select" id="status" name="status" required=>
-                                        <option value="vacant" >Vacant</option>
-                                        <option value="occupied">Occupied</option>
-                                        <option value="booked">Booked</option>
-                                        <option value="booked but not paid">Booked but Not Paid </option>
-                                        <option value="under maintenance">Under Maintenance </option>
+                                    <label class="form-label" for="is_maintenance">Under Maintenance</label>
+                                    <select class="form-control form-select" id="is_maintenance" name="is_maintenance">
+                                        <option value="0" selected>No (available when vacant)</option>
+                                        <option value="1">Yes — block booking</option>
                                     </select>
+                                    <small class="text-muted">Occupancy status (vacant / booked / occupied) is managed automatically by contracts and payments.</small>
                                 </div>
                             </div>
 
@@ -331,10 +329,17 @@
 
                             <div class="col-lg-12">
                                 <div class="form-group">
-                                    <label class="form-label" for="status">Status</label>
-                                    <select class="form-control e" id="status" name="e_status" required=>
-                                        <option value="">Choose One</option>
-
+                                    <label class="form-label">Current Status (read-only)</label>
+                                    <input type="text" class="form-control" name="e_status_display" readonly>
+                                    <small class="text-muted e-active-contract-hint"></small>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_is_maintenance">Under Maintenance</label>
+                                    <select class="form-control" name="e_is_maintenance">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes — block booking</option>
                                     </select>
                                 </div>
                             </div>
@@ -353,6 +358,26 @@
 
     <script>
         $(document).ready(function() {
+
+            function statusBadge(unit) {
+                var status = (unit.status || 'vacant').toLowerCase();
+                var cls = 'badge-secondary';
+                if (status === 'vacant') cls = 'badge-success';
+                else if (status === 'occupied') cls = 'badge-danger';
+                else if (status === 'booked') cls = 'badge-primary';
+                else if (status === 'booked but not paid') cls = 'badge-warning';
+                else if (status === 'under maintenance') cls = 'badge-dark';
+                var label = status;
+                if (unit.is_maintenance == 1 || unit.is_maintenance === true) {
+                    label = 'under maintenance';
+                    cls = 'badge-dark';
+                }
+                var extra = '';
+                if (unit.active_contract_id) {
+                    extra = ' <small class="text-muted">#C'+unit.active_contract_id+'</small>';
+                }
+                return ' <span class="badge '+cls+' text-capitalize">'+label+'</span>'+extra;
+            }
 
             $('#CountryForm').on('submit', function(e) {
 
@@ -428,7 +453,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].location+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].price+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
-                            ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                            statusBadge(data[i])+
                             ' </td>'+
                             '  <td class="nk-tb-col nk-tb-col-tools">'+
                             ' <ul class="nk-tb-actions gx-1">'+
@@ -501,17 +526,20 @@
                         $('input[name=e_length]').val(res.su.length);
                         $('input[name=e_height]').val(res.su.height);
                         $('input[name=e_price]').val(res.su.price);
-
-
-                            $('select[name="e_status"]')
-                                .html(
-                                    `<option value="vacant" ${res.su.status == 'vacant' ? 'selected' : ''}>Vacant</option>`+
-                                    `<option value="occupied" ${res.su.status== 'occupied' ? 'selected' : ''}>Occupied</option>`+
-                                    `<option value="booked" ${res.su.status== 'booked' ? 'selected' : ''}>Booked</option>`+
-                                    `<option value="booked but not paid" ${res.su.status== 'booked but not paid' ? 'selected' : ''}>Booked but Not Paid</option>`+
-                                    `<option value="under maintenance" ${res.su.status== 'under maintenance' ? 'selected' : ''}>under Maintenance</option>`
-
-                                )
+                        $('input[name=e_status_display]').val(res.su.status || 'vacant');
+                        $('select[name="e_is_maintenance"]').val(
+                            (res.su.is_maintenance == 1 || res.su.is_maintenance === true || res.su.status === 'under maintenance') ? '1' : '0'
+                        );
+                        var hint = '';
+                        if (res.su.active_contract_id) {
+                            hint = 'Active contract #' + res.su.active_contract_id;
+                            if (res.su.occupied_by_customer && res.su.occupied_by_customer.customer_name) {
+                                hint += ' — ' + res.su.occupied_by_customer.customer_name;
+                            } else if (res.su.occupied_by_customer_id) {
+                                hint += ' — customer #' + res.su.occupied_by_customer_id;
+                            }
+                        }
+                        $('.e-active-contract-hint').text(hint);
 
                         $('select[name="e_location"]')
                             .html(
@@ -603,8 +631,11 @@
                         $(".btn-update").prop("disabled", false);
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        var msg = (xhr.responseJSON && (xhr.responseJSON.error || xhr.responseJSON.message))
+                            ? (xhr.responseJSON.error || xhr.responseJSON.message)
+                            : 'any technical error';
+                        toastr.error(msg);
                         $('.btn-update').text('Save Changes');
                         $(".btn-update").prop("disabled", false);
                     }

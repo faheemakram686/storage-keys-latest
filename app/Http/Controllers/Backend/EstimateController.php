@@ -16,6 +16,7 @@ use App\Repo\RequireDocumentClass;
 use App\Repo\StorageUnitClass;
 use App\Repo\TermLengthClass;
 use App\Repo\UserClass;
+use App\Services\InsurancePricingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -72,6 +73,7 @@ class EstimateController extends Controller
         $data['addon'] = $this->addon->getAllAddon();
         $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
         $data['req_docs'] = $this->require_document->getAllRequireDocument();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view("backend.estimate.create")->with(compact('data'));
     }
 
@@ -83,6 +85,7 @@ class EstimateController extends Controller
         $data['addon'] = $this->addon->getAllAddon();
         $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
         $data['req_docs'] = $this->require_document->getAllRequireDocument();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view("backend.estimate.create")->with(compact('data','id'));
     }
     public function bookingEstimate($id)
@@ -90,15 +93,19 @@ class EstimateController extends Controller
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->lead->getLead($id);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->storageUnits->pluck('id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
+        $data['su'] = $this->su->leadStorageUnits($suIds);
         $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
         $data['req_docs'] = $this->require_document->getAllRequireDocument();
         $data['term_length'] = $this->term_length->getAllTermLength();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view('backend.estimate.estimate')->with(compact('data'));
     }
 
@@ -113,22 +120,50 @@ class EstimateController extends Controller
 
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->estimate->getEstimate($request->id);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->estimateStorageUnits->pluck('storage_unit_id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
-        $data['term_lengths'] = $this->term_length->getAllTermLength();
+        $data['su'] = $this->su->leadStorageUnits($suIds);
+        $suById = collect($data['su'])->keyBy('id');
+        $estimateUnits = !empty($data['lead'][0])
+            ? ($data['lead'][0]->estimateStorageUnits ?? collect([]))
+            : collect([]);
 
+        // Ensure each pivot row has full unit + warehouse for the customer view.
+        $estimateUnits->each(function ($eu) use ($suById) {
+            $full = $suById->get($eu->storage_unit_id);
+            if ($full) {
+                $eu->setRelation('storageunit', $full);
+            } elseif ($eu->storageunit && !$eu->storageunit->relationLoaded('warehouse')) {
+                $eu->storageunit->loadMissing('warehouse.loc.city.country');
+            }
+        });
+
+        if ($estimateUnits->isEmpty() && $suById->isNotEmpty()) {
+            $headerPrice = (float) ($data['lead'][0]->unit_price ?? 0);
+            $estimateUnits = $suById->values()->map(function ($su) use ($headerPrice) {
+                return (object) [
+                    'storage_unit_id' => $su->id,
+                    'unit_price' => $headerPrice > 0 ? $headerPrice : (float) ($su->price ?? 0),
+                    'storageunit' => $su,
+                ];
+            });
+        }
+
+        $data['estimate_units'] = $estimateUnits;
+        $data['term_lengths'] = $this->term_length->getAllTermLength();
 
         if (!empty($data['lead']) && Carbon::now()->gt($data['lead'][0]->expiry_date)) {
             $expire = array('title' => 'Link Expired','code'=>'419','messege'=>'This link is expired please contect to admin for extend estiamte date');
             return view('backend.layouts.error')->with(compact('expire'));
-        } else {
-
-            return view('backend.estimate.estimatefrontend')->with(compact('data'));
         }
+
+        return view('backend.estimate.estimatefrontend')->with(compact('data'));
 
     }
 
@@ -148,12 +183,15 @@ class EstimateController extends Controller
     {
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->estimate->getEstimate($request->id);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->estimateStorageUnits->pluck('storage_unit_id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
+        $data['su'] = $this->su->leadStorageUnits($suIds);
         return $data;
     }
 
@@ -209,6 +247,7 @@ class EstimateController extends Controller
         $data['email_temp'] = $this->email_template->getEmailTemplate('estimate');
         $data['req_docs'] = $this->require_document->getAllRequireDocument();
         $data['estimate'] = $this->estimate->editEstimate($id);
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
 
         return view("backend.estimate.edit")->with(compact('data'));
     }

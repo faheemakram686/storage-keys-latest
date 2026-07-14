@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Backend\PaymentReminder;
+use App\Console\Commands\Backend\RecalculateStorageUnitStatus;
 use App\Jobs\Tenant\AssignLeaveByStatusJob;
 use App\Jobs\Tenant\AssignLeaveJob;
 use App\Jobs\Tenant\AssignUpcomingWorkingShiftJob;
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         PaymentReminder::class,
+        RecalculateStorageUnitStatus::class,
     ];
 
     /**

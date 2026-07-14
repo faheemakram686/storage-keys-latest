@@ -18,6 +18,18 @@ class Lead extends Model
     {
         return $this->belongsTo(StorageUnit::class, 'su_id', 'id');
     }
+
+    public function leadStorageUnits()
+    {
+        return $this->hasMany(LeadStorageUnit::class, 'lead_id', 'id');
+    }
+
+    public function storageUnits()
+    {
+        return $this->belongsToMany(StorageUnit::class, 'lead_storage_units', 'lead_id', 'storage_unit_id')
+            ->withTimestamps();
+    }
+
     public function userresponsible()
     {
         return $this->belongsTo(User::class, 'user_res_id', 'id')->select(['id', 'first_name','last_name']);
@@ -33,6 +45,36 @@ class Lead extends Model
     public function termLength()
     {
         return $this->belongsTo(TermLength::class, 'price', 'id');
+    }
+
+    public function insurance()
+    {
+        return $this->belongsTo(Insurance::class, 'insurance_id', 'id');
+    }
+
+    public function insuranceFee(): float
+    {
+        return (float) ($this->insurance_amount ?? 0);
+    }
+
+    public function setApprovalStatusAttribute($value)
+    {
+        $this->attributes['approval_status'] = (int) $value;
+    }
+
+    public function getApprovalStatusAttribute($value)
+    {
+        if ($value == 3) {
+            return 'Approved';
+        }
+        if ($value == 2) {
+            return 'Approved Level 2';
+        }
+        if ($value == 1) {
+            return 'Approved Level 1';
+        }
+
+        return 'Not Approved';
     }
 
 

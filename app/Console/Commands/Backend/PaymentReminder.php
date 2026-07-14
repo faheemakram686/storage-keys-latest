@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Backend;
 
 use App\Models\Invoice;
-use App\Notifications\Backend\EstimateApprovalNotification;
 use App\Notifications\Backend\PaymentReminderNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -32,21 +31,29 @@ class PaymentReminder extends Command
      */
     public function handle()
     {
-        $qry = Invoice::with('customer.contact');
-        $qry = $qry->where('payment_status','Unpaid');
-        $qry = $qry->where('is_deleted',0);
-        $data['customer'] = $qry->get();
-        foreach ($data['customer'] as $user) {
+        $invoices = Invoice::with(array_merge([
+            'customer.contact',
+        ], Invoice::paymentStatusRelations()))
+            ->where('is_deleted', 0)
+            ->get();
+
+        foreach ($invoices as $invoice) {
+            $invoice->syncPaymentStatus();
+
+            if ($invoice->isFullyPaid() || !$invoice->customer?->contact?->email) {
+                continue;
+            }
+
             $email= [
-                'greeting' => 'Hi '.$user->customer->contact->first_name.' '.$user->customer->contact->last_name.',',
+                'greeting' => 'Hi '.$invoice->customer->contact->first_name.' '.$invoice->customer->contact->last_name.',',
                 'body' => "Its reminder for you.<br> Your payment pending please pay your pending payments",
                 'thanks' => 'Thank you this is from storage Key',
                 'actionText' => 'Visit Storage Keys',
                 'actionURL' => url('/'),
-                'id' => $user->id,
+                'id' => $invoice->id,
 
             ];
-            Notification::route('mail', $user->customer->contact->email)->notify(new PaymentReminderNotification($email));
+            Notification::route('mail', $invoice->customer->contact->email)->notify(new PaymentReminderNotification($email));
         }
         return $this->info('Payment Reminder of the Day sent to All Users');
     }

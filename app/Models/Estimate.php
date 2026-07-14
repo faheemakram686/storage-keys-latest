@@ -16,6 +16,58 @@ class Estimate extends Model
     {
         return $this->belongsTo(StorageUnit::class, 'su_id', 'id');
     }
+
+    public function estimateStorageUnits()
+    {
+        return $this->hasMany(EstimateStorageUnit::class, 'estimate_id', 'id');
+    }
+
+    public function storageUnits()
+    {
+        return $this->belongsToMany(StorageUnit::class, 'estimate_storage_units', 'estimate_id', 'storage_unit_id')
+            ->withPivot('unit_price')
+            ->withTimestamps();
+    }
+
+    /**
+     * Sum of discounted storage cost across all units for the estimate term.
+     */
+    public function totalStorageCost(): float
+    {
+        $term = $this->termLength;
+        $period = $term ? (float) $term->term_period : 1;
+        $discount = $term ? (float) $term->discount_percentage : 0;
+
+        $units = $this->relationLoaded('estimateStorageUnits')
+            ? $this->estimateStorageUnits
+            : $this->estimateStorageUnits()->get();
+
+        if ($units->isEmpty()) {
+            $price = (float) ($this->unit_price ?? 0);
+            $storageTotal = $price * $period;
+            return $storageTotal - ($storageTotal * $discount / 100);
+        }
+
+        $total = 0.0;
+        foreach ($units as $row) {
+            $price = (float) ($row->unit_price ?? 0);
+            $storageTotal = $price * $period;
+            $total += $storageTotal - ($storageTotal * $discount / 100);
+        }
+
+        return $total;
+    }
+
+    public function insuranceFee(): float
+    {
+        return (float) ($this->insurance_amount ?? 0);
+    }
+
+    public function insurance()
+    {
+        return $this->belongsTo(Insurance::class, 'insurance_id', 'id');
+    }
+
     public function lead()
     {
         return $this->belongsTo(Lead::class, 'lead_id', 'id');

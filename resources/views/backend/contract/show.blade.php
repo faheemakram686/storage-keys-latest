@@ -39,6 +39,25 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            @php
+                                                $isDirectApproval = \App\Models\AppSettings::isDirectApproval();
+                                                $canDirectApprove = $isDirectApproval
+                                                    && auth()->user()
+                                                    && auth()->user()->hasRole('App Admin')
+                                                    && isset($data['contract'][0]->status)
+                                                    && $data['contract'][0]->status != 'Approved';
+                                            @endphp
+                                            @if($canDirectApprove)
+                                                <div class="d-flex align-center">
+                                                    <div class="nk-tab-actions me-n1">
+                                                        <a class="btn btn-primary" title="Approve" id="btn-approve" href="#">Approve</a>
+                                                        <a class="btn btn-danger" data-toggle="modal" data-target="#declineModal" title="Decline" href="#">Decline</a>
+                                                    </div>
+                                                    <div class="nk-block-head-content align-self-start d-lg-none">
+                                                        <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
+                                                    </div>
+                                                </div>
+                                            @elseif(!$isDirectApproval)
                                             @isset($data['appSettings'][3]->value)
                                                 @if($data['appSettings'][3]->value == auth()->id() && isset($data['contract'][0]->status) && $data['contract'][0]->status == 'Not Approved' )
                                                     <div class="d-flex align-center">
@@ -72,6 +91,7 @@
                                                     </div>
                                                 @endif
                                             @endisset
+                                            @endif
 
                                         </div>
                                     </div><!-- .nk-block-head -->

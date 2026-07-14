@@ -28,7 +28,7 @@
                                     <div class="nk-block-head">
                                         <div class="nk-block-between g-3">
                                             <div class="nk-block-head-content">
-                                                <h4 class="nk-block-title page-title">Invoice <strong class="text-primary small">#{{$data['invoice'][0]->invoice_no}}</strong>  <span class="badge {{((($data['invoice'][0]->grand_total - $data['payment']) == 0)? 'badge-success':'badge-danger')}} ">{{((($data['invoice'][0]->grand_total - $data['payment']) == 0)? 'Paid':'Up-Paid')}}</span></h4>
+                                                <h4 class="nk-block-title page-title">Invoice <strong class="text-primary small">#{{$data['invoice'][0]->invoice_no}}</strong>  <span class="badge {{ $data['invoice'][0]->paymentStatusBadgeClass() }}">{{ $data['invoice'][0]->payment_status }}</span></h4>
                                                 @if($data['invoice'][0]->recurring != '0')
                                                 <span class="badge badge-outline-primary">Recurring</span>
                                                 <span class="badge badge-outline-primary">Cycles Remaining: {{ $data['invoice'][0]->no_cycle}} </span>
@@ -60,7 +60,7 @@
                                             </div>
                                             <div class="d-flex align-center">
                                                 <div class="nk-tab-actions me-n1">
-                                                    <a class="btn btn-primary {{((($data['invoice'][0]->grand_total - $data['payment']) == 0)? 'disabled':'')}} " title="Payment"  href="{{url('admin/invoice/payment/'.$data['invoice'][0]->id)}}">Payment</a>
+                                                    <a class="btn btn-primary {{ ($data['invoice'][0]->payment_status === 'Paid') ? 'disabled' : '' }} " title="Payment"  href="{{url('admin/invoice/payment/'.$data['invoice'][0]->id)}}">Payment</a>
                                                 </div>
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>

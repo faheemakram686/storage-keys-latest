@@ -96,14 +96,59 @@
                                                                     <option value="">Choose One</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-6">
-                                                                <label  class="lbl" >Storage Unit</label>
-                                                                <input type="hidden" name="old_su_id" id="old_su_id" value="{{$data['estimate'][0]->su_id}}">
-                                                                <select class=" form-control su_id " data-live-search="true" name="su_id" id="su_id">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
+                                                            <div class="col-12">
+                                                                <label class="lbl">Selected Units & Pricing (AED/mo)</label>
+                                                                <table class="table table-sm table-bordered" id="estimate_units_main_table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Unit</th>
+                                                                            <th style="width:180px;">Price</th>
+                                                                            <th style="width:80px;">Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="estimate_units_main_tbody">
+                                                                        @php
+                                                                            $estUnits = $data['estimate'][0]->estimateStorageUnits ?? collect([]);
+                                                                            if ($estUnits->isEmpty() && $data['estimate'][0]->storageunit) {
+                                                                                $estUnits = collect([(object)[
+                                                                                    'storage_unit_id' => $data['estimate'][0]->su_id,
+                                                                                    'unit_price' => $data['estimate'][0]->unit_price,
+                                                                                    'storageunit' => $data['estimate'][0]->storageunit,
+                                                                                ]]);
+                                                                            }
+                                                                        @endphp
+                                                                        @foreach($estUnits as $estUnit)
+                                                                        <tr data-id="{{ $estUnit->storage_unit_id }}">
+                                                                            <td>
+                                                                                {{ optional($estUnit->storageunit)->storage_unit_name ?? ('Unit #'.$estUnit->storage_unit_id) }}
+                                                                                <input type="hidden" name="su_ids[]" value="{{ $estUnit->storage_unit_id }}" class="est-su-id">
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" step="any" class="form-control" name="unit_prices[]" value="{{ $estUnit->unit_price }}" required style="height:35px;">
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-sm btn-danger btn-remove-est-unit" data-id="{{ $estUnit->storage_unit_id }}">X</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                                <p class="text-muted mb-0" id="estimate_units_empty" style="{{ $estUnits->isEmpty() ? '' : 'display:none;' }}">No units selected yet.</p>
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-6 mt-3">
+                                                                <label  class="lbl" >Add Unit</label>
+                                                                <input type="hidden" name="old_su_id" id="old_su_id" value="{{$data['estimate'][0]->su_id}}">
+                                                                <div class="input-group">
+                                                                    <select class="form-control su_id" name="su_picker" id="su_id">
+                                                                        <option value="">Choose One</option>
+                                                                    </select>
+                                                                    <div class="input-group-append">
+                                                                        <button type="button" class="btn btn-primary" id="btn_add_est_unit" style="height:35px;">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                                <small class="text-muted">Pick warehouse cascade above, then Add units here.</small>
+                                                            </div>
+                                                            <div class="col-6 mt-3">
                                                                 <label  class="status" >Estimate Status</label>
                                                                 <select  class="form-control select2" data-live-search="true" name="status" id="status" required>
                                                                     <option value="" selected>Select Estimate Status</option>
@@ -138,9 +183,7 @@
                                                                 </div>
                                                                 @if($term_length->term_period == 1 )
                                                                 <div class="col-3 d-flex">
-                                                                    <span class="no-bottom-margin mt-1 text-right">AED</span>
-                                                                    <input type="text" class=" no-bottom-margin form-control" placeholder="Price" name="unit_price" value="{{$data['estimate'][0]->unit_price}}" style="height:35px;width:100px;padding: 0px 8px">
-                                                                    <span class="no-bottom-margin mt-1 text-right">/mo</span>
+                                                                    <p class="no-bottom-margin text-right">Fixed Price</p>
                                                                 </div>
                                                                 @else
                                                                 <div class="col-3 d-flex">
@@ -187,35 +230,12 @@
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 padlock-section-header">
                                                 Insurance</div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
-                                                <div class="row">
-                                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                        <p>Insure your goods</p>
-                                                        <div class="separator"></div>
-                                                        <div class="row">
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" name="insurance" type="radio" value="cover" {{($data['estimate'][0]->insurence == 'cover' ? 'checked' : '')}} id="ins_cover" />
-                                                                    <label class="check-container" for="ins_cover">Choose your own cover (100 AED per 100,000 AED cover)</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">AED 25.00/mo</p>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <input type="text" class="form-control" placeholder="Enter value of your goods" name="goodsval" value="{{$data['estimate'][0]->goods}}" style="height:35px;">
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">Cover AED 25000.00</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="separator"></div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="insurance" type="radio" value="nothanks" {{($data['estimate'][0]->insurence == 'nothanks' ? 'checked' : '')}} id="ins_nothanks" />
-                                                            <label class="check-container" for="ins_nothanks">No Thanks</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @include('partials.insurance-selector', [
+                                                    'insurances' => $data['insurances'] ?? collect([]),
+                                                    'selectedInsuranceId' => $data['estimate'][0]->insurance_id ?? null,
+                                                    'goodsValue' => $data['estimate'][0]->goods ?? null,
+                                                    'readonly' => false,
+                                                ])
                                             </div>
                                         </div>
                                         <div class="row reservations-sections">
@@ -408,23 +428,63 @@
                     dataType: 'json',
                     data: { warehouse_id: warehouse_id },
                     success: function(data) {
-                        $('.su_id').empty();
-                        var html3 = '';
-                        $('.su_id').html('<option value="">Select Storage Unit</option>');
+                        var html = '<option value="">Choose One</option>';
                         if (data.length > 0) {
                             for (var i = 0; i < data.length; i++) {
-                                html3 += ' <option value='+data[i].id+' ' + (selected_id == data[i].id ? 'selected' : '') + '> '+data[i].storage_unit_name+'</option>';
+                                html += '<option value="'+data[i].id+'" data-name="'+data[i].storage_unit_name+'" data-price="'+(data[i].price || 0)+'" '+(selected_id == data[i].id ? 'selected' : '')+'>'+data[i].storage_unit_name+'</option>';
                             }
-                        } else {
-                            html3 = '<option value="">No Storage Unit Found</option>';
+                        } else if (warehouse_id) {
+                            html = '<option value="">No Storage Unit Found</option>';
                         }
-                        $('.su_id').append(html3);
+                        $('.su_id').html(html);
                     }
                 });
             }
 
+            function toggleEstimateUnitsEmpty() {
+                var hasRows = $('#estimate_units_main_tbody tr').length > 0;
+                if (hasRows) {
+                    $('#estimate_units_empty').hide();
+                } else {
+                    $('#estimate_units_empty').show();
+                }
+            }
+
+            $('#btn_add_est_unit').on('click', function() {
+                var $opt = $('#su_id option:selected');
+                var id = $opt.val();
+                var name = ($opt.data('name') || $opt.text() || '').toString().trim();
+                var price = $opt.data('price') || 0;
+                if (!id) {
+                    toastr.error('Please select a storage unit first.');
+                    return;
+                }
+                if ($('#estimate_units_main_tbody tr[data-id="'+id+'"]').length) {
+                    toastr.error('This unit is already added.');
+                    return;
+                }
+                $('#estimate_units_main_tbody').append(
+                    '<tr data-id="'+id+'">'+
+                    '<td>'+name+'<input type="hidden" name="su_ids[]" value="'+id+'" class="est-su-id"></td>'+
+                    '<td><input type="number" step="any" class="form-control" name="unit_prices[]" value="'+price+'" required style="height:35px;"></td>'+
+                    '<td><button type="button" class="btn btn-sm btn-danger btn-remove-est-unit" data-id="'+id+'">X</button></td>'+
+                    '</tr>'
+                );
+                toggleEstimateUnitsEmpty();
+                $('#su_id').val('');
+            });
+
+            $(document).on('click', '.btn-remove-est-unit', function() {
+                $(this).closest('tr').remove();
+                toggleEstimateUnitsEmpty();
+            });
+
             $('#EstimateUpdateForm').on('submit', function(e) {
                 e.preventDefault();
+                if ($('#estimate_units_main_tbody tr').length === 0) {
+                    toastr.error('Please select at least one storage unit.');
+                    return;
+                }
                 var formData=$(this).serialize();
                 $.ajax({
                     type: "post",

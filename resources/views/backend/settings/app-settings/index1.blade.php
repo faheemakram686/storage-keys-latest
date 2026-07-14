@@ -43,7 +43,31 @@
                                 <div class="nk-block-head">
                                     <h4 class="title">Default Settings</h4>
                                 </div>
-                                    <div class="row">
+                                    @php
+                                        $approvalModeSetting = isset($data['appSettings'])
+                                            ? $data['appSettings']->firstWhere('key', 'approval_mode')
+                                            : null;
+                                        $approvalMode = $approvalModeSetting->value ?? 'multi_level';
+                                    @endphp
+                                    <div class="row mb-4">
+                                        <div class="col-md-12">
+                                            <label><h6>Approval Mode</h6></label>
+                                            <div class="form-group">
+                                                <div class="custom-control custom-radio mb-1">
+                                                    <input type="radio" id="approval_mode_multi" name="approval_mode" value="multi_level" class="custom-control-input"
+                                                        {{ $approvalMode === 'multi_level' ? 'checked' : '' }}>
+                                                    <label class="custom-control-label" for="approval_mode_multi">3-Level Approval</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="approval_mode_direct" name="approval_mode" value="direct" class="custom-control-input"
+                                                        {{ $approvalMode === 'direct' ? 'checked' : '' }}>
+                                                    <label class="custom-control-label" for="approval_mode_direct">Direct Admin Approval</label>
+                                                </div>
+                                                <small class="text-soft">Direct mode lets App Admin fully approve Estimates, Contracts, and Leads in one step. 3-Level uses the users configured below.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="approval-levels-section">
                                         <div class="col-md-6">
                                             <label> <h6>By Default Estimate Approval</h6>  <span class="text-danger"></span></label>
                                             <div class="form-group">
@@ -148,7 +172,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6 mt-3">
-                                            <label><h6>By Default Lead Assign</h6>  <span class="text-danger"></span></label>
+                                            <label><h6>By Default Lead Approval</h6>  <span class="text-danger"></span></label>
                                             <div class="form-group">
                                                 <label> Level 1 <span class="text-danger"></span></label>
                                                 <select name="lead_level_1" id="" class="form-control select2" data-live-search="true" >
@@ -229,6 +253,17 @@
 
     <script>
         $(document).ready(function() {
+            function toggleApprovalLevels() {
+                var isDirect = $('input[name="approval_mode"]:checked').val() === 'direct';
+                if (isDirect) {
+                    $('#approval-levels-section').slideUp(150);
+                } else {
+                    $('#approval-levels-section').slideDown(150);
+                }
+            }
+            $('input[name="approval_mode"]').on('change', toggleApprovalLevels);
+            toggleApprovalLevels();
+
             $('#updateCountryForm').on('submit', function(e) {
                 e.preventDefault();
                 var formData=$('#updateCountryForm').serialize()

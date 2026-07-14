@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="col-2">
-                    @if($data['invoice'][0]->payment_status == "UNPAID")
+                    @if($data['invoice'][0]->payment_status !== "Paid")
                     <a href="{{url('pay-now/'.$data['invoice'][0]->id)}}" class="btn btn-primary" >Pay Now</a>
                         @endif
                 </div>

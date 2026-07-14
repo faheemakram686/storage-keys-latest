@@ -17,6 +17,7 @@
                         @php
                             $lead = $data['lead'][0] ?? null;
                             $su   = $data['su'][0]   ?? null;
+                            $allSus = $data['su'] ?? collect([]);
                         @endphp
 
                         @if($lead)
@@ -28,10 +29,34 @@
                                         <div class="nk-block-head-content">
                                             <h4 class="nk-block-title">Lead Information</h4>
                                             <div class="nk-block-des">
-                                                <p>Basic info about lead.</p>
+                                                <p>Basic info about lead.
+                                                    <span class="badge {{(($lead->approval_status == 'Approved') ? 'badge-success' : 'badge-danger')}}">
+                                                        {{ $lead->approval_status }}
+                                                    </span>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="d-flex align-center">
+                                            @php
+                                                $isDirectApproval = \App\Models\AppSettings::isDirectApproval();
+                                                $canDirectApprove = $isDirectApproval
+                                                    && auth()->user()
+                                                    && auth()->user()->hasRole('App Admin')
+                                                    && $lead->approval_status != 'Approved';
+                                                $showApprove = $canDirectApprove;
+                                                if (!$isDirectApproval && isset($data['appSettings'])) {
+                                                    $showApprove =
+                                                        (!empty($data['appSettings'][6]->value) && $data['appSettings'][6]->value == auth()->id() && $lead->approval_status == 'Not Approved')
+                                                        || (!empty($data['appSettings'][7]->value) && $data['appSettings'][7]->value == auth()->id() && $lead->approval_status == 'Approved Level 1')
+                                                        || (!empty($data['appSettings'][8]->value) && $data['appSettings'][8]->value == auth()->id() && $lead->approval_status == 'Approved Level 2');
+                                                }
+                                            @endphp
+                                            @if($showApprove)
+                                                <div class="nk-tab-actions me-n1">
+                                                    <a class="btn btn-primary btn-sm" title="Approve" id="btn-approve-lead" href="#">Approve</a>
+                                                    <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#declineLeadModal" title="Decline" href="#">Decline</a>
+                                                </div>
+                                            @endif
                                             <div class="nk-tab-actions me-n1">
                                                 <a class="btn btn-icon btn-trigger" title="Edit Lead" href="{{ url('admin/edit-lead/'.$lead->id) }}"><em class="icon ni ni-edit"></em></a>
                                             </div>
@@ -102,18 +127,23 @@
                                             <div class="data-col">
                                                 <span class="data-label">Storage Unit:</span>
                                                 <span class="data-value">
-                                                    @if($su)
-                                                        {{ $su->storage_unit_name ?? 'N/A' }}
-                                                        @if(!empty($su->warehouse))
-                                                            , {{ $su->warehouse->name ?? '' }}<br>
-                                                            @if(!empty($su->warehouse->loc))
-                                                                {{ $su->warehouse->loc->loc_name ?? '' }}@if(!empty($su->warehouse->loc->city)),
-                                                                    {{ $su->warehouse->loc->city->city_name ?? '' }}@if(!empty($su->warehouse->loc->city->country)),
-                                                                        {{ $su->warehouse->loc->city->country->name ?? '' }}
+                                                    @if($allSus && count($allSus))
+                                                        @foreach($allSus as $unitRow)
+                                                            <div class="mb-1">
+                                                                {{ $unitRow->storage_unit_name ?? 'N/A' }}
+                                                                @if(!empty($unitRow->warehouse))
+                                                                    , {{ $unitRow->warehouse->name ?? '' }}
+                                                                    @if(!empty($unitRow->warehouse->loc))
+                                                                        — {{ $unitRow->warehouse->loc->loc_name ?? '' }}
+                                                                        @if(!empty($unitRow->warehouse->loc->city))
+                                                                            , {{ $unitRow->warehouse->loc->city->city_name ?? '' }}
+                                                                        @endif
                                                                     @endif
                                                                 @endif
-                                                            @endif
-                                                        @endif
+                                                            </div>
+                                                        @endforeach
+                                                    @elseif($su)
+                                                        {{ $su->storage_unit_name ?? 'N/A' }}
                                                     @else
                                                         N/A
                                                     @endif
@@ -292,11 +322,90 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="declineLeadModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-capitalize">Decline Lead</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{{ url('admin/decline-lead') }}" id="DeclineLeadForm">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $lead->id }}">
+                                <div class="form-group">
+                                    <label for="decline_reason">Decline Reason Note</label>
+                                    <textarea name="decline_reason" id="decline_reason" class="form-control" placeholder="Enter lead decline reason note...."></textarea>
+                                </div>
+                                <div class="float-right">
+                                    <button class="btn btn-danger mt-2 btn-decline-lead" type="submit">Decline</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @endisset
         </div>
     </div>
 
     <script>
+        $('#btn-approve-lead').on('click', function (e) {
+            e.preventDefault();
+            var id = {{ isset($lead) ? $lead->id : 'null' }};
+            if (!id) {
+                return;
+            }
+            $.ajax({
+                url: '{{ url('admin/approve-lead') }}',
+                type: 'get',
+                dataType: 'json',
+                data: {id: id},
+                beforeSend: function() {
+                    $('#btn-approve-lead').text('Saving...').prop('disabled', true);
+                },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.success);
+                        window.location.reload();
+                    } else {
+                        toastr.error(data.error);
+                    }
+                },
+                complete: function() {
+                    $('#btn-approve-lead').text('Approve').prop('disabled', false);
+                },
+                error: function () {
+                    toastr.error('something went wrong');
+                    $('#btn-approve-lead').text('Approve').prop('disabled', false);
+                }
+            });
+        });
+
+        $('#DeclineLeadForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'get',
+                url: '{{ url('admin/decline-lead') }}',
+                data: formData,
+                success: function(data) {
+                    if (data.success) {
+                        toastr.success(data.success);
+                        window.location.reload();
+                    } else {
+                        toastr.error(data.error || 'Unable to decline lead');
+                    }
+                },
+                error: function() {
+                    toastr.error('something went wrong');
+                }
+            });
+        });
+
         $('#changeStatus').on('submit', function(e) {
             e.preventDefault();
             var formData = $('#changeStatus').serialize();

@@ -94,7 +94,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Width</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="width" placeholder="Width" step="any" required>
+                                        <input class="form-control" type="number" name="width" placeholder="Width" step="any">
                                     </div>
 
                                 </div>
@@ -104,7 +104,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Length</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="length" placeholder="Length" step="any" required>
+                                        <input class="form-control" type="number" name="length" placeholder="Length" step="any">
                                     </div>
 
                                 </div>
@@ -114,7 +114,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Height</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="height" placeholder="Height" step="any" required>
+                                        <input class="form-control" type="number" name="height" placeholder="Height" step="any">
                                     </div>
 
                                 </div>
@@ -190,7 +190,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Width</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_width" placeholder="Width" required>
+                                        <input class="form-control" type="number" step="any" name="e_width" placeholder="Width">
                                     </div>
 
                                 </div>
@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Length</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_length" placeholder="Length" required>
+                                        <input class="form-control" type="number" step="any" name="e_length" placeholder="Length">
                                     </div>
 
                                 </div>
@@ -210,7 +210,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Height</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_height" placeholder="Height" required>
+                                        <input class="form-control" type="number" step="any" name="e_height" placeholder="Height">
                                     </div>
 
                                 </div>
@@ -319,9 +319,9 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_type_name+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].m_unit.value+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].width+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].height+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].length+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+(data[i].width ?? '-')+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+(data[i].height ?? '-')+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+(data[i].length ?? '-')+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].no_of_units+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
                             ' <span class="badge badge-success">'+data[i].status+'</span>'+
@@ -392,9 +392,9 @@
 
                         $('input[name=id]').val(id);
                         $('input[name=e_u_name]').val(res.st.unit_type_name);
-                        $('input[name=e_width]').val(res.st.width);
-                        $('input[name=e_length]').val(res.st.length);
-                        $('input[name=e_height]').val(res.st.height);
+                        $('input[name=e_width]').val(res.st.width ?? '');
+                        $('input[name=e_length]').val(res.st.length ?? '');
+                        $('input[name=e_height]').val(res.st.height ?? '');
                         $('input[name=e_no_unit]').val(res.st.no_of_units);
 
                             $('select[name="e_status"]')

@@ -28,6 +28,24 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            @php
+                                                $isDirectApproval = \App\Models\AppSettings::isDirectApproval();
+                                                $canDirectApprove = $isDirectApproval
+                                                    && auth()->user()
+                                                    && auth()->user()->hasRole('App Admin')
+                                                    && $data['estimate'][0]->status != 'Approved';
+                                            @endphp
+                                            @if($canDirectApprove)
+                                                <div class="d-flex align-center">
+                                                    <div class="nk-tab-actions me-n1">
+                                                        <a class="btn btn-primary btn-approve" title="Approve" id="btn-approve" href="#">Approve</a>
+                                                        <a class="btn btn-danger" data-toggle="modal" data-target="#declineModal" title="Decline" href="#">Decline</a>
+                                                    </div>
+                                                    <div class="nk-block-head-content align-self-start d-lg-none">
+                                                        <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
+                                                    </div>
+                                                </div>
+                                            @elseif(!$isDirectApproval)
                                             @isset($data['appSettings'])
                                                 @if($data['appSettings'][0]->value == auth()->id() && $data['estimate'][0]->status == 'Not Approved' )
                                                        <div class="d-flex align-center">
@@ -61,6 +79,7 @@
                                                     </div>
                                                 @endif
                                             @endisset
+                                            @endif
                                         </div>
                                     </div><!-- .nk-block-head -->
                                     <div class="nk-block">
@@ -107,21 +126,53 @@
                                                             </tr>
                                                             </thead>
                                                             @php
-                                                            $storageunitotal = $data['estimate'][0]->unit_price * $data['estimate'][0]->termLength->term_period;
+                                                            $est = $data['estimate'][0];
+                                                            $estUnits = $est->estimateStorageUnits ?? collect([]);
+                                                            $period = optional($est->termLength)->term_period ?? 1;
+                                                            $discountPct = optional($est->termLength)->discount_percentage ?? 0;
+                                                            if ($estUnits->isEmpty()) {
+                                                                $storageunitotal = (float)$est->unit_price * $period;
+                                                            } else {
+                                                                $storageunitotal = $estUnits->sum(function ($row) use ($period) {
+                                                                    return (float)$row->unit_price * $period;
+                                                                });
+                                                            }
+                                                            $storageDiscounted = $storageunitotal - ($storageunitotal * $discountPct / 100);
                                                             @endphp
                                                             <tbody>
+                                                            @if($estUnits->isNotEmpty())
+                                                                @foreach($estUnits as $key => $eu)
+                                                                <tr>
+                                                                    <td>{{ $key + 1 }}</td>
+                                                                    <td>{{ optional($eu->storageunit)->storage_unit_name ?? ('Unit #'.$eu->storage_unit_id) }} / {{ optional($est->termLength)->title }}</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td>
+                                                                        @php
+                                                                            $line = (float)$eu->unit_price * $period;
+                                                                            $lineDisc = $line - ($line * $discountPct / 100);
+                                                                        @endphp
+                                                                        {{ $lineDisc }}
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                                @php $addonStart = $estUnits->count() + 1; @endphp
+                                                            @else
                                                             <tr>
                                                                 <td>1</td>
-                                                                <td>{{$data['estimate'][0]->storageunit->storage_unit_name}}/{{$data['estimate'][0]->termLength->title}}</td>
+                                                                <td>{{ optional($est->storageunit)->storage_unit_name }}/{{ optional($est->termLength)->title }}</td>
                                                                 <td></td>
                                                                 <td></td>
-                                                                <td id="storageTotal">{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)}} </td>
-                                                            @if($data['estimate'][0]->estimateAddon)
+                                                                <td id="storageTotal">{{ $storageDiscounted }} </td>
+                                                            </tr>
+                                                                @php $addonStart = 2; @endphp
+                                                            @endif
+                                                            @if($est->estimateAddon)
                                                                 @php $addonAmount = 0; @endphp
-                                                                @foreach($data['estimate'][0]->estimateAddon as $key => $addon)
+                                                                @foreach($est->estimateAddon as $key => $addon)
                                                                     @php
                                                                         $addonAmount += $addon->price;
-                                                                        $i = $key+2;
+                                                                        $i = $addonStart + $key;
                                                                     @endphp
                                                                     <tr>
                                                                         <td>{{$i}}</td>
@@ -131,14 +182,17 @@
                                                                         <td>{{$addon->price}}</td>
                                                                     </tr>
                                                                 @endforeach
+                                                            @else
+                                                                @php $addonAmount = 0; @endphp
                                                             @endif
-                                                            @if($data['estimate'][0]->insurence !='nothanks')
+                                                            @php $insuranceAmt = (float) ($est->insurance_amount ?? 0); @endphp
+                                                            @if($insuranceAmt > 0)
                                                                 <tr>
-                                                                    <td>3</td>
-                                                                    <td>Insurance</td>
+                                                                    <td>{{ $addonStart + ($est->estimateAddon ? $est->estimateAddon->count() : 0) }}</td>
+                                                                    <td>Insurance{{ $est->insurance_cover ? ' (Cover '.$est->insurance_cover.')' : '' }}</td>
                                                                     <td></td>
                                                                     <td></td>
-                                                                    <td>25</td>
+                                                                    <td>{{ number_format($insuranceAmt, 2, '.', '') }}</td>
                                                                 </tr>
                                                             @endif
                                                             </tbody>
@@ -146,7 +200,7 @@
                                                             <tr>
                                                                 <td colspan="2"></td>
                                                                 <td colspan="2">Subtotal</td>
-                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0) }} AED</td>
+                                                                <td>{{ $storageDiscounted  + $addonAmount + $insuranceAmt }} AED</td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="2"></td>
@@ -156,7 +210,7 @@
                                                             <tr>
                                                                 <td colspan="2"></td>
                                                                 <td colspan="2">Grand Total</td>
-                                                                <td>{{ $storageunitotal - ($storageunitotal * $data['estimate'][0]->termLength->discount_percentage/100)  + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0)}} AED</td>
+                                                                <td>{{ $storageDiscounted  + $addonAmount + $insuranceAmt }} AED</td>
                                                             </tr>
                                                             </tfoot>
                                                         </table>

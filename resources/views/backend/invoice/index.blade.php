@@ -8,7 +8,7 @@
                     <div class="nk-block-head-content">
                         <h3 class="nk-block-title page-title">Invoice List</h3>
                         <div class="nk-block-des text-soft">
-
+                            <p id="invoiceSummary">Loading invoice summary...</p>
                         </div>
                     </div>
 
@@ -51,6 +51,8 @@
                             <th class="nk-tb-col"><span class="sub-text">Contract/Order</span></th>
                             <th class="nk-tb-col"><span class="sub-text">INV-Date</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Due</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Amount</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Balance</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Payment</span></th>
                             <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>
@@ -117,6 +119,16 @@
             });
 
             getAllCities();
+            function paymentStatusBadgeClass(status) {
+                if (status === 'Paid') {
+                    return 'badge-success';
+                }
+                if (status === 'Partial') {
+                    return 'badge-warning';
+                }
+                return 'badge-danger';
+            }
+
             function getAllCities() {
 
                 $.ajax({
@@ -126,8 +138,13 @@
                     async: false,
                     dataType: 'json',
 
-                    success: function(data) {
-                        console.log(data);
+                    success: function(response) {
+                        var data = response.invoices || [];
+                        var summary = response.summary || { pending_count: 0, total_balance: 0 };
+
+                        $('#invoiceSummary').html(
+                            'Pending invoices: <strong>' + summary.pending_count + '</strong> | Total balance: <strong>' + summary.total_balance + ' AED</strong>'
+                        );
 
                         var html = '';
                         var i;
@@ -154,11 +171,13 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools"> '+ contractOrOrderHtml +' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].invoice_date+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].due_date+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].grand_total+' AED</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].balance+' AED</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+
                                 ' </td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge '+((data[i].payment_status == 'PAID')? 'badge-success':'badge-danger') +' ">'+data[i].payment_status+'</span>'+
+                                ' <span class="badge '+ paymentStatusBadgeClass(data[i].payment_status) +' ">'+data[i].payment_status+'</span>'+
                                 ' </td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
                                 ' <ul class="nk-tb-actions gx-1">'+

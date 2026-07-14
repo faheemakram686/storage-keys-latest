@@ -98,9 +98,15 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Storage Unit</label>
-                                                                <select class=" form-control su_id " data-live-search="true" name="su_id" id="su_id">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
+                                                                <div class="input-group">
+                                                                    <select class="form-control su_id" name="su_picker" id="su_id">
+                                                                        <option value="">Choose One</option>
+                                                                    </select>
+                                                                    <div class="input-group-append">
+                                                                        <button type="button" class="btn btn-primary" id="btn_add_est_unit" style="height:35px;">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                                <small class="text-muted">Select a unit and click Add. You can add multiple units.</small>
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="status" >Estimate Status</label>
@@ -111,6 +117,21 @@
                                                                     <option value="1">Approved Level 1</option>
                                                                     <option value="0">Not Approved</option>
                                                                 </select>
+                                                            </div>
+                                                            <div class="col-12 mt-3">
+                                                                <label class="lbl">Unit Pricing (AED/mo)</label>
+                                                                <table class="table table-sm table-bordered" id="estimate_units_price_table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Unit</th>
+                                                                            <th style="width:180px;">Price</th>
+                                                                            <th style="width:80px;">Action</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                                <div id="estimate_su_ids_inputs"></div>
+                                                                <p class="text-muted" id="estimate_units_empty">No units selected yet. Use Add above.</p>
                                                             </div>
                                                         </div>
 
@@ -136,9 +157,7 @@
                                                                 </div>
                                                                 @if($term_length->term_period ==1 )
                                                                 <div class="col-3 d-flex">
-                                                                    <span class="no-bottom-margin mt-1 text-right">AED</span>
-                                                                    <input type="text" class=" no-bottom-margin form-control" placeholder="Price" name="unit_price" value="" style="height:35px;width:100px;padding: 0px 8px">
-                                                                    <span class="no-bottom-margin mt-1 text-right">/mo</span>
+                                                                    <p class="no-bottom-margin text-right">Fixed Price</p>
                                                                 </div>
                                                                 @else
                                                                 <div class="col-3 d-flex">
@@ -181,37 +200,12 @@
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 padlock-section-header">
                                                 Insurance</div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
-                                                <div class="row">
-                                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                        <p>Insure your goods</p>
-                                                        <div class="separator"></div>
-                                                        <div class="row">
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" name="insurance" type="radio" value="cover"    id="flexCheckDefault" />
-                                                                    <label class="check-container" for="flexCheckDefault">Choose your own cover (100 AED per 100,000 AED cover)</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">AED 25.00/mo</p>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-
-                                                                <input type="text" class="form-control" placeholder="Enter value of your goods" name="goodsval" value="" style="height:35px;">
-
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">Cover AED 25000.00</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="separator"></div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="insurance" type="radio" value="nothanks"  id="flexCheckDefault" />
-                                                            <label class="check-container" for="flexCheckDefault">No Thanks</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @include('partials.insurance-selector', [
+                                                    'insurances' => $data['insurances'] ?? collect([]),
+                                                    'selectedInsuranceId' => null,
+                                                    'goodsValue' => null,
+                                                    'readonly' => false,
+                                                ])
                                             </div>
                                         </div>
                                         <div class="row reservations-sections">
@@ -406,6 +400,31 @@
                 var warehouse_id = $(this).val();
                 getStorageUnit(warehouse_id);
             });
+
+            var estimateUnitsMap = {};
+
+            function renderEstimateUnitsTable() {
+                var $tbody = $('#estimate_units_price_table tbody');
+                var $inputs = $('#estimate_su_ids_inputs');
+                $tbody.empty();
+                $inputs.empty();
+                var ids = Object.keys(estimateUnitsMap);
+                if (ids.length === 0) {
+                    $('#estimate_units_empty').show();
+                    return;
+                }
+                $('#estimate_units_empty').hide();
+                ids.forEach(function(id) {
+                    var u = estimateUnitsMap[id];
+                    $tbody.append(
+                        '<tr data-id="'+id+'"><td>'+u.name+'</td>'+
+                        '<td><input type="number" step="any" class="form-control" name="unit_prices[]" value="'+u.price+'" required style="height:35px;"></td>'+
+                        '<td><button type="button" class="btn btn-sm btn-danger btn-remove-est-unit" data-id="'+id+'">X</button></td></tr>'
+                    );
+                    $inputs.append('<input type="hidden" name="su_ids[]" value="'+id+'">');
+                });
+            }
+
             function getStorageUnit(warehouse_id) {
                 $.ajax({
                     url: '{{ url('get-storageunit') }}',
@@ -414,20 +433,16 @@
                     dataType: 'json',
                     data: { warehouse_id: warehouse_id },
                     success: function(data) {
-                        $('.su_id').empty();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.su_id').html('<option value="">Select Storage Unit</option>');
+                        var $su = $('.su_id');
+                        var html = '<option value="">Choose One</option>';
                         if (data.length > 0) {
-                            for (i = 0; i < data.length; i++) {
-                                c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].storage_unit_name+'</option>';
+                            for (var i = 0; i < data.length; i++) {
+                                html += '<option value="'+data[i].id+'" data-name="'+data[i].storage_unit_name+'" data-price="'+(data[i].price || 0)+'">'+data[i].storage_unit_name+'</option>';
                             }
                         } else {
-                            var html3 = '<option value="">No Storage Unit Found</option>';
+                            html = '<option value="">No Storage Unit Found</option>';
                         }
-                        $('.su_id').append(html3);
+                        $su.html(html);
                     },
                     error: function() {
                         toastr.error('any technical error');
@@ -435,9 +450,38 @@
                 });
             }
 
+            $('#btn_add_est_unit').on('click', function() {
+                var $opt = $('#su_id option:selected');
+                var id = $opt.val();
+                var name = ($opt.data('name') || $opt.text() || '').toString().trim();
+                var price = $opt.data('price') || 0;
+                if (!id) {
+                    toastr.error('Please select a storage unit first.');
+                    return;
+                }
+                if (estimateUnitsMap[id]) {
+                    toastr.error('This unit is already added.');
+                    return;
+                }
+                estimateUnitsMap[id] = { name: name, price: price };
+                renderEstimateUnitsTable();
+                $('#su_id').val('');
+            });
+
+            $(document).on('click', '.btn-remove-est-unit', function() {
+                var id = $(this).data('id');
+                delete estimateUnitsMap[id];
+                renderEstimateUnitsTable();
+            });
+
             $('#EstimateForm').on('submit', function(e) {
                 e.preventDefault();
+                if (Object.keys(estimateUnitsMap).length === 0) {
+                    toastr.error('Please select at least one storage unit.');
+                    return;
+                }
                 var formData=$('#EstimateForm').serialize()
+
                 $.ajax({
                     type: "get",
                     url: '{{ url('admin/add-estimate') }}',

@@ -10,6 +10,7 @@ interface StorageUnitInterface{
     public function updateStorageUnit($request);
     public function searchStorageUnit($request);
     public function leadStorageUnit($request);
+    public function leadStorageUnits($ids);
 
     public function getSunitWarehouseWise($request);
 

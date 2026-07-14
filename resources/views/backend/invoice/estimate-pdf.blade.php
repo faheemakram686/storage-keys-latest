@@ -161,7 +161,7 @@
                                         <div class="col-lg-6 d-flex">
                                             <span class="no-bottom-margin mt-1 text-right">AED</span>
                                             @isset($data['lead'][0]->insurence)
-                                            <span class="no-bottom-margin inc_amount mt-1 text-right">{{(( $data['lead'][0]->insurence == 'nothanks')? 0 : 25)}}</span>
+                                            <span class="no-bottom-margin inc_amount mt-1 text-right">{{ number_format((float) ($data['lead'][0]->insurance_amount ?? 0), 2, '.', '') }}</span>
                                             @endisset
                                             <span class="no-bottom-margin mt-1 text-right">/mo</span>
                                         </div>
@@ -175,7 +175,7 @@
                                         </div>
                                         <div class="col-lg-6 d-flex">
                                             <span class="no-bottom-margin mt-1 text-right">AED</span>
-                                            <span class="no-bottom-margin mt-1 sub_total text-right" id="subtotal">{{$data['lead'][0]->estimateAddon->sum('price') + $data['su'][0]->price +  (( $data['lead'][0]->insurence == 'nothanks')? 0 : 25) }} </span>
+                                            <span class="no-bottom-margin mt-1 sub_total text-right" id="subtotal">{{ $data['lead'][0]->estimateAddon->sum('price') + $data['su'][0]->price + (float) ($data['lead'][0]->insurance_amount ?? 0) }} </span>
                                             <span class="no-bottom-margin mt-1 text-right">/mo</span>
                                         </div>
                                     </div>
@@ -269,7 +269,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                            <p class="text-right">AED 25.00/mo</p>
+                                            <p class="text-right">AED {{ number_format((float) ($lead->insurance_amount ?? 0), 2) }}/mo</p>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-6 col-lg-6">
 
@@ -277,7 +277,7 @@
 
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                            <p class="text-right">Cover AED 25000.00</p>
+                                            <p class="text-right">Cover AED {{ $lead->insurance_cover ?? '—' }}</p>
                                         </div>
                                     </div>
                                     <div class="separator"></div>

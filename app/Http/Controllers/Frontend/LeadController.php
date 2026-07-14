@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\AppSettings;
 use App\Repo\AddonClass;
 use App\Repo\CountryClass;
 use App\Repo\CustomerClass;
@@ -12,6 +13,7 @@ use App\Repo\LeadStatusClass;
 use App\Repo\StorageUnitClass;
 use App\Repo\TermLengthClass;
 use App\Repo\UserClass;
+use App\Services\InsurancePricingService;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
@@ -57,6 +59,7 @@ class LeadController extends Controller
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
         $data['term_length'] = $this->term_length->getAllTermLength();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view('backend.leads.create')->with(compact('data'));
     }
     public function createLeadCustomer($id)
@@ -68,16 +71,14 @@ class LeadController extends Controller
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
         $data['term_length'] = $this->term_length->getAllTermLength();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view('backend.leads.create')->with(compact('data','id'));
     }
 
 
     public function saveLead(Request $request)
     {
-        $res = $this->lead->saveLead($request);
-       return $data = $res->getData(true); // Convert to array
-
-      //  dd($data); // Now you can safely access 'status'
+        return $this->lead->saveLead($request);
     }
     public function saveLeadBackend(Request $request)
     {
@@ -109,15 +110,19 @@ class LeadController extends Controller
     public function viewLead($request)
     {
         $data['lead']=$this->lead->getLead($request);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->storageUnits->pluck('id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
+        $data['su'] = $this->su->leadStorageUnits($suIds);
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
         $data['user'] = $this->user->getUser();
+        $data['appSettings'] = AppSettings::query()->orderBy('id')->get(['id', 'key', 'value']);
 
         return view('backend.leads.show')->with(compact('data'));
     }
@@ -126,12 +131,15 @@ class LeadController extends Controller
     {
 
         $data['lead'] = $this->lead->getLead($request->id);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->storageUnits->pluck('id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
+        $data['su'] = $this->su->leadStorageUnits($suIds);
         return $data;
     }
     public function editLead($id)
@@ -139,16 +147,21 @@ class LeadController extends Controller
         $data['loc'] =  $this->country->getAllCountry();
         $data['addon'] = $this->addon->getStorageUnitAddon();
         $data['lead'] = $this->lead->getLead($id);
-        $su_id = null;
+        $suIds = [];
         foreach ($data['lead'] as $item) {
             $data['leadaddon'] = !empty($item['addon']) ? explode(',', $item['addon']) : [];
-            $su_id = $item['su_id'];
+            $suIds = $item->storageUnits->pluck('id')->toArray();
+            if (empty($suIds) && $item->su_id) {
+                $suIds = [$item->su_id];
+            }
         }
-        $data['su'] = $su_id ? $this->su->leadStorageUnit($su_id) : collect([]);
+        $data['su'] = $this->su->leadStorageUnits($suIds);
+        $data['selected_su_ids'] = $suIds;
         $data['user'] = $this->user->getUser();
         $data['status'] = $this->lead_status->getAllLeadStatus();
         $data['source'] = $this->lead_source->getAllLeadSource();
         $data['term_length'] = $this->term_length->getAllTermLength();
+        $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view('backend.leads.editlead')->with(compact('data'));
 
     }
@@ -188,6 +201,16 @@ class LeadController extends Controller
         $data['lead'] = $this->lead->getLead($request);
         $data['users'] = $this->user->getUser();
         return view('backend.leads.reminders')->with(compact('data'));
+    }
+
+    public function approveLead(Request $request)
+    {
+        return $this->lead->approveLead($request->id);
+    }
+
+    public function declineLead(Request $request)
+    {
+        return $this->lead->declineLead($request);
     }
 
 

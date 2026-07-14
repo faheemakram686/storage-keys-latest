@@ -202,9 +202,31 @@
                                                     </div>
                                                     <div class="col-6">
                                                         <label  class="lbl" >Storage Unit</label>
-                                                        <select class="selectpicker form-control su_id" name="id" id="su_id">
-                                                            <option value="">Choose One</option>
-                                                        </select>
+                                                        <div class="input-group">
+                                                            <select class="form-control su_id" name="su_picker" id="su_id">
+                                                                <option value="">Choose One</option>
+                                                            </select>
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-primary" id="btn_add_su_unit" style="height:35px;">Add</button>
+                                                            </div>
+                                                        </div>
+                                                        <small class="text-muted">Select a unit and click Add. You can add multiple units.</small>
+                                                    </div>
+                                                    <div class="col-12 mt-3">
+                                                        <label class="lbl">Selected Units</label>
+                                                        <div id="selected_units_container">
+                                                            <table class="table table-sm table-bordered" id="selected_units_table" style="display:none;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Unit</th>
+                                                                        <th style="width:80px;">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                            <p class="text-muted mb-0" id="selected_units_empty">No units selected yet.</p>
+                                                        </div>
+                                                        <div id="su_ids_inputs"></div>
                                                     </div>
                                                 </div>
 
@@ -272,35 +294,12 @@
                                     <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 insurance-section-header">
                                         Insurance</div>
                                     <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
-                                        <div class="row">
-                                            <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                <p>Insure your goods</p>
-                                                <div class="separator"></div>
-                                                <div class="row">
-                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="insurance" type="radio" value="cover"  id="flexCheckDefault" />
-                                                            <label class="check-container" for="flexCheckDefault">Choose your own cover (100 AED per 100,000 AED cover)</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                        <p class="text-right">AED 25.00/mo</p>
-                                                    </div>
-                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                        <input type="text" class="form-control" placeholder="Enter value of your goods" name="goodsval" style="height:35px;">
-                                                    </div>
-                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                        <p class="text-right">Cover AED 25000.00</p>
-                                                    </div>
-                                                </div>
-                                                <div class="separator"></div>
-
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="insurance" type="radio" value="nothanks"  id="flexCheckDefault" />
-                                                    <label class="check-container" for="flexCheckDefault">No Thanks</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @include('partials.insurance-selector', [
+                                            'insurances' => $data['insurances'] ?? collect([]),
+                                            'selectedInsuranceId' => null,
+                                            'goodsValue' => null,
+                                            'readonly' => false,
+                                        ])
                                     </div>
                                 </div>
                                 <div class="row terms-conditions-sections">
@@ -521,6 +520,32 @@
                 var warehouse_id = $(this).val();
                 getStorageUnit(warehouse_id);
             });
+
+            var selectedUnitsMap = {};
+
+            function renderSelectedUnits() {
+                var $tbody = $('#selected_units_table tbody');
+                var $inputs = $('#su_ids_inputs');
+                $tbody.empty();
+                $inputs.empty();
+                var ids = Object.keys(selectedUnitsMap);
+                if (ids.length === 0) {
+                    $('#selected_units_empty').show();
+                    $('#selected_units_table').hide();
+                    return;
+                }
+                $('#selected_units_empty').hide();
+                $('#selected_units_table').show();
+                ids.forEach(function(id) {
+                    var name = selectedUnitsMap[id];
+                    $tbody.append(
+                        '<tr data-id="'+id+'"><td>'+name+'</td>'+
+                        '<td><button type="button" class="btn btn-sm btn-danger btn-remove-unit" data-id="'+id+'"><em class="icon ni ni-trash"></em></button></td></tr>'
+                    );
+                    $inputs.append('<input type="hidden" name="su_ids[]" value="'+id+'">');
+                });
+            }
+
             function getStorageUnit(warehouse_id) {
                 $.ajax({
                     url: '{{ url('get-storageunit') }}',
@@ -529,20 +554,17 @@
                     dataType: 'json',
                     data: { warehouse_id: warehouse_id },
                     success: function(data) {
-                        $('.su_id').empty();
-                        var html3 = '';
-                        var i;
-                        var c = 0;
-                        $('.su_id').html('<option value="">Select Storage Unit</option>');
+                        var $su = $('.su_id');
+                        $su.empty();
+                        var html = '<option value="">Choose One</option>';
                         if (data.length > 0) {
-                            for (i = 0; i < data.length; i++) {
-                                c++;
-                                html3 += ' <option value='+data[i].id+'> '+data[i].storage_unit_name+'</option>';
+                            for (var i = 0; i < data.length; i++) {
+                                html += '<option value="'+data[i].id+'" data-name="'+data[i].storage_unit_name+'">'+data[i].storage_unit_name+'</option>';
                             }
                         } else {
-                            var html3 = '<option value="">No Storage Unit Found</option>';
+                            html = '<option value="">No Storage Unit Found</option>';
                         }
-                        $('.su_id').append(html3);
+                        $su.html(html);
                     },
                     error: function() {
                         toastr.error('any technical error');
@@ -550,9 +572,37 @@
                 });
             }
 
+            $('#btn_add_su_unit').on('click', function() {
+                var $opt = $('#su_id option:selected');
+                var id = $opt.val();
+                var name = ($opt.data('name') || $opt.text() || '').toString().trim();
+                if (!id) {
+                    toastr.error('Please select a storage unit first.');
+                    return;
+                }
+                if (selectedUnitsMap[id]) {
+                    toastr.error('This unit is already added.');
+                    return;
+                }
+                selectedUnitsMap[id] = name;
+                renderSelectedUnits();
+                $('#su_id').val('');
+            });
+
+            $(document).on('click', '.btn-remove-unit', function() {
+                var id = $(this).data('id');
+                delete selectedUnitsMap[id];
+                renderSelectedUnits();
+            });
+
+            renderSelectedUnits();
 
             $('#LeadForm').on('submit', function(e) {
                 e.preventDefault();
+                if (Object.keys(selectedUnitsMap).length === 0) {
+                    toastr.error('Please select at least one storage unit.');
+                    return;
+                }
                 var formData=$('#LeadForm').serialize()
                 $.ajax({
                     type: "get",
@@ -581,8 +631,9 @@
                         $(".btn-submit").prop("disabled", false);
                         window.location.href = "{{ url('admin/leads')}}";
                     },
-                    error: function() {
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        var msg = (xhr.responseJSON && (xhr.responseJSON.error || xhr.responseJSON.message)) ? (xhr.responseJSON.error || xhr.responseJSON.message) : 'any technical error';
+                        toastr.error(msg);
                         $('.btn-submit').text('Save');
                         $(".btn-submit").prop("disabled", false);
                     }

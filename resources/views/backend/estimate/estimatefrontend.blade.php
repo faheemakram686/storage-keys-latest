@@ -5,16 +5,58 @@
 
     <div class="justify-content-center checkout-page">
         @foreach ($data['lead'] as $lead)
+        @php
+            $estimateUnits = collect($data['estimate_units'] ?? ($lead->estimateStorageUnits ?? []));
+            if ($estimateUnits->isEmpty() && !empty($data['su'])) {
+                $estimateUnits = collect($data['su'])->map(function ($su) use ($lead) {
+                    return (object) [
+                        'storage_unit_id' => $su->id,
+                        'unit_price' => $lead->unit_price,
+                        'storageunit' => $su,
+                    ];
+                });
+            }
+            $monthlySum = $estimateUnits->sum(function ($row) {
+                return (float) (is_array($row) ? ($row['unit_price'] ?? 0) : ($row->unit_price ?? 0));
+            });
+            if ($monthlySum <= 0) {
+                $monthlySum = (float) ($lead->unit_price ?? 0);
+            }
+            $discountPct = optional($lead->termLength)->discount_percentage ?? 0;
+            $termPeriod = optional($lead->termLength)->term_period ?? 1;
+            $storageTermTotal = $monthlySum * $termPeriod;
+            $storageDiscounted = $storageTermTotal - ($storageTermTotal * $discountPct / 100);
+            $addonSum = ($lead->estimateAddon ?? collect([]))->sum('price');
+            $insuranceAmt = (float) ($lead->insurance_amount ?? 0);
+            $subTotal = $storageDiscounted + $addonSum + $insuranceAmt;
+        @endphp
         <div class="container">
-            @foreach ($data['su'] as $su)
             <div class="row">
                 <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 greeting-user">
                     <h3 class="animated fadeIn" style="color:#FF8820;">Hi, {{$lead->f_name}}  {{$lead->l_name}}</h3>
-                    <h3 class="animated fadeIn" style="color:#FF8820;" >You have selected {{$su->warehouse->loc->city->city_name}} <span class="area-name">-{{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</span> </h3>
+                    <h3 class="animated fadeIn" style="color:#FF8820;">You have selected:</h3>
+                    <ul class="list-unstyled mb-0" style="color:#FF8820;">
+                        @forelse($estimateUnits as $eu)
+                            @php $su = $eu->storageunit ?? null; @endphp
+                            <li class="mb-1">
+                                @if($su && optional(optional(optional($su->warehouse)->loc)->city)->city_name)
+                                    <span class="area-name">
+                                        {{ $su->warehouse->loc->city->city_name }}
+                                        - {{ $su->warehouse->loc->loc_name }}
+                                        - {{ $su->warehouse->name }}
+                                        - {{ $su->storage_unit_name }}
+                                    </span>
+                                @else
+                                    <span class="area-name">{{ optional($su)->storage_unit_name ?? ('Unit #'.($eu->storage_unit_id ?? '')) }}</span>
+                                @endif
+                                <small style="color:#666;">(AED {{ number_format((float)($eu->unit_price ?? 0), 2) }}/mo)</small>
+                            </li>
+                        @empty
+                            <li>No storage units found on this estimate.</li>
+                        @endforelse
+                    </ul>
                 </div>
-{{--                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 selected-plot-message"> <p> {{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</p></div>--}}
             </div>
-            @endforeach
 
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
@@ -22,6 +64,9 @@
                         @csrf
                         <input type="hidden" name="lead_id" id="lead_id" value="{{$lead->id}}">
                         <input type="hidden" name="su_id" value="{{$lead->su_id}}">
+                        @foreach($estimateUnits as $euHid)
+                            <input type="hidden" name="su_ids[]" value="{{ is_array($euHid) ? ($euHid['storage_unit_id'] ?? '') : ($euHid->storage_unit_id ?? '') }}">
+                        @endforeach
 
                     <div class="row reservations-sections">
                         <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
@@ -41,7 +86,7 @@
                                             </div>
                                         </div>
                                             @php
-                                                $total2 = $data['lead'][0]->unit_price * $term_length->term_period;
+                                                $total2 = $monthlySum * $term_length->term_period;
                                             @endphp
                                             <div class="col-6">
                                                 <p class="no-bottom-margin text-right">AED {{$total2 - ($total2 * $term_length->discount_percentage/100)}}</p>
@@ -60,24 +105,28 @@
                             <div class="row locations-section">
                                 <div class="offset-2 offset-md-2 offset-lg-2 col-6 col-sm-6 col-md-8 col-lg-7 order-section-header">Order Summary</div>
                                 <div class="col-12 order-section-body">
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <strong>Units</strong>
+                                            <ul class="pl-3 mb-2">
+                                                @foreach($estimateUnits as $eu)
+                                                    <li>
+                                                        {{ optional($eu->storageunit)->storage_unit_name ?? ('Unit #'.($eu->storage_unit_id ?? '')) }}
+                                                        — AED {{ number_format((float)($eu->unit_price ?? 0), 2) }}/mo
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-check">
-{{--                                                <input class="form-check-input" name="term_length" type="radio" value="monthly" {{ ($lead->price=="monthly")? "checked" : "" }}  id="flexCheckDefault" />--}}
                                                 <label class="check-container" for="flexCheckDefault">Storage</label>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 d-flex">
-
-                                            @isset($data['su'])
-                                                @php
-                                                $storagetotal = $lead->unit_price * $lead->termLength->term_period;
-                                                 @endphp
-                                            <span class="no-bottom-margin ml-1 mt-1 text-right st_amount"> {{$storagetotal - ($storagetotal * $lead->termLength->discount_percentage/100)}}</span>
-{{--                                            <span class="no-bottom-margin mt-1 text-right st_amount"> {{($lead->term_length == 'annual') ? (($lead->unit_price * 12) - ($lead->unit_price * 15/100)) : (($lead->term_length == 'bi-annual') ? (($lead->unit_price * 6) - ($lead->unit_price * 8/100)) : (($lead->term_length == 'quarterly') ? (($lead->unit_price * 3) - ($lead->unit_price * 4/100)) : (($lead->term_length =='monthly')?  $lead->unit_price:0 )  )) }}</span>--}}
+                                            <span class="no-bottom-margin ml-1 mt-1 text-right st_amount">{{ number_format($storageDiscounted, 2, '.', '') }}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
-                                            @endisset
-{{--                                            <span class="no-bottom-margin mt-1 text-right"> /mo</span>--}}
                                         </div>
                                     </div>
 
@@ -107,8 +156,8 @@
                                         </div>
                                         <div class="col-lg-6 d-flex">
 
-                                            @isset($data['lead'][0]->insurence)
-                                            <span class="no-bottom-margin inc_amount mt-1 ml-1 text-right">{{(( $data['lead'][0]->insurence == 'nothanks')? 0 : 25)}}</span>
+                                            @isset($data['lead'][0])
+                                            <span class="no-bottom-margin inc_amount mt-1 ml-1 text-right">{{ number_format((float) ($data['lead'][0]->insurance_amount ?? 0), 2, '.', '') }}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                             @endisset
 {{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
@@ -123,8 +172,7 @@
                                         </div>
                                         <div class="col-lg-6 d-flex">
 
-                                            <span class="no-bottom-margin mt-1 sub_total text-right ml-1 "  id="subtotal">{{$data['lead'][0]->estimateAddon->sum('price') + $data['su'][0]->price +  (( $data['lead'][0]->insurence == 'nothanks')? 0 : 25) }} </span>
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
+                                            <span class="no-bottom-margin mt-1 sub_total text-right ml-1 "  id="subtotal">{{ number_format($subTotal, 2, '.', '') }}</span>
                                             <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                         </div>
                                     </div>
@@ -225,31 +273,32 @@
                                 <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
                                     <p>Insure your goods</p>
                                     <div class="separator"></div>
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" readonly name="insurance" type="radio" value="cover" {{ ($lead->insurence == "cover")? "checked" : "" }}   id="flexCheckDefault" disabled />
-                                                <label class="check-container" for="flexCheckDefault">Choose your own cover (100 AED per 100,000 AED cover)</label>
+                                    @if((float) ($lead->insurance_amount ?? 0) > 0 || ($lead->insurence ?? '') === 'cover')
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" checked disabled />
+                                                    <label class="check-container">
+                                                        {{ optional($lead->insurance)->name ?? 'Insurance cover' }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                <p class="text-right">AED {{ number_format((float) ($lead->insurance_amount ?? 0), 2) }}/mo</p>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                <input type="text" class="form-control" readonly value="{{ $lead->goods }}" style="height:35px;" disabled>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                <p class="text-right">Cover AED {{ $lead->insurance_cover ?? '—' }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                            <p class="text-right">AED 25.00/mo</p>
+                                    @else
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" checked disabled />
+                                            <label class="check-container">No Thanks</label>
                                         </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-
-                                            <input type="text" class="form-control" readonly placeholder="Enter value of your goods" name="goodsval" value="{{$lead->goods}}" style="height:35px;" disabled>
-
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                            <p class="text-right">Cover AED 25000.00</p>
-                                        </div>
-                                    </div>
-                                    <div class="separator"></div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" name="insurance" type="radio" value="nothanks" disabled {{ ($lead->insurence == "nothanks")? "checked" : "" }}  id="flexCheckDefault" disabled />
-                                        <label class="check-container" for="flexCheckDefault">No Thanks</label>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -291,15 +340,14 @@
             var vat_amount = 0;
             getSubtotal();
             function getSubtotal() {
-                    total += parseInt($('.st_amount').text());
-                    total += parseInt($('.addon_amount').text());
-                    total += parseInt($('.inc_amount').text());
-                    $("#subtotal").text(total);
-                    vat_amount = parseInt($('.vat_amount').text());
+                    total = 0;
+                    total += parseFloat($('.st_amount').text()) || 0;
+                    total += parseFloat($('.addon_amount').text()) || 0;
+                    total += parseFloat($('.inc_amount').text()) || 0;
+                    $("#subtotal").text(total.toFixed(2));
+                    vat_amount = parseFloat($('.vat_amount').text()) || 0;
                     total_amount = total - vat_amount;
-                    $("#total_amount").text(total_amount);
-            console.log(total_amount);
-
+                    $("#total_amount").text(total_amount.toFixed(2));
             }
 
             $('.btn-qoutation').on('click', function(e) {

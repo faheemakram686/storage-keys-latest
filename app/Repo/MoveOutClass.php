@@ -2,6 +2,7 @@
 namespace App\Repo;
 use App\Http\Controllers\Backend\MoveInRequestController;
 use App\Models\BarcodeLabel;
+use App\Models\Contract;
 use App\Models\Country;
 use App\Models\LeadSource;
 use App\Models\LeadStatus;
@@ -14,10 +15,19 @@ use App\Repo\Interfaces\LeadStatusInterface;
 use App\Repo\Interfaces\MoveInInterface;
 use App\Repo\Interfaces\MoveInRequestInterface;
 use App\Repo\Interfaces\MoveOutInterface;
+use App\Services\StorageUnitStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class MoveOutClass implements MoveOutInterface {
+
+    /** @var StorageUnitStatusService */
+    protected $unitStatus;
+
+    public function __construct(?StorageUnitStatusService $unitStatus = null)
+    {
+        $this->unitStatus = $unitStatus ?: app(StorageUnitStatusService::class);
+    }
 
     public function saveMoveOut($request)
     {
@@ -46,6 +56,13 @@ class MoveOutClass implements MoveOutInterface {
                     $barcode->save();
                 }
             }
+
+            // Full move-out releases hard hold and returns units to vacant.
+            $contract = Contract::find($request->contract_id);
+            if ($contract) {
+                $this->unitStatus->releaseByContract($contract, 'move_out.saved');
+            }
+
             return response()->json(['success' => 'Record save successfully'], 200);
         }
 
@@ -120,9 +137,4 @@ class MoveOutClass implements MoveOutInterface {
 
     }
 
-    public function editMoveOutBarcode($id)
-    {
-        return $country=BarcodeLabel::find($id)->first();
-    }
-
-  }
+}

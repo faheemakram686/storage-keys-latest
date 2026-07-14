@@ -23,6 +23,9 @@
                                 {{--                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 selected-plot-message"> <p> {{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</p></div>--}}
                             </div>
                         @endforeach
+                        @php
+                            $primarySu = isset($data['su'][0]) ? $data['su'][0] : null;
+                        @endphp
                         @foreach ($data['lead'] as $lead)
                             <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
@@ -31,6 +34,11 @@
                                         <input type="hidden" name="lead_id" value="{{$lead->id}}">
                                         <input type="hidden" name="su_id" value="{{$lead->su_id}}">
                                         <input type="hidden" name="customer_id" value="{{$lead->customer_id}}">
+                                        @isset($data['su'])
+                                            @foreach($data['su'] as $unitRow)
+                                                <input type="hidden" name="su_ids[]" value="{{ $unitRow->id }}">
+                                            @endforeach
+                                        @endisset
                                         <div class="row reservations-sections">
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
                                                 Contact Information</div>
@@ -113,54 +121,40 @@
                                         </div>
                                         <div class="row reservations-sections">
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
-                                                Storage Unit Information </div>
+                                                Storage Unit Pricing </div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
                                                 <div class="row">
                                                     <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                        {{--<p>Select storage unit</p>--}}
-                                                        <div class="row">
-                                                            <div class=" col-6">
-                                                                <label class="lbl" >Country</label>
-                                                                <select class=" form-control select2" data-live-search="true" name="country_id" id="country_id">
-                                                                    <option value="" selected >Choose One</option>
-
-                                                                    @isset($data)
-                                                                        @foreach ($data['loc'] as $country)
-                                                                            <option value="{{ $country->id }}" {{ ($su->warehouse->loc->city->country->id == $country->id) ? "selected" : "" }} >{{$country->name }}</option>
-                                                                        @endforeach
-                                                                    @endisset
-                                                                </select>
-                                                            </div>
+                                                        <p>Set price for each selected unit (AED / mo)</p>
+                                                        <table class="table table-sm table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Unit</th>
+                                                                    <th>Warehouse</th>
+                                                                    <th style="width:160px;">Price (AED/mo)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @isset($data['su'])
+                                                                    @foreach($data['su'] as $unitRow)
+                                                                    <tr>
+                                                                        <td>{{ $unitRow->storage_unit_name }}</td>
+                                                                        <td>{{ optional(optional($unitRow->warehouse)->loc)->loc_name }} / {{ optional($unitRow->warehouse)->name }}</td>
+                                                                        <td>
+                                                                            <input type="number" step="any" class="form-control" name="unit_prices[]" value="{{ $unitRow->price }}" required style="height:35px;">
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                @endisset
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="row mt-2">
                                                             <div class="col-6">
-                                                                <label  class="lbl" >City</label>
-                                                                <select name="city_id" class="  form-control  citySection select2" data-live-search="true" id="citySection" data="{{$su->warehouse->loc->city->id}}" >
-                                                                    <option value="">Choose One</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label  class="lbl" >Location</label>
-                                                                <select class=" form-control loc_id select2" data-live-search="true" name="loc_id" id="loc_id" data="{{$su->warehouse->loc->id}}">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label  class="lbl" >Warehouse</label>
-                                                                <select class=" form-control warehouse_id select2" data-live-search="true" name="warehouse_id" id="warehouse_id" data="{{$su->warehouse->id}}">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label  class="lbl" >Storage Unit</label>
-                                                                <select class=" form-control su_id select2" data-live-search="true" name="ssu_id" id="su_id" data="{{$su->id}}">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label  class="status" >Estimate Status</label>
-                                                                <select  class="form-control select2" data-live-search="true" name="status" id="status" required>
+                                                                <label class="status">Estimate Status</label>
+                                                                <select class="form-control select2" data-live-search="true" name="status" id="status" required>
                                                                     <option value="" selected>Select Estimate Status</option>
-                                                                    <option value="3" >Approved</option>
-                                                                    <option value="2" >Approved Level 2</option>
+                                                                    <option value="3">Approved</option>
+                                                                    <option value="2">Approved Level 2</option>
                                                                     <option value="1">Approved Level 1</option>
                                                                     <option value="0">Not Approved</option>
                                                                 </select>
@@ -188,9 +182,7 @@
                                                                 </div>
                                                                 @if($term_length->term_period ==1 )
                                                                 <div class="col-3 d-flex">
-                                                                    <span class="no-bottom-margin mt-1 text-right">AED</span>
-                                                                    <input type="text" class=" no-bottom-margin form-control" placeholder="Price" name="unit_price" value="{{$lead->storageunit->price}}" style="height:35px;width:100px;padding: 0px 8px">
-                                                                    <span class="no-bottom-margin mt-1 text-right">/mo</span>
+                                                                    <p class="no-bottom-margin text-right">Fixed Price</p>
                                                                 </div>
                                                                 @else
                                                                 <div class="col-3 d-flex">
@@ -233,37 +225,12 @@
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 padlock-section-header">
                                                 Insurance</div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
-                                                <div class="row">
-                                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                        <p>Insure your goods</p>
-                                                        <div class="separator"></div>
-                                                        <div class="row">
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" name="insurance" type="radio" value="cover" {{ ($lead->insurence == "cover")? "checked" : "" }}   id="flexCheckDefault" />
-                                                                    <label class="check-container" for="flexCheckDefault">Choose your own cover (100 AED per 100,000 AED cover)</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">AED 25.00/mo</p>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-
-                                                                <input type="text" class="form-control" placeholder="Enter value of your goods" name="goodsval" value="{{$lead->goods}}" style="height:35px;">
-
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">Cover AED 25000.00</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="separator"></div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="insurance" type="radio" value="nothanks" {{ ($lead->insurence == "nothanks")? "checked" : "" }}  id="flexCheckDefault" />
-                                                            <label class="check-container" for="flexCheckDefault">No Thanks</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @include('partials.insurance-selector', [
+                                                    'insurances' => $data['insurances'] ?? collect([]),
+                                                    'selectedInsuranceId' => $lead->insurance_id ?? null,
+                                                    'goodsValue' => $lead->goods ?? null,
+                                                    'readonly' => false,
+                                                ])
                                             </div>
                                         </div>
                                         <div class="row reservations-sections">

@@ -135,7 +135,17 @@
                                                         <tbody>
                                                         @foreach($data['estimate'] as $estimate)
                                                             <tr>
-                                                                <td>{{$estimate->storageunit->storage_unit_name}} / {{$estimate->termLength->title}}</td>
+                                                                <td>
+                                                                    @php
+                                                                        $names = ($estimate->estimateStorageUnits ?? collect())->map(function($u) {
+                                                                            return optional($u->storageunit)->storage_unit_name;
+                                                                        })->filter()->values();
+                                                                        if ($names->isEmpty()) {
+                                                                            $names = collect([optional($estimate->storageunit)->storage_unit_name])->filter();
+                                                                        }
+                                                                    @endphp
+                                                                    {{ $names->implode(', ') }} / {{ optional($estimate->termLength)->title }}
+                                                                </td>
                                                                 <td>{{$estimate->estimate_date}}</td>
                                                                 <td>{{$estimate->status}}</td>
                                                                 <td>{{$estimate->unit_price}}</td>
@@ -208,7 +218,7 @@
                                                                     <td>{{$invoice->invoice_no}}</td>
                                                                     <td>{{$invoice->invoice_date}}</td>
                                                                     <td>{{$invoice->grand_total}}</td>
-                                                                    <td>{{$invoice->payment_status}}</td>
+                                                                    <td><span class="badge {{ $invoice->paymentStatusBadgeClass() }}">{{ $invoice->payment_status }}</span></td>
                                                                     <td><a href="{{url('customer/pdf-invoice').'/'.$invoice->id}}"> Download</a><a href="{{url('customer/invoice-to-customer').'/'.$invoice->id}}"> View</a></td>
                                                                 </tr>
                                                             @endforeach

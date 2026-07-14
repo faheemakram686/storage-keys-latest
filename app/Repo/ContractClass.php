@@ -6,6 +6,8 @@ use App\Models\Contract;
 use App\Models\Core\Auth\User;
 use App\Models\Country;
 use App\Models\Estimate;
+use App\Models\MoveIn;
+use App\Models\MoveOut;
 use App\Models\Note;
 use App\Notifications\Backend\ContractApprovalNotification;
 use App\Notifications\Backend\ContractDeclineNotification;
@@ -14,52 +16,119 @@ use App\Notifications\Backend\EstimateDeclineNotification;
 use App\Repo\Interfaces\ContactInterface;
 
 use App\Repo\Interfaces\ContractInterface;
+use App\Services\InsurancePricingService;
+use App\Services\StorageUnitStatusService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\ValidationException;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ContractClass implements ContractInterface {
 
+    /** @var StorageUnitStatusService */
+    protected $unitStatus;
+
+    /** @var InsurancePricingService */
+    protected $insurancePricing;
+
+    public function __construct(?StorageUnitStatusService $unitStatus = null, ?InsurancePricingService $insurancePricing = null)
+    {
+        $this->unitStatus = $unitStatus ?: app(StorageUnitStatusService::class);
+        $this->insurancePricing = $insurancePricing ?: app(InsurancePricingService::class);
+    }
 
     public function saveContract($request)
     {
-        $contract =new Contract();
-        $contract->customer_id = $request->customer_id;
-        $contract->estimate_id = $request->estimate_id;
-        $contract->user_id = Auth::id();
-        $contract->subject = $request->subject;
-        $contract->contract_value = $request->contract_value;
-        $contract->contract_type = $request->contract_type;
-        $contract->start_date = $request->s_date;
-        $contract->end_date = $request->e_date;
-        $contract->description = $request->description;
-        $contract->is_accepted=0;
-        $contract->status=0;
-        if($contract->save()){
-            $appsettings = AppSettings::get();
-            $user = User::find($appsettings[3]->value);
-            $template = new EmailTemplateClass();
-            $notification = $template->getTemplateByName('contract','email','Contract_approval_email');
-            $email2 = [
-                'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
-                'body' => $notification[0]->temp_body,
-                'thanks' => 'Thank you this is from storage Key',
-                'actionText' => 'View Contract',
-                'actionURL' => url('admin/contract/detail').'/'.$contract->id,
-                'id' => $user->id,
+        try {
+            $estimate = Estimate::with('estimateStorageUnits')->find($request->estimate_id);
+            if (!$estimate) {
+                return response()->json(['error' => 'Estimate not found.'], 422);
+            }
 
-            ];
-            Notification::send($user, new ContractApprovalNotification($email2,$user,$contract));
+            $unitRows = [];
+            foreach ($estimate->estimateStorageUnits as $row) {
+                $unitRows[] = [
+                    'storage_unit_id' => (int) $row->storage_unit_id,
+                    'unit_price' => $row->unit_price,
+                ];
+            }
+
+            if (empty($unitRows) && $estimate->su_id) {
+                $unitRows[] = [
+                    'storage_unit_id' => (int) $estimate->su_id,
+                    'unit_price' => $estimate->unit_price,
+                ];
+            }
+
+            $unitIds = array_column($unitRows, 'storage_unit_id');
+            $this->unitStatus->assertAvailableForContract($unitIds);
+
+            DB::beginTransaction();
+
+            $contract = new Contract();
+            $contract->customer_id = $request->customer_id;
+            $contract->estimate_id = $request->estimate_id;
+            $contract->user_id = Auth::id();
+            $contract->subject = $request->subject;
+            $contract->contract_value = $request->contract_value;
+            $this->insurancePricing->applySnapshot(
+                $contract,
+                $this->insurancePricing->snapshotFromModel($estimate),
+                false
+            );
+            $contract->contract_type = $request->contract_type;
+            $contract->start_date = $request->s_date;
+            $contract->end_date = $request->e_date;
+            $contract->description = $request->description;
+            $contract->is_accepted = 0;
+            $contract->status = 0;
+            $contract->save();
+
+            $this->unitStatus->hardHoldContract($contract, $unitRows);
+
+            DB::commit();
+
+            if (!AppSettings::isDirectApproval()) {
+                $appsettings = AppSettings::get();
+                $user = !empty($appsettings[3]->value) ? User::find($appsettings[3]->value) : null;
+                if ($user) {
+                    $template = new EmailTemplateClass();
+                    $notification = $template->getTemplateByName('contract','email','Contract_approval_email');
+                    if (!empty($notification[0]->temp_body)) {
+                        $email2 = [
+                            'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
+                            'body' => $notification[0]->temp_body,
+                            'thanks' => 'Thank you this is from storage Key',
+                            'actionText' => 'View Contract',
+                            'actionURL' => url('admin/contract/detail').'/'.$contract->id,
+                            'id' => $user->id,
+
+                        ];
+                        Notification::send($user, new ContractApprovalNotification($email2,$user,$contract));
+                    }
+                }
+            }
 
             return response()->json(['success' => 'Record save successfully'], 200);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            $messages = collect($e->errors())->flatten()->all();
+            return response()->json([
+                'error' => implode(' ', $messages),
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function getAllContract()
     {
-        $qry=Contract::with('customer','estimate.storageunit','estimate.termLength');
+        $qry=Contract::with('customer','estimate.storageunit','estimate.estimateStorageUnits.storageunit','contractStorageUnits.storageunit','estimate.termLength');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
@@ -67,11 +136,31 @@ class ContractClass implements ContractInterface {
 
     public function deleteContract($id)
     {
-        $country=Contract::find($id);
-        $country->is_deleted=1;
-        $country->save();
-        return 1;
+        $contract = Contract::find($id);
+        if (!$contract) {
+            return 0;
+        }
 
+        $hasMoveIn = MoveIn::query()
+            ->where('contract_id', $contract->id)
+            ->where('is_deleted', 0)
+            ->exists();
+        $hasMoveOut = MoveOut::query()
+            ->where('contract_id', $contract->id)
+            ->where('is_deleted', 0)
+            ->exists();
+
+        if ($hasMoveIn && !$hasMoveOut) {
+            return response()->json([
+                'error' => 'Cannot delete contract while units are occupied. Complete move-out first.',
+            ], 422);
+        }
+
+        $contract->is_deleted = 1;
+        $contract->save();
+        $this->unitStatus->releaseByContract($contract, 'contract.deleted');
+
+        return 1;
     }
 
     public function editContract($id)
@@ -85,7 +174,7 @@ class ContractClass implements ContractInterface {
     public function getContract($id)
     {
 
-        $qry=Contract::with('contractTemplate','estimate.storageunit.storagesize.mUnit','estimate.termLength','estimate.estimateAddon.addon','customer');
+        $qry=Contract::with('contractTemplate','estimate.storageunit.storagesize.mUnit','estimate.estimateStorageUnits.storageunit','contractStorageUnits.storageunit','estimate.termLength','estimate.estimateAddon.addon','customer');
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
@@ -128,6 +217,16 @@ class ContractClass implements ContractInterface {
         $contract->estimate_id = $request->estimate_id;
         $contract->subject = $request->subject;
         $contract->contract_value = $request->contract_value;
+        if ($request->estimate_id) {
+            $estimate = Estimate::find($request->estimate_id);
+            if ($estimate) {
+                $this->insurancePricing->applySnapshot(
+                    $contract,
+                    $this->insurancePricing->snapshotFromModel($estimate),
+                    false
+                );
+            }
+        }
         $contract->contract_type = $request->contract_type;
         $contract->start_date = $request->s_date;
         $contract->end_date = $request->e_date;
@@ -148,7 +247,7 @@ class ContractClass implements ContractInterface {
 
     public function getCustomerContracts($request)
     {
-        $qry=Contract::with('estimate.storageunit','estimate.termLength');
+        $qry=Contract::with('estimate.storageunit','estimate.estimateStorageUnits.storageunit','estimate.termLength');
         $qry=$qry->where('customer_id',$request);
 //        $qry = $qry->where( 'status' , 1 );
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
@@ -161,7 +260,7 @@ class ContractClass implements ContractInterface {
 
 
         try {
-            $qry=Contract::with('estimate.storageunit','estimate.termLength');
+            $qry=Contract::with('estimate.storageunit','estimate.estimateStorageUnits.storageunit','estimate.storageUnits','estimate.termLength');
             $qry=$qry->where('customer_id',$request);
             $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
             $qry=$qry->get();
@@ -188,6 +287,24 @@ class ContractClass implements ContractInterface {
     {
         $appsettings = AppSettings::get();
         $estimate = Contract::find($id);
+        if (!$estimate) {
+            return response()->json(['error' => 'Contract not found'], 404);
+        }
+
+        if ($estimate->status == 'Approved') {
+            return response()->json(['error' => 'Estimate already Approved'], 200);
+        }
+
+        if (AppSettings::isDirectApproval()) {
+            $user = Auth::user();
+            if (!$user || !$user->hasRole('App Admin')) {
+                return response()->json(['error' => 'You are not allowed to approve'], 200);
+            }
+            $estimate->status = 3;
+            $estimate->save();
+            return response()->json(['success' => 'Estimate Approved successfully'], 200);
+        }
+
         if($estimate->status == 'Not Approved')
         {
             if($appsettings[3]->value == auth()->id())
@@ -254,11 +371,9 @@ class ContractClass implements ContractInterface {
             {
                 return response()->json(['error' => 'You are not allowed to approve'], 200);
             }
-        }elseif ($estimate->status == 'Approved')
-        {
-            return response()->json(['error' => 'Estimate already Approved'], 200);
         }
 
+        return response()->json(['error' => 'Unable to approve contract'], 200);
     }
 
     public function declineContract($request)

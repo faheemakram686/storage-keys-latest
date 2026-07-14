@@ -576,54 +576,84 @@
                     data: { contract_id: contract_id },
                     success: function(data) {
                         console.log(data);
-                        var html3 = '';
                         var i;
-                        var c = 0;
-                        const price = data.contract[0].estimate.unit_price;
                         const discount = (data.contract[0].estimate.term_length && data.contract[0].estimate.term_length.discount_percentage) ? data.contract[0].estimate.term_length.discount_percentage : 0;
-                        const discountedPrice = price - (price * discount / 100);
                         const termLengthId = (data.contract[0].estimate.term_length && data.contract[0].estimate.term_length.id) ? data.contract[0].estimate.term_length.id : '';
                         const termLengthTitle = (data.contract[0].estimate.term_length && data.contract[0].estimate.term_length.title) ? data.contract[0].estimate.term_length.title : 'N/A';
                         const termPeriod = (data.contract[0].estimate.term_length && data.contract[0].estimate.term_length.term_period) ? data.contract[0].estimate.term_length.term_period : 1;
-                        const storageUnitName = (data.contract[0].estimate.storageunit && data.contract[0].estimate.storageunit.storage_unit_name) ? data.contract[0].estimate.storageunit.storage_unit_name : 'N/A';
+
+                        var units = data.contract[0].estimate.estimate_storage_units || [];
+                        if (!units.length) {
+                            // Backward compatible single-unit estimate
+                            units = [{
+                                unit_price: data.contract[0].estimate.unit_price,
+                                storage_unit_id: (data.contract[0].estimate.storageunit && data.contract[0].estimate.storageunit.id) ? data.contract[0].estimate.storageunit.id : '',
+                                storageunit: data.contract[0].estimate.storageunit || null
+                            }];
+                        }
 
                         $('#invoiceItems').empty();
-                        dr++;
+                        var html = '';
 
-                        $('input[name=invoice_value]').val();
-                        var   html = '<tr id="row'+dr+'" class="dynamic-added">'+
-                            '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + termLengthId + '" /><span>' + dr + '</span></td>'+
-                            '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="storage_unit" /></td>'+
-                            '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + storageUnitName +' / '+  termLengthTitle + '" /></td>'+
-                            '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="'+  termPeriod + '" min="0"/></td>'+
-                            '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="'+  termLengthTitle + '" /></td>'+
-                            '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + discountedPrice + '" min="0.00" /></td>'+
-                            '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.unit_price + '" min="0.00" /></td>'+
-                            '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
-                            '</tr>';
-                        // total = parseFloat(data.contract[0].estimate.unit_price);
+                        for (i = 0; i < units.length; i++) {
+                            dr++;
+                            var price = parseFloat(units[i].unit_price || 0);
+                            var discountedPrice = price - (price * discount / 100);
+                            var lineTotal = price * termPeriod;
+                            var storageUnitName = (units[i].storageunit && units[i].storageunit.storage_unit_name) ? units[i].storageunit.storage_unit_name : ('Unit #' + (units[i].storage_unit_id || ''));
+                            var itemId = units[i].storage_unit_id || termLengthId;
 
-                        for (i = 0; i < data.contract[0].estimate.estimate_addon.length; i++) {
+                            html += '<tr id="row'+dr+'" class="dynamic-added">'+
+                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + itemId + '" /><span>' + dr + '</span></td>'+
+                                '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="storage_unit" /></td>'+
+                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + storageUnitName +' / '+  termLengthTitle + '" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="'+  termPeriod + '" min="0"/></td>'+
+                                '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="'+  termLengthTitle + '" /></td>'+
+                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + discountedPrice + '" min="0.00" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + lineTotal + '" min="0.00" /></td>'+
+                                '<td><button type="button" name="remove" id="'+dr+'" class="btn  btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
+                                '</tr>';
+                        }
+
+                        var addons = data.contract[0].estimate.estimate_addon || [];
+                        for (i = 0; i < addons.length; i++) {
                             dr++;
                             html += '<tr id="row'+dr+'" class="dynamic-added">'+
-                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + data.contract[0].estimate.estimate_addon[i].addon.id + '" /><span>' + dr + '</span></td>'+
+                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + addons[i].addon.id + '" /><span>' + dr + '</span></td>'+
                                 '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="addon" /></td>'+
-                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + data.contract[0].estimate.estimate_addon[i].addon.name + '" /></td>'+
+                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + addons[i].addon.name + '" /></td>'+
                                 '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="1" min="0" /></td>'+
                                 '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="" /></td>'+
-                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + data.contract[0].estimate.estimate_addon[i].price + '" min="0.00" /></td>'+
-                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + data.contract[0].estimate.estimate_addon[i].price + '"  min="0.00" /></td>'+
+                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + addons[i].price + '" min="0.00" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + addons[i].price + '"  min="0.00" /></td>'+
                                 '<td><button type="button" name="remove" id="'+dr+'" class="btn btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
                                 '</tr>';
-                            // total = total +  parseFloat( data.contract[0].estimate.estimate_addon[i].price);
-
                         }
+
+                        var contract = data.contract[0];
+                        var estimate = contract.estimate || {};
+                        var insuranceAmount = parseFloat(contract.insurance_amount || estimate.insurance_amount || 0);
+                        if (insuranceAmount > 0) {
+                            dr++;
+                            var insuranceCover = contract.insurance_cover || estimate.insurance_cover || '';
+                            var insuranceName = 'Insurance' + (insuranceCover ? (' (Cover ' + insuranceCover + ')') : '');
+                            var insuranceId = contract.insurance_id || estimate.insurance_id || '';
+                            var insuranceTotal = (insuranceAmount * termPeriod).toFixed(2);
+                            html += '<tr id="row'+dr+'" class="dynamic-added">'+
+                                '<td><input type="hidden" name="invoiceItems[id][]" placeholder="id" class="form-control id_list" value="' + insuranceId + '" /><span>' + dr + '</span></td>'+
+                                '<td><input type="hidden" name="invoiceItems[cat][]" placeholder="cat" class="form-control cat_list" value="insurance" /></td>'+
+                                '<td><input type="text" name="invoiceItems[name][]" placeholder="Item Name" class="form-control name_list" value="' + insuranceName + '" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[qty][]" placeholder="QTY" class="form-control qty_list" value="'+ termPeriod +'" min="0"/></td>'+
+                                '<td><input type="text" name="invoiceItems[unit][]" placeholder="Unit" class="form-control unit_list" value="'+ termLengthTitle +'" /></td>'+
+                                '<td><input type="text" name="invoiceItems[amount][]" placeholder="Price" class="form-control amount_list" value="' + insuranceAmount.toFixed(2) + '" min="0.00" /></td>'+
+                                '<td><input type="number" step="any" name="invoiceItems[total][]" placeholder="Total" class="form-control total" value="' + insuranceTotal + '" min="0.00" /></td>'+
+                                '<td><button type="button" name="remove" id="'+dr+'" class="btn btn-sm btn-danger btn_remove"><em class="icon ni ni-trash-empty-fill"></em></button></td>'+
+                                '</tr>';
+                        }
+
                         $('#invoiceItems').append(html);
                         var total = calculateTotal();
                         $('#subtotal').val(total);
-                        // var totalhtml = total + ' AED';
-                        // $('#subtotal').text(totalhtml);
-                        // $('#grandtotal').text(totalhtml);
                         $('input[name=invoice_value]').val(total);
 
                     },

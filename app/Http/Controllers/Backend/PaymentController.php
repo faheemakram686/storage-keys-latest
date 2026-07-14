@@ -47,11 +47,7 @@ class PaymentController extends Controller
         if ($payload) {
             $this->zapier->send('add_payment', $payload);
         }
-        $invoice = $this->invoice->getInvoice($request->invoice_id);
-        if(($invoice[0]->grand_total - $request->amount_received) == 0)
-        {
-            $status = $this->invoice->changePaymentStatus($request->invoice_id,1);
-        }
+        $this->invoice->syncPaymentStatus($request->invoice_id);
 
         return $data;
     }
@@ -72,16 +68,24 @@ class PaymentController extends Controller
     }
     public function updatePayment(Request $request)
     {
+        $payment = $this->payment->editPayment($request->id);
         $res = $this->payment->updatePayment($request);
-        if($res){
+        if ($res) {
+            if ($payment && $payment->invoice_id) {
+                $this->invoice->syncPaymentStatus($payment->invoice_id);
+            }
             return response()->json(['success' => 'Record updated successfully'], 200);
         }
 
     }
     public function deletePayment(Request $request)
     {
+        $payment = $this->payment->editPayment($request->id);
         $res=$this->payment->deletePayment($request->id);
         if($res){
+            if ($payment && $payment->invoice_id) {
+                $this->invoice->syncPaymentStatus($payment->invoice_id);
+            }
             return response()->json(['success' => 'Record deleted successfully'], 200);
         }
 

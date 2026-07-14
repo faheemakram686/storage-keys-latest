@@ -23,6 +23,16 @@ class Contract extends Model
         return $this->belongsTo(Estimate::class, 'estimate_id', 'id');
     }
 
+    public function insurance()
+    {
+        return $this->belongsTo(Insurance::class, 'insurance_id', 'id');
+    }
+
+    public function insuranceFee(): float
+    {
+        return (float) ($this->insurance_amount ?? 0);
+    }
+
 
 
     public function contractTemplate()
@@ -36,6 +46,23 @@ class Contract extends Model
     public function barcode()
     {
         return $this->hasMany(BarcodeLabel::class, 'contract_id', 'id');
+    }
+
+    public function contractStorageUnits()
+    {
+        return $this->hasMany(ContractStorageUnit::class, 'contract_id', 'id');
+    }
+
+    public function storageUnits()
+    {
+        return $this->belongsToMany(StorageUnit::class, 'contract_storage_units', 'contract_id', 'storage_unit_id')
+            ->withPivot('unit_price', 'released_at')
+            ->withTimestamps();
+    }
+
+    public function activeStorageUnits()
+    {
+        return $this->storageUnits()->wherePivotNull('released_at');
     }
 
 

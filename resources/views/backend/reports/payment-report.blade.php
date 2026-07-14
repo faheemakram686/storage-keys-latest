@@ -55,9 +55,9 @@
                                             <label class="form-label" for="status">Status</label>
                                             <select class="form-control select2" data-live-search="true" name="payment_status" id="payment_status">
                                                 <option value="" selected>Select Status</option>
-                                                <option value="1" >PAID</option>
-                                                <option value="2" >PARTIALLY PAID</option>
-                                                <option value="0">UNPAID</option>
+                                                <option value="0">Pending</option>
+                                                <option value="2">Partial</option>
+                                                <option value="1">Paid</option>
                                             </select>
                                         </div>
                                     </div>
@@ -117,6 +117,16 @@
 
             var formData = '';
 
+            function paymentStatusBadgeClass(status) {
+                if (status === 'Paid') {
+                    return 'badge-success';
+                }
+                if (status === 'Partial') {
+                    return 'badge-warning';
+                }
+                return 'badge-danger';
+            }
+
             getReport(formData);
 
             $('#ReportFilterForm').on('submit', function(e) {
@@ -162,7 +172,7 @@
                                     ' <span class="badge badge-success">'+data[i].payment_method+'</span>'+
                                     ' </td>'+
                                     '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                    ' <span class="badge '+((data[i].payment_status == 'PAID')? 'badge-success':'badge-danger') +' ">'+data[i].payment_status+'</span>'+
+                                    ' <span class="badge '+ paymentStatusBadgeClass(data[i].payment_status) +' ">'+data[i].payment_status+'</span>'+
                                     ' </td>'+
                                     '</tr>';
 

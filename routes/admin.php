@@ -219,6 +219,8 @@ require __DIR__.'/auth.php';
     Route::any('change-lead-status', [LeadController::class,'changeStatus']);
     Route::any('change-lead-source', [LeadController::class,'changeSource']);
     Route::any('change-lead-assignee', [LeadController::class,'changeAssignee']);
+    Route::any('approve-lead', [LeadController::class, 'approveLead'])->name('approve-lead');
+    Route::any('decline-lead', [LeadController::class, 'declineLead'])->name('decline-lead');
     Route::any('lead/tasks/{id}', [LeadController::class,'showTasks'])->name('lead-tasks');
     Route::any('lead/attachments/{id}', [LeadController::class,'showAttachments'])->name('lead-attachments');
     Route::any('lead/reminders/{id}', [LeadController::class,'showReminders'])->name('lead-reminders');

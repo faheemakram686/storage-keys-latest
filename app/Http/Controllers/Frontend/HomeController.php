@@ -18,6 +18,7 @@ use App\Repo\StorageUnitClass;
 use App\Repo\StorageUnitLevelClass;
 use App\Repo\StorageUnitSizeClass;
 use App\Repo\TermLengthClass;
+use App\Services\InsurancePricingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -118,8 +119,10 @@ class HomeController extends Controller
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();
           $data['su'] = $this->su->leadStorageUnit($id);
+          $data['loc'] = $this->country->getAllCountry();
           $data['term_length'] =  $this->term_length->getAllTermLength();
           $data['terms_conditions'] =  $this->appsettings->getAppSettings();
+          $data['insurances'] = app(InsurancePricingService::class)->activePackages();
         return view('ui.pages.reservation')->with(compact('data'));
     }
 }

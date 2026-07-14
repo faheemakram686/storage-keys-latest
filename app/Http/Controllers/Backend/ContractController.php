@@ -209,13 +209,37 @@ class ContractController extends Controller
         }
 
         $addonprice = $contract[0]->estimate->estimateAddon->sum('price');
-        $storagetotal = $contract[0]->estimate->unit_price * $contract[0]->estimate->termLength->term_period;
-        $totelCost = $storagetotal - ($storagetotal * $contract[0]->estimate->termLength->discount_percentage / 100);
-        $storage = $contract[0]->estimate->storageunit;
+        $term = $contract[0]->estimate->termLength;
+        $period = $term ? (float) $term->term_period : 1;
+        $discount = $term ? (float) $term->discount_percentage : 0;
 
-        $templateContent = str_replace('{{unit_no}}', $this->formatTemplateValue($storage->storage_unit_name ?? ''), $templateContent);
+        $estUnits = $contract[0]->estimate->estimateStorageUnits ?? collect([]);
+        if ($estUnits->isEmpty()) {
+            $price = (float) ($contract[0]->estimate->unit_price ?? 0);
+            $storagetotal = $price * $period;
+            $totelCost = $storagetotal - ($storagetotal * $discount / 100);
+            $unitNames = optional($contract[0]->estimate->storageunit)->storage_unit_name ?? '';
+        } else {
+            $totelCost = 0;
+            $names = [];
+            foreach ($estUnits as $row) {
+                $price = (float) ($row->unit_price ?? 0);
+                $storagetotal = $price * $period;
+                $totelCost += $storagetotal - ($storagetotal * $discount / 100);
+                $names[] = optional($row->storageunit)->storage_unit_name ?? ('#'.$row->storage_unit_id);
+            }
+            $unitNames = implode(', ', $names);
+        }
+
+        $insuranceMonthly = (float) ($contract[0]->insurance_amount
+            ?? optional($contract[0]->estimate)->insurance_amount
+            ?? 0);
+        $insuranceFee = $insuranceMonthly * $period;
+
+        $templateContent = str_replace('{{unit_no}}', $this->formatTemplateValue($unitNames), $templateContent);
         $templateContent = str_replace('{{storage_fee}}', $this->formatTemplateValue($totelCost), $templateContent);
         $templateContent = str_replace('{{addon_fee}}', $this->formatTemplateValue($addonprice), $templateContent);
+        $templateContent = str_replace('{{insurance_fee}}', $this->formatTemplateValue($insuranceFee), $templateContent);
 
         $contract[0]->contractTemplate->temp_body = $templateContent;
     }

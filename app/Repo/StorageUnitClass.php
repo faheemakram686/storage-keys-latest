@@ -1,6 +1,7 @@
 <?php
 namespace App\Repo;
 
+use App\Enums\StorageUnitStatus;
 use App\Models\Location;
 use App\Models\StorageType;
 use App\Models\StorageUnit;
@@ -8,9 +9,19 @@ use App\Models\Warehouse;
 use App\Repo\Interfaces\StorageTypeInterface;
 use App\Repo\Interfaces\StorageUnitInterface;
 use App\Repo\Interfaces\WarehouseInterface;
+use App\Services\StorageUnitStatusService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class StorageUnitClass implements StorageUnitInterface {
+
+    /** @var StorageUnitStatusService */
+    protected $unitStatus;
+
+    public function __construct(?StorageUnitStatusService $unitStatus = null)
+    {
+        $this->unitStatus = $unitStatus ?: app(StorageUnitStatusService::class);
+    }
 
   public function saveStorageUnit($request)
   {
@@ -27,7 +38,12 @@ class StorageUnitClass implements StorageUnitInterface {
       $sy->height=$request->height;
       $sy->price=$request->price;
       $sy->location=$request->location;
-      $sy->status=$request->status;
+      $sy->status = StorageUnitStatus::VACANT;
+      $sy->is_maintenance = false;
+      if ($request->filled('is_maintenance') && (int) $request->is_maintenance === 1) {
+          $sy->is_maintenance = true;
+          $sy->status = StorageUnitStatus::UNDER_MAINTENANCE;
+      }
       if($sy->save()){
           return response()->json(['success' => 'Record save successfully'], 200);
       }
@@ -37,7 +53,7 @@ class StorageUnitClass implements StorageUnitInterface {
     public function getStorageUnit()
     {
         // TODO: Implement getStorageUnit() method.
-        $qry=StorageUnit::with('warehouse','warehouse.loc.city.country','storagetype','storagelevel','storagesize');
+        $qry=StorageUnit::with('warehouse','warehouse.loc.city.country','storagetype','storagelevel','storagesize','occupiedByCustomer','activeContract');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
@@ -56,13 +72,16 @@ class StorageUnitClass implements StorageUnitInterface {
     public function editStorageUnit($id)
     {
         // TODO: Implement editStorageUnit() method.
-        return $country=StorageUnit::find($id);
+        return $country=StorageUnit::with('occupiedByCustomer','activeContract')->find($id);
     }
 
     public function updateStorageUnit($request)
     {
         // TODO: Implement updateStorageUnit() method.
         $sy=StorageUnit::find($request->id);
+        if (!$sy) {
+            return 0;
+        }
         $sy->storage_unit_name=$request->e_su_name;
         $sy->wh_id=$request->e_wh_id;
         $sy->stype_id=$request->e_st_id;
@@ -73,13 +92,50 @@ class StorageUnitClass implements StorageUnitInterface {
         $sy->height=$request->e_height;
         $sy->price=$request->e_price;
         $sy->location=$request->e_location;
-        $sy->status=$request->e_status;
         $sy->save();
+
+        // Derived occupancy is read-only; only maintenance toggle is accepted from admin.
+        if ($request->has('e_is_maintenance') || $request->has('is_maintenance')) {
+            $enabled = (int) ($request->e_is_maintenance ?? $request->is_maintenance) === 1;
+            try {
+                $this->unitStatus->setMaintenance($sy->fresh(), $enabled);
+            } catch (ValidationException $e) {
+                return response()->json([
+                    'error' => collect($e->errors())->flatten()->implode(' '),
+                ], 422);
+            }
+        } else {
+            $this->unitStatus->recalculate($sy->id, 'admin.unit_updated');
+        }
+
         return 1;
     }
+
+    public function setMaintenance($id, $enabled)
+    {
+        $unit = StorageUnit::find($id);
+        if (!$unit) {
+            return response()->json(['error' => 'Storage unit not found.'], 404);
+        }
+        try {
+            $status = $this->unitStatus->setMaintenance($unit, (bool) $enabled);
+            return response()->json([
+                'success' => 'Maintenance updated successfully',
+                'status' => $status,
+                'is_maintenance' => (bool) $unit->fresh()->is_maintenance,
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => collect($e->errors())->flatten()->implode(' '),
+            ], 422);
+        }
+    }
+
     public function searchStorageUnit($request){
 
         $qry=StorageUnit::with('warehouse.loc','warehouse.loc.city.country','storagetype','storagelevel','storagesize');
+
+        $qry=$qry->availableForBooking();
 
         $qry=$qry->when($request->country_id, function ($query, $country_id) {
             return $query->whereRelation('warehouse.loc.city.country', 'id', $country_id);
@@ -112,20 +168,24 @@ class StorageUnitClass implements StorageUnitInterface {
         return $qry;
     }
 
+    public function leadStorageUnits($ids)
+    {
+        $ids = is_array($ids) ? $ids : [$ids];
+        $ids = array_values(array_filter($ids));
+        if (empty($ids)) {
+            return collect([]);
+        }
+        return StorageUnit::with('warehouse.loc.city.country')
+            ->whereIn('id', $ids)
+            ->get();
+    }
 
     public function getSunitWarehouseWise($request)
     {
-//        $qry=StorageUnit::with('warehouse.loc','warehouse.loc.city.country','storagetype','storagelevel','storagesize');
-//        $qry=$qry->when($request, function ($query, $warehouse_id) {
-//            return $query->whereRelation('warehouse', 'id', $warehouse_id);
-//        });
-//        $qry=$qry->get();
-//        return $qry;
-        $qry=StorageUnit::query();
-        $qry=$qry->where('wh_id',$request);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
-
+        $qry = StorageUnit::query();
+        $qry = $qry->where('wh_id', $request);
+        $qry = $qry->availableForBooking();
+        $qry = $qry->orderBy('id', 'DESC');
+        return $qry->get();
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Repo;
 use App\Http\Controllers\Backend\MoveInRequestController;
 use App\Models\BarcodeLabel;
+use App\Models\Contract;
 use App\Models\Country;
 use App\Models\LeadSource;
 use App\Models\LeadStatus;
@@ -12,10 +13,19 @@ use App\Repo\Interfaces\LeadSourceInterface;
 use App\Repo\Interfaces\LeadStatusInterface;
 use App\Repo\Interfaces\MoveInInterface;
 use App\Repo\Interfaces\MoveInRequestInterface;
+use App\Services\StorageUnitStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class MoveInClass implements MoveInInterface {
+
+    /** @var StorageUnitStatusService */
+    protected $unitStatus;
+
+    public function __construct(?StorageUnitStatusService $unitStatus = null)
+    {
+        $this->unitStatus = $unitStatus ?: app(StorageUnitStatusService::class);
+    }
 
     public function saveMoveIn($request)
     {
@@ -46,6 +56,12 @@ class MoveInClass implements MoveInInterface {
                     $barcode->save();
                 }
             }
+
+            $contract = Contract::find($request->contract_id);
+            if ($contract) {
+                $this->unitStatus->recalculateForContract($contract, 'move_in.saved');
+            }
+
             return response()->json(['success' => 'Record save successfully'], 200);
         }
     }
@@ -70,6 +86,12 @@ class MoveInClass implements MoveInInterface {
         $country=MoveIn::find($id);
         $country->is_deleted=1;
         if($country->save()){
+            if ($country->contract_id) {
+                $contract = Contract::find($country->contract_id);
+                if ($contract) {
+                    $this->unitStatus->recalculateForContract($contract, 'move_in.deleted');
+                }
+            }
             return 1;
         }
 

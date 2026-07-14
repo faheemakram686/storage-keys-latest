@@ -82,43 +82,84 @@ class ReportClass implements ReportInterface {
 
     public function getInvoiceReport($request)
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract','order','userResponsible');
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        if($request->customer_id)
-            $qry = $qry->where( 'customer_id' , $request->customer_id);
-        if($request->user_res)
-            $qry = $qry->where( 'user_id' , $request->user_res);
-        if($request->contract_id)
-            $qry = $qry->where( 'contract_id' ,$request->contract_id);
-        if($request->payment_status)
-            $qry = $qry->where( 'payment_status' ,$request->payment_status);
-        if($request->start_date)
-            $qry = $qry->whereDate( 'invoice_date' ,'>=', $request->start_date);
-        if($request->end_date)
-            $qry = $qry->whereDate( 'due_date' ,'<=', $request->end_date);
-        $qry = $qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer',
+            'estimate.storageunit',
+            'contract',
+            'order',
+            'userResponsible',
+        ], Invoice::paymentStatusRelations()))
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC');
 
+        if ($request->customer_id) {
+            $invoices = $invoices->where('customer_id', $request->customer_id);
+        }
+        if ($request->user_res) {
+            $invoices = $invoices->where('user_id', $request->user_res);
+        }
+        if ($request->contract_id) {
+            $invoices = $invoices->where('contract_id', $request->contract_id);
+        }
+        if ($request->start_date) {
+            $invoices = $invoices->whereDate('invoice_date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $invoices = $invoices->whereDate('due_date', '<=', $request->end_date);
+        }
+
+        $invoices = $invoices->get()->each(function ($invoice) {
+            $invoice->applyResolvedPaymentStatus();
+        });
+
+        if ($request->payment_status !== null && $request->payment_status !== '') {
+            $invoices = $invoices->filter(function ($invoice) use ($request) {
+                return $invoice->currentPaymentStatusValue() === (int) $request->payment_status;
+            })->values();
+        }
+
+        return $invoices;
     }
 
     public function getPaymentReport($request)
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract','order','userResponsible');
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        if($request->customer_id)
-            $qry = $qry->where( 'customer_id' , $request->customer_id);
-        if($request->user_res)
-            $qry = $qry->where( 'user_id' , $request->user_res);
-        if($request->contract_id)
-            $qry = $qry->where( 'contract_id' ,$request->contract_id);
-        if($request->payment_status)
-            $qry = $qry->where( 'payment_status' ,$request->payment_status);
-        if($request->start_date)
-            $qry = $qry->whereDate( 'invoice_date' ,'>=', $request->start_date);
-        if($request->end_date)
-            $qry = $qry->whereDate( 'due_date' ,'<=', $request->end_date);
-        $qry = $qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer',
+            'estimate.storageunit',
+            'contract',
+            'order',
+            'userResponsible',
+        ], Invoice::paymentStatusRelations()))
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC');
+
+        if ($request->customer_id) {
+            $invoices = $invoices->where('customer_id', $request->customer_id);
+        }
+        if ($request->user_res) {
+            $invoices = $invoices->where('user_id', $request->user_res);
+        }
+        if ($request->contract_id) {
+            $invoices = $invoices->where('contract_id', $request->contract_id);
+        }
+        if ($request->start_date) {
+            $invoices = $invoices->whereDate('invoice_date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $invoices = $invoices->whereDate('due_date', '<=', $request->end_date);
+        }
+
+        $invoices = $invoices->get()->each(function ($invoice) {
+            $invoice->applyResolvedPaymentStatus();
+        });
+
+        if ($request->payment_status !== null && $request->payment_status !== '') {
+            $invoices = $invoices->filter(function ($invoice) use ($request) {
+                return $invoice->currentPaymentStatusValue() === (int) $request->payment_status;
+            })->values();
+        }
+
+        return $invoices;
     }
 
     public function getMoveInRequestReport($request)

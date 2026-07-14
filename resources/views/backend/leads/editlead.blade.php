@@ -202,9 +202,31 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <label  class="lbl" >Storage Unit</label>
-                                                                <select class="selectpicker form-control su_id" name="su_id" id="su_id" data="{{ $lead->su_id }}">
-                                                                    <option value="">Choose One</option>
-                                                                </select>
+                                                                <div class="input-group">
+                                                                    <select class="form-control su_id" name="su_picker" id="su_id">
+                                                                        <option value="">Choose One</option>
+                                                                    </select>
+                                                                    <div class="input-group-append">
+                                                                        <button type="button" class="btn btn-primary" id="btn_add_su_unit" style="height:35px;">Add</button>
+                                                                    </div>
+                                                                </div>
+                                                                <small class="text-muted">Select a unit and click Add. You can add multiple units.</small>
+                                                            </div>
+                                                            <div class="col-12 mt-3">
+                                                                <label class="lbl">Selected Units</label>
+                                                                <div id="selected_units_container">
+                                                                    <table class="table table-sm table-bordered" id="selected_units_table" style="display:none;">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Unit</th>
+                                                                                <th style="width:80px;">Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody></tbody>
+                                                                    </table>
+                                                                    <p class="text-muted mb-0" id="selected_units_empty">No units selected yet.</p>
+                                                                </div>
+                                                                <div id="su_ids_inputs"></div>
                                                             </div>
                                                         </div>
 
@@ -272,37 +294,12 @@
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 insurance-section-header">
                                                 Insurance</div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
-                                                <div class="row">
-                                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                                        <p>Insure your goods</p>
-                                                        <div class="separator"></div>
-                                                        <div class="row">
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" name="insurance" type="radio" value="cover" {{ ($lead->insurence == "cover")? "checked" : "" }}   id="flexCheckDefault" />
-                                                                    <label class="check-container" for="flexCheckDefault">Choose your own cover (100 AED per 100,000 AED cover)</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">AED 25.00/mo</p>
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-
-                                                                <input type="text" class="form-control" placeholder="Enter value of your goods" name="goodsval" value="{{$lead->goods}}" style="height:35px;">
-
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                                <p class="text-right">Cover AED 25000.00</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="separator"></div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" name="insurance" type="radio" value="nothanks" {{ ($lead->insurence == "nothanks")? "checked" : "" }}  id="flexCheckDefault" />
-                                                            <label class="check-container" for="flexCheckDefault">No Thanks</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @include('partials.insurance-selector', [
+                                                    'insurances' => $data['insurances'] ?? collect([]),
+                                                    'selectedInsuranceId' => $lead->insurance_id ?? null,
+                                                    'goodsValue' => $lead->goods ?? null,
+                                                    'readonly' => false,
+                                                ])
                                             </div>
                                         </div>
                                         <div class="row submission-sections">
@@ -364,6 +361,47 @@
                 }
             }
 
+            function populateMultiSelect($el, items, valueKey, labelKey, selectedValues) {
+                // Kept for cascade resets: always a single-select unit list
+                var html = '<option value="">Choose One</option>';
+                if (items && items.length > 0) {
+                    for (var i = 0; i < items.length; i++) {
+                        html += '<option value="' + items[i][valueKey] + '" data-name="' + items[i][labelKey] + '">' + items[i][labelKey] + '</option>';
+                    }
+                }
+                $el.html(html);
+            }
+
+            var selectedUnitsMap = {};
+            @isset($data['su'])
+                @foreach($data['su'] as $preSu)
+                    selectedUnitsMap[{{ $preSu->id }}] = @json($preSu->storage_unit_name);
+                @endforeach
+            @endisset
+
+            function renderSelectedUnits() {
+                var $tbody = $('#selected_units_table tbody');
+                var $inputs = $('#su_ids_inputs');
+                $tbody.empty();
+                $inputs.empty();
+                var ids = Object.keys(selectedUnitsMap);
+                if (ids.length === 0) {
+                    $('#selected_units_empty').show();
+                    $('#selected_units_table').hide();
+                    return;
+                }
+                $('#selected_units_empty').hide();
+                $('#selected_units_table').show();
+                ids.forEach(function(id) {
+                    var name = selectedUnitsMap[id];
+                    $tbody.append(
+                        '<tr data-id="'+id+'"><td>'+name+'</td>'+
+                        '<td><button type="button" class="btn btn-sm btn-danger btn-remove-unit" data-id="'+id+'"><em class="icon ni ni-trash"></em></button></td></tr>'
+                    );
+                    $inputs.append('<input type="hidden" name="su_ids[]" value="'+id+'">');
+                });
+            }
+
             function getCities(country_id, selectedCityId) {
                 return $.ajax({
                     url: '{{ url('get-cities') }}',
@@ -397,14 +435,14 @@
                 }).fail(showReqError);
             }
 
-            function getStorageUnit(warehouse_id, selectedSuId) {
+            function getStorageUnit(warehouse_id) {
                 return $.ajax({
                     url: '{{ url('get-storageunit') }}',
                     type: 'get',
                     dataType: 'json',
                     data: { warehouse_id: warehouse_id }
                 }).done(function(data) {
-                    populateSelect($('.su_id'), data, 'id', 'storage_unit_name', selectedSuId, 'Select Storage Unit');
+                    populateMultiSelect($('.su_id'), data, 'id', 'storage_unit_name', []);
                 }).fail(showReqError);
             }
 
@@ -412,13 +450,14 @@
             var selectedCityId = $('#citySection').attr("data") || '';
             var selectedLocationId = $('#loc_id').attr("data") || '';
             var selectedWarehouseId = $('#warehouse_id').attr("data") || '';
-            var selectedSuId = $('#su_id').attr("data") || '';
+
+            renderSelectedUnits();
 
             if (country_id) {
                 getCities(country_id, selectedCityId)
                     .then(function() { return getLocations(selectedCityId, selectedLocationId); })
                     .then(function() { return getWharehouse(selectedLocationId, selectedWarehouseId); })
-                    .then(function() { return getStorageUnit(selectedWarehouseId, selectedSuId); });
+                    .then(function() { return getStorageUnit(selectedWarehouseId); });
             }
 
             $("#country_id").on('change', function() {
@@ -426,7 +465,7 @@
                 getCities(cid, '').then(function() {
                     populateSelect($('.loc_id'), [], 'id', 'loc_name', '', 'Select Location');
                     populateSelect($('.warehouse_id'), [], 'id', 'name', '', 'Select Warehouse');
-                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
+                    populateMultiSelect($('.su_id'), [], 'id', 'storage_unit_name', []);
                 });
             });
 
@@ -434,26 +473,51 @@
                 var city_id = $(this).val();
                 getLocations(city_id, '').then(function() {
                     populateSelect($('.warehouse_id'), [], 'id', 'name', '', 'Select Warehouse');
-                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
+                    populateMultiSelect($('.su_id'), [], 'id', 'storage_unit_name', []);
                 });
             });
 
             $(".loc_id").on('change', function() {
                 var loc_id = $(this).val();
                 getWharehouse(loc_id, '').then(function() {
-                    populateSelect($('.su_id'), [], 'id', 'storage_unit_name', '', 'Select Storage Unit');
+                    populateMultiSelect($('.su_id'), [], 'id', 'storage_unit_name', []);
                 });
             });
 
             $(".warehouse_id").on('change', function() {
                 var warehouse_id = $(this).val();
-                getStorageUnit(warehouse_id, '');
+                getStorageUnit(warehouse_id);
             });
 
+            $('#btn_add_su_unit').on('click', function() {
+                var $opt = $('#su_id option:selected');
+                var id = $opt.val();
+                var name = ($opt.data('name') || $opt.text() || '').toString().trim();
+                if (!id) {
+                    toastr.error('Please select a storage unit first.');
+                    return;
+                }
+                if (selectedUnitsMap[id]) {
+                    toastr.error('This unit is already added.');
+                    return;
+                }
+                selectedUnitsMap[id] = name;
+                renderSelectedUnits();
+                $('#su_id').val('');
+            });
 
+            $(document).on('click', '.btn-remove-unit', function() {
+                var id = $(this).data('id');
+                delete selectedUnitsMap[id];
+                renderSelectedUnits();
+            });
 
             $('#UpdateLeadForm').on('submit', function(e) {
                 e.preventDefault();
+                if (Object.keys(selectedUnitsMap).length === 0) {
+                    toastr.error('Please select at least one storage unit.');
+                    return;
+                }
                 var formData=$('#UpdateLeadForm').serialize()
                 $.ajax({
                     type: "get",
@@ -487,8 +551,9 @@
                         window.location.href = "{{ url('admin/leads')}}";
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        var msg = (xhr.responseJSON && (xhr.responseJSON.error || xhr.responseJSON.message)) ? (xhr.responseJSON.error || xhr.responseJSON.message) : 'any technical error';
+                        toastr.error(msg);
                         $('.btn-update').text('Save Changes');
                         $(".btn-update").prop("disabled", false);
                     }

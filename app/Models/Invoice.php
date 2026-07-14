@@ -9,6 +9,10 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    public const PAYMENT_PENDING = 0;
+    public const PAYMENT_PAID = 1;
+    public const PAYMENT_PARTIAL = 2;
+
     protected $fillable = [
         'q_invoice_id',
         'customer_id',
@@ -83,32 +87,97 @@ class Invoice extends Model
     ];
 
 
+    public function paidAmount(): float
+    {
+        if ($this->relationLoaded('payments')) {
+            return (float) $this->payments->sum('amount_received');
+        }
+
+        return (float) $this->payments()->where('is_deleted', 0)->sum('amount_received');
+    }
+
+    public function balanceAmount(): float
+    {
+        return max(0, round(((float) $this->grand_total) - $this->paidAmount(), 2));
+    }
+
+    public function resolvePaymentStatusValue(): int
+    {
+        $paid = $this->paidAmount();
+        $balance = round(((float) $this->grand_total) - $paid, 2);
+
+        if ($balance <= 0 || $paid >= (float) $this->grand_total) {
+            return self::PAYMENT_PAID;
+        }
+
+        if ($paid > 0) {
+            return self::PAYMENT_PARTIAL;
+        }
+
+        return self::PAYMENT_PENDING;
+    }
+
+    public function applyResolvedPaymentStatus(): self
+    {
+        $this->setAttribute('payment_status', $this->resolvePaymentStatusValue());
+
+        return $this;
+    }
+
+    public function syncPaymentStatus(): int
+    {
+        $status = $this->resolvePaymentStatusValue();
+
+        if ((int) $this->getRawOriginal('payment_status') !== $status) {
+            $this->payment_status = $status;
+            $this->save();
+        }
+
+        $this->setAttribute('payment_status', $status);
+
+        return $status;
+    }
+
+    public function isFullyPaid(): bool
+    {
+        return $this->resolvePaymentStatusValue() === self::PAYMENT_PAID;
+    }
+
+    public function currentPaymentStatusValue(): int
+    {
+        return (int) ($this->attributes['payment_status'] ?? $this->getRawOriginal('payment_status') ?? self::PAYMENT_PENDING);
+    }
+
+    public static function paymentStatusRelations(): array
+    {
+        return [
+            'payments' => function ($query) {
+                $query->where('is_deleted', 0);
+            },
+        ];
+    }
+
     public function setPaymentStatusAttribute($value)
     {
-        if($value==0){
-            $value=0;
-        }
-        if($value==1){
-            $value=1;
-        }
-        if($value==2){
-            $value=2;
-        }
-        $this->attributes['payment_status'] =$value;
+        $this->attributes['payment_status'] = (int) $value;
     }
 
     public function getPaymentStatusAttribute($value)
     {
-        if($value==1){
-            $getVal='PAID';
-        }
-        if($value==2){
-            $getVal='PARTIALLY PAID';
-        }
-        if($value==0){
-            $getVal='UNPAID';
-        }
-        return $getVal;
+        return match ((int) $value) {
+            self::PAYMENT_PAID => 'Paid',
+            self::PAYMENT_PARTIAL => 'Partial',
+            default => 'Pending',
+        };
+    }
+
+    public function paymentStatusBadgeClass(): string
+    {
+        return match ($this->currentPaymentStatusValue()) {
+            self::PAYMENT_PAID => 'badge-success',
+            self::PAYMENT_PARTIAL => 'badge-warning',
+            default => 'badge-danger',
+        };
     }
     public function setStatusAttribute($value)
     {

@@ -81,8 +81,7 @@ class InvoiceController extends Controller
     }
     public function getAllInvoices()
     {
-        $data = $this->invoice->getAllInvoices();
-        return $data;
+        return response()->json($this->invoice->getAllInvoices());
     }
 
     public function getCustomerInvoices(Request $request)
@@ -213,13 +212,14 @@ class InvoiceController extends Controller
             return response()->json(['status' => false, 'message' => 'Invoice not found'], 404);
         }
 
-        // grand_total has no accessor; payment_status has, so read raw.
-        $paid    = $this->payment->getPaymentSum($invoice->id);
-        $balance = round(((float) $invoice->grand_total) - (float) $paid, 2);
+        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
+        $invoice->syncPaymentStatus();
 
-        if ($balance <= 0 || (int) $invoice->getRawOriginal('payment_status') === 1) {
+        if ($invoice->isFullyPaid()) {
             return response()->json(['status' => false, 'message' => 'Invoice already paid'], 422);
         }
+
+        $balance = $invoice->balanceAmount();
 
         $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer);
 
@@ -268,8 +268,10 @@ class InvoiceController extends Controller
             return response()->json(['status' => false, 'message' => 'Invoice not found'], 404);
         }
 
-        // Already finalized: return success idempotently.
-        if ((int) $invoice->getRawOriginal('payment_status') === 1) {
+        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
+        $invoice->syncPaymentStatus();
+
+        if ($invoice->isFullyPaid()) {
             return response()->json([
                 'status'     => true,
                 'message'    => 'Payment already recorded',
@@ -294,10 +296,7 @@ class InvoiceController extends Controller
         $capturedMinor = $this->paymentService->extractCapturedAmount($order);
         $amountReceived = $capturedMinor !== null
             ? round($capturedMinor / 100, 2)
-            : round(((float) $invoice->grand_total) - (float) $this->payment->getPaymentSum($invoice->id), 2);
-
-        $invoice->payment_status = 1;
-        $invoice->save();
+            : $invoice->balanceAmount();
 
         $inovicePayment = (object)[
             'invoice_ref'    => $invoice->invoice_ref,
@@ -318,6 +317,8 @@ class InvoiceController extends Controller
         if ($payload) {
             $this->zapier->send('add_payment', $payload);
         }
+
+        $this->invoice->syncPaymentStatus($invoice->id);
 
         return response()->json([
             'status'     => true,
@@ -344,8 +345,10 @@ class InvoiceController extends Controller
             return back()->with('error', 'Invalid payment reference');
         }
 
-        // Already finalized: don't record twice.
-        if ((int) $invoice->getRawOriginal('payment_status') === 1) {
+        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
+        $invoice->syncPaymentStatus();
+
+        if ($invoice->isFullyPaid()) {
             return redirect('invoice-to-customer/'.$invoice->id)->with('success', 'Payment successful!');
         }
 
@@ -358,10 +361,8 @@ class InvoiceController extends Controller
         $capturedMinor = $this->paymentService->extractCapturedAmount($order);
         $amountReceived = $capturedMinor !== null
             ? round($capturedMinor / 100, 2)
-            : round(((float) $invoice->grand_total) - (float) $this->payment->getPaymentSum($invoice->id), 2);
+            : $invoice->balanceAmount();
 
-        $invoice->payment_status = 1;
-        $invoice->save();
         $inovicePayment = (object)[
             'invoice_ref'   => $ref,
             'invoice_id'    => $invoice->id,
@@ -380,6 +381,8 @@ class InvoiceController extends Controller
         if ($payload){
             $this->zapier->send('add_payment', $payload);
         }
+
+        $this->invoice->syncPaymentStatus($invoice->id);
 
         // Redirect user with status
         if ($payment) {

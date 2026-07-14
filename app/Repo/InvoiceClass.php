@@ -10,6 +10,7 @@ use App\Repo\Interfaces\ContactInterface;
 
 use App\Repo\Interfaces\ContractInterface;
 use App\Repo\Interfaces\InvoiceInterface;
+use App\Services\StorageUnitStatusService;
 use App\Services\ZapierService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +19,13 @@ use QuickBooksOnline\API\DataService\DataService;
 
 class InvoiceClass implements InvoiceInterface {
 
+    /** @var StorageUnitStatusService */
+    protected $unitStatus;
+
+    public function __construct(?StorageUnitStatusService $unitStatus = null)
+    {
+        $this->unitStatus = $unitStatus ?: app(StorageUnitStatusService::class);
+    }
 
     public function saveInvoice($request)
     {
@@ -61,6 +69,13 @@ class InvoiceClass implements InvoiceInterface {
                             $invoiceItem->save();
                     }
                 }
+
+            if ($invoice->contract_id) {
+                $contract = Contract::find($invoice->contract_id);
+                if ($contract) {
+                    $this->unitStatus->recalculateForContract($contract, 'invoice.created');
+                }
+            }
 
             $invoice = Invoice::with(['invoiceItems.productdetail', 'invoiceItems.termsdetail','invoiceItems.addOndetail','customer'])->find($invoice->id);
 
@@ -139,29 +154,80 @@ class InvoiceClass implements InvoiceInterface {
 
     public function getAllInvoices()
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract','order');
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer',
+            'estimate.storageunit',
+            'estimate.estimateStorageUnits.storageunit',
+            'contract',
+            'order',
+        ], Invoice::paymentStatusRelations()))
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $pendingCount = 0;
+        $totalBalance = 0;
+
+        $invoices->each(function ($invoice) use (&$pendingCount, &$totalBalance) {
+            $invoice->applyResolvedPaymentStatus();
+            $balance = $invoice->balanceAmount();
+            $invoice->setAttribute('balance', $balance);
+
+            if ($balance > 0) {
+                $pendingCount++;
+                $totalBalance += $balance;
+            }
+        });
+
+        return [
+            'invoices' => $invoices,
+            'summary' => [
+                'pending_count' => $pendingCount,
+                'total_balance' => round($totalBalance, 2),
+            ],
+        ];
     }
     public function getCustomerInvoices($customerid)
     {
-        $qry=Invoice::with('customer','estimate.storageunit','contract','order');
-        $qry=$qry->where('customer_id',$customerid);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer',
+            'estimate.storageunit',
+            'estimate.estimateStorageUnits.storageunit',
+            'contract',
+            'order',
+        ], Invoice::paymentStatusRelations()))
+            ->where('customer_id', $customerid)
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $invoices->each(function ($invoice) {
+            $invoice->syncPaymentStatus();
+        });
+
+        return $invoices;
     }
     public function getCustomerInvoicesApi($customerid)
     {
         try {
-            $qry=Invoice::with('invoiceItems','payments','customer','estimate.storageunit','contract');
-            $qry=$qry->where('customer_id',$customerid);
-            $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-            $qry=$qry->get();
+            $invoices = Invoice::with(array_merge([
+                'invoiceItems',
+                'customer',
+                'estimate.storageunit',
+                'estimate.estimateStorageUnits.storageunit',
+                'contract',
+            ], Invoice::paymentStatusRelations()))
+                ->where('customer_id', $customerid)
+                ->where('is_deleted', 0)
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            $invoices->each(function ($invoice) {
+                $invoice->syncPaymentStatus();
+            });
 
             return response()->json([
-                'Invoices' => $qry,
+                'Invoices' => $invoices,
                 'status' => true,
                 'message' => 'Customer Invoices',
             ], 200);
@@ -186,19 +252,39 @@ class InvoiceClass implements InvoiceInterface {
 
     public function editInvoice($id)
     {
-        $qry=Invoice::with('customer.primaryContact','contract','invoiceItems');
-        $qry=$qry->where('id',$id);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer.primaryContact',
+            'contract',
+            'invoiceItems',
+        ], Invoice::paymentStatusRelations()))
+            ->where('id', $id)
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $invoices->each(function ($invoice) {
+            $invoice->applyResolvedPaymentStatus();
+        });
+
+        return $invoices;
     }
     public function getInvoice($id)
     {
-        $qry=Invoice::with('customer.primaryContact','contract','invoiceItems');
-        $qry=$qry->where('id',$id);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        $invoices = Invoice::with(array_merge([
+            'customer.primaryContact',
+            'contract',
+            'invoiceItems',
+        ], Invoice::paymentStatusRelations()))
+            ->where('id', $id)
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $invoices->each(function ($invoice) {
+            $invoice->syncPaymentStatus();
+        });
+
+        return $invoices;
     }
 
     public function updateInvoice($request)
@@ -267,12 +353,40 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->save();
         return 1;
     }
-    public function changePaymentStatus($id,$status)
+    public function changePaymentStatus($id, $status = null)
     {
-        $invoice =Invoice::find($id);
-        $invoice->payment_status = 1;
+        if ($status === null) {
+            return $this->syncPaymentStatus($id);
+        }
+
+        $invoice = Invoice::find($id);
+        if (!$invoice) {
+            return 0;
+        }
+
+        $invoice->payment_status = $status;
         $invoice->save();
+
         return 1;
+    }
+
+    public function syncPaymentStatus($id)
+    {
+        $invoice = Invoice::find($id);
+        if (!$invoice) {
+            return 0;
+        }
+
+        $status = $invoice->syncPaymentStatus();
+
+        if ($invoice->contract_id) {
+            $contract = Contract::find($invoice->contract_id);
+            if ($contract) {
+                $this->unitStatus->recalculateForContract($contract, 'payment.synced');
+            }
+        }
+
+        return $status;
     }
     public function updateInvoiceRef($invoiceReq)
     {

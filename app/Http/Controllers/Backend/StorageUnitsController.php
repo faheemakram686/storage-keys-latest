@@ -68,6 +68,9 @@ class StorageUnitsController extends Controller
     public function updateStorageUnit(Request $request)
     {
         $res=$this->sUnit->updateStorageUnit($request);
+        if ($res instanceof \Illuminate\Http\JsonResponse) {
+            return $res;
+        }
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 

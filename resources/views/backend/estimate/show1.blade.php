@@ -331,19 +331,45 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                    $est = $data['estimate'][0];
+                                    $estUnits = $est->estimateStorageUnits ?? collect([]);
+                                    $storageAmount = 0;
+                                    if ($estUnits->isNotEmpty()) {
+                                        $storageAmount = $estUnits->sum(function ($row) {
+                                            return (float) $row->unit_price;
+                                        });
+                                    } else {
+                                        $storageAmount = (float) $est->unit_price;
+                                    }
+                                    $addonAmount = 0;
+                                @endphp
+                                @if($estUnits->isNotEmpty())
+                                    @foreach($estUnits as $key => $eu)
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ optional($eu->storageunit)->storage_unit_name ?? ('Unit #'.$eu->storage_unit_id) }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ $eu->unit_price }}</td>
+                                    </tr>
+                                    @endforeach
+                                    @php $addonStart = $estUnits->count() + 1; @endphp
+                                @else
                                 <tr>
                                     <td>1</td>
-                                    <td>{{$data['estimate'][0]->storageunit->storage_unit_name}}</td>
+                                    <td>{{ optional($est->storageunit)->storage_unit_name }}</td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{$data['estimate'][0]->unit_price}}</td>
+                                    <td>{{ $est->unit_price }}</td>
                                 </tr>
-                                @if($data['estimate'][0]->estimateAddon)
-                                        @php $addonAmount = 0; @endphp
-                                    @foreach($data['estimate'][0]->estimateAddon as $key => $addon)
+                                    @php $addonStart = 2; @endphp
+                                @endif
+                                @if($est->estimateAddon)
+                                    @foreach($est->estimateAddon as $key => $addon)
                                         @php
                                             $addonAmount += $addon->price;
-                                            $i = $key+2;
+                                            $i = $addonStart + $key;
                                          @endphp
                                         <tr>
                                             <td>{{$i}}</td>
@@ -354,13 +380,14 @@
                                         </tr>
                                     @endforeach
                                 @endif
-                                @if($data['estimate'][0]->insurence !='nothanks')
+                                @php $insuranceAmt = (float) ($est->insurance_amount ?? 0); @endphp
+                                @if($insuranceAmt > 0)
                                         <tr>
-                                            <td>{{$data['estimate'][0]->id}}</td>
-                                            <td>Insurance</td>
+                                            <td>{{ $addonStart + ($est->estimateAddon ? $est->estimateAddon->count() : 0) }}</td>
+                                            <td>Insurance{{ $est->insurance_cover ? ' (Cover '.$est->insurance_cover.')' : '' }}</td>
                                             <td></td>
                                             <td></td>
-                                            <td>25</td>
+                                            <td>{{ number_format($insuranceAmt, 2, '.', '') }}</td>
                                         </tr>
                                 @endif
                                 </tbody>
@@ -368,7 +395,7 @@
                                 <tr>
                                     <td colspan="2"></td>
                                     <td colspan="2" align="right">Subtotal</td>
-                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0) }} AED</td>
+                                    <td>{{ $storageAmount + $addonAmount + $insuranceAmt }} AED</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2"></td>
@@ -378,7 +405,7 @@
                                 <tr>
                                     <td colspan="2"></td>
                                     <td colspan="2" align="right">Grand Total</td>
-                                    <td>{{$data['estimate'][0]->unit_price + $addonAmount + (($data['estimate'][0]->insurence !='nothanks')? 25:0)}} AED</td>
+                                    <td>{{ $storageAmount + $addonAmount + $insuranceAmt }} AED</td>
                                 </tr>
                                 </tfoot>
                             </table>

@@ -140,7 +140,14 @@
                             for (i = 0; i < data.length; i++) {
                                 c++
                                 var termLengthTitle = (data[i].estimate && data[i].estimate.term_length && data[i].estimate.term_length.title) ? data[i].estimate.term_length.title : 'N/A';
-                                var storageUnitName = (data[i].estimate && data[i].estimate.storageunit && data[i].estimate.storageunit.storage_unit_name) ? data[i].estimate.storageunit.storage_unit_name : 'N/A';
+                                var storageUnitName = 'N/A';
+                                if (data[i].estimate && data[i].estimate.estimate_storage_units && data[i].estimate.estimate_storage_units.length > 0) {
+                                    storageUnitName = data[i].estimate.estimate_storage_units.map(function(u) {
+                                        return (u.storageunit && u.storageunit.storage_unit_name) ? u.storageunit.storage_unit_name : ('#'+u.storage_unit_id);
+                                    }).join(', ');
+                                } else if (data[i].estimate && data[i].estimate.storageunit && data[i].estimate.storageunit.storage_unit_name) {
+                                    storageUnitName = data[i].estimate.storageunit.storage_unit_name;
+                                }
                                 var estimateId = (data[i].estimate && data[i].estimate.id) ? data[i].estimate.id : 'N/A';
 
                                 html += ' <tr class="nk-tb-item odd">'+
