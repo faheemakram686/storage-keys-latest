@@ -230,12 +230,16 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         @isset($data)
+                                        @php
+                                            $termCondition = $data['appSettings']->firstWhere('key', 'term_condition')
+                                                ?? ($data['appSettings'][9] ?? null);
+                                        @endphp
                                         <label>Terms & Conditions<span class="text-danger"></span></label>
-                                        <textarea class="form-control" name="term_condition">{{isset($data['appSettings'][9]) ? $data['appSettings'][9]->value : null}}</textarea>
+                                        <div id="terms-toolbar-container"></div>
+                                        <div id="terms-editor">
+                                            @if($termCondition) {!! $termCondition->value !!} @endif
+                                        </div>
                                         @endisset
-{{--                                        <div id="toolbar-container"></div>--}}
-{{--                                        <div id="editor">--}}
-{{--                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -253,6 +257,20 @@
 
     <script>
         $(document).ready(function() {
+            var termsEditor = '';
+
+            if (document.querySelector('#terms-editor')) {
+                DecoupledEditor
+                    .create(document.querySelector('#terms-editor'))
+                    .then(function(editor) {
+                        document.querySelector('#terms-toolbar-container').appendChild(editor.ui.view.toolbar.element);
+                        termsEditor = editor;
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                    });
+            }
+
             function toggleApprovalLevels() {
                 var isDirect = $('input[name="approval_mode"]:checked').val() === 'direct';
                 if (isDirect) {
@@ -266,7 +284,10 @@
 
             $('#updateCountryForm').on('submit', function(e) {
                 e.preventDefault();
-                var formData=$('#updateCountryForm').serialize()
+                var formData = $('#updateCountryForm').serialize();
+                if (termsEditor) {
+                    formData += '&term_condition=' + encodeURIComponent(termsEditor.getData());
+                }
                 $.ajax({
                     type: "get",
                     url: '{{ url('admin/update-app-settings') }}',
