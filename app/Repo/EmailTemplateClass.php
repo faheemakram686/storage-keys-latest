@@ -86,4 +86,59 @@ class EmailTemplateClass implements EmailTemplateInterface {
         $temp->save();
         return 1;
     }
+
+    public function applyTemplateVariables(string $content, array $variables): string
+    {
+        foreach ($variables as $key => $value) {
+            $content = str_replace('{{'.$key.'}}', $this->formatTemplateValue($value), $content);
+        }
+
+        return $content;
+    }
+
+    public function formatTemplateValue($value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format('Y-m-d H:i:s');
+        }
+
+        return '';
+    }
+
+    /**
+     * Build common email placeholder map from a recipient model/array.
+     */
+    public function buildRecipientVariables($recipient): array
+    {
+        if (is_object($recipient) && method_exists($recipient, 'toArray')) {
+            $data = $recipient->toArray();
+        } elseif (is_array($recipient)) {
+            $data = $recipient;
+        } else {
+            $data = [];
+        }
+
+        return [
+            'f_name' => $data['f_name'] ?? $data['first_name'] ?? '',
+            'l_name' => $data['l_name'] ?? $data['last_name'] ?? '',
+            'company_name' => $data['company_name'] ?? '',
+            'email' => $data['email'] ?? '',
+            'phone' => $data['phone'] ?? '',
+            'address' => $data['address'] ?? '',
+            'city' => $data['city'] ?? '',
+            'country' => $data['country'] ?? '',
+        ];
+    }
 }

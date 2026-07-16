@@ -410,11 +410,9 @@
             e.preventDefault();
             var formData = $('#changeStatus').serialize();
             $.ajax({
-                type: "get",
+                type: 'POST',
                 url: '{{ url('admin/change-lead-status') }}',
                 data: formData,
-                contentType: false,
-                processData: false,
                 beforeSend: function() {
                     $('.btn-submit').text('Saving...');
                     $(".btn-submit").prop("disabled", true);
@@ -448,11 +446,9 @@
             e.preventDefault();
             var formData = $('#changeSource').serialize();
             $.ajax({
-                type: "get",
+                type: 'POST',
                 url: '{{ url('admin/change-lead-source') }}',
                 data: formData,
-                contentType: false,
-                processData: false,
                 beforeSend: function() {
                     $('.btn-submit').text('Saving...');
                     $(".btn-submit").prop("disabled", true);
@@ -486,11 +482,9 @@
             e.preventDefault();
             var formData = $('#changeAssigneeForm').serialize();
             $.ajax({
-                type: "get",
+                type: 'POST',
                 url: '{{ url('admin/change-lead-assignee') }}',
                 data: formData,
-                contentType: false,
-                processData: false,
                 beforeSend: function() {
                     $('.btn-submit').text('Saving...');
                     $(".btn-submit").prop("disabled", true);

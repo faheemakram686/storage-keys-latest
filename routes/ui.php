@@ -37,13 +37,13 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
     Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
     Route::get('/blog-details', [HomeController::class, 'blogDetails'])->name('blogDetails');
-    Route::get('/estimatetocustomer/{id}', [EstimateController::class, 'estimateToCustomer'])->name('estimate-customer');
-    Route::get('/contract-to-customer/{id}', [ContractController::class, 'contractToCustomer'])->name('contract-customer');
-    Route::any('estimate-upload-document/{id}', [EstimateController::class, 'showUploadDocuments'])->name('show-upload-document');
+    Route::get('/estimatetocustomer/{id}', [EstimateController::class, 'estimateToCustomer'])->name('estimate-customer')->middleware('hashid');
+    Route::get('/contract-to-customer/{id}', [ContractController::class, 'contractToCustomer'])->name('contract-customer')->middleware('hashid');
+    Route::any('estimate-upload-document/{id}', [EstimateController::class, 'showUploadDocuments'])->name('show-upload-document')->middleware('hashid');
     Route::any('upload-estimate-documents', [EstimateController::class, 'uploadDocuments'])->name('upload-document');
 //sign contract and download contract
     Route::post('sign-contract', [ContractController::class, 'signContract'])->name('contract.sign');
-    Route::any('contract-pdf/{id}', [ContractController::class, 'contractPdf'])->name('contract-pdf');
+    Route::any('contract-pdf/{id}', [ContractController::class, 'contractPdf'])->name('contract-pdf')->middleware('hashid');
 
     Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('inquiry.store');
 

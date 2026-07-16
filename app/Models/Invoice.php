@@ -9,6 +9,13 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $appends = ['hashid'];
+
+    public function getHashidAttribute(): string
+    {
+        return hashid_encode((int) $this->id);
+    }
+
     public const PAYMENT_PENDING = 0;
     public const PAYMENT_PAID = 1;
     public const PAYMENT_PARTIAL = 2;
@@ -28,6 +35,7 @@ class Invoice extends Model
         'user_id',
         'sub_total',
         'vat',
+        'vat_type',
         'grand_total',
         'due_date',
         'note',
@@ -179,6 +187,38 @@ class Invoice extends Model
             default => 'badge-danger',
         };
     }
+
+    public function isVatInclusive(): bool
+    {
+        return $this->vat_type === 'inclusive';
+    }
+
+    public function vatAmount(): float
+    {
+        $subtotal = (float) $this->sub_total;
+        $rate = (float) $this->vat;
+
+        if ($rate <= 0) {
+            return 0.0;
+        }
+
+        $amount = $this->isVatInclusive()
+            ? $subtotal - ($subtotal / (1 + ($rate / 100)))
+            : $subtotal * ($rate / 100);
+
+        return round($amount, 2);
+    }
+
+    public function taxableSubtotal(): float
+    {
+        return round(
+            $this->isVatInclusive()
+                ? (float) $this->sub_total - $this->vatAmount()
+                : (float) $this->sub_total,
+            2
+        );
+    }
+
     public function setStatusAttribute($value)
     {
         if($value==0){

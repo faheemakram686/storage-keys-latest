@@ -266,25 +266,72 @@ class LeadClass implements LeadInterface {
         return Lead::with('storageUnits', 'storageunit')->find($id);
     }
 
+    private function resolveLeadId($request): ?int
+    {
+        $raw = $request->lead_id ?? $request->id ?? null;
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        if (is_numeric($raw)) {
+            return (int) $raw;
+        }
+
+        return hashid_decode((string) $raw);
+    }
+
+    private function existingLeadStorageUnitIds(Lead $lead): array
+    {
+        $lead->loadMissing('storageUnits');
+        $suIds = $lead->storageUnits->pluck('id')->map(function ($id) {
+            return (int) $id;
+        })->all();
+
+        if (empty($suIds) && $lead->su_id) {
+            $suIds = [(int) $lead->su_id];
+        }
+
+        return array_values(array_unique($suIds));
+    }
+
     public function updateLead($request)
     {
-        $lead=Lead::find($request->lead_id);
+        $leadId = $this->resolveLeadId($request);
+        if (!$leadId) {
+            return 0;
+        }
+
+        $lead = Lead::find($leadId);
         if (!$lead) {
             return 0;
         }
+
         $suIds = $this->resolveSuIds($request);
         if (empty($suIds)) {
-            return 0;
+            $suIds = $this->existingLeadStorageUnitIds($lead);
         }
-        try {
-            $this->unitStatus->assertAvailableForLead($suIds);
-        } catch (ValidationException $e) {
-            return 0;
+        if (empty($suIds)) {
+            return ['error' => 'Please select at least one storage unit.'];
         }
+
+        $currentSuIds = $this->existingLeadStorageUnitIds($lead);
+        $newSuIds = array_values(array_diff($suIds, $currentSuIds));
+
+        if (!empty($newSuIds)) {
+            try {
+                $this->unitStatus->assertAvailableForLead($newSuIds);
+            } catch (ValidationException $e) {
+                $messages = collect($e->errors())->flatten()->implode(' ');
+
+                return ['error' => $messages ?: 'Selected storage units are not available.'];
+            }
+        }
+
         $this->applyLeadAttributes($lead, $request, true);
         $lead->status = $request->lead_status;
         $lead->save();
         $this->syncLeadStorageUnits($lead, $suIds);
+
         return 1;
     }
     public  function getLead($id)
@@ -363,7 +410,8 @@ class LeadClass implements LeadInterface {
     public function changeStatus($request)
     {
 
-        $lead=Lead::find($request->lead_id);
+        $leadId = $this->resolveLeadId($request);
+        $lead = $leadId ? Lead::find($leadId) : null;
         if (!$lead) {
             return response()->json(['error' => 'Lead not found'], 404);
         }
@@ -375,7 +423,8 @@ class LeadClass implements LeadInterface {
 
     public function changeSource($request)
     {
-        $lead=Lead::find($request->lead_id);
+        $leadId = $this->resolveLeadId($request);
+        $lead = $leadId ? Lead::find($leadId) : null;
         if (!$lead) {
             return response()->json(['error' => 'Lead not found'], 404);
         }
@@ -387,7 +436,8 @@ class LeadClass implements LeadInterface {
 
     public function changeAssignee($request)
     {
-        $lead=Lead::find($request->lead_id);
+        $leadId = $this->resolveLeadId($request);
+        $lead = $leadId ? Lead::find($leadId) : null;
         if (!$lead) {
             return response()->json(['error' => 'Lead not found'], 404);
         }

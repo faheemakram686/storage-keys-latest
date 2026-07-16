@@ -45,9 +45,7 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
-        $invoice->sub_total = $request->sub_total;
-        $invoice->vat = $request->vat;
-        $invoice->grand_total = $request->grand_total;
+        $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
         $invoice->payment_method = $request->payment_method;
@@ -304,9 +302,7 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
-        $invoice->sub_total = $request->sub_total;
-        $invoice->vat = $request->vat;
-        $invoice->grand_total = $request->grand_total;
+        $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
         $invoice->payment_method = $request->payment_method;
@@ -336,6 +332,20 @@ class InvoiceClass implements InvoiceInterface {
             }
         }
 //        return 1;
+    }
+
+    private function applyVatTotals(Invoice $invoice, $request): void
+    {
+        $subtotal = round(max(0, (float) $request->sub_total), 2);
+        $vatRate = round(max(0, (float) $request->vat), 2);
+        $vatType = $request->vat_type === 'inclusive' ? 'inclusive' : 'exclusive';
+
+        $invoice->sub_total = $subtotal;
+        $invoice->vat = $vatRate;
+        $invoice->vat_type = $vatType;
+        $invoice->grand_total = $vatType === 'inclusive'
+            ? $subtotal
+            : round($subtotal + ($subtotal * $vatRate / 100), 2);
     }
 
     public function getInvoiceItems($id)

@@ -212,7 +212,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-check">
-                                                <a href="{{url('estimate-upload-document')}}/{{$data['lead'][0]->id}}" class="btn btn-qoutation btn-sm active mt-1 text-right" >Accept</a>
+                                                <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active mt-1 text-right" >Accept</a>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 d-flex">

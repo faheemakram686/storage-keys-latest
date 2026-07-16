@@ -149,7 +149,7 @@
                                                                 <td>{{$estimate->estimate_date}}</td>
                                                                 <td>{{$estimate->status}}</td>
                                                                 <td>{{$estimate->unit_price}}</td>
-                                                                <td><a href={{url('/estimatetocustomer').'/'.$estimate->id}}>View</a></td>
+                                                                <td><a href={{url('/estimatetocustomer').'/'.hashid_encode($estimate->id)}}>View</a></td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -180,9 +180,9 @@
                                                             <td>{{$contract->end_date}}</td>
                                                             <td>{{$contract->is_signed}}</td>
                                                             @if($contract->is_signed == 'Signed')
-                                                                <td><a href="{{url('customer/contract-pdf').'/'.$contract->id}}">Download</a></td>
+                                                                <td><a href="{{url('customer/contract-pdf').'/'.hashid_encode($contract->id)}}">Download</a></td>
                                                             @else
-                                                                <td><a href="{{url('customer/contract-to-customer').'/'.$contract->id}}"><i class="far fa-arrow-to-bottom mr-1"></i>Sign Contract</a></td>
+                                                                <td><a href="{{url('customer/contract-to-customer').'/'.hashid_encode($contract->id)}}"><i class="far fa-arrow-to-bottom mr-1"></i>Sign Contract</a></td>
                                                             @endif
                                                         </tr>
                                                         @endforeach
@@ -219,7 +219,7 @@
                                                                     <td>{{$invoice->invoice_date}}</td>
                                                                     <td>{{$invoice->grand_total}}</td>
                                                                     <td><span class="badge {{ $invoice->paymentStatusBadgeClass() }}">{{ $invoice->payment_status }}</span></td>
-                                                                    <td><a href="{{url('customer/pdf-invoice').'/'.$invoice->id}}"> Download</a><a href="{{url('customer/invoice-to-customer').'/'.$invoice->id}}"> View</a></td>
+                                                                    <td><a href="{{url('customer/pdf-invoice').'/'.hashid_encode($invoice->id)}}"> Download</a><a href="{{url('customer/invoice-to-customer').'/'.hashid_encode($invoice->id)}}"> View</a></td>
                                                                 </tr>
                                                             @endforeach
                                                             </tbody>

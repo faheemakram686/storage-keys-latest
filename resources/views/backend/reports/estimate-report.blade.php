@@ -105,14 +105,27 @@
 
             var formData = '';
 
+            // Replace table rows and keep DataTables (search/pagination/export) in sync
+            function renderRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#countryTable').html(html);
+                if (wasInitialized && window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
+
             getReport(formData);
 
             $('#ReportFilterForm').on('submit', function(e) {
                 e.preventDefault();
                 formData=$('#ReportFilterForm').serialize()
-                console.log(formData);
                 getReport(formData);
-             $('#datatable').DataTable.reload();
             });
 
             function getReport(formData) {
@@ -121,7 +134,7 @@
                     url: '{{ url('admin/filter-estimate-report') }}',
                     data: formData,
                     type: 'get',
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     contentType: false,
                     processData: true,
@@ -148,15 +161,17 @@
                                 } else if (data[i].storageunit && data[i].storageunit.storage_unit_name) {
                                     storageUnitName = data[i].storageunit.storage_unit_name;
                                 }
+                                var customerName = (data[i].customer && data[i].customer.customer_name) ? data[i].customer.customer_name : ' ';
+                                var responsibleName = (data[i].user_responsible && data[i].user_responsible.full_name) ? data[i].user_responsible.full_name : 'N/A';
 
                                 html += ' <tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].customer.customer_name == null) ? ' ' : data[i].customer.customer_name)+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+customerName+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].unit_price+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].estimate_date+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].expiry_date+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].user_responsible.full_name+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+responsibleName+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools" >'+
                                     ' <span class="badge '+((endDate < TodayDate ? "badge-danger":"badge-success"))+'">'+((endDate < TodayDate ? "Expired":"Active"))+'</span>'+
                                     ' </td>'+
@@ -169,7 +184,7 @@
                         }else {
                             toastr.error('Result Not Found');
                         }
-                        $('#countryTable').html(html);
+                        renderRows(html);
                     },
 
                     complete: function(data) {

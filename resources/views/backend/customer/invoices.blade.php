@@ -110,7 +110,7 @@
                                 '<td class="nk-tb-col nk-tb-col-tools">' + contractOrOrderHtml + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].invoice_date + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].due_date + '</td>' +
-                                '<td class="nk-tb-col nk-tb-col-tools"><span class="badge badge-success">' + data[i].status + '</span></td>' +
+                                '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + (data[i].status === 'Active' ? 'badge-success' : 'badge-danger') + '">' + data[i].status + '</span></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + paymentStatusBadgeClass(data[i].payment_status) + '">' + data[i].payment_status + '</span></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' +
                                 '<ul class="nk-tb-actions gx-1">' +
@@ -119,7 +119,7 @@
                                 '<div class="dropdown-menu dropdown-menu-right">' +
                                 '<ul class="link-list-opt no-bdr">' +
                                 '<li><a href={{ url('admin/invoice/detail') }}/' + data[i].id + '><em class="icon ni ni-eye"></em><span>View</span></a></li>' +
-                                '<li><a href={{ url('/invoice-to-customer') }}/' + data[i].id + '><em class="icon ni ni-user"></em><span>View as Customer</span></a></li>' +
+                                '<li><a href={{ url('/invoice-to-customer') }}/' + data[i].hashid + '><em class="icon ni ni-user"></em><span>View as Customer</span></a></li>' +
                                 '<li><a href={{ url('admin/pdf-invoice') }}/' + data[i].id + '><em class="icon ni ni-file-pdf"></em><span>View as PDF</span></a></li>' +
                                 '<li><a href={{ url('admin/edit-invoice') }}/' + data[i].id + '><em class="icon ni ni-edit"></em><span>Edit</span></a></li>' +
                                 '<li><a href="#" class="btn-delete" data=' + data[i].id + '><em class="icon ni ni-trash"></em><span>Delete</span></a></li>' +

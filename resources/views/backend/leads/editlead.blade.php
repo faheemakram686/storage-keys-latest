@@ -518,44 +518,36 @@
                     toastr.error('Please select at least one storage unit.');
                     return;
                 }
-                var formData=$('#UpdateLeadForm').serialize()
+                renderSelectedUnits();
+                var formData = $('#UpdateLeadForm').serialize();
                 $.ajax({
-                    type: "get",
+                    type: 'POST',
                     url: '{{ url('admin/update-lead') }}',
                     data: formData,
-                    contentType: false,
-                    processData: false,
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
                     },
                     success: function(data) {
-
-                        if (data.success) {
-                            getCities();
-                            $('#UpdateLeadForm')[0].reset();
-                            $('.close').click();
-                            toastr.success(data.success);
-
-                        }
-                        if (data.errors) {
-                            toastr.error(data.errors);
-                            $('.btn-update').text('Save Changes');
-                            $(".btn-update").prop("disabled", false);
-                        }
-                    },
-
-                    complete: function(data) {
                         $(".btn-update").html("Save Changes");
                         $(".btn-update").prop("disabled", false);
-                        window.location.href = "{{ url('admin/leads')}}";
+
+                        if (data.success) {
+                            toastr.success(data.success);
+                            window.location.href = "{{ url('admin/leads')}}";
+                            return;
+                        }
+
+                        if (data.errors) {
+                            toastr.error(data.errors);
+                        }
                     },
 
                     error: function(xhr) {
+                        $(".btn-update").html("Save Changes");
+                        $(".btn-update").prop("disabled", false);
                         var msg = (xhr.responseJSON && (xhr.responseJSON.error || xhr.responseJSON.message)) ? (xhr.responseJSON.error || xhr.responseJSON.message) : 'any technical error';
                         toastr.error(msg);
-                        $('.btn-update').text('Save Changes');
-                        $(".btn-update").prop("disabled", false);
                     }
                 });
 

@@ -3,7 +3,61 @@
 @section('content')
     @isset($data)
 
-    <div class="justify-content-center checkout-page">
+    <style>
+        /* Page-scoped responsive tweaks for the customer estimate page */
+        .estimate-view-page.checkout-page {
+            padding-top: 200px;
+            padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+        .estimate-view-page .order-summary .d-flex {
+            justify-content: flex-end;
+        }
+        @media (max-width: 991.98px) {
+            .estimate-view-page.checkout-page {
+                padding-top: 140px;
+            }
+            .estimate-view-page .order-summary {
+                margin-top: 20px;
+            }
+            .estimate-view-page .term-section-body,
+            .estimate-view-page .padlock-section-body,
+            .estimate-view-page .insurance-section-body,
+            .estimate-view-page .terms-conditions-section-body,
+            .estimate-view-page .order-section-body {
+                padding: 20px 15px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .estimate-view-page.checkout-page {
+                padding-top: 110px;
+            }
+            .estimate-view-page .greeting-user h3 {
+                font-size: 1.3rem;
+            }
+            .estimate-view-page .greeting-user .area-name {
+                font-size: 0.9rem;
+            }
+            .estimate-view-page .term-section-header,
+            .estimate-view-page .padlock-section-header,
+            .estimate-view-page .insurance-section-header,
+            .estimate-view-page .terms-conditions-section-header,
+            .estimate-view-page .order-section-header {
+                font-size: 0.95rem;
+            }
+            .estimate-view-page .order-summary .btn-qoutation {
+                width: 100%;
+                text-align: center;
+            }
+            .estimate-view-page .modal-body {
+                padding: 20px !important;
+            }
+            .estimate-view-page ~ .modal .modal-body {
+                padding: 20px !important;
+            }
+        }
+    </style>
+    <div class="justify-content-center checkout-page estimate-view-page">
         @foreach ($data['lead'] as $lead)
         @php
             $estimateUnits = collect($data['estimate_units'] ?? ($lead->estimateStorageUnits ?? []));
@@ -69,11 +123,11 @@
                         @endforeach
 
                     <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
+                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 term-section-header">
                             Select term length</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 term-section-body">
+                        <div class="offset-md-1 offset-lg-1 col-12 col-md-7 col-lg-7 term-section-body">
                             <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
+                                <div class="col-12 col-md-10 offset-md-1">
                                     <p>Select longer periods to enjoy massive savings!</p>
                                     @isset($data['term_lengths'])
                                         @foreach($data['term_lengths'] as $term_length)
@@ -101,9 +155,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-3  order-summary">
-                            <div class="row locations-section">
-                                <div class="offset-2 offset-md-2 offset-lg-2 col-6 col-sm-6 col-md-8 col-lg-7 order-section-header">Order Summary</div>
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-3  order-summary">
+                            <div class="row locations-section justify-content-center">
+                                <div class="col-10 col-sm-8 col-md-10 col-lg-10 order-section-header">Order Summary</div>
                                 <div class="col-12 order-section-body">
                                     <div class="row mb-2">
                                         <div class="col-12">
@@ -119,12 +173,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <label class="check-container" for="flexCheckDefault">Storage</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
                                             <span class="no-bottom-margin ml-1 mt-1 text-right st_amount">{{ number_format($storageDiscounted, 2, '.', '') }}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                         </div>
@@ -132,12 +186,12 @@
 
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <label class="check-container" for="flexCheckDefault">PadLock</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
 
                                             @isset($data['lead'][0]->estimateAddon)
 
@@ -149,12 +203,12 @@
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <label class="check-container" for="flexCheckDefault">Insurance</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
 
                                             @isset($data['lead'][0])
                                             <span class="no-bottom-margin inc_amount mt-1 ml-1 text-right">{{ number_format((float) ($data['lead'][0]->insurance_amount ?? 0), 2, '.', '') }}</span>
@@ -165,12 +219,12 @@
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <label class="check-container" for="flexCheckDefault">Sub Total</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
 
                                             <span class="no-bottom-margin mt-1 sub_total text-right ml-1 "  id="subtotal">{{ number_format($subTotal, 2, '.', '') }}</span>
                                             <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
@@ -190,13 +244,13 @@
                                 </div>
                                 <div class="col-12 mt-2 order-section-body ">
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
 {{--                                                <input class="form-check-input" name="term_length" type="radio" value="monthly" {{ ($lead->price=="monthly")? "checked" : "" }}  id="flexCheckDefault" />--}}
                                                 <label class="check-container" for="flexCheckDefault">VAT</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
 
 
                                             <span class="no-bottom-margin mt-1 text-right vat_amount">0</span>
@@ -206,12 +260,12 @@
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
                                                 <label class="check-container" for="flexCheckDefault">Total</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex">
 
                                             <span class="no-bottom-margin mt-1 total_amount ml-1  text-right" id="total_amount"></span>
 {{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
@@ -222,10 +276,10 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-check">
-                                                <a href="{{url('estimate-upload-document')}}/{{$data['lead'][0]->id}}" class="btn btn-qoutation btn-sm active mt-1 text-right" >Accept</a>
+                                                <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active mt-1 text-right" >Accept</a>
                                             </div>
                                         </div>
-{{--                                        <div class="col-lg-6 d-flex">--}}
+{{--                                        <div class="col-6 d-flex">--}}
 {{--                                            <a href="#" class="btn btn-qoutation btn-sm active mt-1 text-right">Reject</a>--}}
 {{--                                        </div>--}}
                                     </div>
@@ -234,7 +288,7 @@
                         </div>
                     </div>
                     <div class="row padlock-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 padlock-section-header">
+                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 padlock-section-header">
                             Addons</div>
                         <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 padlock-section-body">
                             <div class="row">
@@ -266,7 +320,7 @@
 
                     </div>
                     <div class="row insurance-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 insurance-section-header">
+                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 insurance-section-header">
                             Insurance</div>
                         <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 insurance-section-body">
                             <div class="row">
@@ -304,7 +358,7 @@
                         </div>
                     </div>
                         <div class="row terms-conditions-sections">
-                            <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 terms-conditions-section-header">
+                            <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 terms-conditions-section-header">
                                 TERMS &amp; CONDITIONS
                             </div>
                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-7 terms-conditions-section-body">

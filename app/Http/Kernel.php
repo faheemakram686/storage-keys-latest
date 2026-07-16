@@ -93,6 +93,7 @@ class Kernel extends HttpKernel
         'customer' => \App\Http\Middleware\RedirectIfNotCustomer::class,
         'switch.guard' => \App\Http\Middleware\SwitchGuard::class,
         'set.guard' =>   \App\Http\Middleware\SetGuard::class,
+        'hashid' => \App\Http\Middleware\DecodeHashid::class,
 
 
     ];

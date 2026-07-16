@@ -147,13 +147,13 @@
                                                             <tfoot>
                                                             <tr>
                                                                 <td colspan="5"></td>
-                                                                <td colspan="2">Subtotal</td>
-                                                                <td id="subtotal" >{{$data['invoice'][0]->sub_total}} AED</td>
+                                                                <td colspan="2">Net Subtotal</td>
+                                                                <td id="subtotal" >{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}} AED</td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="5"></td>
-                                                                <td colspan="2">VAT</td>
-                                                                <td id="vat" >{{$data['invoice'][0]->vat}}%</td>
+                                                                <td colspan="2">VAT ({{ ucfirst($data['invoice'][0]->vat_type ?? 'exclusive') }})</td>
+                                                                <td id="vat" >{{number_format($data['invoice'][0]->vatAmount(), 2)}} AED ({{$data['invoice'][0]->vat}}%)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="5"></td>

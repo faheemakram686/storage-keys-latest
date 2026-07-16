@@ -63,7 +63,7 @@
             <div class="card card-preview mt-5">
                 <div class="card-inner">
 
-                    <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true">
+                    <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true" id="datatable">
                         <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">ID</span></th>
@@ -93,6 +93,21 @@
 
             var formData = '';
 
+            // Replace table rows and keep DataTables (search/pagination/export) in sync
+            function renderRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#countryTable').html(html);
+                if (wasInitialized && window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
+
             getReport(formData);
 
             $('#LeadReportForm').on('submit', function(e) {
@@ -109,7 +124,7 @@
                     url: '{{ url('admin/filter-lead-report') }}',
                     data: formData,
                     type: 'get',
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     contentType: false,
                     processData: true,
@@ -132,24 +147,27 @@
                                 } else if (data[i].storageunit && data[i].storageunit.storage_unit_name) {
                                     storageUnitName = data[i].storageunit.storage_unit_name;
                                 }
+                                var leadSourceTitle = (data[i].lead_source && data[i].lead_source.title) ? data[i].lead_source.title : 'N/A';
+                                var leadStatusTitle = (data[i].lead_status && data[i].lead_status.title) ? data[i].lead_status.title : 'N/A';
+                                var responsibleName = data[i].userresponsible ? (data[i].userresponsible.first_name + ' ' + data[i].userresponsible.last_name) : 'N/A';
 
                                 html += ' <tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? data[i].f_name+' '+data[i].l_name : data[i].company_name)+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lead_type+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lead_source.title+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+leadSourceTitle+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools" >'+
-                                    ' <span class="badge badge-success">'+data[i].lead_status.title+'</span>'+
+                                    ' <span class="badge badge-success">'+leadStatusTitle+'</span>'+
                                     ' </td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].userresponsible.first_name+' '+data[i].userresponsible.last_name+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+responsibleName+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
                                     ' </tr>';
                             }
                         }else {
                             toastr.error('Result Not Found');
                         }
-                        $('#countryTable').html(html);
+                        renderRows(html);
                     },
 
                     complete: function(data) {

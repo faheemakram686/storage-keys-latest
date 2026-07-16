@@ -6,6 +6,7 @@ use App\Models\Core\Auth\User;
 use App\Models\Customer;
 use App\Models\Estimate;
 use App\Notifications\EmailNotification;
+use App\Repo\EmailTemplateClass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -16,13 +17,18 @@ class TestingController extends Controller
     public function send()
     {
         $user = Estimate::with('emailTemplate')->first();
+        $emailTemplate = new EmailTemplateClass();
+        $body = $emailTemplate->applyTemplateVariables(
+            html_entity_decode($user->emailTemplate->temp_body),
+            $emailTemplate->buildRecipientVariables($user)
+        );
 
         $project = [
             'greeting' => 'Hi '.$user->f_name.' '.$user->l_name.',',
-            'body' => html_entity_decode($user->emailTemplate->temp_body),
+            'body' => $body,
             'thanks' => 'Thank you this is from storage Key',
             'actionText' => 'View Estimate',
-            'actionURL' => url('estimatetocustomer').'/'.$user->id,
+            'actionURL' => url('estimatetocustomer').'/'.hashid_encode($user->id),
             'id' => $user->id,
         ];
         Notification::route('mail', 'faheemakram686@gmail.com')->notify(new EmailNotification($project));

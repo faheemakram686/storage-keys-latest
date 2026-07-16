@@ -267,7 +267,7 @@
                             ' <div class="dropdown-menu dropdown-menu-right">'+
                             ' <ul class="link-list-opt no-bdr">'+
                             // ' <li><a href="#" class="btn-approve" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Approve</span></a></li>'+
-                            ' <li><a href={{url('/estimatetocustomer')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as customer</span></a></li>'+
+                            ' <li><a href={{url('/estimatetocustomer')}}/'+data[i].hashid +' ><em class="icon ni ni-edit"></em><span>View as customer</span></a></li>'+
                             ' <li><a href={{url('/admin/estimatePdf')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
                             ' <li><a href={{url('/admin/edit-estimate')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+
                             ' <li><a href="#" class="btn-edit" data='+data[i].id+' data-estimate-id="'+data[i].id+'" data-customer-id="'+(data[i].customer_id || '')+'" data-customer-name="'+(((data[i].customer && data[i].customer.customer_name != null) ? data[i].customer.customer_name : ((data[i].f_name || "") + " " + (data[i].l_name || "")).trim()).replace(/"/g, '&quot;'))+'" data-toggle="modal" data-target="#addCountry"><em class="icon ni ni-edit"></em><span>Create Contract</span></a></li>'+

@@ -34,7 +34,10 @@
             padding: 5px;
         }
         .invoice-brand img {
+            display: block;
+            width: 223px;
             max-height: 60px;
+            height: auto;
         }
         .title {
             margin: 0 0 8px;
@@ -99,6 +102,11 @@
             color: #364a63;
             text-transform: uppercase;
         }
+        .company-trn {
+            color: #8094ae;
+            font-size: 11px;
+            margin-top: 4px;
+        }
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -139,6 +147,12 @@
             font-size: 14px;
             color: #364a63;
         }
+        .invoice-note {
+            margin-top: 15px;
+            font-style: italic;
+            font-size: 11px;
+            color: #8094ae;
+        }
         footer {
             text-align: center;
             margin-top: 30px;
@@ -158,11 +172,18 @@
                     <tr>
                         <td style="width: 40%;">
                             <div class="invoice-brand">
-                                <img src="{{ public_path('sk-assets/assets/images/frontend/front-logo.png') }}" alt="logo">
+                                @php
+                                    $logoPath = public_path('sk-assets/assets/images/frontend/front-logo.png');
+                                    $logoData = file_exists($logoPath) ? base64_encode(file_get_contents($logoPath)) : null;
+                                @endphp
+                                @if($logoData)
+                                    <img src="data:image/png;base64,{{ $logoData }}" alt="Storage Keys">
+                                @endif
                             </div>
                         </td>
                         <td style="width: 30%;">
                             <h5 class="title">Storage Keys</h5>
+                            <div class="company-trn">TRN: 100368001200003</div>
                         </td>
                         <td style="width: 30%;">
                             <h5 class="title">Tax Invoice</h5>
@@ -248,13 +269,13 @@
                             <tfoot>
                             <tr>
                                 <td colspan="3"></td>
-                                <td colspan="2">SUBTOTAL</td>
-                                <td>{{ $data['invoice'][0]->sub_total }} AED</td>
+                                <td colspan="2">NET SUBTOTAL</td>
+                                <td>{{ number_format($data['invoice'][0]->taxableSubtotal(), 2) }} AED</td>
                             </tr>
                             <tr>
                                 <td colspan="3"></td>
-                                <td colspan="2">VAT TOTAL</td>
-                                <td>{{ ($data['invoice'][0]->sub_total * $data['invoice'][0]->vat / 100) }} AED</td>
+                                <td colspan="2">VAT TOTAL ({{ strtoupper($data['invoice'][0]->vat_type ?? 'exclusive') }})</td>
+                                <td>{{ number_format($data['invoice'][0]->vatAmount(), 2) }} AED</td>
                             </tr>
                             <tr>
                                 <td colspan="3"></td>
@@ -276,18 +297,22 @@
                             <thead>
                             <tr>
                                 <th>RATE</th>
-                                <th>VAT</th>
                                 <th>NET</th>
+                                <th>VAT</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td>Federal Tax Authority @ {{ $data['invoice'][0]->vat }}%</td>
-                                <td>{{ $data['invoice'][0]->vat }}</td>
-                                <td>{{ ($data['invoice'][0]->sub_total * $data['invoice'][0]->vat / 100) }}</td>
+                                <td>{{ number_format($data['invoice'][0]->taxableSubtotal(), 2) }}</td>
+                                <td>{{ number_format($data['invoice'][0]->vatAmount(), 2) }}</td>
                             </tr>
                             </tbody>
                         </table>
+
+                        @if($data['invoice'][0]->note)
+                            <div class="invoice-note">{{ $data['invoice'][0]->note }}</div>
+                        @endif
                     </div>
                 @endisset
             </div>

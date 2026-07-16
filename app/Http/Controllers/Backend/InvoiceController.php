@@ -349,13 +349,13 @@ class InvoiceController extends Controller
         $invoice->syncPaymentStatus();
 
         if ($invoice->isFullyPaid()) {
-            return redirect('invoice-to-customer/'.$invoice->id)->with('success', 'Payment successful!');
+            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('success', 'Payment successful!');
         }
 
         // Verify the payment with Ngenius before marking the invoice paid.
         $order = $this->paymentService->getOrderStatus($ref);
         if (!$order || !$this->paymentService->isPaid($order)) {
-            return redirect('invoice-to-customer/'.$invoice->id)->with('error', 'Payment failed or cancelled.');
+            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('error', 'Payment failed or cancelled.');
         }
 
         $capturedMinor = $this->paymentService->extractCapturedAmount($order);
@@ -386,9 +386,9 @@ class InvoiceController extends Controller
 
         // Redirect user with status
         if ($payment) {
-            return redirect('invoice-to-customer/'.$invoice->id)->with('success', 'Payment successful!');
+            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('success', 'Payment successful!');
         } else {
-            return redirect('invoice-to-customer/'.$invoice->id)->with('error', 'Payment failed or cancelled.');
+            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('error', 'Payment failed or cancelled.');
         }
 
     }

@@ -106,14 +106,27 @@
 
             var formData = '';
 
+            // Replace table rows and keep DataTables (search/pagination/export) in sync
+            function renderRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#countryTable').html(html);
+                if (wasInitialized && window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
+
             getReport(formData);
 
             $('#ReportFilterForm').on('submit', function(e) {
                 e.preventDefault();
                 formData=$('#ReportFilterForm').serialize()
-                console.log(formData);
                 getReport(formData);
-             $('#datatable').DataTable.reload();
             });
 
             function getReport(formData) {
@@ -122,7 +135,7 @@
                     url: '{{ url('admin/filter-contract-report') }}',
                     data: formData,
                     type: 'get',
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     contentType: false,
                     processData: true,
@@ -149,17 +162,23 @@
                                     storageUnitName = data[i].estimate.storageunit.storage_unit_name;
                                 }
                                 var estimateId = (data[i].estimate && data[i].estimate.id) ? data[i].estimate.id : 'N/A';
+                                var customerCell = data[i].customer
+                                    ? '<a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a>'
+                                    : 'N/A';
+                                var estimateCell = data[i].estimate
+                                    ? '<a href={{url('admin/estimate/detail')}}/' + data[i].estimate.id + '>'+estimateId+'-'+storageUnitName+'/'+termLengthTitle+'</a>'
+                                    : 'N/A';
+                                var responsibleName = (data[i].user_rensonsible && data[i].user_rensonsible.full_name) ? data[i].user_rensonsible.full_name : 'N/A';
 
                                 html += ' <tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a></td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+customerCell+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/contract/detail')}}/' + data[i].id + '>'+data[i].subject+'</a></td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/estimate/detail')}}/' + data[i].estimate.id + '>'+estimateId+'-'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
-                                    // ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_value+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+estimateCell+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_type+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].start_date+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].end_date+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].user_rensonsible.full_name+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+responsibleName+'</td>'+
                                     '<td class="nk-tb-col nk-tb-col-tools" >'+
                                     ' <span class="badge '+((data[i].status == 'Approved' ? "badge-success":"badge-danger"))+'">'+data[i].status+'</span>'+
                                     ' </td>'+
@@ -167,14 +186,12 @@
                                     ' <span class="badge '+((data[i].is_signed == 'Signed')? 'badge-success':'badge-danger') +' ">'+data[i].is_signed+'</span>'+
                                     ' </td>'+
                                     '</tr>';
-                                c++;
-                                var endDate= new Date(Date.parse(data[i].expiry_date));
                             }
 
                         }else {
                             toastr.error('Result Not Found');
                         }
-                        $('#countryTable').html(html);
+                        renderRows(html);
                     },
 
                     complete: function(data) {

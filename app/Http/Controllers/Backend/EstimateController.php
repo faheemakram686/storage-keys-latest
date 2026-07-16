@@ -270,54 +270,221 @@ class EstimateController extends Controller
     public function showUploadDocuments($id)
     {
         $data['estimate'] = $this->estimate->getEstimateReqDocs($id);
-        $data['req_docs'] = [];
-        foreach ($data['estimate'] as $item) {
-            $data['req_docs'] = !empty($item['require_documents']) ? explode(',', $item['require_documents']) : [];
-        }
-        $data['req_documents'] = collect([]);
-        foreach($data['req_docs'] as $doc => $v)
-        {
-            if ($v !== '' && $v !== null) {
-                $data['req_documents']->push($this->require_document->getRequireDocument($v));
-            }
-        }
+        $data['req_documents'] = $this->estimateRequiredDocuments($data['estimate']);
+        $data['uploaded_doc_ids'] = \App\Models\Attachment::where('type', 'estimate')
+            ->where('type_id', $id)
+            ->where('is_deleted', 0)
+            ->pluck('req_doc_id')
+            ->map(function ($docId) { return (string) $docId; })
+            ->all();
         return view('backend.estimate.estimate-upload-documents')->with(compact('data'));
 
     }
 
+    /**
+     * Resolve the RequireDocument models referenced by an estimate's
+     * require_documents CSV, skipping missing/deleted document types so the
+     * upload page never renders (or requires) a document that no longer exists.
+     */
+    private function estimateRequiredDocuments($estimates)
+    {
+        $documents = collect([]);
+        foreach ($estimates as $item) {
+            $ids = !empty($item['require_documents']) ? explode(',', $item['require_documents']) : [];
+            foreach ($ids as $id) {
+                $id = trim((string) $id);
+                if ($id === '') {
+                    continue;
+                }
+                $doc = $this->require_document->getRequireDocument($id);
+                if ($doc && !$doc->is_deleted && !$documents->contains('id', $doc->id)) {
+                    $documents->push($doc);
+                }
+            }
+        }
+        return $documents;
+    }
+
     public function uploadDocuments(Request $request)
     {
-        $ids = $request->input('id', []);
-        $images = $request->file('files', []);
+        $result = $this->storeEstimateDocuments($request);
 
-        if (empty($ids) || count($images) !== count($ids)) {
-            return response()->json(['errors' => 'Please upload all required documents.'], 422);
+        if (!$result['status']) {
+            return response()->json(['errors' => $result['message']], $result['code']);
         }
 
-        foreach ($images as $image) {
-            if (!$image || !$image->isValid()) {
-                return response()->json(['errors' => 'Please upload all required documents.'], 422);
+        return response()->json(['success' => $result['message']], 200);
+    }
+
+    /**
+     * Shared upload handler for the customer web portal and the mobile API.
+     * Pairs submitted req-doc ids with their files, only requires documents
+     * that are still configured on the estimate and not already uploaded,
+     * and stores each file as an estimate attachment.
+     */
+    private function storeEstimateDocuments(Request $request, $customerId = null)
+    {
+        $estimateId = $request->input('estimate_id');
+        if (empty($estimateId)) {
+            return ['status' => false, 'code' => 422, 'message' => 'Estimate reference is missing. Please reopen the upload link and try again.'];
+        }
+
+        $query = \App\Models\Estimate::where('id', $estimateId)->where('is_deleted', 0);
+        if ($customerId) {
+            $query->where('customer_id', $customerId);
+        }
+        $estimate = $query->first();
+
+        if (!$estimate) {
+            return ['status' => false, 'code' => 404, 'message' => 'Estimate not found.'];
+        }
+
+        $requiredDocuments = $this->estimateRequiredDocuments(collect([$estimate]));
+
+        if ($requiredDocuments->isEmpty()) {
+            return ['status' => true, 'message' => 'No documents are required for this estimate.'];
+        }
+
+        // Pair each submitted req-doc id with the file posted at the same index.
+        // Empty file inputs arrive as null, so keys stay aligned with id[].
+        $submittedIds = (array) $request->input('id', []);
+        $files = (array) $request->file('files', []);
+        $fileByDocId = [];
+        foreach ($submittedIds as $index => $docId) {
+            $file = $files[$index] ?? null;
+            if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
+                $fileByDocId[(string) $docId] = $file;
             }
         }
 
-        for ($c = 0; $c < count($images); $c++) {
-            $uniqueid = uniqid();
-            $extension = $images[$c]->getClientOriginalExtension();
-            $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
-            $path = $images[$c]->storeAs('public/files', $name);
+        $alreadyUploaded = \App\Models\Attachment::where('type', 'estimate')
+            ->where('type_id', $estimate->id)
+            ->where('is_deleted', 0)
+            ->pluck('req_doc_id')
+            ->map(function ($id) { return (string) $id; })
+            ->all();
 
-            $items = array(
+        $missing = [];
+        $toStore = [];
+        foreach ($requiredDocuments as $doc) {
+            $docId = (string) $doc->id;
+            if (isset($fileByDocId[$docId])) {
+                $toStore[$docId] = $fileByDocId[$docId];
+            } elseif (!in_array($docId, $alreadyUploaded, true)) {
+                $missing[] = $doc->title;
+            }
+        }
+
+        if (!empty($missing)) {
+            return ['status' => false, 'code' => 422, 'message' => 'Please upload the following required documents: ' . implode(', ', $missing)];
+        }
+
+        if (empty($toStore)) {
+            return ['status' => true, 'message' => 'All required documents have already been uploaded.'];
+        }
+
+        foreach ($toStore as $docId => $file) {
+            $uniqueid = uniqid();
+            $extension = $file->getClientOriginalExtension();
+            $name = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
+            $path = $file->storeAs('public/files', $name);
+
+            $this->attachment->saveAttachment(array(
                 'type' => 'estimate',
-                'type_id' => $request->estimate_id,
-                'req_doc_id' => $ids[$c],
+                'type_id' => $estimate->id,
+                'req_doc_id' => $docId,
                 'name' => $name,
                 'path' => $path,
                 'status' => 1,
-            );
-            $this->attachment->saveAttachment($items);
+            ));
         }
 
-        return response()->json(['success' => 'Documents uploaded successfully'], 200);
+        return ['status' => true, 'message' => 'Documents uploaded successfully'];
+    }
+
+    /**
+     * Mobile API: list the authenticated customer's estimates.
+     */
+    public function getCustomerEstimatesApi(Request $request)
+    {
+        $customerId = optional($request->user())->customer_id;
+        if (!$customerId) {
+            return response()->json(['status' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Customer estimates',
+            'data' => $this->estimate->getCustomerEstimates($customerId),
+        ], 200);
+    }
+
+    /**
+     * Mobile API: list the required documents for one of the customer's
+     * estimates, with an uploaded flag so the app knows what is pending.
+     */
+    public function getEstimateRequiredDocumentsApi(Request $request)
+    {
+        $customerId = optional($request->user())->customer_id;
+        if (!$customerId) {
+            return response()->json(['status' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        if (empty($request->estimate_id)) {
+            return response()->json(['status' => false, 'message' => 'estimate_id is required'], 422);
+        }
+
+        $estimate = \App\Models\Estimate::where('id', $request->estimate_id)
+            ->where('customer_id', $customerId)
+            ->where('is_deleted', 0)
+            ->first();
+
+        if (!$estimate) {
+            return response()->json(['status' => false, 'message' => 'Estimate not found'], 404);
+        }
+
+        $uploaded = \App\Models\Attachment::where('type', 'estimate')
+            ->where('type_id', $estimate->id)
+            ->where('is_deleted', 0)
+            ->pluck('req_doc_id')
+            ->map(function ($id) { return (string) $id; })
+            ->all();
+
+        $documents = $this->estimateRequiredDocuments(collect([$estimate]))
+            ->map(function ($doc) use ($uploaded) {
+                return [
+                    'id' => $doc->id,
+                    'title' => $doc->title,
+                    'description' => $doc->description,
+                    'uploaded' => in_array((string) $doc->id, $uploaded, true),
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Estimate required documents',
+            'data' => $documents,
+        ], 200);
+    }
+
+    /**
+     * Mobile API: upload estimate documents. Accepts the same payload as the
+     * web form (estimate_id, id[] of require-document ids, files[]).
+     */
+    public function uploadEstimateDocumentsApi(Request $request)
+    {
+        $customerId = optional($request->user())->customer_id;
+        if (!$customerId) {
+            return response()->json(['status' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $result = $this->storeEstimateDocuments($request, $customerId);
+
+        return response()->json([
+            'status' => $result['status'],
+            'message' => $result['message'],
+        ], $result['status'] ? 200 : $result['code']);
     }
 
 

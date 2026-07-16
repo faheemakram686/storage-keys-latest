@@ -113,7 +113,7 @@
             <!-- .card-preview -->
             <div class="card card-bordered card-preview">
                 <div class="card-inner">
-                    <table class="datatable-init-export nowrap table" data-export-title="Export">
+                    <table class="datatable-init-export nowrap table" data-export-title="Export" id="datatable">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -150,12 +150,23 @@
             $('#WarehouseReportForm').on('submit', function(e) {
                 e.preventDefault();
                 formData=$('#WarehouseReportForm').serialize()
-                var table = $('#datatable').DataTable();
                 getReport(formData);
-                table.draw();
-
-
             });
+
+            // Replace table rows and keep DataTables (search/pagination/export) in sync
+            function renderRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#tbodyrow').html(html);
+                if (wasInitialized && window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
 
             function getReport(formData) {
 
@@ -163,7 +174,7 @@
                     url: '{{ url('admin/filter-warehouse-report') }}',
                     data: formData,
                     type: 'get',
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     contentType: false,
                     processData: true,
@@ -208,7 +219,7 @@
                         }else {
                             toastr.error('Result Not Found');
                         }
-                        $('#tbodyrow').html(html);
+                        renderRows(html);
                     },
 
                     complete: function(data) {

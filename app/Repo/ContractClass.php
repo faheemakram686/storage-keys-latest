@@ -100,7 +100,10 @@ class ContractClass implements ContractInterface {
                     if (!empty($notification[0]->temp_body)) {
                         $email2 = [
                             'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
-                            'body' => $notification[0]->temp_body,
+                            'body' => $template->applyTemplateVariables(
+                                html_entity_decode($notification[0]->temp_body),
+                                $template->buildRecipientVariables($user)
+                            ),
                             'thanks' => 'Thank you this is from storage Key',
                             'actionText' => 'View Contract',
                             'actionURL' => url('admin/contract/detail').'/'.$contract->id,
@@ -318,7 +321,10 @@ class ContractClass implements ContractInterface {
                     $notification = $template->getTemplateByName('contract','email','Contract_approval_email');
                     $email2 = [
                         'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
-                        'body' => $notification[0]->temp_body,
+                        'body' => $template->applyTemplateVariables(
+                            html_entity_decode($notification[0]->temp_body),
+                            $template->buildRecipientVariables($user)
+                        ),
                         'thanks' => 'Thank you this is from storage Key',
                         'actionText' => 'View Contract',
                         'actionURL' => url('admin/contract/detail').'/'.$estimate->id,
@@ -346,7 +352,10 @@ class ContractClass implements ContractInterface {
                     $notification = $template->getTemplateByName('contract','email','Contract_approval_email');
                     $email2 = [
                         'greeting' => 'Hi ' . $user->first_name . ' ' . $user->last_name . ',',
-                        'body' => $notification[0]->temp_body,
+                        'body' => $template->applyTemplateVariables(
+                            html_entity_decode($notification[0]->temp_body),
+                            $template->buildRecipientVariables($user)
+                        ),
                         'thanks' => 'Thank you this is from storage Key',
                         'actionText' => 'View Contract',
                         'actionURL' => url('admin/contract/detail') . '/' . $estimate->id,

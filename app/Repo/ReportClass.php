@@ -31,7 +31,7 @@ class ReportClass implements ReportInterface {
     }
     public function getLeadReport($request)
     {
-        $qry=Lead::with('storageunit','userresponsible','leadStatus','termLength','leadSource');
+        $qry=Lead::with('storageunit','storageUnits','userresponsible','leadStatus','termLength','leadSource');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         if($request->user_res)
             $qry = $qry->where( 'user_res_id' , $request->user_res);
@@ -46,7 +46,7 @@ class ReportClass implements ReportInterface {
     }
     public function getEstimateReport($request)
     {
-        $qry=Estimate::with('storageunit','termLength','customer','userResponsible');
+        $qry=Estimate::with('storageunit','estimateStorageUnits.storageunit','termLength','customer','userResponsible');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         if($request->customer_id)
             $qry = $qry->where( 'customer_id' , $request->customer_id);
@@ -64,7 +64,7 @@ class ReportClass implements ReportInterface {
 
     public function getContractReport($request)
     {
-        $qry=Contract::with('customer','estimate.storageunit','estimate.termLength','userRensonsible');
+        $qry=Contract::with('customer','estimate.storageunit','estimate.estimateStorageUnits.storageunit','estimate.termLength','userRensonsible');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         if($request->customer_id)
             $qry = $qry->where( 'customer_id' , $request->customer_id);

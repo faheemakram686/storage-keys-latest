@@ -270,12 +270,18 @@ class EstimateClass implements EstimateInterface {
                 ], 422);
             }
 
+            $emailTemplate = new EmailTemplateClass();
+            $templateBody = $emailTemplate->applyTemplateVariables(
+                html_entity_decode($templateBody),
+                $emailTemplate->buildRecipientVariables($estimate_email)
+            );
+
             $email = [
                 'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
-                'body' => html_entity_decode($templateBody),
+                'body' => $templateBody,
                 'thanks' => 'Thank you this Estimate from storage Key',
                 'actionText' => 'View Estimate',
-                'actionURL' => url('estimatetocustomer').'/'.$estimate_email->id,
+                'actionURL' => url('estimatetocustomer').'/'.hashid_encode($estimate_email->id),
                 'id' => $estimate_email->id,
             ];
 
@@ -360,7 +366,10 @@ class EstimateClass implements EstimateInterface {
                 }
                 $email2 = [
                     'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
-                    'body' => $notification[0]->temp_body,
+                    'body' => $template->applyTemplateVariables(
+                        html_entity_decode($notification[0]->temp_body),
+                        $template->buildRecipientVariables($user)
+                    ),
                     'thanks' => 'Thank you this is from storage Key',
                     'actionText' => 'View Estimate',
                     'actionURL' => url('admin/estimate/detail').'/'.$estimate->id,
@@ -556,7 +565,10 @@ class EstimateClass implements EstimateInterface {
                     }
                     $email2 = [
                         'greeting' => 'Hi '.$user->first_name.' '.$user->last_name.',',
-                        'body' => $notification[0]->temp_body,
+                        'body' => $template->applyTemplateVariables(
+                            html_entity_decode($notification[0]->temp_body),
+                            $template->buildRecipientVariables($user)
+                        ),
                         'thanks' => 'Thank you this is from storage Key',
                         'actionText' => 'View Estimate',
                         'actionURL' => url('admin/estimate/detail').'/'.$estimate->id,
@@ -594,7 +606,10 @@ class EstimateClass implements EstimateInterface {
                     }
                     $email2 = [
                         'greeting' => 'Hi ' . $user->first_name . ' ' . $user->last_name . ',',
-                        'body' => $notification[0]->temp_body,
+                        'body' => $template->applyTemplateVariables(
+                            html_entity_decode($notification[0]->temp_body),
+                            $template->buildRecipientVariables($user)
+                        ),
                         'thanks' => 'Thank you this is from storage Key',
                         'actionText' => 'View Estimate',
                         'actionURL' => url('admin/estimate/detail') . '/' . $estimate->id,
@@ -642,12 +657,18 @@ class EstimateClass implements EstimateInterface {
             ], 422);
         }
 
+        $emailTemplate = new EmailTemplateClass();
+        $templateBody = $emailTemplate->applyTemplateVariables(
+            html_entity_decode($templateBody),
+            $emailTemplate->buildRecipientVariables($estimate_email)
+        );
+
         $email = [
             'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
-            'body' => html_entity_decode($templateBody),
+            'body' => $templateBody,
             'thanks' => 'Thank you this Estimate from storage Key',
             'actionText' => 'View Estimate',
-            'actionURL' => url('estimatetocustomer').'/'.$estimate_email->id,
+            'actionURL' => url('estimatetocustomer').'/'.hashid_encode($estimate_email->id),
             'id' => $estimate_email->id,
         ];
 

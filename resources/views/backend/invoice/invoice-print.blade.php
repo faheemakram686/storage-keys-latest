@@ -19,6 +19,19 @@
     <!-- StyleSheets  -->
 {{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/app.css') }}"/>--}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/theme.css') }}"/>
+    <style>
+        .invoice-brand img {
+            display: block;
+            width: 223px;
+            max-width: 100%;
+            height: auto;
+        }
+        .company-trn {
+            color: #8094ae;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+    </style>
 
 </head>
 
@@ -48,11 +61,12 @@
             <div class="row">
                 <div class="col-4">
                     <div class="invoice-brand ">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="logo">
+                        <img src="/sk-assets/assets/images/frontend/front-logo.png" alt="Storage Keys">
                     </div>
                 </div>
                 <div class="col-4">
                     <h5 class="title">Storage Keys</h5>
+                    <div class="company-trn">TRN: 100368001200003</div>
                 </div>
                 <div class="col-2">
                     <h5 class="title">Tax Invoice</h5>
@@ -61,7 +75,7 @@
 
                 <div class="col-2">
                     @if($data['invoice'][0]->payment_status !== "Paid")
-                    <a href="{{url('pay-now/'.$data['invoice'][0]->id)}}" class="btn btn-primary" >Pay Now</a>
+                    <a href="{{url('pay-now/'.hashid_encode($data['invoice'][0]->id))}}" class="btn btn-primary" >Pay Now</a>
                         @endif
                 </div>
 
@@ -129,14 +143,14 @@
                         <tfoot>
                         <tr>
                             <td colspan="3"></td>
-                            <td colspan="2">SUBTOTAL</td>
-                            <td>{{$data['invoice'][0]->sub_total}} AED</td>
+                            <td colspan="2">NET SUBTOTAL</td>
+                            <td>{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}} AED</td>
                         </tr>
 
                         <tr>
                             <td colspan="3"></td>
-                            <td colspan="2">VAT TOTAL</td>
-                            <td>{{($data['invoice'][0]->sub_total * $data['invoice'][0]->vat / 100)}} AED</td>
+                            <td colspan="2">VAT TOTAL ({{strtoupper($data['invoice'][0]->vat_type ?? 'exclusive')}})</td>
+                            <td>{{number_format($data['invoice'][0]->vatAmount(), 2)}} AED</td>
                         </tr>
                         <tr>
                             <td colspan="3"></td>
@@ -158,15 +172,15 @@
                                 <thead>
                                     <tr>
                                         <th>RATE</th>
-                                        <th>VAT</th>
                                         <th>NET</th>
+                                        <th>VAT</th>
                                     </tr>
                                 </thead>
                                 <tobody>
                                     <tr>
                                         <td>Federal Tax Authority @ {{$data['invoice'][0]->vat}}%</td>
-                                        <td>{{$data['invoice'][0]->vat}}</td>
-                                        <td>{{($data['invoice'][0]->sub_total * $data['invoice'][0]->vat / 100)}}</td>
+                                        <td>{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}}</td>
+                                        <td>{{number_format($data['invoice'][0]->vatAmount(), 2)}}</td>
                                     </tr>
                                 </tobody>
                          </table>
@@ -174,6 +188,10 @@
                     </div>
                     <div class="table-responsive">
                     </div>
+
+                    @if($data['invoice'][0]->note)
+                        <div class="nk-notes ff-italic fs-12px text-soft">{{ $data['invoice'][0]->note }}</div>
+                    @endif
 
                 </div>
             </div><!-- .invoice-bills -->

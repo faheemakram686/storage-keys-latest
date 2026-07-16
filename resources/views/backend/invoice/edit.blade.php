@@ -219,6 +219,16 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="4"></td>
+                                                <td colspan="2">VAT Type</td>
+                                                <td>
+                                                    <select class="form-control form-select" id="vat_type" name="vat_type" required>
+                                                        <option value="exclusive" {{ (($data['invoice'][0]->vat_type ?? 'exclusive') === 'exclusive') ? 'selected' : '' }}>VAT Exclusive</option>
+                                                        <option value="inclusive" {{ (($data['invoice'][0]->vat_type ?? 'exclusive') === 'inclusive') ? 'selected' : '' }}>VAT Inclusive</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4"></td>
                                                 <td colspan="2">VAT</td>
                                                 <td ><input class="form-control d-inline" type="number" step="any" id="vat" name="vat" value="{{$data['invoice'][0]->vat}}" min="0">%</td>
                                             </tr>
@@ -245,8 +255,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Status</label>
                                     <select class="form-control form-select " id="status" name="status" required>
-                                        <option value="1" {{(($data['invoice'][0]->status == 1)? 'selected':'')}}>Active</option>
-                                        <option value="0" {{(($data['invoice'][0]->status == 0)? 'selected':'')}} >In-Active</option>
+                                        <option value="1" {{(($data['invoice'][0]->status == 'Active')? 'selected':'')}}>Active</option>
+                                        <option value="0" {{(($data['invoice'][0]->status == 'In-Active')? 'selected':'')}} >In-Active</option>
                                     </select>
                                 </div>
                             </div>
@@ -465,11 +475,11 @@
                     var rowTotal = calculateRowTotal($(this));
                     total += rowTotal;
                 });
-                var gtotal = total;
-                var vat = $('#vat').val();
-                var tax = gtotal / 100 * vat;
-                var grand = gtotal + tax;
-                $('#grandtotal').val(grand);
+                var vat = parseFloat($('#vat').val()) || 0;
+                var vatType = $('#vat_type').val();
+                var tax = vatType === 'inclusive' ? 0 : total * vat / 100;
+                var grand = total + tax;
+                $('#grandtotal').val(grand.toFixed(2));
                 return total;
             }
 
@@ -480,8 +490,7 @@
                 $('#subtotal').val(total);
             });
 
-            $('#dynamic_field').on('change', '#vat', function() {
-                var vat = $(this).val();
+            $('#vat, #vat_type').on('change', function() {
                 calculateTotal();
             });
 

@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Estimate extends Model
 {
     use HasFactory;
+
+    protected $appends = ['hashid'];
+
     protected $casts = [
         'created_at'  => 'datetime:Y-m-d H:00'
     ];
+
+    public function getHashidAttribute(): string
+    {
+        return hashid_encode((int) $this->id);
+    }
 
     public function storageunit()
     {

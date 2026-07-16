@@ -9,6 +9,13 @@ class Contract extends Model
 {
     use HasFactory;
 
+    protected $appends = ['hashid'];
+
+    public function getHashidAttribute(): string
+    {
+        return hashid_encode((int) $this->id);
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');

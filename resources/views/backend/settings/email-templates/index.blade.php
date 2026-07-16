@@ -102,9 +102,12 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
+                                        <label for="">Use these strings in template:</label>
+                                        <p> @verbatim{{f_name}} - {{l_name}} - {{company_name}} - {{email}} - {{phone}} - {{address}} - {{city}} - {{country}} @endverbatim</p>
                                         <label class="form-label" for="reviewer">Template Body</label>
-                                        <div class="form-control-wrap">
-                                            <textarea id="editor" class="form-control" name="temp_body"></textarea>
+                                        <div id="toolbar-container"></div>
+                                        <div id="editor">
+
                                         </div>
                                     </div>
                                 </div>
@@ -209,8 +212,14 @@
     </div>
 
     <script>
-        ClassicEditor
+        var myeditor = '';
+        DecoupledEditor
             .create( document.querySelector( '#editor' ) )
+            .then( editor => {
+                const toolbarContainer = document.querySelector( '#toolbar-container' );
+                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                myeditor = editor;
+            } )
             .catch( error => {
                 console.error( error );
             } );
@@ -222,13 +231,25 @@
             $('#CountryForm').on('submit', function(e) {
 
                 e.preventDefault();
-                  var formData=$('#CountryForm').serialize()
+                var body = myeditor.getData();
+                var temp_name = $("input[name=temp_name]").val();
+                var temp_for = $("select[name=temp_for]").val();
+                var temp_category = $("select[name=temp_category]").val();
+                var temp_subject = $("input[name=temp_subject]").val();
+                var status = $("select[name=status]").val();
+
                 $.ajax({
                     type: "get",
                     url: '{{ url('admin/save-email-template') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
+                    data: {
+                        temp_name: temp_name,
+                        temp_for: temp_for,
+                        temp_category: temp_category,
+                        temp_subject: temp_subject,
+                        temp_body: body,
+                        status: status
+                    },
+                    dataType: 'json',
                     beforeSend: function() {
                         $('.btn-submit').text('Saving...');
                         $(".btn-submit").prop("disabled", true);
@@ -238,6 +259,9 @@
                         if (data.success) {
                             getCountries();
                             $('#CountryForm')[0].reset();
+                            if (myeditor) {
+                                myeditor.setData('');
+                            }
                             $('.close').click();
                             toastr.success(data.success);
 
@@ -366,16 +390,7 @@
                         $('input[name=et_temp_name]').val(res.temp_name);
                         $('input[name=et_temp_subject]').val(res.temp_subject);
 
-                        ClassicEditor
-                            .create( document.querySelector( '#editor2' ) )
-                            .then( editor2 => {
-                                editor2.setData( res.temp_body );
-                                text = editor2.getData();
-                                $('textarea[name=et_temp_body]').val(text);
-                            } )
-                            .catch( error => {
-                                console.error( error );
-                            } );
+                        $('textarea[name=et_temp_body]').val(res.temp_body);
 
 
                         console.log(text);

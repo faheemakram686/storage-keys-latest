@@ -284,13 +284,35 @@ class StorageUnitStatusService
     }
 
     /**
+     * @param  int|array<int>|null  $excludeEstimateIds
+     * @return array<int>
+     */
+    protected function normalizeExcludeEstimateIds($excludeEstimateIds): array
+    {
+        if ($excludeEstimateIds === null) {
+            return [];
+        }
+
+        if (is_int($excludeEstimateIds)) {
+            return [$excludeEstimateIds];
+        }
+
+        if (is_array($excludeEstimateIds)) {
+            return array_values(array_unique(array_filter(array_map('intval', $excludeEstimateIds))));
+        }
+
+        return [];
+    }
+
+    /**
      * Assert units can be soft-held (lead/estimate). Blocks maintenance + occupied + hard-held
-     * (unless the hard hold belongs to a contract created from $excludeEstimateId).
+     * (unless the hard hold belongs to a contract created from $excludeEstimateIds).
      *
-     * @param array<int, int|string> $storageUnitIds
+     * @param  array<int, int|string>  $storageUnitIds
+     * @param  int|array<int>|null  $excludeEstimateIds
      * @throws ValidationException
      */
-    public function assertAvailableForEstimate(array $storageUnitIds, ?int $excludeEstimateId = null): void
+    public function assertAvailableForEstimate(array $storageUnitIds, $excludeEstimateIds = null): void
     {
         $ids = array_values(array_unique(array_filter(array_map('intval', $storageUnitIds))));
         if (empty($ids)) {
@@ -314,7 +336,7 @@ class StorageUnitStatusService
                 $errors[] = "Storage unit {$unit->storage_unit_name} is occupied.";
                 continue;
             }
-            if ($this->hasActiveHardHold($id, null, $excludeEstimateId)) {
+            if ($this->hasActiveHardHold($id, null, $excludeEstimateIds)) {
                 $errors[] = "Storage unit {$unit->storage_unit_name} is already booked under an active contract.";
             }
         }
@@ -378,11 +400,19 @@ class StorageUnitStatusService
     /**
      * Alias for lead soft-hold checks (same rules as estimate).
      *
-     * @param array<int, int|string> $storageUnitIds
+     * @param  array<int, int|string>  $storageUnitIds
      */
-    public function assertAvailableForLead(array $storageUnitIds): void
+    public function assertAvailableForLead(array $storageUnitIds, ?int $excludeLeadId = null): void
     {
-        $this->assertAvailableForEstimate($storageUnitIds);
+        $excludeEstimateIds = null;
+        if ($excludeLeadId) {
+            $excludeEstimateIds = Estimate::query()
+                ->where('lead_id', $excludeLeadId)
+                ->pluck('id')
+                ->all();
+        }
+
+        $this->assertAvailableForEstimate($storageUnitIds, $excludeEstimateIds);
     }
 
     public function setMaintenance(StorageUnit $unit, bool $enabled, ?string $notes = null): string
@@ -427,13 +457,17 @@ class StorageUnitStatusService
         $this->recalculateMany($unitIds, $trigger, $contract);
     }
 
-    public function hasActiveHardHold(int $storageUnitId, ?int $excludeContractId = null, ?int $excludeEstimateId = null): bool
+    /**
+     * @param  int|array<int>|null  $excludeEstimateIds
+     */
+    public function hasActiveHardHold(int $storageUnitId, ?int $excludeContractId = null, $excludeEstimateIds = null): bool
     {
         $excludedContractIds = [];
         if ($excludeContractId) {
             $excludedContractIds[] = $excludeContractId;
         }
-        if ($excludeEstimateId) {
+
+        foreach ($this->normalizeExcludeEstimateIds($excludeEstimateIds) as $excludeEstimateId) {
             $fromEstimate = Contract::query()
                 ->where('estimate_id', $excludeEstimateId)
                 ->where('is_deleted', 0)
@@ -441,6 +475,7 @@ class StorageUnitStatusService
                 ->all();
             $excludedContractIds = array_merge($excludedContractIds, $fromEstimate);
         }
+
         $excludedContractIds = array_values(array_unique(array_filter($excludedContractIds)));
 
         $assignmentExists = StorageUnitAssignment::query()

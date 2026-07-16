@@ -135,7 +135,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-check">
-                                                <a href={{url('contract-pdf/').'/'.$contract->id}} class="btn btn-qoutation btn-sm active mt-1 text-right" style="padding:8px;background-color: #F58320; color: #fff3e9" >Download</a>
+                                                <a href={{url('contract-pdf/').'/'.hashid_encode($contract->id)}} class="btn btn-qoutation btn-sm active mt-1 text-right" style="padding:8px;background-color: #F58320; color: #fff3e9" >Download</a>
                                             </div>
                                         </div>
                                         @if($contract->is_signed == 'Not Signed')

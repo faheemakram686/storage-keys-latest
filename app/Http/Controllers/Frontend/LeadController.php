@@ -168,11 +168,19 @@ class LeadController extends Controller
 
     public function updateLead(Request $request)
     {
-        $res=$this->lead->updateLead($request);
-        if (!$res) {
-            return response()->json(['error' => 'Lead not found'], 404);
+        if (!$request->filled('lead_id')) {
+            return response()->json(['error' => 'Lead ID is required.'], 422);
         }
-        return response()->json(['success' => 'Record updated successfully'], 200);
+
+        $res = $this->lead->updateLead($request);
+        if ($res === 1) {
+            return response()->json(['success' => 'Record updated successfully'], 200);
+        }
+        if (is_array($res) && !empty($res['error'])) {
+            return response()->json(['error' => $res['error']], 422);
+        }
+
+        return response()->json(['error' => 'Lead not found'], 404);
     }
 
 

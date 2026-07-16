@@ -2,32 +2,86 @@
 @section('title', '| Bookings')
 @section('content')
     @isset($data)
-{{--        {{dd($data)}}--}}
-    <div class="justify-content-center checkout-page">
+    <style>
+        /* Page-scoped responsive tweaks for the estimate document upload page */
+        .upload-documents-page.checkout-page {
+            padding-top: 200px;
+            padding-bottom: 60px;
+        }
+        .upload-documents-page .term-section-body {
+            width: 100%;
+        }
+        .upload-documents-page .upload-doc-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .upload-documents-page input[type="file"].form-control {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            min-height: 32px;
+            padding: 2px;
+        }
+        @media (max-width: 991.98px) {
+            .upload-documents-page.checkout-page {
+                padding-top: 140px;
+            }
+            .upload-documents-page .term-section-body {
+                padding: 20px 15px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .upload-documents-page.checkout-page {
+                padding-top: 110px;
+            }
+            .upload-documents-page .term-section-header {
+                font-size: 1rem;
+            }
+            .upload-documents-page .check-container {
+                font-size: 0.9rem;
+                margin-bottom: 5px;
+            }
+            .upload-documents-page .btn-submit {
+                width: 100%;
+                float: none !important;
+            }
+        }
+    </style>
+    <div class="justify-content-center checkout-page upload-documents-page">
         @foreach ($data['estimate'] as $estimate)
         <div class="container">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 details-section">
                     <form action="{{ url('upload-estimate-documents') }}" method="POST" enctype="multipart/form-data" id="AttachmentForm">
                         @csrf
                         <input type="hidden" name="estimate_id" id="estimate" value="{{$estimate->id}}">
-                    <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
+                    <div class="row reservations-sections justify-content-center">
+                        <div class="col-10 col-sm-8 col-md-6 term-section-header">
                             Upload Required Document</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-10 term-section-body">
+                        <div class="col-12 term-section-body">
                             <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
+                                <div class="col-12">
+                                    @if ($data['req_documents']->isEmpty())
+                                    <p>No documents are required for this estimate. You are all set!</p>
+                                    @else
                                     <p>Please Upload your required documents for varification!</p>
+                                    @endif
                                     @foreach ($data['req_documents'] as $doc)
-                                    <div class="row">
-                                        <div class="col-8">
+                                    @php $isUploaded = in_array((string) $doc->id, $data['uploaded_doc_ids'] ?? [], true); @endphp
+                                    <div class="row upload-doc-row">
+                                        <div class="col-12 col-sm-5 col-md-6">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault">{{$doc->title}}</label>
+                                                <label class="check-container" for="flexCheckDefault">{{$doc->title}}
+                                                    @if ($isUploaded)
+                                                    <span class="badge badge-success" style="background-color:#28a745;color:#fff;">Uploaded</span>
+                                                    @endif
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class="col-4 d-flex">
+                                        <div class="col-12 col-sm-7 col-md-6 d-flex">
                                             <input type="hidden" name="id[]" value="{{$doc->id}}">
-                                            <input type="file" class="no-bottom-margin form-control required-document" name="files[]" data-title="{{ $doc->title }}" required style="padding: 0px 0px;height: 32px;">
+                                            <input type="file" class="no-bottom-margin form-control {{ $isUploaded ? '' : 'required-document' }}" name="files[]" data-title="{{ $doc->title }}" {{ $isUploaded ? '' : 'required' }}>
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
@@ -37,7 +91,11 @@
                         </div>
                     </div>
                     <div class="row submission-sections">
-                        <button class="offset-md-1 offset-lg-1 btn btn-qoutation btn-sm active btn-submit float-end" type="submit">Upload Documents</button>
+                        @if (!$data['req_documents']->isEmpty())
+                        <div class="col-12 d-flex justify-content-end">
+                            <button class="btn btn-qoutation btn-sm active btn-submit" type="submit">Upload Documents</button>
+                        </div>
+                        @endif
                     </div>
                     </form>
                 </div>

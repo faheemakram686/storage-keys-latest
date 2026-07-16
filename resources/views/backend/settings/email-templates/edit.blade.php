@@ -60,16 +60,19 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
+                                        <label for="">Use these strings in template:</label>
+                                        <p> @verbatim{{f_name}} - {{l_name}} - {{company_name}} - {{email}} - {{phone}} - {{address}} - {{city}} - {{country}} @endverbatim</p>
                                         <label class="form-label" for="reviewer">Template Body</label>
-                                        <div class="form-control-wrap">
-                                            <textarea id="" class="form-control" name="et_temp_body" value="{{$data['st']->temp_body}}"> {{$data['st']->temp_body}} </textarea>
+                                        <div id="toolbar-container"></div>
+                                        <div id="editor">
+                                            @isset($data['st']->temp_body) {!! $data['st']->temp_body !!} @endisset
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Status <span class="text-danger"></span></label>
-                                        <select name="edit_status" id="" class="form-control" required>
+                                        <select name="edit_status" id="edit_status" class="form-control" required>
                                             <option value="">Choose One</option>
                                             <option value="1" {{$data['st']->status == 'Active' ? 'selected' : ''}}>Active</option>
                                             <option value="0" {{$data['st']->status == 'In-Active' ? 'selected' : ''}}>In-Active</option>
@@ -89,25 +92,46 @@
     </div>
 
     <script>
-        ClassicEditor
-            .create( document.querySelector( '#editor' ) )
-            .catch( error => {
-                console.error( error );
-            } );
-    </script>
-
-    <script>
         $(document).ready(function() {
+
+            var myeditor = '';
+            DecoupledEditor
+                .create( document.querySelector( '#editor' ), {
+
+                })
+                .then( editor => {
+                    const toolbarContainer = document.querySelector( '#toolbar-container' );
+                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                    myeditor = editor;
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
 
             $('#updateCountryForm').on('submit', function(e) {
                 e.preventDefault();
-                var formData=$('#updateCountryForm').serialize()
+
+                var body = myeditor.getData();
+                var id = $("input[name=id]").val();
+                var et_temp_name = $("input[name=et_temp_name]").val();
+                var et_temp_for = $("select[name=et_temp_for]").val();
+                var et_temp_category = $("select[name=et_temp_category]").val();
+                var et_temp_subject = $("input[name=et_temp_subject]").val();
+                var edit_status = $('#edit_status').find(":selected").val();
+
                 $.ajax({
                     type: "get",
                     url: '{{ url('admin/update-email-template') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
+                    data: {
+                        id: id,
+                        et_temp_name: et_temp_name,
+                        et_temp_for: et_temp_for,
+                        et_temp_category: et_temp_category,
+                        et_temp_subject: et_temp_subject,
+                        et_temp_body: body,
+                        edit_status: edit_status
+                    },
+                    dataType: 'json',
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
@@ -147,6 +171,3 @@
     </script>
 
 @endsection
-
-
-

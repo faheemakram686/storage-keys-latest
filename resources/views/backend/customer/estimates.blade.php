@@ -280,7 +280,7 @@
                                 '  <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>'+
                                 ' <div class="dropdown-menu dropdown-menu-right">'+
                                 '<ul class="link-list-opt no-bdr">'+
-                                '<li><a href={{url('/estimatetocustomer')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+
+                                '<li><a href={{url('/estimatetocustomer')}}/'+data[i].hashid +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+
                                 '<li><a href={{url('/admin/estimatePdf')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
                                 '<li><a href="#" class="btn-contract" data='+data[i].id+' data-toggle="modal" data-target="#addCountry"><em class="icon ni ni-edit"></em><span>Create Contract</span></a></li>'+
                                 '<li><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+

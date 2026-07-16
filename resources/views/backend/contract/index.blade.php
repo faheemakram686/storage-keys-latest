@@ -170,7 +170,7 @@
                                 ' <div class="dropdown-menu dropdown-menu-right">'+
                                 '<ul class="link-list-opt no-bdr">'+
                                 // '<li><a href="#" class="btn-approve" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Approve</span></a></li>'+
-                                '<li><a href={{url('/contract-to-customer')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+
+                                '<li><a href={{url('/contract-to-customer')}}/'+data[i].hashid +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+
                                 '<li><a href={{url('admin/contract-pdf')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
                                 {{--'<li><a href={{url('admin/convert-invoice')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>Convert to Invoice </span></a></li>'+--}}
                                 '<li><a href={{url('admin/edit-contract')}}/'+data[i].id+' class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+

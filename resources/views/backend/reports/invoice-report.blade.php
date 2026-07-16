@@ -129,14 +129,27 @@
                 return 'badge-danger';
             }
 
+            // Replace table rows and keep DataTables (search/pagination/export) in sync
+            function renderRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#countryTable').html(html);
+                if (wasInitialized && window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
+
             getReport(formData);
 
             $('#ReportFilterForm').on('submit', function(e) {
                 e.preventDefault();
                 formData=$('#ReportFilterForm').serialize()
-                console.log(formData);
                 getReport(formData);
-             $('#datatable').DataTable.reload();
             });
 
             function getReport(formData) {
@@ -145,7 +158,7 @@
                     url: '{{ url('admin/filter-invoice-report') }}',
                     data: formData,
                     type: 'get',
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     contentType: false,
                     processData: true,
@@ -162,15 +175,26 @@
                             var TodayDate = new Date();
                             for (i = 0; i < data.length; i++) {
                                 c++
+                                var customerCell = data[i].customer
+                                    ? '<a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a>'
+                                    : 'N/A';
+                                var contractOrderCell = 'N/A';
+                                if (data[i].contract != null) {
+                                    contractOrderCell = '<a href={{url('admin/contract/detail')}}/' + data[i].contract.id + '>'+data[i].contract.subject+'</a>';
+                                } else if (data[i].order != null) {
+                                    contractOrderCell = '<a href={{url('admin/order/detail')}}/' + data[i].order.id + '>Order No: '+data[i].order.id+'</a>';
+                                }
+                                var responsibleName = (data[i].user_responsible && data[i].user_responsible.full_name) ? data[i].user_responsible.full_name : 'N/A';
+
                                 html += '<tr class="nk-tb-item odd">'+
                                     ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no + ' '+((data[i].recurring != '0')? '<span class="badge badge-outline-primary">Recurring</span></a>':' ') +'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/customer/profile')}}/' + data[i].customer.id + '>'+data[i].customer.customer_name+'</a></td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools"> '+((data[i].contract != null)? '<a href={{url('admin/contract/detail')}}/' + data[i].contract.id + '>'+data[i].contract.subject+'</a>':'<a href={{url('admin/order/detail')}}/' + data[i].order.id + '>Order No: '+data[i].order.id+'</a>') +' </td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no+'</a>'+((data[i].recurring != '0')? ' <span class="badge badge-outline-primary">Recurring</span>':'') +'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+customerCell+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools"> '+contractOrderCell+' </td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].invoice_date+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].due_date+'</td>'+
                                     ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].grand_total+'</td>'+
-                                    ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].user_responsible.full_name+'</td>'+
+                                    ' <td class="nk-tb-col nk-tb-col-tools">'+responsibleName+'</td>'+
                                     '<td class="nk-tb-col nk-tb-col-tools" >'+
                                     ' <span class="badge badge-success">'+data[i].payment_method+'</span>'+
                                     ' </td>'+
@@ -184,7 +208,7 @@
                         }else {
                             toastr.error('Result Not Found');
                         }
-                        $('#countryTable').html(html);
+                        renderRows(html);
                     },
 
                     complete: function(data) {
