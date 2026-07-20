@@ -139,7 +139,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Width</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="width" placeholder="Width" step="any" required>
+                                        <input class="form-control" type="number" name="width" placeholder="Width" step="any">
                                     </div>
 
                                 </div>
@@ -149,7 +149,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Length</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="length" placeholder="Length" step="any" required>
+                                        <input class="form-control" type="number" name="length" placeholder="Length" step="any">
                                     </div>
 
                                 </div>
@@ -159,7 +159,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Height</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" name="height" placeholder="Height" step="any" required>
+                                        <input class="form-control" type="number" name="height" placeholder="Height" step="any">
                                     </div>
 
                                 </div>
@@ -280,7 +280,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Width</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_width" placeholder="Width" required>
+                                        <input class="form-control" type="number" step="any" name="e_width" placeholder="Width">
                                     </div>
 
                                 </div>
@@ -290,7 +290,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Length</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_length" placeholder="Length" required>
+                                        <input class="form-control" type="number" step="any" name="e_length" placeholder="Length">
                                     </div>
 
                                 </div>
@@ -300,7 +300,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="status">Height</label>
                                     <div class="form-control-wrap">
-                                        <input class="form-control" type="number" step="any" name="e_height" placeholder="Height" required>
+                                        <input class="form-control" type="number" step="any" name="e_height" placeholder="Height">
                                     </div>
 
                                 </div>

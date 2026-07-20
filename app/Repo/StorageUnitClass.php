@@ -33,9 +33,9 @@ class StorageUnitClass implements StorageUnitInterface {
       $sy->stype_id=$request->st_id;
       $sy->slevel_id =$request->sl_id;
       $sy->ssize_id =$request->ss_id;
-      $sy->width=$request->width;
-      $sy->length=$request->length;
-      $sy->height=$request->height;
+      $sy->width = $request->filled('width') ? $request->width : null;
+      $sy->length = $request->filled('length') ? $request->length : null;
+      $sy->height = $request->filled('height') ? $request->height : null;
       $sy->price=$request->price;
       $sy->location=$request->location;
       $sy->status = StorageUnitStatus::VACANT;
@@ -87,9 +87,9 @@ class StorageUnitClass implements StorageUnitInterface {
         $sy->stype_id=$request->e_st_id;
         $sy->slevel_id =$request->e_sl_id;
         $sy->ssize_id =$request->e_ss_id;
-        $sy->width=$request->e_width;
-        $sy->length=$request->e_length;
-        $sy->height=$request->e_height;
+        $sy->width = $request->filled('e_width') ? $request->e_width : null;
+        $sy->length = $request->filled('e_length') ? $request->e_length : null;
+        $sy->height = $request->filled('e_height') ? $request->e_height : null;
         $sy->price=$request->e_price;
         $sy->location=$request->e_location;
         $sy->save();

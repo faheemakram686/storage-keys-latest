@@ -17,9 +17,9 @@ class StorageUnitSizeClass implements StorageUnitSizeInterface {
         $sy =new StorageUnitSize();
         $sy->unit_type_name=$request->u_name;
         $sy->measurement_unit=$request->m_unit;
-        $sy->width = $request->filled('width') ? $request->width : null;
-        $sy->length = $request->filled('length') ? $request->length : null;
-        $sy->height = $request->filled('height') ? $request->height : null;
+        $sy->width = $request->width;
+        $sy->length = $request->length;
+        $sy->height = $request->height;
         $sy->no_of_units=$request->no_unit;
         $sy->status=$request->status;
         if($sy->save()){
@@ -53,9 +53,9 @@ class StorageUnitSizeClass implements StorageUnitSizeInterface {
         $sy=StorageUnitSize::find($request->id);
         $sy->unit_type_name=$request->e_u_name;
         $sy->measurement_unit=$request->e_m_unit;
-        $sy->width = $request->filled('e_width') ? $request->e_width : null;
-        $sy->length = $request->filled('e_length') ? $request->e_length : null;
-        $sy->height = $request->filled('e_height') ? $request->e_height : null;
+        $sy->width = $request->e_width;
+        $sy->length = $request->e_length;
+        $sy->height = $request->e_height;
         $sy->no_of_units=$request->e_no_unit;
         $sy->status=$request->e_status;
         $sy->save();
