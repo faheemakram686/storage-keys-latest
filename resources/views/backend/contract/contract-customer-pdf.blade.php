@@ -1,306 +1,211 @@
 <!DOCTYPE html>
-<html lang="zxx" class="js">
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta charset="utf-8">
+    <title>Contract | Storage Keys</title>
     <style>
-        @font-face {
-            font-family: 'Mcs Book Title 6';
-            src: url('https://www.fontsaddict.com/fontface/mcs-book-title-6.TTF');
-        }
-        .ck-editor__editable {
-            min-height: 300px !important;
-        }
-        .nk-block-head {
-            position: relative;
-            padding-bottom: 1.25rem;
-        }
-        .card {
-            box-shadow: 0px 1px 3px 0px rgba(54, 74, 99, 0.05);
-        }
-        .components-preview .card-preview > .card-inner {
-            padding: 1.25rem;
-        }
-        .invoice {
-            position: relative;
-        }
-        .invoice-action {
-            position: absolute;
-            right: 1.25rem;
-            top: 1.25rem;
-        }
-        .invoice-wrap {
-            padding: 1.25rem;
-            border: 1px solid #dbdfea;
-            border-radius: 4px;
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 18px 20px;
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 11px;
+            line-height: 1.45;
+            color: #4A392D;
             background: #fff;
         }
-        .invoice-brand {
-            padding-bottom: 1.5rem;
+        .contract-print { width: 100%; }
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
         }
-        .text-center {
-            text-align: center !important;
+        .header-table td {
+            vertical-align: middle;
+            padding: 0;
         }
-        .invoice-head {
-            padding-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            flex-direction: row;
+        .brand-logo {
+            display: block;
+            width: 170px;
+            max-height: 52px;
+            height: auto;
         }
-        @media (min-width: 300px)
-        {
-            .invoice-head {
-                flex-direction: row;
-            }
-            .invoice-desc {
-                padding-top: 0;
-            }
-            .invoice-bills {
-                font-size: 0.875rem;
-            }
+        .header-meta {
+            text-align: right;
+            color: #526484;
         }
-        .overline-title {
+        .header-meta .company {
+            margin: 0 0 2px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #364a63;
+        }
+        .header-meta .doc-title {
+            margin: 0;
             font-size: 11px;
-            line-height: 1.2;
-            letter-spacing: 0.2em;
             color: #8094ae;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .header-rule {
+            border: 0;
+            border-top: 2px solid #FF8820;
+            margin: 8px 0 14px;
+        }
+        .contract-body {
+            width: 100%;
+        }
+        .contract-body p {
+            margin: 0 0 7px;
+            line-height: 1.45;
+        }
+        .contract-body strong { font-weight: 700; }
+        .contract-body figure.table,
+        .contract-body figure {
+            display: block;
+            margin: 6px 0 10px;
+            padding: 0;
+            width: 100%;
+        }
+        .contract-body table {
+            width: 100% !important;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin: 0 0 8px;
+        }
+        .contract-body table td,
+        .contract-body table th {
+            border: 1px solid #cfd6e4;
+            padding: 6px 7px;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 10.5px;
+            line-height: 1.4;
+        }
+        /* Terms & Conditions bilingual table */
+        .contract-body table.tc-table td {
+            width: 50%;
+            padding: 7px 8px;
+            vertical-align: top;
+            font-size: 9.5px;
+            line-height: 1.4;
+        }
+        .contract-body table colgroup col {
+            width: 50%;
+        }
+        .contract-body table td[dir="rtl"],
+        .contract-body [dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+            unicode-bidi: embed;
+        }
+        .contract-body table td p {
+            margin: 0 0 5px;
+            font-size: 9.5px;
+            line-height: 1.4;
+        }
+        .contract-body table td[style*="background:#f3f5f9"],
+        .contract-body table td[style*="background:#f7f8fa"] {
+            background: #f3f5f9 !important;
+            font-size: 11px;
+            vertical-align: middle !important;
+            text-align: center;
+        }
+        .section-title {
+            color: #FF8820;
+            font-size: 12px;
             font-weight: 700;
-            font-family: "DM Sans", sans-serif, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            margin: 10px 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
-        .components-preview h4.title, .components-preview h5.title {
-            font-size: 1.25rem;
-            letter-spacing: -0.01rem;
-            font-family: "DM Sans", sans-serif;
-            font-weight: 500;
+        .sign-box {
+            margin-top: 14px;
+            text-align: center;
         }
-        ol, ul {
-            list-style: none;
+        .sign-box img {
+            height: 90px;
+            width: auto;
+            max-width: 180px;
+        }
+        .sign-label {
+            margin: 4px 0 0;
+            color: #FF8820;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .contract-note {
+            margin-top: 16px;
+            padding-top: 8px;
+            border-top: 1px solid #dbdfea;
+            font-style: italic;
+            font-size: 10px;
+            color: #8094ae;
+        }
+        .page-break,
+        [style*="page-break-before"] {
+            page-break-before: always;
+            display: block;
+            height: 0;
             margin: 0;
             padding: 0;
         }
-        .invoice-desc {
-            width: 210px;
-            padding-top: 1.5rem;
-        }
-        .invoice-bills {
-            font-size: 24px;
-        }
-        .invoice-contact ul li:first-child {
-            padding-top: 0;
-        }
-        .invoice-contact ul li {
-            padding: 0.5rem 0;
-            line-height: 1.3;
-        }
-        li {
-            list-style: none;
-        }
-        .invoice-contact ul .icon {
-            line-height: 1.3;
-            font-size: 1.1em;
-            display: inline-block;
-            vertical-align: top;
-            margin-top: -2px;
-            color: #854fff;
-            margin-right: 0.5rem;
-        }
-        .ni {
-            font-family: "Nioicon" !important;
-            speak: never;
-            font-style: normal;
-            font-weight: normal;
-            font-variant: normal;
-            text-transform: none;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .invoice-contact ul .icon + span {
-            display: inline-block;
-            vertical-align: top;
-            color: #8094ae;
-        }
-        .icon + span, span + .icon {
-            margin-left: 0.25rem;
-        }
-        .invoice-contact ul li:last-child {
-            padding-bottom: 0;
-        }
-
-        .invoice-desc .title {
-            text-transform: uppercase;
-            color: #854fff;
-        }
-        @media (min-width: 992px)
-        .h3{
-                font-size: 2rem;
-                letter-spacing: -0.03em;
-            }
-        invoice-desc ul li {
-            padding: 0.25rem 0;
-        }
-        .invoice-desc ul span:first-child {
-            min-width: 40px;
-            display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #8094ae;
-        }
-        .invoice-desc ul span {
-            font-size: 13px;
-            font-weight: 500;
-            color: #526484;
-        }
-        .invoice-bills {
-            font-size: 12px;
-        }
-        .table-responsive {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .invoice-bills .table {
-            min-width: 580px;
-        }
-        .card .table {
-            margin-bottom: 0;
-        }
-
-
-
-        .card .table tr:first-child th:first-child {
-            border-top-left-radius: 4px;
-        }
-        .card .table tr:first-child th, .card .table tr:first-child td {
-            border-top: none;
-        }
-        .table thead tr:last-child th {
-            border-bottom: 1px solid #dbdfea;
-        }
-        .invoice-bills .table th {
-            color: #854fff;
-            font-size: 12px;
-            text-transform: uppercase;
-            border-top: 0;
-        }
-
-        .w-150px {
-            width: 150px !important;
-        }
-        th {
-            text-align: inherit;
-        }
-        .w-60 {
-            width: 60% !important;
-        }
-        .card .table tr:first-child th, .card .table tr:first-child td {
-            border-top: none;
-        }
-        .table td:first-child, .table th:first-child {
-            padding-left: 1.25rem;
-        }
-        .table th, .table td {
-            padding: 0.5rem;
-            vertical-align: top;
-            border-top: 1px solid #dbdfea;
-        }
-        .fs-12px {
-            font-size: 12px;
-        }
-        .text-soft {
-            color: #8094ae !important;
-        }
-        .font-italic, .ff-italic {
-            font-style: italic !important;
-        }
-        .invoice-bills .table tfoot {
-            border-top: 1px solid #dbdfea;
-        }
-        .card .table tr:first-child th, .card .table tr:first-child td {
-            border-top: none;
-        }
-        .invoice-bills .table tfoot td {
-            border-top: 0;
-            white-space: nowrap;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-        }
-
-
     </style>
 </head>
 <body>
-    <div class="components-preview wide-md mx-auto">
-        <div class="nk-block nk-block-lg">
-        <div class="nk-block">
-            <div class="invoice">
-                <div class="invoice-wrap">
-                    <div class="invoice-bills">
-                        <div class="table-responsive">
-                            @isset($data)
-                                <div class="justify-content-center checkout-page">
-                                    @foreach ($data['contract'] as $contract)
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
-                                                    <form method="post" action="#" id="EstimateForm111">
-                                                        @csrf
-                                                        <input type="hidden" name="contract_id" id="contract_id" value="{{$contract->id}}">
-                                                        <div class="row">
-                                                                <div class="row">
-                                                                    <div class=" col-12 col-sm-12 col-md-10 col-lg-12">
-                                                                        @isset($contract->contractTemplate)
-                                                                            {!! $contract->contractTemplate->temp_body !!}
-                                                                        @endisset
-                                                                    </div>
-                                                                </div>
-                                                            <div class="col-12 col-sm-12 col-md-3 col-lg-3  order-summary" >
-                                                                <div class="row locations-section" >
-                                                                    <div class="col-12 order-section-body">
-                                                                        @if($contract->is_signed == 'Signed')
-                                                                            <div class="separator-item"></div>
-                                                                            <div class="row">
-                                                                                @if($contract->sign_image != null)
-                                                                                    <div class="col-lg-12 col-md-12">
-                                                                                        <div class="text-center">
-                                                                                            <img style="height: 100px; width:100px; margin-top:20px"  src="{{ public_path('storage/uploads/contract_sign_images').'/'.$contract->sign_image}}"  alt="image not found" class=" mt-5" >
-                                                                                            <h4 style="color:#FF8820;margin-bottom: 10px">Signature</h4>
-                                                                                        </div>
+@isset($data)
+    @foreach ($data['contract'] as $contract)
+        <div class="contract-print">
+            <table class="header-table">
+                <tr>
+                    <td style="width: 42%;">
+                        @php
+                            $logoPath = public_path('sk-assets/assets/images/frontend/front-logo.png');
+                            $logoData = is_file($logoPath) ? base64_encode(file_get_contents($logoPath)) : null;
+                        @endphp
+                        @if($logoData)
+                            <img class="brand-logo" src="data:image/png;base64,{{ $logoData }}" alt="Storage Keys">
+                        @endif
+                    </td>
+                    <td class="header-meta" style="width: 58%;">
+                        <p class="company">Storage Keys</p>
+                        <p class="doc-title">Self Storage License Agreement</p>
+                        <p style="margin:4px 0 0;font-size:11px;">
+                            Agreement No: <strong>{{ $contract->id }}</strong>
+                            @if(!empty($contract->start_date))
+                                &nbsp;|&nbsp; Start: <strong>{{ \Carbon\Carbon::parse($contract->start_date)->format('d M Y') }}</strong>
+                            @endif
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <hr class="header-rule">
 
-                                                                                    </div>
-                                                                                @endif
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
+            <div class="contract-body">
+                @isset($contract->contractTemplate)
+                    {!! $contract->contractTemplate->temp_body !!}
+                @endisset
+            </div>
 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                </div>
+            @if($contract->is_signed == 'Signed' && !empty($contract->sign_image))
+                @php
+                    $signPath = public_path('storage/uploads/contract_sign_images/'.$contract->sign_image);
+                    $signData = is_file($signPath) ? base64_encode(file_get_contents($signPath)) : null;
+                @endphp
+                @if($signData)
+                    <div class="sign-box">
+                        <img src="data:image/png;base64,{{ $signData }}" alt="Signature">
+                        <p class="sign-label">Signature</p>
+                    </div>
+                @endif
+            @endif
 
-                            @endisset
-                            <div class="nk-notes ff-italic fs-12px text-soft"> Contract was created on a computer and is valid without the signature and seal. </div>
-                        </div>
-                    </div><!-- .invoice-bills -->
-                </div><!-- .invoice-wrap -->
-            </div><!-- .invoice -->
-        </div><!-- .nk-block -->
+            <div class="contract-note">
+                Contract was created on a computer and is valid without the signature and seal.
+            </div>
         </div>
-        <!-- nk-block -->
-    </div>
+    @endforeach
+@endisset
 </body>
 </html>
-
-
-
-

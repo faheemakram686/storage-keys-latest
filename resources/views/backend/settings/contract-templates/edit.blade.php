@@ -27,7 +27,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="">Use these strings in template:</label>
-                                        <p> @verbatim{{company_name}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{unit_no}}  - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.phone}} -{{contact.email}} - {{storage_fee}} - {{addon_fee}} @endverbatim</p>
+                                        <p> @verbatim{{agreement_no}} - {{booked_by}} - {{customer_name}} - {{company_name}} - {{phone}} - {{mobile}} - {{email}} - {{address}} - {{city}} - {{country}} - {{dob}} - {{customer_id_card}} - {{passport_no}} - {{license_no}} - {{vat}} - {{unit_no}} - {{unit_size}} - {{total_units}} - {{commencement_date}} - {{start_date}} - {{end_date}} - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.email}} - {{storage_fee}} - {{addon_fee}} - {{addon_name}} - {{insurance_fee}} - {{total}} - {{term_title}} - {{individual_mark}} - {{business_mark}} @endverbatim</p>
                                         <label>Template Content<span class="text-danger"></span></label>
                                         <div id="toolbar-container"></div>
                                         <div id="editor">

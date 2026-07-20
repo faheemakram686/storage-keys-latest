@@ -177,10 +177,20 @@ class ContractClass implements ContractInterface {
     public function getContract($id)
     {
 
-        $qry=Contract::with('contractTemplate','estimate.storageunit.storagesize.mUnit','estimate.estimateStorageUnits.storageunit','contractStorageUnits.storageunit','estimate.termLength','estimate.estimateAddon.addon','customer');
-        $qry=$qry->where('id',$id);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
+        $qry = Contract::with([
+            'contractTemplate',
+            'estimate.storageunit.storagesize.mUnit',
+            'estimate.estimateStorageUnits.storageunit.storagesize',
+            'contractStorageUnits.storageunit.storagesize',
+            'estimate.termLength',
+            'estimate.estimateAddon.addon',
+            'customer',
+            'userRensonsible',
+            'insurance',
+        ]);
+        $qry = $qry->where('id', $id);
+        $qry = $qry->where('is_deleted', 0)->orderBy('id', 'DESC');
+        $qry = $qry->get();
         return $qry;
     }
 

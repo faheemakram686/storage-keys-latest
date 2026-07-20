@@ -12,7 +12,7 @@
                     </div>
                     <div class="d-flex align-items-center" style="gap: 8px;">
                         @isset($data['contract'][0])
-                            <a href="{{ route('contract-customer', $data['contract'][0]->id) }}" class="btn btn-outline-primary btn-sm d-none d-md-inline-flex" target="_blank">
+                            <a href="{{ route('contract-customer', $data['contract'][0]->hashid) }}" class="btn btn-outline-primary btn-sm d-none d-md-inline-flex" target="_blank">
                                 <em class="icon ni ni-eye"></em><span>View as Customer</span>
                             </a>
                         @endisset
@@ -116,7 +116,7 @@
                                                 <div class="col-sm-11">
                                                     <div class="form-group">
                                                         <label for="">Use these strings in template:</label>
-                                                        <p> @verbatim{{company_name}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{unit_no}}  - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.phone}} -{{contact.email}} - {{storage_fee}} - {{addon_fee}} @endverbatim</p>
+                                                        <p> @verbatim{{agreement_no}} - {{booked_by}} - {{customer_name}} - {{company_name}} - {{phone}} - {{mobile}} - {{email}} - {{address}} - {{city}} - {{country}} - {{dob}} - {{customer_id_card}} - {{passport_no}} - {{license_no}} - {{vat}} - {{unit_no}} - {{unit_size}} - {{total_units}} - {{commencement_date}} - {{start_date}} - {{end_date}} - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.email}} - {{storage_fee}} - {{addon_fee}} - {{addon_name}} - {{insurance_fee}} - {{total}} - {{term_title}} - {{individual_mark}} - {{business_mark}} @endverbatim</p>
                                                         <label>Contract Content<span class="text-danger"></span></label>
                                                         <div id="toolbar-container"></div>
                                                         <div id="editor">

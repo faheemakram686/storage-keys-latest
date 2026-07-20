@@ -14,7 +14,6 @@ use App\Repo\UserClass;
 use Illuminate\Http\Request;
 use function Symfony\Component\Translation\t;
 use PDF;
-use Dompdf\Options;
 use ArPHP\I18N\Arabic;
 
 class ContractController extends Controller
@@ -123,22 +122,56 @@ class ContractController extends Controller
     {
         $data['contract'] = $this->contract->getContract($request->id);
         $this->applyContractTemplateVariables($data['contract']);
-//        return view('backend.contract.contract-customer-pdf', compact('data'));
-        $reportHtml = view('backend.contract.contract-customer-pdf', compact('data'))->render();
-        $arabic = new Arabic();
-        $p = $arabic->arIdentify($reportHtml);
 
-        for ($i = count($p)-1; $i >= 0; $i-=2) {
-            $utf8ar = $arabic->utf8Glyphs(substr($reportHtml, $p[$i-1], $p[$i] - $p[$i-1]));
-            $reportHtml = substr_replace($reportHtml, $utf8ar, $p[$i-1], $p[$i] - $p[$i-1]);
+        // Reshape Arabic only in the contract body (much faster than full document + CSS).
+        if (!empty($data['contract'][0]->contractTemplate)) {
+            $data['contract'][0]->contractTemplate->temp_body = $this->reshapeArabicHtml(
+                (string) $data['contract'][0]->contractTemplate->temp_body
+            );
         }
 
-        $pdf = PDF::loadHTML($reportHtml);
-       return $pdf->stream('contract.pdf');
+        $pdf = PDF::loadView('backend.contract.contract-customer-pdf', compact('data'))
+            ->setPaper('a4', 'portrait')
+            ->setOptions([
+                'defaultFont' => 'DejaVu Sans',
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => false,
+                'isFontSubsettingEnabled' => true,
+            ]);
 
-//
-//        $pdf = PDF::setOptions(['isHtml5ParserEnabled'=>true,'isPhpEnabled'=>true,'isFontSubsettingEnabled'=>true,'chroot' => base_path()])->loadView('backend.contract.contract-customer-pdf', compact('data'));
-//        return $pdf->stream('contract.pdf');
+        return $pdf->stream('contract-'.$request->id.'.pdf');
+    }
+
+    /**
+     * Convert Arabic text segments to presentation forms for DomPDF.
+     */
+    protected function reshapeArabicHtml(string $html): string
+    {
+        if ($html === '' || !preg_match('/\p{Arabic}/u', $html)) {
+            return $html;
+        }
+
+        try {
+            $arabic = new Arabic();
+            $positions = $arabic->arIdentify($html);
+
+            for ($i = count($positions) - 1; $i >= 1; $i -= 2) {
+                $start = (int) $positions[$i - 1];
+                $end = (int) $positions[$i];
+                $length = $end - $start;
+
+                if ($length <= 0) {
+                    continue;
+                }
+
+                $segment = substr($html, $start, $length);
+                $html = substr_replace($html, $arabic->utf8Glyphs($segment), $start, $length);
+            }
+        } catch (\Throwable $e) {
+            // Keep original HTML if reshaping fails.
+        }
+
+        return $html;
     }
 
     public function signContract(Request $request)
@@ -194,54 +227,218 @@ class ContractController extends Controller
             return;
         }
 
-        $variables = $contract[0]->customer;
-        $templateContent = $contract[0]->contractTemplate->temp_body;
+        $c = $contract[0];
+        $templateContent = (string) ($c->contractTemplate->temp_body ?? '');
+        $replacements = [];
 
-        foreach ($variables->toArray() as $key => $value) {
-            $templateContent = str_replace('{{'.$key.'}}', $this->formatTemplateValue($value), $templateContent);
+        $customer = $c->customer;
+        if ($customer) {
+            foreach ($customer->getAttributes() as $key => $value) {
+                if (in_array($key, ['password', 'remember_token'], true)) {
+                    continue;
+                }
+                $replacements[$key] = $this->formatTemplateValue($value);
+            }
+
+            try {
+                $contact = $this->contact->getPrimaryContect($customer->id);
+            } catch (\Throwable $e) {
+                $contact = null;
+            }
+
+            if ($contact) {
+                foreach ($contact->getAttributes() as $key => $value) {
+                    if (in_array($key, ['password', 'remember_token'], true)) {
+                        continue;
+                    }
+                    $replacements['contact.'.$key] = $this->formatTemplateValue($value);
+                }
+                $replacements['contact.full_name'] = trim(
+                    $this->formatTemplateValue($contact->first_name ?? null).' '.
+                    $this->formatTemplateValue($contact->last_name ?? null)
+                );
+            }
+
+            $customerType = strtolower(trim((string) ($customer->customer_type ?? '')));
+            $replacements['individual_mark'] = $customerType === 'individual' ? '✓' : '';
+            $replacements['business_mark'] = $customerType === 'company' ? '✓' : '';
+            $replacements['customer_type'] = $this->formatTemplateValue($customer->customer_type ?? null);
         }
 
-        $contact = $this->contact->getPrimaryContect($variables->id);
-        if ($contact) {
-            foreach ($contact->toArray() as $key => $value) {
-                $templateContent = str_replace('{{contact.'.$key.'}}', $this->formatTemplateValue($value), $templateContent);
+        $replacements['agreement_no'] = $this->formatTemplateValue($c->id);
+        $replacements['contract_id'] = $this->formatTemplateValue($c->id);
+        $replacements['contract_value'] = $this->formatMoneyValue($c->contract_value ?? null);
+        $replacements['subject'] = $this->formatTemplateValue($c->subject ?? null);
+        $replacements['start_date'] = $this->formatDateValue($c->start_date ?? null);
+        $replacements['end_date'] = $this->formatDateValue($c->end_date ?? null);
+        $replacements['commencement_date'] = $replacements['start_date'];
+        $replacements['insurance_cover'] = $this->formatTemplateValue(
+            $c->insurance_cover ?? optional($c->estimate)->insurance_cover ?? null
+        );
+
+        $bookedBy = '';
+        $user = $c->relationLoaded('userRensonsible') ? $c->userRensonsible : null;
+        if (!$user && !empty($c->user_id)) {
+            try {
+                $user = $c->userRensonsible()->first();
+            } catch (\Throwable $e) {
+                $user = null;
             }
         }
+        if ($user) {
+            $bookedBy = trim(
+                $this->formatTemplateValue($user->first_name ?? null).' '.
+                $this->formatTemplateValue($user->last_name ?? null)
+            );
+            if ($bookedBy === '' && !empty($user->name)) {
+                $bookedBy = $this->formatTemplateValue($user->name);
+            }
+        }
+        $replacements['booked_by'] = $bookedBy;
 
-        $addonprice = $contract[0]->estimate->estimateAddon->sum('price');
-        $term = $contract[0]->estimate->termLength;
-        $period = $term ? (float) $term->term_period : 1;
-        $discount = $term ? (float) $term->discount_percentage : 0;
+        $estimate = $c->estimate;
+        $addonPrice = 0.0;
+        $period = 1.0;
+        $discount = 0.0;
+        $storageFee = 0.0;
+        $unitNames = [];
+        $unitSizes = [];
+        $unitCount = 0;
+        $addonNames = [];
 
-        $estUnits = $contract[0]->estimate->estimateStorageUnits ?? collect([]);
-        if ($estUnits->isEmpty()) {
-            $price = (float) ($contract[0]->estimate->unit_price ?? 0);
-            $storagetotal = $price * $period;
-            $totelCost = $storagetotal - ($storagetotal * $discount / 100);
-            $unitNames = optional($contract[0]->estimate->storageunit)->storage_unit_name ?? '';
+        if ($estimate) {
+            $addons = $estimate->estimateAddon ?? collect([]);
+            $addonPrice = (float) $addons->sum(function ($row) {
+                return (float) ($row->price ?? 0);
+            });
+            foreach ($addons as $addonRow) {
+                $addonName = optional($addonRow->addon)->name
+                    ?? optional($addonRow->addon)->title
+                    ?? null;
+                if ($addonName) {
+                    $addonNames[] = $addonName;
+                }
+            }
+
+            $term = $estimate->termLength;
+            $period = $term ? (float) ($term->term_period ?? 1) : 1.0;
+            if ($period <= 0) {
+                $period = 1.0;
+            }
+            $discount = $term ? (float) ($term->discount_percentage ?? 0) : 0.0;
+            $replacements['term_title'] = $term ? $this->formatTemplateValue($term->title ?? null) : '';
+            $replacements['term_period'] = $term ? $this->formatTemplateValue($term->term_period ?? null) : '';
+
+            $estUnits = $estimate->estimateStorageUnits ?? collect([]);
+            if ($estUnits->isEmpty()) {
+                $price = (float) ($estimate->unit_price ?? 0);
+                $storageTotal = $price * $period;
+                $storageFee = $storageTotal - ($storageTotal * $discount / 100);
+                $su = $estimate->storageunit;
+                if ($su) {
+                    $unitNames[] = $this->formatTemplateValue($su->storage_unit_name ?? null);
+                    $sizeLabel = $this->resolveUnitSizeLabel($su);
+                    if ($sizeLabel !== '') {
+                        $unitSizes[] = $sizeLabel;
+                    }
+                    $unitCount = 1;
+                }
+            } else {
+                foreach ($estUnits as $row) {
+                    $price = (float) ($row->unit_price ?? 0);
+                    $storageTotal = $price * $period;
+                    $storageFee += $storageTotal - ($storageTotal * $discount / 100);
+                    $su = $row->storageunit;
+                    $unitNames[] = $su
+                        ? $this->formatTemplateValue($su->storage_unit_name ?? null)
+                        : ('#'.($row->storage_unit_id ?? ''));
+                    if ($su) {
+                        $sizeLabel = $this->resolveUnitSizeLabel($su);
+                        if ($sizeLabel !== '') {
+                            $unitSizes[] = $sizeLabel;
+                        }
+                    }
+                }
+                $unitCount = $estUnits->count();
+            }
         } else {
-            $totelCost = 0;
-            $names = [];
-            foreach ($estUnits as $row) {
-                $price = (float) ($row->unit_price ?? 0);
-                $storagetotal = $price * $period;
-                $totelCost += $storagetotal - ($storagetotal * $discount / 100);
-                $names[] = optional($row->storageunit)->storage_unit_name ?? ('#'.$row->storage_unit_id);
-            }
-            $unitNames = implode(', ', $names);
+            $replacements['term_title'] = '';
+            $replacements['term_period'] = '';
         }
 
-        $insuranceMonthly = (float) ($contract[0]->insurance_amount
-            ?? optional($contract[0]->estimate)->insurance_amount
-            ?? 0);
+        $contractUnits = collect($c->contractStorageUnits ?? [])->filter(function ($row) {
+            return empty($row->released_at);
+        });
+        if ($contractUnits->isNotEmpty()) {
+            $unitNames = [];
+            $unitSizes = [];
+            foreach ($contractUnits as $row) {
+                $su = $row->storageunit;
+                $unitNames[] = $su
+                    ? $this->formatTemplateValue($su->storage_unit_name ?? null)
+                    : ('#'.($row->storage_unit_id ?? ''));
+                if ($su) {
+                    $sizeLabel = $this->resolveUnitSizeLabel($su);
+                    if ($sizeLabel !== '') {
+                        $unitSizes[] = $sizeLabel;
+                    }
+                }
+            }
+            $unitCount = $contractUnits->count();
+        }
+
+        $insuranceMonthly = (float) (
+            $c->insurance_amount
+            ?? optional($estimate)->insurance_amount
+            ?? 0
+        );
         $insuranceFee = $insuranceMonthly * $period;
+        $totalFee = $storageFee + $addonPrice + $insuranceFee;
 
-        $templateContent = str_replace('{{unit_no}}', $this->formatTemplateValue($unitNames), $templateContent);
-        $templateContent = str_replace('{{storage_fee}}', $this->formatTemplateValue($totelCost), $templateContent);
-        $templateContent = str_replace('{{addon_fee}}', $this->formatTemplateValue($addonprice), $templateContent);
-        $templateContent = str_replace('{{insurance_fee}}', $this->formatTemplateValue($insuranceFee), $templateContent);
+        $replacements['unit_no'] = implode(', ', array_values(array_filter($unitNames, fn ($v) => $v !== '' && $v !== null)));
+        $replacements['unit_size'] = implode(', ', array_values(array_unique(array_filter($unitSizes))));
+        $replacements['total_units'] = $unitCount > 0 ? (string) $unitCount : '';
+        $replacements['storage_fee'] = $this->formatMoneyValue($storageFee);
+        $replacements['addon_fee'] = $this->formatMoneyValue($addonPrice);
+        $replacements['addon_name'] = implode(', ', array_values(array_unique(array_filter($addonNames)))) ?: 'Padlock';
+        $replacements['insurance_fee'] = $this->formatMoneyValue($insuranceFee);
+        $replacements['total'] = $this->formatMoneyValue($totalFee);
+        $replacements['total_fee'] = $replacements['total'];
 
-        $contract[0]->contractTemplate->temp_body = $templateContent;
+        foreach ($replacements as $key => $value) {
+            $templateContent = str_replace('{{'.$key.'}}', $value, $templateContent);
+        }
+
+        // Leave blank instead of showing unresolved tokens when related data is missing.
+        $templateContent = preg_replace('/\{\{[a-zA-Z0-9_.]+\}\}/', '', $templateContent) ?? $templateContent;
+
+        $c->contractTemplate->temp_body = $templateContent;
+    }
+
+    protected function resolveUnitSizeLabel($storageUnit): string
+    {
+        if (!$storageUnit) {
+            return '';
+        }
+
+        $typeName = optional($storageUnit->storagesize)->unit_type_name;
+        if ($typeName !== null && trim((string) $typeName) !== '') {
+            return trim((string) $typeName);
+        }
+
+        $parts = array_filter([
+            $storageUnit->width ?? null,
+            $storageUnit->length ?? null,
+            $storageUnit->height ?? null,
+        ], function ($v) {
+            return $v !== null && $v !== '';
+        });
+
+        if (count($parts) === 0) {
+            return '';
+        }
+
+        return implode(' x ', $parts);
     }
 
     protected function formatTemplateValue($value): string
@@ -254,15 +451,45 @@ class ContractController extends Controller
             return $value ? '1' : '0';
         }
 
-        if (is_scalar($value)) {
-            return (string) $value;
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format('Y-m-d');
         }
 
-        if ($value instanceof \DateTimeInterface) {
-            return $value->format('Y-m-d H:i:s');
+        if (is_scalar($value)) {
+            return trim((string) $value);
         }
 
         return '';
+    }
+
+    protected function formatDateValue($value): string
+    {
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        try {
+            if ($value instanceof \DateTimeInterface) {
+                return $value->format('d M Y');
+            }
+
+            return \Carbon\Carbon::parse($value)->format('d M Y');
+        } catch (\Throwable $e) {
+            return $this->formatTemplateValue($value);
+        }
+    }
+
+    protected function formatMoneyValue($value): string
+    {
+        if ($value === null || $value === '') {
+            return '';
+        }
+
+        if (!is_numeric($value)) {
+            return $this->formatTemplateValue($value);
+        }
+
+        return number_format((float) $value, 2, '.', '');
     }
 
 }
