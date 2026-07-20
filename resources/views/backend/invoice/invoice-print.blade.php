@@ -20,16 +20,217 @@
 {{--    <link rel="stylesheet" href="{{ asset('sk-assets/css/app.css') }}"/>--}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/backend/theme.css') }}"/>
     <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .invoice-print {
+            max-width: 940px;
+            margin: 1rem auto;
+            padding: 0 12px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .invoice-print .invoice-wrap {
+            padding: 1rem 0;
+            overflow-x: hidden;
+        }
+
+        .invoice-header {
+            align-items: center;
+        }
+
         .invoice-brand img {
             display: block;
             width: 223px;
             max-width: 100%;
             height: auto;
         }
+
         .company-trn {
             color: #8094ae;
             font-size: 12px;
             margin-top: 4px;
+        }
+
+        .invoice-print .invoice-desc {
+            width: 100%;
+            max-width: 100%;
+            padding-top: 1rem;
+        }
+
+        .invoice-meta-box {
+            background-color: #F5F6FA;
+            padding: 15px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .invoice-meta-box .title {
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .invoice-print .table {
+            margin-bottom: 1rem;
+        }
+
+        .invoice-print .table th,
+        .invoice-print .table td {
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .invoice-print .table .w-60 {
+            white-space: normal;
+            min-width: 140px;
+        }
+
+        .invoice-print footer {
+            padding: 1rem 12px 1.5rem;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #8094ae;
+            word-break: break-word;
+        }
+
+        .pay-now-btn {
+            white-space: nowrap;
+        }
+
+        .payment-status-stamp {
+            -webkit-transform: rotate(-15deg);
+            transform: rotate(-15deg);
+            margin: 1rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .invoice-print {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .invoice-print .invoice-wrap {
+                padding: 1rem;
+            }
+
+            .invoice-print .invoice-desc {
+                width: 370px;
+                max-width: 48%;
+                padding-top: 0;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .invoice-header > [class*="col-"] {
+                margin-bottom: 0.75rem;
+            }
+
+            .invoice-brand {
+                text-align: center;
+            }
+
+            .invoice-brand img {
+                width: 160px;
+                margin: 0 auto;
+            }
+
+            .invoice-company,
+            .invoice-title-block,
+            .invoice-pay-block {
+                text-align: center;
+            }
+
+            .invoice-pay-block .btn {
+                width: 100%;
+                max-width: 220px;
+            }
+
+            .invoice-print .invoice-head {
+                flex-direction: column;
+            }
+
+            .invoice-print .invoice-contact {
+                margin-bottom: 1rem;
+            }
+
+            .invoice-meta-box {
+                padding: 12px 8px;
+            }
+
+            .invoice-meta-box .title {
+                font-size: 11px;
+                letter-spacing: 0.02em;
+            }
+
+            .invoice-meta-box span {
+                font-size: 13px;
+                word-break: break-word;
+            }
+
+            .invoice-print .table {
+                font-size: 12px;
+            }
+
+            .invoice-print .table th,
+            .invoice-print .table td {
+                padding: 0.5rem 0.4rem;
+            }
+
+            .invoice-print footer {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .invoice-print {
+                margin: 0.5rem auto;
+                padding: 0 8px;
+            }
+
+            .invoice-brand img {
+                width: 140px;
+            }
+
+            .invoice-meta-box .col-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .invoice-meta-box .col-4:last-child {
+                margin-bottom: 0;
+            }
+
+            .invoice-print .alert {
+                font-size: 13px;
+                margin: 0.5rem 0;
+            }
+        }
+
+        @media print {
+            .invoice-print {
+                margin: 0;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .pay-now-btn,
+            .alert {
+                display: none !important;
+            }
+
+            .invoice-print .invoice-desc {
+                width: 370px;
+                max-width: 48%;
+            }
+
+            .invoice-meta-box .col-4 {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+                margin-bottom: 0;
+            }
         }
     </style>
 
@@ -58,24 +259,24 @@
     <div class="invoice invoice-print">
         @isset($data['invoice'][0])
         <div class="invoice-wrap">
-            <div class="row">
-                <div class="col-4">
-                    <div class="invoice-brand ">
+            <div class="row invoice-header">
+                <div class="col-12 col-md-4">
+                    <div class="invoice-brand">
                         <img src="/sk-assets/assets/images/frontend/front-logo.png" alt="Storage Keys">
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-sm-6 col-md-4 invoice-company">
                     <h5 class="title">Storage Keys</h5>
                     <div class="company-trn">TRN: 100368001200003</div>
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-sm-3 col-md-2 invoice-title-block">
                     <h5 class="title">Tax Invoice</h5>
-                    <span >{{$data['invoice'][0]->invoice_no}}</span>
+                    <span>{{$data['invoice'][0]->invoice_no}}</span>
                 </div>
 
-                <div class="col-2">
+                <div class="col-6 col-sm-3 col-md-2 invoice-pay-block">
                     @if($data['invoice'][0]->payment_status !== "Paid")
-                    <a href="{{url('pay-now/'.hashid_encode($data['invoice'][0]->id))}}" class="btn btn-primary" >Pay Now</a>
+                    <a href="{{url('pay-now/'.hashid_encode($data['invoice'][0]->id))}}" class="btn btn-primary pay-now-btn">Pay Now</a>
                         @endif
                 </div>
 
@@ -98,7 +299,7 @@
                     </div>
                 </div>
                 <div class="invoice-desc">
-                    <div class="row" style="background-color: #F5F6FA;padding: 15px;text-align: center;">
+                    <div class="row invoice-meta-box">
                         <div class="col-4">
                             <h6 class="title">DATE</h6>
                             <span>{{$data['invoice'][0]->invoice_date}}</span>
@@ -164,8 +365,7 @@
                         </tr>
                         </tfoot>
                     </table>
-                    <h4 class="text-center"
-                        style=" -webkit-transform: rotate(-15deg);">{{$data['invoice'][0]->payment_status}}</h4>
+                    <h4 class="text-center payment-status-stamp">{{$data['invoice'][0]->payment_status}}</h4>
                     <h5 class="title">VAT SUMMARY</h5>
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -176,13 +376,13 @@
                                         <th>VAT</th>
                                     </tr>
                                 </thead>
-                                <tobody>
+                                <tbody>
                                     <tr>
                                         <td>Federal Tax Authority @ {{$data['invoice'][0]->vat}}%</td>
                                         <td>{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}}</td>
                                         <td>{{number_format($data['invoice'][0]->vatAmount(), 2)}}</td>
                                     </tr>
-                                </tobody>
+                                </tbody>
                          </table>
 
                     </div>
