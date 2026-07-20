@@ -90,10 +90,15 @@
 
                 $.ajax({
                     url: '{{ url('admin/update-contract-template') }}',
-                    type: 'get',
-                    async: false,
+                    type: 'POST',
                     dataType: 'json',
-                    data: { id:id,temp_title:newtitle,temp_body:body,status:status},
+                    data: {
+                        id: id,
+                        temp_title: newtitle,
+                        temp_body: body,
+                        status: status,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
@@ -117,7 +122,7 @@
                         $(".btn-update").prop("disabled", false);
 
                     },
-                    error: function() {;
+                    error: function() {
                         toastr.error('any technical error');
                         $('.btn-update').text('Save Changes');
                         $(".btn-update").prop("disabled", false);

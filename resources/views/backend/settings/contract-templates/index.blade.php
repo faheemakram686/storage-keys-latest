@@ -132,10 +132,14 @@
                 var status= $('#status').find(":selected").val();
 
                 $.ajax({
-                    type: "get",
+                    type: "POST",
                     url: '{{ url('admin/save-contract-template') }}',
-                    data: { temp_title:newtitle,temp_body:body,status:status},
-                    async: false,
+                    data: {
+                        temp_title: newtitle,
+                        temp_body: body,
+                        status: status,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
                     dataType: 'json',
                     beforeSend: function() {
                         $('.btn-submit').text('Saving...');
@@ -147,6 +151,7 @@
                         if (data.success) {
                             getAllCities();
                             $('#CountryForm')[0].reset();
+                            myeditor.setData('');
                             $('.close').click();
                             toastr.success(data.success);
 
@@ -163,7 +168,7 @@
                         $(".btn-submit").prop("disabled", false);
                     },
 
-                    error: function() {;
+                    error: function() {
                         toastr.error('any technical error');
                         $('.btn-submit').text('Save');
                         $(".btn-submit").prop("disabled", false);

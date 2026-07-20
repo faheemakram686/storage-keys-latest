@@ -316,13 +316,13 @@ require __DIR__.'/auth.php';
 
 
     //Contract Template routes
-    Route::any('contract-template', [ContractTemplateController::class,'index'])->name('contract-template.index');
-    Route::any('save-contract-template', [ContractTemplateController::class,'saveContractTemplate']);
-    Route::any('get-contract-templates', [ContractTemplateController::class,'getContractTemplates']);
-    Route::any('get-contract-template', [ContractTemplateController::class,'getContractTemplate']);
-    Route::any('delete-contract-template', [ContractTemplateController::class,'deleteContractTemplate']);
-    Route::any('edit-contract-template/{id}', [ContractTemplateController::class,'editContractTemplate']);
-    Route::any('update-contract-template', [ContractTemplateController::class,'updateContractTemplate']);
+    Route::get('contract-template', [ContractTemplateController::class,'index'])->name('contract-template.index');
+    Route::post('save-contract-template', [ContractTemplateController::class,'saveContractTemplate']);
+    Route::get('get-contract-templates', [ContractTemplateController::class,'getContractTemplates']);
+    Route::get('get-contract-template', [ContractTemplateController::class,'getContractTemplate']);
+    Route::get('delete-contract-template', [ContractTemplateController::class,'deleteContractTemplate']);
+    Route::get('edit-contract-template/{id}', [ContractTemplateController::class,'editContractTemplate']);
+    Route::post('update-contract-template', [ContractTemplateController::class,'updateContractTemplate']);
 
 
     //Customer routes
