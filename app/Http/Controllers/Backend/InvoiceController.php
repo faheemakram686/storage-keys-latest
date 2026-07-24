@@ -153,33 +153,52 @@ class InvoiceController extends Controller
     }
     public function payNowByCustomer($id)
     {
-        $data['invoice'] = $this->invoice->getInvoice($id);
-        $data['payment'] = $this->payment->getPaymentSum($id);
-        if($data['invoice']['0'])
-        {
+        $invoices = $this->invoice->getInvoice($id);
+        $invoice = $invoices[0] ?? null;
 
-            $invoiceId = $data['invoice'][0]->id ?? null;
-            $grandTotal = $data['invoice'][0]->grand_total - $data['payment'] ?? 0;
-            $customerRef = $data['invoice'][0]->customer ?? "";
+        if (!$invoice) {
+            return redirect()
+                ->to(url('invoice-to-customer/' . hashid_encode($id)))
+                ->with('error', 'Invoice not found. Please try again.');
+        }
 
+        $invoice->loadMissing(['customer.primaryContact']);
+        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
+        $invoice->syncPaymentStatus();
 
-            $response = $this->paymentService->createOrder($grandTotal, 'AED', 1,$customerRef);
+        if ($invoice->isFullyPaid()) {
+            return redirect()
+                ->to(url('invoice-to-customer/' . hashid_encode($invoice->id)))
+                ->with('success', 'This invoice is already paid.');
+        }
 
+        $balance = $invoice->balanceAmount();
+        if ($balance <= 0) {
+            return redirect()
+                ->to(url('invoice-to-customer/' . hashid_encode($invoice->id)))
+                ->with('error', 'No outstanding balance to pay.');
+        }
 
-            if (!$response || empty($response['_links']['payment']['href'])) {
-                return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
-            }
+        if (!$invoice->customer) {
+            return redirect()
+                ->to(url('invoice-to-customer/' . hashid_encode($invoice->id)))
+                ->with('error', 'Customer details are missing for this invoice.');
+        }
 
-            $this->invoice->updateInvoiceRef((object)[
-                'id'          => $invoiceId,
-                'invoice_ref' => $response['reference'] ?? null,
-            ]);
+        $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer);
 
-            return redirect()->away($response['_links']['payment']['href']);
-        }else{
-                return back()->withErrors(['error' => 'There is issue in invoice. Please try again.']);
-             }
+        if (!$response || empty($response['_links']['payment']['href'])) {
+            return redirect()
+                ->to(url('invoice-to-customer/' . hashid_encode($invoice->id)))
+                ->with('error', 'Payment initiation failed. Please try again.');
+        }
 
+        $this->invoice->updateInvoiceRef((object) [
+            'id' => $invoice->id,
+            'invoice_ref' => $response['reference'] ?? null,
+        ]);
+
+        return redirect()->away($response['_links']['payment']['href']);
     }
 
     public function getCustomerInvoicesApi(Request $request)

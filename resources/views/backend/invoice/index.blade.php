@@ -187,7 +187,7 @@
                                 ' <div class="dropdown-menu dropdown-menu-right">'+
                                 '<ul class="link-list-opt no-bdr">'+
                                 '<li><a href={{url('/invoice-to-customer')}}/'+data[i].hashid +' ><em class="icon ni ni-edit"></em><span>View as Customer</span></a></li>'+
-                                '<li><a href={{url('admin/pdf-invoice')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
+                                '<li><a href={{url('admin/pdf-invoice')}}/'+data[i].hashid +' ><em class="icon ni ni-edit"></em><span>View as PDF</span></a></li>'+
                                 '<li><a href={{url('admin/edit-invoice')}}/'+data[i].id+' class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+
                                 '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                                 '</ul>'+

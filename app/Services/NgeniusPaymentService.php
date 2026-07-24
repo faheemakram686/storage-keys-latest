@@ -18,20 +18,23 @@ class NgeniusPaymentService
         $this->tokenService = $tokenService;
     }
 
-    public function createOrder($amount, $currency = 'AED',$redirectUrl = null,$customerRef = null)
+    public function createOrder($amount, $currency = 'AED', $redirectUrl = null, $customerRef = null)
     {
         $token = $this->tokenService->getAccessToken();
 
-        if($customerRef && $customerRef->customer_name){
-            $parts = explode(' ', trim($customerRef->customer_name), 2);
-
-            $first_name = $parts[0] ?? null;
-            $last_name  = $parts[1] ?? null;
-        }
-
-
         if (!$token) {
             Log::error('Failed to get Ngenius access token');
+            return false;
+        }
+
+        $billing = $this->resolveBillingDetails($customerRef);
+        $resolvedRedirectUrl = $this->resolveRedirectUrl($redirectUrl !== null);
+
+        if (!$resolvedRedirectUrl) {
+            Log::error('Ngenius redirect URL could not be resolved', [
+                'app_url' => config('app.url'),
+                'callback_url' => config('services.ngenius.callback_url'),
+            ]);
             return false;
         }
 
@@ -41,22 +44,21 @@ class NgeniusPaymentService
             'action' => 'SALE',
             'amount' => [
                 'currencyCode' => $currency,
-                'value' => $amount * 100, // Convert to minor units
+                'value' => (int) round(((float) $amount) * 100), // minor units
             ],
-            'emailAddress' => $customerRef->email ?? "",
+            'emailAddress' => $billing['email'],
             'merchantAttributes' => [
                 'maskPaymentInfo' => true,
-                'paymentAttempts' => "3",
-                'redirectUrl' => $redirectUrl!=null? route('invoice.redirect-response'):route('handle.redirect'),
+                'paymentAttempts' => '3',
+                'redirectUrl' => $resolvedRedirectUrl,
             ],
             'billingAddress' => [
-                    'firstName'=> $first_name ?? "",
-                    'lastName'=> $last_name ?? "",
-                    'address1'=> $customerRef->address ?? "",
-                    'city'=>$customerRef->city ?? "",
-                    'countryCode'=>$customerRef->country ?? "",
-            ]
-
+                'firstName' => $billing['first_name'],
+                'lastName' => $billing['last_name'],
+                'address1' => $billing['address'],
+                'city' => $billing['city'],
+                'countryCode' => $billing['country_code'],
+            ],
         ];
 
         try {
@@ -69,6 +71,7 @@ class NgeniusPaymentService
             if ($response->successful()) {
                 Log::info('Ngenius Order Creation successful', [
                     'status' => $response->status(),
+                    'redirectUrl' => $resolvedRedirectUrl,
                     'response' => $response->body(),
                 ]);
                 return $response->json();
@@ -77,20 +80,124 @@ class NgeniusPaymentService
             // If token might be expired, clear cache and retry once
             if ($response->status() === 401) {
                 $this->tokenService->clearTokenCache();
-                return $this->createOrder($amount, $currency,$redirectUrl,$customerRef);
+                return $this->createOrder($amount, $currency, $redirectUrl, $customerRef);
             }
 
             Log::error('Ngenius Order Creation Failed', [
                 'status' => $response->status(),
+                'redirectUrl' => $resolvedRedirectUrl,
                 'response' => $response->body(),
             ]);
 
             return false;
-
         } catch (\Exception $e) {
             Log::error('Ngenius Order Creation Exception', ['error' => $e->getMessage()]);
-            return $e->getMessage();
+            return false;
         }
+    }
+
+    /**
+     * N-Genius rejects hostname "localhost". Prefer the live request host
+     * (e.g. http://127.0.0.1:8000), then a configured public callback URL.
+     */
+    protected function resolveRedirectUrl(bool $forInvoice = true): ?string
+    {
+        $path = $forInvoice ? '/redirect-response' : '/redirectPaymentRef';
+
+        $candidates = [];
+
+        $configured = trim((string) config('services.ngenius.callback_url', ''));
+        if ($configured !== '') {
+            $candidates[] = $configured;
+        }
+
+        if (!app()->runningInConsole() && request()) {
+            $candidates[] = rtrim(request()->getSchemeAndHttpHost(), '/') . $path;
+        }
+
+        try {
+            $candidates[] = $forInvoice
+                ? route('invoice.redirect-response', [], true)
+                : route('handle.redirect', [], true);
+        } catch (\Throwable $e) {
+            // Named route may be unavailable in some contexts.
+        }
+
+        $candidates[] = rtrim((string) config('app.url'), '/') . $path;
+
+        foreach ($candidates as $url) {
+            $normalized = $this->normalizeRedirectUrl($url);
+            if ($this->isUsableRedirectUrl($normalized)) {
+                return $normalized;
+            }
+        }
+
+        return null;
+    }
+
+    protected function normalizeRedirectUrl(?string $url): ?string
+    {
+        if (!$url) {
+            return null;
+        }
+
+        // N-Genius rejects the hostname "localhost" but accepts 127.0.0.1.
+        return preg_replace('#://localhost(?=[:/]|$)#i', '://127.0.0.1', $url);
+    }
+
+    protected function isUsableRedirectUrl(?string $url): bool
+    {
+        if (!$url || !preg_match('#^https?://#i', $url)) {
+            return false;
+        }
+
+        if (stripos($url, 'yourdomain.com') !== false) {
+            return false;
+        }
+
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+
+        return $host !== '' && $host !== 'localhost';
+    }
+
+    protected function resolveBillingDetails($customerRef): array
+    {
+        $contact = null;
+        if (is_object($customerRef) && method_exists($customerRef, 'relationLoaded')) {
+            $contact = $customerRef->relationLoaded('primaryContact')
+                ? $customerRef->primaryContact
+                : (method_exists($customerRef, 'primaryContact') ? $customerRef->primaryContact()->first() : null);
+        }
+
+        $displayName = '';
+        if (is_object($customerRef)) {
+            $displayName = trim((string) (
+                $customerRef->customer_name
+                ?: $customerRef->company_name
+                ?: (($contact->first_name ?? '') . ' ' . ($contact->last_name ?? ''))
+            ));
+        }
+
+        $parts = $displayName !== '' ? explode(' ', $displayName, 2) : [];
+
+        $country = is_object($customerRef) ? strtoupper(trim((string) ($customerRef->country ?? ''))) : '';
+        // N-Genius expects an ISO country code; default to AE for this app.
+        if ($country === '' || strlen($country) !== 2) {
+            $country = 'AE';
+        }
+
+        return [
+            'email' => (string) (
+                (is_object($customerRef) ? ($customerRef->email ?? null) : null)
+                ?: ($contact->email ?? null)
+                ?: ''
+            ),
+            'first_name' => (string) ($contact->first_name ?? $parts[0] ?? ''),
+            'last_name' => (string) ($contact->last_name ?? $parts[1] ?? ''),
+            'address' => (string) (is_object($customerRef) ? ($customerRef->address ?? '') : ''),
+            'city' => (string) (is_object($customerRef) ? ($customerRef->city ?? '') : ''),
+            'country_code' => $country,
+        ];
     }
 
     /**
