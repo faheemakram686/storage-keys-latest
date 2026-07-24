@@ -15,13 +15,37 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
+            margin-bottom: 8px;
         }
-        .upload-documents-page input[type="file"].form-control {
+        .upload-documents-page .upload-file-wrap {
+            display: block;
             width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        /* Keep file inputs tappable on iOS/Android (flex shrink + tiny hit areas break them) */
+        .upload-documents-page input[type="file"].form-control {
+            display: block;
+            width: 100% !important;
             max-width: 100%;
-            height: auto;
-            min-height: 32px;
-            padding: 2px;
+            min-width: 0;
+            height: auto !important;
+            min-height: 44px;
+            padding: 8px;
+            font-size: 16px; /* prevents iOS zoom on focus */
+            -webkit-appearance: none;
+            appearance: none;
+            touch-action: manipulation;
+            cursor: pointer;
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+        .upload-documents-page .btn-submit {
+            position: relative;
+            z-index: 2;
+            touch-action: manipulation;
+            min-height: 44px;
         }
         @media (max-width: 991.98px) {
             .upload-documents-page.checkout-page {
@@ -53,121 +77,149 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8 details-section">
-                    <form action="{{ url('upload-estimate-documents') }}" method="POST" enctype="multipart/form-data" id="AttachmentForm">
+                    <form action="{{ url('upload-estimate-documents') }}" method="POST" enctype="multipart/form-data" id="AttachmentForm" novalidate>
                         @csrf
-                        <input type="hidden" name="estimate_id" id="estimate" value="{{$estimate->id}}">
-                    <div class="row reservations-sections justify-content-center">
-                        <div class="col-10 col-sm-8 col-md-6 term-section-header">
-                            Upload Required Document</div>
-                        <div class="col-12 term-section-body">
-                            <div class="row">
-                                <div class="col-12">
-                                    @if ($data['req_documents']->isEmpty())
-                                    <p>No documents are required for this estimate. You are all set!</p>
-                                    @else
-                                    <p>Please Upload your required documents for varification!</p>
-                                    @endif
-                                    @foreach ($data['req_documents'] as $doc)
-                                    @php $isUploaded = in_array((string) $doc->id, $data['uploaded_doc_ids'] ?? [], true); @endphp
-                                    <div class="row upload-doc-row">
-                                        <div class="col-12 col-sm-5 col-md-6">
-                                            <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault">{{$doc->title}}
-                                                    @if ($isUploaded)
-                                                    <span class="badge badge-success" style="background-color:#28a745;color:#fff;">Uploaded</span>
-                                                    @endif
-                                                </label>
+                        <input type="hidden" name="estimate_id" id="estimate" value="{{ $estimate->id }}">
+                        <div class="row reservations-sections justify-content-center">
+                            <div class="col-10 col-sm-8 col-md-6 term-section-header">
+                                Upload Required Document
+                            </div>
+                            <div class="col-12 term-section-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        @if ($data['req_documents']->isEmpty())
+                                            <p>No documents are required for this estimate. You are all set!</p>
+                                        @else
+                                            <p>Please Upload your required documents for varification!</p>
+                                        @endif
+                                        @foreach ($data['req_documents'] as $doc)
+                                            @php $isUploaded = in_array((string) $doc->id, $data['uploaded_doc_ids'] ?? [], true); @endphp
+                                            <div class="row upload-doc-row">
+                                                <div class="col-12 col-sm-5 col-md-6">
+                                                    <div class="form-check">
+                                                        <label class="check-container" for="estimate-doc-{{ $doc->id }}">{{ $doc->title }}
+                                                            @if ($isUploaded)
+                                                                <span class="badge badge-success" style="background-color:#28a745;color:#fff;">Uploaded</span>
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-sm-7 col-md-6">
+                                                    <div class="upload-file-wrap">
+                                                        {{-- Key files by document id so empty inputs omitted on mobile Safari cannot shift indexes --}}
+                                                        <input
+                                                            type="file"
+                                                            id="estimate-doc-{{ $doc->id }}"
+                                                            class="no-bottom-margin form-control {{ $isUploaded ? '' : 'required-document' }}"
+                                                            name="files[{{ $doc->id }}]"
+                                                            data-doc-id="{{ $doc->id }}"
+                                                            data-title="{{ $doc->title }}"
+                                                            accept="image/*,.pdf,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                                        >
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-sm-7 col-md-6 d-flex">
-                                            <input type="hidden" name="id[]" value="{{$doc->id}}">
-                                            <input type="file" class="no-bottom-margin form-control {{ $isUploaded ? '' : 'required-document' }}" name="files[]" data-title="{{ $doc->title }}" {{ $isUploaded ? '' : 'required' }}>
-                                        </div>
+                                            <div class="separator-item"></div>
+                                        @endforeach
                                     </div>
-                                    <div class="separator-item"></div>
-                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row submission-sections">
-                        @if (!$data['req_documents']->isEmpty())
-                        <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-qoutation btn-sm active btn-submit" type="submit">Upload Documents</button>
+                        <div class="row submission-sections">
+                            @if (!$data['req_documents']->isEmpty())
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button class="btn btn-qoutation btn-sm active btn-submit" type="submit">Upload Documents</button>
+                                </div>
+                            @endif
                         </div>
-                        @endif
-                    </div>
                     </form>
                 </div>
             </div>
-                @endforeach
         </div>
-
+        @endforeach
     </div>
-
     @endisset
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+@endsection
 
-    <script>
-        $(document).ready(function() {
+@section('javascriptWork')
+<script>
+    (function ($) {
+        $(function () {
+            var $form = $('#AttachmentForm');
+            if (!$form.length) {
+                return;
+            }
 
-            $('#AttachmentForm').on('submit', function(e) {
+            $form.on('submit', function (e) {
                 e.preventDefault();
+                e.stopPropagation();
 
-                let missing = [];
-                $('input.required-document').each(function() {
+                var missing = [];
+                $form.find('input.required-document').each(function () {
                     if (!this.files || !this.files.length) {
-                        missing.push($(this).data('title'));
+                        missing.push($(this).data('title') || 'Document');
                     }
                 });
 
                 if (missing.length) {
                     toastr.error('Please upload the following documents: ' + missing.join(', '));
-                    return;
+                    return false;
                 }
 
-                let formData = new FormData($('#AttachmentForm')[0]);
+                var formData = new FormData();
+                formData.append('_token', $form.find('input[name="_token"]').val());
+                formData.append('estimate_id', $form.find('input[name="estimate_id"]').val());
+
+                // Append only selected files, keyed by require-document id
+                $form.find('input[type="file"]').each(function () {
+                    if (this.files && this.files.length) {
+                        var docId = $(this).data('doc-id');
+                        formData.append('files[' + docId + ']', this.files[0]);
+                        formData.append('id[]', docId);
+                    }
+                });
 
                 $.ajax({
-                    type: "POST",
+                    type: 'POST',
                     url: '{{ url('upload-estimate-documents') }}',
                     data: formData,
                     contentType: false,
                     processData: false,
-                    beforeSend: function() {
-                        $('.btn-submit').text('Uploading...');
-                        $(".btn-submit").prop("disabled", true);
+                    cache: false,
+                    beforeSend: function () {
+                        $form.find('.btn-submit').text('Uploading...').prop('disabled', true);
                     },
-                    success: function(data) {
+                    success: function (data) {
                         if (data.success) {
-                            $('#AttachmentForm')[0].reset();
                             toastr.success(data.success);
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 window.location.href = "{{ url('/') }}";
                             }, 1500);
+                            return;
                         }
                         if (data.errors) {
                             toastr.error(data.errors);
                         }
                     },
-                    complete: function() {
-                        $(".btn-submit").html("Upload Documents");
-                        $(".btn-submit").prop("disabled", false);
+                    complete: function () {
+                        $form.find('.btn-submit').html('Upload Documents').prop('disabled', false);
                     },
-                    error: function(xhr) {
-                        let message = 'A technical error occurred. Please try again.';
+                    error: function (xhr) {
+                        var message = 'A technical error occurred. Please try again.';
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
                             message = typeof xhr.responseJSON.errors === 'string'
                                 ? xhr.responseJSON.errors
                                 : Object.values(xhr.responseJSON.errors).flat().join(' ');
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
                         }
                         toastr.error(message);
                     }
                 });
+
+                return false;
             });
-
         });
-    </script>
-
-
+    })(jQuery);
+</script>
 @endsection

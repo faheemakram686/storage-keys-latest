@@ -7,6 +7,7 @@ use App\Filters\Core\RoleFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Core\Auth\Role\RoleRequest;
 use App\Models\Core\Auth\Role;
+use App\Models\Core\Auth\Type;
 use App\Notifications\Core\Role\RoleNotification;
 use App\Services\Core\Auth\RoleService;
 use Illuminate\Http\Request;
@@ -50,8 +51,12 @@ class RoleController extends Controller
 
     public function storesk(Request $request)
     {
-       $request['alias']=$request->name;
-       $request['type_id']=3;
+        $adminTypeId = Type::findByAlias('admin')->id;
+        $request->merge([
+            'alias' => $request->name,
+            'type_id' => $adminTypeId,
+        ]);
+
         $this->service
             ->beforeCreated()
             ->save(request()->except('is_default', 'is_admin'));
@@ -61,6 +66,7 @@ class RoleController extends Controller
             ->when(count($request->get('permissions', [])), function (RoleService $service) use ($request) {
                 $service->assignPermissions($request->get('permissions'));
             });
+
         return redirect()->route('roles.index')->withSuccess(['Record Saved successfully']);
     }
     public function show(Role $role)
@@ -107,25 +113,20 @@ class RoleController extends Controller
 
     public function updatesk(Request $request)
     {
+        $role = Role::findOrFail($request->id);
+        $adminTypeId = Type::findByAlias('admin')->id;
 
-        $role = Role::find($request->id);
-        $role->id = $request->id;
-        $role->name = $request->name;
-        $role->alias = $request->name;
-        $role->type_id = 3;
-        $permissionss=[];
-        foreach ($request->permissions as $key => $permission){
-            $arr[$key] = ["permission_id" => $key,];
-
-        }
-
+        $request->merge([
+            'alias' => $request->name,
+            'type_id' => $adminTypeId,
+        ]);
 
         $this->service
             ->setModel($role)
             ->beforeUpdated()
             ->update();
-        return redirect()->route('roles.index')->withSuccess(['Record Updated successfully']);
 
+        return redirect()->route('roles.index')->withSuccess(['Record Updated successfully']);
     }
 
     public function destroy(Role $role, RoleRequest $request)

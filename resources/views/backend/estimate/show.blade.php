@@ -104,6 +104,14 @@
                                                                 <li><em class="icon ni ni-call-fill"></em><span>{{$data['estimate'][0]->customer->phone}}</span></li>
                                                             </ul>
                                                         </div>
+                                                        <div class="invoice-contact-info mt-3">
+                                                            <span class="overline-title">Alternative Contact</span>
+                                                            <ul class="list-plain">
+                                                                <li><span>Name:</span> <span>{{ $data['estimate'][0]->alt_contact_name ?: 'N/A' }}</span></li>
+                                                                <li><em class="icon ni ni-emails-fill"></em><span>{{ $data['estimate'][0]->alt_contact_email ?: 'N/A' }}</span></li>
+                                                                <li><em class="icon ni ni-call-fill"></em><span>{{ $data['estimate'][0]->alt_contact_mobile ?: 'N/A' }}</span></li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                     <div class="invoice-desc">
                                                         <h4 class="title">Estimate</h4>

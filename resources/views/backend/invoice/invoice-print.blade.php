@@ -105,6 +105,22 @@
             margin: 1rem 0;
         }
 
+        .invoice-print .table td.invoice-note-cell {
+            white-space: normal;
+            vertical-align: top;
+            text-align: left;
+            padding-right: 1rem;
+        }
+
+        .invoice-note-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8094ae;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+        }
+
         @media (min-width: 768px) {
             .invoice-print {
                 margin: 2rem auto;
@@ -297,6 +313,10 @@
                             <li><em class="icon ni ni-call-fill fs-14px"></em><span>{{$data['invoice'][0]->customer->phone}}</span></li>
                         </ul>
                     </div>
+                    <span class="overline-title" style="display:block;margin-top:1rem;">Bill From</span>
+                    <div class="invoice-contact-info">
+                        <h6 class="title">MUFATEEH AL MAKHAZAN</h6>
+                    </div>
                 </div>
                 <div class="invoice-desc">
                     <div class="row invoice-meta-box">
@@ -343,23 +363,25 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="3"></td>
+                            <td colspan="3" rowspan="4" class="invoice-note-cell">
+                                @if($data['invoice'][0]->note)
+                                    <div class="invoice-note-label">Invoice Note</div>
+                                    <div class="nk-notes ff-italic fs-12px text-soft">{{ $data['invoice'][0]->note }}</div>
+                                @endif
+                            </td>
                             <td colspan="2">NET SUBTOTAL</td>
                             <td>{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}} AED</td>
                         </tr>
 
                         <tr>
-                            <td colspan="3"></td>
                             <td colspan="2">VAT TOTAL ({{strtoupper($data['invoice'][0]->vat_type ?? 'exclusive')}})</td>
                             <td>{{number_format($data['invoice'][0]->vatAmount(), 2)}} AED</td>
                         </tr>
                         <tr>
-                            <td colspan="3"></td>
                             <td colspan="2">TOTAL</td>
                             <td>{{$data['invoice'][0]->grand_total}} AED</td>
                         </tr>
                         <tr>
-                            <td colspan="3"></td>
                             <td colspan="2">TOTAL DUE</td>
                             <td><h6>AED {{$data['invoice'][0]->grand_total}}</h6></td>
                         </tr>
@@ -388,10 +410,6 @@
                     </div>
                     <div class="table-responsive">
                     </div>
-
-                    @if($data['invoice'][0]->note)
-                        <div class="nk-notes ff-italic fs-12px text-soft">{{ $data['invoice'][0]->note }}</div>
-                    @endif
 
                 </div>
             </div><!-- .invoice-bills -->

@@ -136,6 +136,9 @@ class LeadClass implements LeadInterface {
         $lead->phone = $request->phone;
         $lead->mobile1 = $request->mobile1;
         $lead->mobile2 = $request->mobile2 ?? "";
+        $lead->alt_contact_name = $request->alt_contact_name ?? null;
+        $lead->alt_contact_email = $request->alt_contact_email ?? null;
+        $lead->alt_contact_mobile = $request->alt_contact_mobile ?? null;
         $lead->price = $request->term_length ?? $request->price;
         $lead->addon = $this->toCsvOrNull($request->addon);
         $this->insurancePricing->applyFromRequest($lead, $request);

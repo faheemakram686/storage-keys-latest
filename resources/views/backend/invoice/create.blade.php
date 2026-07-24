@@ -141,10 +141,10 @@
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">
                                                     <label for="unlimited_cycles" class="mr-1">Infinity</label>
-                                                    <input id="unlimited_cycles" name="no_cycle" value="infinity"  checked  type="checkbox">
+                                                    <input id="unlimited_cycles" name="unlimited_cycles" value="1" checked type="checkbox">
                                                 </div>
                                             </div>
-                                            <input id="no_cycle" name="no_cycle" type="number" step="any" value="0" class="form-control">
+                                            <input id="no_cycle" name="no_cycle" type="number" step="1" min="0" value="0" class="form-control" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -305,7 +305,7 @@
                 }
             });
 
-            if($('input[name="unlimited_cycles"]:checked'))
+            if($('#unlimited_cycles').is(':checked'))
             {
                 $('#no_cycle').attr('disabled', 'disabled');
                 // checked

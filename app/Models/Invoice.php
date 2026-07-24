@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,8 @@ class Invoice extends Model
         'no_cycle',
         'duration',
         'duration_type',
+        'next_recurring_date',
+        'parent_invoice_id',
         'invoice_date',
         'invoice_no',
         'user_id',
@@ -59,6 +62,89 @@ class Invoice extends Model
         return 'INV-' . str_pad($newInvoiceNumber, 4, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Advance a date by this invoice's recurring interval.
+     */
+    public function calculateNextRecurringDate($fromDate = null): ?string
+    {
+        if ($this->recurring === null || $this->recurring === '' || $this->recurring === '0') {
+            return null;
+        }
+
+        $date = $fromDate
+            ? Carbon::parse($fromDate)
+            : Carbon::parse($this->invoice_date ?? now());
+
+        if ($this->recurring === 'custom') {
+            $amount = max(1, (int) $this->duration);
+
+            return match ($this->duration_type) {
+                'days' => $date->addDays($amount)->format('Y-m-d'),
+                'weeks' => $date->addWeeks($amount)->format('Y-m-d'),
+                'years' => $date->addYears($amount)->format('Y-m-d'),
+                default => $date->addMonths($amount)->format('Y-m-d'),
+            };
+        }
+
+        $months = max(1, (int) $this->recurring);
+
+        return $date->addMonths($months)->format('Y-m-d');
+    }
+
+    public function isRecurringActive(): bool
+    {
+        if ($this->recurring === null || $this->recurring === '' || $this->recurring === '0') {
+            return false;
+        }
+
+        if ($this->no_cycle === 'infinity') {
+            return true;
+        }
+
+        return (int) $this->no_cycle > 0;
+    }
+
+    /**
+     * Human-readable billing period, e.g. "Every 3 months".
+     */
+    public function recurringIntervalLabel(): ?string
+    {
+        if ($this->recurring === null || $this->recurring === '' || $this->recurring === '0') {
+            return null;
+        }
+
+        if ($this->recurring === 'custom') {
+            $amount = max(1, (int) $this->duration);
+            $type = $this->duration_type ?: 'months';
+            $singular = rtrim($type, 's');
+            $unit = $amount === 1 ? $singular : $type;
+
+            return "Every {$amount} {$unit}";
+        }
+
+        $months = max(1, (int) $this->recurring);
+
+        return $months === 1 ? 'Every 1 month' : "Every {$months} months";
+    }
+
+    /**
+     * Whole months past due_date while payment is not fully paid; null if paid or not overdue.
+     */
+    public function monthsOverdue(): ?int
+    {
+        if ($this->isFullyPaid() || !$this->due_date) {
+            return null;
+        }
+
+        $due = Carbon::parse($this->due_date)->startOfDay();
+        $today = Carbon::today();
+
+        if ($today->lte($due)) {
+            return null;
+        }
+
+        return max(1, (int) $due->diffInMonths($today));
+    }
 
     public function customer()
     {
@@ -87,6 +173,14 @@ class Invoice extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class, 'invoice_id', 'id');
+    }
+    public function parentInvoice()
+    {
+        return $this->belongsTo(self::class, 'parent_invoice_id');
+    }
+    public function childInvoices()
+    {
+        return $this->hasMany(self::class, 'parent_invoice_id');
     }
 
 

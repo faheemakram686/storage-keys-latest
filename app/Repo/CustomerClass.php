@@ -177,6 +177,26 @@ class CustomerClass implements CustomerInterface {
                 $lead = Lead::find($request->lead_id);
                 $lead->customer_id =  $customer->id;
                 $lead->save();
+
+                $altEmail = trim((string) ($lead->alt_contact_email ?? ''));
+                $altName = trim((string) ($lead->alt_contact_name ?? ''));
+                $altMobile = trim((string) ($lead->alt_contact_mobile ?? ''));
+                if ($altEmail !== '' && strcasecmp($altEmail, (string) $request->email) !== 0) {
+                    $emailExists = Contact::where('email', $altEmail)->exists();
+                    if (!$emailExists) {
+                        $nameParts = preg_split('/\s+/', $altName, 2);
+                        $altContact = new Contact();
+                        $altContact->customer_id = $customer->id;
+                        $altContact->first_name = $nameParts[0] ?? $altName;
+                        $altContact->last_name = $nameParts[1] ?? '';
+                        $altContact->email = $altEmail;
+                        $altContact->phone = $altMobile !== '' ? $altMobile : null;
+                        $altContact->contact_type = 'general';
+                        $altContact->status = $request->status;
+                        $altContact->save();
+                    }
+                }
+
                 if($request->dont_welcome != 1)
                 {
                     $contact_email = Contact::find($contact->id);

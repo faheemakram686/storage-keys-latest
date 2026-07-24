@@ -60,12 +60,15 @@ trait UserMethod
         }
 
         if (is_string($role)) {
-            return $this->roles()->attach(
+            $this->roles()->attach(
                 Role::findByName($role)->id
             );
+            return true;
         }
 
-        return $this->roles()->attach($role instanceof Role ? $role->id : $role);
+        $this->roles()->attach($role instanceof Role ? $role->id : $role);
+
+        return true;
     }
 
     public function isBrandAdmin($brand_id = null)

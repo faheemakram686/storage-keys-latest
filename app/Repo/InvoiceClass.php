@@ -36,12 +36,8 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->contract_id = $request->contract_id;
         $invoice->order_id = $request->order_id;
         $invoice->recurring = $request->recurring;
-        $invoice->no_cycle = $request->no_cycle;
-        if($request->recurring == 'custom')
-        {
-            $invoice->duration = $request->duration;
-            $invoice->duration_type = $request->duration_type;
-        }
+        $invoice->no_cycle = $this->resolveNoCycle($request);
+        $this->applyRecurringSettings($invoice, $request);
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
@@ -170,6 +166,8 @@ class InvoiceClass implements InvoiceInterface {
             $invoice->applyResolvedPaymentStatus();
             $balance = $invoice->balanceAmount();
             $invoice->setAttribute('balance', $balance);
+            $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
+            $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
 
             if ($balance > 0) {
                 $pendingCount++;
@@ -201,6 +199,8 @@ class InvoiceClass implements InvoiceInterface {
 
         $invoices->each(function ($invoice) {
             $invoice->syncPaymentStatus();
+            $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
+            $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
         });
 
         return $invoices;
@@ -293,12 +293,8 @@ class InvoiceClass implements InvoiceInterface {
         $invoice->contract_id = $request->contract_id;
         $invoice->order_id = $request->order_id;
         $invoice->recurring = $request->recurring;
-        $invoice->no_cycle = $request->no_cycle;
-        if($request->recurring == 'custom')
-        {
-            $invoice->duration = $request->duration;
-            $invoice->duration_type = $request->duration_type;
-        }
+        $invoice->no_cycle = $this->resolveNoCycle($request);
+        $this->applyRecurringSettings($invoice, $request);
         $invoice->invoice_date = $request->invoice_date;
         $invoice->invoice_no = $request->invoice_no;
         $invoice->user_id = $request->sale_agent;
@@ -332,6 +328,43 @@ class InvoiceClass implements InvoiceInterface {
             }
         }
 //        return 1;
+    }
+
+    private function resolveNoCycle($request): ?string
+    {
+        if ($request->boolean('unlimited_cycles') || $request->no_cycle === 'infinity') {
+            return 'infinity';
+        }
+
+        if ($request->no_cycle === null || $request->no_cycle === '') {
+            return null;
+        }
+
+        return (string) $request->no_cycle;
+    }
+
+    private function applyRecurringSettings(Invoice $invoice, $request): void
+    {
+        if ($request->recurring == '0' || $request->recurring === null || $request->recurring === '') {
+            $invoice->duration = null;
+            $invoice->duration_type = null;
+            $invoice->next_recurring_date = null;
+            return;
+        }
+
+        if ($request->recurring == 'custom') {
+            $invoice->duration = $request->duration;
+            $invoice->duration_type = $request->duration_type;
+        } else {
+            $invoice->duration = null;
+            $invoice->duration_type = null;
+        }
+
+        if ($invoice->isRecurringActive()) {
+            $invoice->next_recurring_date = $invoice->calculateNextRecurringDate($request->invoice_date);
+        } else {
+            $invoice->next_recurring_date = null;
+        }
     }
 
     private function applyVatTotals(Invoice $invoice, $request): void

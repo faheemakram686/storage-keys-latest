@@ -68,9 +68,8 @@ class UserClass implements UserInterface {
             $user->status        = $request->status;
             $user->save();
 
-           
             $role = Role::findOrFail($request->role);
-            $user->assignRole($role);
+            $user->roles()->sync([$role->id]);
 
             DB::commit();
 
@@ -92,27 +91,25 @@ class UserClass implements UserInterface {
 
     public function getUser()
     {
-        // TODO: Implement getUser() method.
-        $qry=User::with('role');
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        return User::with('roles')
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->get();
     }
 
     public function deleteUser($id)
     {
-        // TODO: Implement deleteUser() method.
-        $user=\App\Models\Core\Auth\User::find($id);
-        $user->is_deleted=1;
+        $user = User::findOrFail($id);
+        $user->is_deleted = 1;
         $user->save();
         $user->delete();
+
         return 1;
     }
 
     public function editUser($id)
     {
-        // TODO: Implement editUser() method.
-        return $country = User::find($id);
+        return User::with('roles')->findOrFail($id);
     }
 
     public function updateUser($request)
@@ -173,9 +170,8 @@ class UserClass implements UserInterface {
 
             $user->save();
 
-
             $role = Role::findOrFail($request->e_role);
-            $user->assignRole([$role->id]);
+            $user->roles()->sync([$role->id]);
 
             DB::commit();
 

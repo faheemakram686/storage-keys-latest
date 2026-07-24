@@ -73,7 +73,6 @@ require __DIR__.'/auth.php';
 //  Route::any('update-role', [Backend\RolesController::class, 'updateRole'])->name('update-role');
     Route::any('update-role', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'updatesk'])->name('update-role');
     Route::any('delete-role', [Backend\RolesController::class, 'deleteRole'])->name('delete-role');
-    Route::any('delete-role/{id}', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'destroysk'])->name('delete-role');
 
     //users routes
     Route::resource('users', Backend\UserController::class);

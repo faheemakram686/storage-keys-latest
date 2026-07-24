@@ -83,6 +83,12 @@ class ContractClass implements ContractInterface {
             $contract->start_date = $request->s_date;
             $contract->end_date = $request->e_date;
             $contract->description = $request->description;
+            $contract->alt_contact_name = $request->alt_contact_name
+                ?? ($estimate->alt_contact_name ?? null);
+            $contract->alt_contact_email = $request->alt_contact_email
+                ?? ($estimate->alt_contact_email ?? null);
+            $contract->alt_contact_mobile = $request->alt_contact_mobile
+                ?? ($estimate->alt_contact_mobile ?? null);
             $contract->is_accepted = 0;
             $contract->status = 0;
             $contract->save();
@@ -244,6 +250,18 @@ class ContractClass implements ContractInterface {
         $contract->start_date = $request->s_date;
         $contract->end_date = $request->e_date;
         $contract->description = $request->description;
+        if ($request->has('alt_contact_name') || $request->has('alt_contact_email') || $request->has('alt_contact_mobile')) {
+            $contract->alt_contact_name = $request->alt_contact_name ?? null;
+            $contract->alt_contact_email = $request->alt_contact_email ?? null;
+            $contract->alt_contact_mobile = $request->alt_contact_mobile ?? null;
+        } elseif ($request->estimate_id) {
+            $estimateForAlt = isset($estimate) ? $estimate : Estimate::find($request->estimate_id);
+            if ($estimateForAlt) {
+                $contract->alt_contact_name = $estimateForAlt->alt_contact_name ?? $contract->alt_contact_name;
+                $contract->alt_contact_email = $estimateForAlt->alt_contact_email ?? $contract->alt_contact_email;
+                $contract->alt_contact_mobile = $estimateForAlt->alt_contact_mobile ?? $contract->alt_contact_mobile;
+            }
+        }
         $contract->status=$request->status;
         $contract->save();
         return 1;

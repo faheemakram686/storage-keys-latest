@@ -110,6 +110,8 @@ class ReportClass implements ReportInterface {
 
         $invoices = $invoices->get()->each(function ($invoice) {
             $invoice->applyResolvedPaymentStatus();
+            $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
+            $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
         });
 
         if ($request->payment_status !== null && $request->payment_status !== '') {
@@ -151,6 +153,8 @@ class ReportClass implements ReportInterface {
 
         $invoices = $invoices->get()->each(function ($invoice) {
             $invoice->applyResolvedPaymentStatus();
+            $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
+            $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
         });
 
         if ($request->payment_status !== null && $request->payment_status !== '') {

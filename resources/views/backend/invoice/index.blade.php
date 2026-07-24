@@ -166,7 +166,7 @@
 
                             html += '<tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no + ' '+((data[i].recurring != '0')? '<span class="badge badge-outline-primary">Recurring</span></a>':' ') +'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/invoice/detail')}}/' + data[i].id + '>'+data[i].invoice_no + '</a> '+((data[i].recurring != '0')? '<span class="badge badge-outline-primary">Recurring</span>'+(data[i].recurring_interval_label ? ' <span class="badge badge-outline-info">'+data[i].recurring_interval_label+'</span>' : '')+(data[i].no_cycle != null && data[i].no_cycle !== '' ? ' <span class="badge badge-outline-primary">Cycles Remaining: '+data[i].no_cycle+'</span>' : '') : '')+(data[i].months_overdue ? ' <span class="badge badge-outline-danger">'+data[i].months_overdue+(data[i].months_overdue==1?' month':' months')+' overdue</span>' : '') +'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+ (customerId ? '<a href={{url('admin/customer/profile')}}/' + customerId + '>'+customerName+'</a>' : customerName) +'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"> '+ contractOrOrderHtml +' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].invoice_date+'</td>'+

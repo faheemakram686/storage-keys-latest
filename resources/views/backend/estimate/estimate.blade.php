@@ -121,6 +121,32 @@
                                         </div>
                                         <div class="row reservations-sections">
                                             <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
+                                                Alternative Contact Information</div>
+                                            <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
+                                                <div class="row">
+                                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
+                                                        <div class="row mt-3">
+                                                            <div class="col-6">
+                                                                <label class="">Name</label>
+                                                                <input type="text" class="form-control" name="alt_contact_name" value="{{$lead->alt_contact_name}}" style="height:35px;">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="">Email</label>
+                                                                <input type="email" class="form-control" name="alt_contact_email" value="{{$lead->alt_contact_email}}" style="height:35px;">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6">
+                                                                <label class="">Mobile number</label>
+                                                                <input type="text" class="form-control" name="alt_contact_mobile" value="{{$lead->alt_contact_mobile}}" style="height:35px;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row reservations-sections">
+                                            <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
                                                 Storage Unit Pricing </div>
                                             <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
                                                 <div class="row">

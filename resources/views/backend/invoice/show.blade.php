@@ -6,6 +6,20 @@
             pointer-events: none;
             cursor: default;
         }
+        .invoice-note-cell {
+            white-space: normal;
+            vertical-align: top !important;
+            text-align: left;
+            padding-right: 1rem;
+        }
+        .invoice-note-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8094ae;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+        }
     </style>
 
 
@@ -31,25 +45,16 @@
                                                 <h4 class="nk-block-title page-title">Invoice <strong class="text-primary small">#{{$data['invoice'][0]->invoice_no}}</strong>  <span class="badge {{ $data['invoice'][0]->paymentStatusBadgeClass() }}">{{ $data['invoice'][0]->payment_status }}</span></h4>
                                                 @if($data['invoice'][0]->recurring != '0')
                                                 <span class="badge badge-outline-primary">Recurring</span>
+                                                @if($data['invoice'][0]->recurringIntervalLabel())
+                                                <span class="badge badge-outline-info">{{ $data['invoice'][0]->recurringIntervalLabel() }}</span>
+                                                @endif
                                                 <span class="badge badge-outline-primary">Cycles Remaining: {{ $data['invoice'][0]->no_cycle}} </span>
-                                                    @php
-                                                        $currentDate =   \Carbon\Carbon::create($data['invoice'][0]->invoice_date);
-                                                         if($data['invoice'][0]->duration_type=="days")
-                                                            {
-                                                                  $oneMonthLater = $currentDate->addDays($data['invoice'][0]->duration);
-                                                            }elseif($data['invoice'][0]->duration_type=="months")
-                                                            {
-                                                                  $oneMonthLater = $currentDate->addMonths($data['invoice'][0]->duration);
-                                                            }elseif($data['invoice'][0]->duration_type=="years")
-                                                            {
-                                                                  $oneMonthLater = $currentDate->addYears($data['invoice'][0]->duration);
-                                                            }elseif($data['invoice'][0]->duration == null && $data['invoice'][0]->duration_type== null)
-                                                            {
-                                                                  $oneMonthLater = $currentDate->addMonths($data['invoice'][0]->recurring);
-                                                            }
-                                                        $nextInvoiceDate=$oneMonthLater->format('Y-m-d');
-                                                    @endphp
-                                                <span class="badge badge-outline-primary"> <em class="icon ni ni-help" data-toggle="tooltip" data-placement="top" title="Invoice will be recreated on specific hour of the day"></em>  Next Invoice Date: {{$nextInvoiceDate}}</span>
+                                                @if($data['invoice'][0]->next_recurring_date)
+                                                <span class="badge badge-outline-primary"> <em class="icon ni ni-help" data-toggle="tooltip" data-placement="top" title="Invoice will be recreated on specific hour of the day"></em>  Next Invoice Date: {{ $data['invoice'][0]->next_recurring_date }}</span>
+                                                @endif
+                                                @endif
+                                                @if($monthsDue = $data['invoice'][0]->monthsOverdue())
+                                                <span class="badge badge-outline-danger">{{ $monthsDue }} {{ $monthsDue === 1 ? 'month' : 'months' }} overdue</span>
                                                 @endif
 
                                                 <div class="nk-block-des text-soft">
@@ -80,7 +85,7 @@
 {{--                                                </div>--}}
                                                 <div class="invoice-head">
                                                     <div class="invoice-contact">
-                                                        <span class="overline-title">Invoice To</span>
+                                                        <span class="overline-title">Bill To</span>
                                                         <div class="invoice-contact-info">
                                                             @if($data['invoice'][0]->customer->customer_type == 'company')
                                                                 <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
@@ -92,6 +97,10 @@
                                                                 <li><em class="icon ni ni-emails-fill"></em><span>{{$data['invoice'][0]->customer->primaryContact->email}}</span></li>
                                                                 <li><em class="icon ni ni-call-fill"></em><span>{{$data['invoice'][0]->customer->primaryContact->phone}}</span></li>
                                                             </ul>
+                                                        </div>
+                                                        <span class="overline-title" style="display:block;margin-top:1rem;">Bill From</span>
+                                                        <div class="invoice-contact-info">
+                                                            <h4 class="title">MUFATEEH AL MAKHAZAN</h4>
                                                         </div>
                                                     </div>
                                                     <div class="invoice-desc mt-5">
@@ -146,35 +155,35 @@
                                                             </tbody>
                                                             <tfoot>
                                                             <tr>
-                                                                <td colspan="5"></td>
+                                                                <td colspan="5" rowspan="{{ isset($data['payment']) ? 5 : 3 }}" class="invoice-note-cell">
+                                                                    @if($data['invoice'][0]->note)
+                                                                        <div class="invoice-note-label">Invoice Note</div>
+                                                                        <div class="nk-notes ff-italic fs-12px text-soft">{{ $data['invoice'][0]->note }}</div>
+                                                                    @endif
+                                                                </td>
                                                                 <td colspan="2">Net Subtotal</td>
                                                                 <td id="subtotal" >{{number_format($data['invoice'][0]->taxableSubtotal(), 2)}} AED</td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="5"></td>
                                                                 <td colspan="2">VAT ({{ ucfirst($data['invoice'][0]->vat_type ?? 'exclusive') }})</td>
                                                                 <td id="vat" >{{number_format($data['invoice'][0]->vatAmount(), 2)}} AED ({{$data['invoice'][0]->vat}}%)</td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="5"></td>
                                                                 <td colspan="2">Grand Total</td>
                                                                 <td id="grandtotal" >{{$data['invoice'][0]->grand_total}} AED</td>
                                                             </tr>
                                                             @isset($data['payment'])
                                                             <tr>
-                                                                <td colspan="5"></td>
                                                                 <td colspan="2">Amount Received</td>
                                                                 <td id="amount_received " >{{ $data['payment']}} AED</td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="5"></td>
                                                                 <td colspan="2"  class="text-danger">Amount Due</td>
                                                                 <td id="amount_due" class="text-danger" >{{ $data['invoice'][0]->grand_total - $data['payment']}} AED</td>
                                                             </tr>
                                                             @endisset
                                                             </tfoot>
                                                         </table>
-                                                        <div class="nk-notes ff-italic fs-12px text-soft"> {{$data['invoice'][0]->note}}</div>
                                                     </div>
                                                 </div><!-- .invoice-bills -->
                                             </div><!-- .invoice-wrap -->

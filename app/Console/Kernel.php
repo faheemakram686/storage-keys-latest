@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Backend\PaymentReminder;
+use App\Console\Commands\Backend\GenerateRecurringInvoices;
 use App\Console\Commands\Backend\RecalculateStorageUnitStatus;
 use App\Jobs\Tenant\AssignLeaveByStatusJob;
 use App\Jobs\Tenant\AssignLeaveJob;
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         PaymentReminder::class,
+        GenerateRecurringInvoices::class,
         RecalculateStorageUnitStatus::class,
     ];
 
@@ -35,6 +37,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('payment:reminder')
+            ->daily();
+
+        $schedule->command('invoice:recurring')
             ->daily();
 
         $schedule->command('queue:work --queue=high,default --tries=2 --stop-when-empty')->everyMinute()->withoutOverlapping();

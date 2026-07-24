@@ -97,6 +97,27 @@
                                                 <span class="data-value text-soft">{{ $lead->phone ?? 'N/A' }}</span>
                                             </div>
                                         </div><!-- data-item -->
+                                        <div class="data-head mt-3">
+                                            <h6 class="overline-title">Alternative Contact Information</h6>
+                                        </div>
+                                        <div class="data-item">
+                                            <div class="data-col">
+                                                <span class="data-label">Name</span>
+                                                <span class="data-value">{{ $lead->alt_contact_name ?: 'N/A' }}</span>
+                                            </div>
+                                        </div><!-- data-item -->
+                                        <div class="data-item">
+                                            <div class="data-col">
+                                                <span class="data-label">Email</span>
+                                                <span class="data-value">{{ $lead->alt_contact_email ?: 'N/A' }}</span>
+                                            </div>
+                                        </div><!-- data-item -->
+                                        <div class="data-item">
+                                            <div class="data-col">
+                                                <span class="data-label">Mobile number</span>
+                                                <span class="data-value text-soft">{{ $lead->alt_contact_mobile ?: 'N/A' }}</span>
+                                            </div>
+                                        </div><!-- data-item -->
                                         <div class="data-item">
                                             <div class="data-col">
                                                 <span class="data-label">Requested Date</span>

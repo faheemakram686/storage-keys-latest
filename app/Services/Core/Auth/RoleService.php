@@ -61,9 +61,9 @@ class RoleService extends BaseService
 
         $this->when($condition, function (RoleService $service) {
             $service->notify('roles_updated');
-        })->when(count(request()->get('permissions', [])), function (RoleService $service) {
-            $service->syncPermissions(request()->get('permissions'));
         });
+
+        $this->syncPermissions(request()->get('permissions', []));
 
         $this->model->save();
 

@@ -144,13 +144,12 @@
             $('#changeAssigneeForm').on('submit', function(e) {
 
                 e.preventDefault();
-                var formData=$('#changeAssigneeForm').serialize()
+                var formData = $('#changeAssigneeForm').serialize();
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: '{{ url('admin/assign-role') }}',
                     data: formData,
-                    contentType: false,
-                    processData: false,
+                    dataType: 'json',
                     beforeSend: function() {
                         $('.btn-submit').text('Saving...');
                         $(".btn-submit").prop("disabled", true);
@@ -176,8 +175,11 @@
                         $(".btn-submit").prop("disabled", false);
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        var message = (xhr.responseJSON && xhr.responseJSON.errors)
+                            ? xhr.responseJSON.errors
+                            : 'any technical error';
+                        toastr.error(message);
                         $('.btn-submit').text('Save');
                         $(".btn-submit").prop("disabled", false);
                     }
@@ -261,22 +263,29 @@
                 var id = $(this).attr('data');
                 $.ajax({
                     url: '{{ url('admin/delete-role') }}',
-                    type: 'get',
-                    async: false,
+                    type: 'post',
                     dataType: 'json',
-                    data: { id: id},
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
                     success: function(data) {
                         if (data.success) {
                             getAllCities();
                             $('.close').click();
                             toastr.success('Record deleted successfully');
-                        }else{
-                            toastr.success('Record not deleted');
+                        } else if (data.errors) {
+                            toastr.error(data.errors);
+                        } else {
+                            toastr.error('Record not deleted');
                         }
 
                     },
-                    error: function() {
-                        toastr.error('something went wrong');
+                    error: function(xhr) {
+                        var message = (xhr.responseJSON && xhr.responseJSON.errors)
+                            ? xhr.responseJSON.errors
+                            : 'something went wrong';
+                        toastr.error(message);
                     }
 
                 });
@@ -323,13 +332,12 @@
 
             $('#deattachUserForm').on('submit', function(e) {
                 e.preventDefault();
-                var formData=$('#deattachUserForm').serialize()
+                var formData = $('#deattachUserForm').serialize();
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: '{{ url('admin/deattach-role') }}',
                     data: formData,
-                    contentType: false,
-                    processData: false,
+                    dataType: 'json',
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
@@ -355,8 +363,11 @@
                         $(".btn-update").prop("disabled", false);
                     },
 
-                    error: function() {;
-                        toastr.error('any technical error');
+                    error: function(xhr) {
+                        var message = (xhr.responseJSON && xhr.responseJSON.errors)
+                            ? xhr.responseJSON.errors
+                            : 'any technical error';
+                        toastr.error(message);
                         $('.btn-update').text('Save Changes');
                         $(".btn-update").prop("disabled", false);
                     }

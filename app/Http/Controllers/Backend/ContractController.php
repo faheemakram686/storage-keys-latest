@@ -297,6 +297,16 @@ class ContractController extends Controller
         $replacements['booked_by'] = $bookedBy;
 
         $estimate = $c->estimate;
+        $replacements['alt_contact_name'] = $this->formatTemplateValue(
+            $c->alt_contact_name ?? optional($estimate)->alt_contact_name ?? null
+        );
+        $replacements['alt_contact_email'] = $this->formatTemplateValue(
+            $c->alt_contact_email ?? optional($estimate)->alt_contact_email ?? null
+        );
+        $replacements['alt_contact_mobile'] = $this->formatTemplateValue(
+            $c->alt_contact_mobile ?? optional($estimate)->alt_contact_mobile ?? null
+        );
+
         $addonPrice = 0.0;
         $period = 1.0;
         $discount = 0.0;
@@ -337,10 +347,7 @@ class ContractController extends Controller
                 $su = $estimate->storageunit;
                 if ($su) {
                     $unitNames[] = $this->formatTemplateValue($su->storage_unit_name ?? null);
-                    $sizeLabel = $this->resolveUnitSizeLabel($su);
-                    if ($sizeLabel !== '') {
-                        $unitSizes[] = $sizeLabel;
-                    }
+                    $unitSizes[] = $this->resolveUnitSizeLabel($su);
                     $unitCount = 1;
                 }
             } else {
@@ -352,12 +359,7 @@ class ContractController extends Controller
                     $unitNames[] = $su
                         ? $this->formatTemplateValue($su->storage_unit_name ?? null)
                         : ('#'.($row->storage_unit_id ?? ''));
-                    if ($su) {
-                        $sizeLabel = $this->resolveUnitSizeLabel($su);
-                        if ($sizeLabel !== '') {
-                            $unitSizes[] = $sizeLabel;
-                        }
-                    }
+                    $unitSizes[] = $su ? $this->resolveUnitSizeLabel($su) : '';
                 }
                 $unitCount = $estUnits->count();
             }
@@ -377,12 +379,7 @@ class ContractController extends Controller
                 $unitNames[] = $su
                     ? $this->formatTemplateValue($su->storage_unit_name ?? null)
                     : ('#'.($row->storage_unit_id ?? ''));
-                if ($su) {
-                    $sizeLabel = $this->resolveUnitSizeLabel($su);
-                    if ($sizeLabel !== '') {
-                        $unitSizes[] = $sizeLabel;
-                    }
-                }
+                $unitSizes[] = $su ? $this->resolveUnitSizeLabel($su) : '';
             }
             $unitCount = $contractUnits->count();
         }
@@ -395,8 +392,22 @@ class ContractController extends Controller
         $insuranceFee = $insuranceMonthly * $period;
         $totalFee = $storageFee + $addonPrice + $insuranceFee;
 
-        $replacements['unit_no'] = implode(', ', array_values(array_filter($unitNames, fn ($v) => $v !== '' && $v !== null)));
-        $replacements['unit_size'] = implode(', ', array_values(array_unique(array_filter($unitSizes))));
+        // Keep unit sizes in the same order/count as unit numbers (do not unique-collapse).
+        $pairedUnitLabels = [];
+        foreach ($unitNames as $index => $unitName) {
+            if ($unitName === '' || $unitName === null) {
+                continue;
+            }
+            $pairedUnitLabels[] = [
+                'name' => $unitName,
+                'size' => $unitSizes[$index] ?? '',
+            ];
+        }
+        $replacements['unit_no'] = implode(', ', array_column($pairedUnitLabels, 'name'));
+        $replacements['unit_size'] = implode(', ', array_map(
+            fn ($row) => $row['size'] !== '' ? $row['size'] : '-',
+            $pairedUnitLabels
+        ));
         $replacements['total_units'] = $unitCount > 0 ? (string) $unitCount : '';
         $replacements['storage_fee'] = $this->formatMoneyValue($storageFee);
         $replacements['addon_fee'] = $this->formatMoneyValue($addonPrice);

@@ -95,6 +95,31 @@
 
                                         </div>
                                     </div><!-- .nk-block-head -->
+                                    <div class="nk-block mb-3">
+                                        <div class="nk-data data-list">
+                                            <div class="data-head">
+                                                <h6 class="overline-title">Alternative Contact Information</h6>
+                                            </div>
+                                            <div class="data-item">
+                                                <div class="data-col">
+                                                    <span class="data-label">Name</span>
+                                                    <span class="data-value">{{ $data['contract'][0]->alt_contact_name ?: 'N/A' }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="data-item">
+                                                <div class="data-col">
+                                                    <span class="data-label">Email</span>
+                                                    <span class="data-value">{{ $data['contract'][0]->alt_contact_email ?: 'N/A' }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="data-item">
+                                                <div class="data-col">
+                                                    <span class="data-label">Mobile number</span>
+                                                    <span class="data-value">{{ $data['contract'][0]->alt_contact_mobile ?: 'N/A' }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="nk-block">
                                         <form method="post" id="ContentForm">
                                             @csrf
@@ -116,7 +141,7 @@
                                                 <div class="col-sm-11">
                                                     <div class="form-group">
                                                         <label for="">Use these strings in template:</label>
-                                                        <p> @verbatim{{agreement_no}} - {{booked_by}} - {{customer_name}} - {{company_name}} - {{phone}} - {{mobile}} - {{email}} - {{address}} - {{city}} - {{country}} - {{dob}} - {{customer_id_card}} - {{passport_no}} - {{license_no}} - {{vat}} - {{unit_no}} - {{unit_size}} - {{total_units}} - {{commencement_date}} - {{start_date}} - {{end_date}} - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.email}} - {{storage_fee}} - {{addon_fee}} - {{addon_name}} - {{insurance_fee}} - {{total}} - {{term_title}} - {{individual_mark}} - {{business_mark}} @endverbatim</p>
+                                                        <p> @verbatim{{agreement_no}} - {{booked_by}} - {{customer_name}} - {{company_name}} - {{phone}} - {{mobile}} - {{email}} - {{address}} - {{city}} - {{country}} - {{dob}} - {{customer_id_card}} - {{passport_no}} - {{license_no}} - {{vat}} - {{unit_no}} - {{unit_size}} - {{total_units}} - {{commencement_date}} - {{start_date}} - {{end_date}} - {{contact.first_name}} {{contact.last_name}} - {{contact.phone}} - {{contact.email}} - {{alt_contact_name}} - {{alt_contact_email}} - {{alt_contact_mobile}} - {{storage_fee}} - {{addon_fee}} - {{addon_name}} - {{insurance_fee}} - {{total}} - {{term_title}} - {{individual_mark}} - {{business_mark}} @endverbatim</p>
                                                         <label>Contract Content<span class="text-danger"></span></label>
                                                         <div id="toolbar-container"></div>
                                                         <div id="editor">

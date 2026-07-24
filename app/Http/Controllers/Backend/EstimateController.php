@@ -345,15 +345,39 @@ class EstimateController extends Controller
             return ['status' => true, 'message' => 'No documents are required for this estimate.'];
         }
 
-        // Pair each submitted req-doc id with the file posted at the same index.
-        // Empty file inputs arrive as null, so keys stay aligned with id[].
-        $submittedIds = (array) $request->input('id', []);
-        $files = (array) $request->file('files', []);
+        // Map uploaded files to require-document ids.
+        // Web form posts files[docId]; older/mobile clients may still post files[] + id[].
+        $files = $request->file('files', []);
+        if (!is_array($files)) {
+            $files = $files ? [$files] : [];
+        }
+
+        $submittedIds = array_values(array_map('strval', (array) $request->input('id', [])));
+
+        $isList = true;
+        foreach (array_keys($files) as $i => $key) {
+            if ((string) $key !== (string) $i) {
+                $isList = false;
+                break;
+            }
+        }
+
         $fileByDocId = [];
-        foreach ($submittedIds as $index => $docId) {
-            $file = $files[$index] ?? null;
-            if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
-                $fileByDocId[(string) $docId] = $file;
+        if ($isList) {
+            foreach ($files as $index => $file) {
+                if (!($file instanceof \Illuminate\Http\UploadedFile && $file->isValid())) {
+                    continue;
+                }
+                if (!isset($submittedIds[$index])) {
+                    continue;
+                }
+                $fileByDocId[$submittedIds[$index]] = $file;
+            }
+        } else {
+            foreach ($files as $docId => $file) {
+                if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
+                    $fileByDocId[(string) $docId] = $file;
+                }
             }
         }
 

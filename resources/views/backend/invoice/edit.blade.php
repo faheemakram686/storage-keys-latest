@@ -146,10 +146,10 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <label for="unlimited_cycles" class="mr-1">Infinity</label>
-                                                <input id="unlimited_cycles"  name="no_cycle" value="infinity"  {{(($data['invoice'][0]->no_cycle == "infinity")? 'checked':'')}}    type="checkbox">
+                                                <input id="unlimited_cycles" name="unlimited_cycles" value="1" {{(($data['invoice'][0]->no_cycle == "infinity")? 'checked':'')}} type="checkbox">
                                             </div>
                                         </div>
-                                        <input id="no_cycle" name="no_cycle" type="number" step="any" value="{{$data['invoice'][0]->no_cycle}}" class="form-control">
+                                        <input id="no_cycle" name="no_cycle" type="number" step="1" min="0" value="{{ $data['invoice'][0]->no_cycle == 'infinity' ? 0 : $data['invoice'][0]->no_cycle }}" class="form-control" {{(($data['invoice'][0]->no_cycle == "infinity")? 'disabled':'')}}>
                                     </div>
                                 </div>
                             </div>
@@ -164,6 +164,7 @@
                                     <label>Duration Type<span class="text-danger"></span></label>
                                     <select name="duration_type" id="" class="form-control select2" data-live-search="true" required>
                                         <option value="days" {{(($data['invoice'][0]->duration_type == "days")? 'selected':'')}}>Days</option>
+                                        <option value="weeks" {{(($data['invoice'][0]->duration_type == "weeks")? 'selected':'')}}>Weeks</option>
                                         <option value="months" {{(($data['invoice'][0]->duration_type == "months")? 'selected':'')}}>Months</option>
                                         <option value="years" {{(($data['invoice'][0]->duration_type == "years")? 'selected':'')}}>Years</option>
                                     </select>
@@ -313,7 +314,7 @@
                 }
             });
 
-            if($('input[name="unlimited_cycles"]:checked'))
+            if($('#unlimited_cycles').is(':checked'))
             {
                 $('#no_cycle').attr('disabled', 'disabled');
                 // checked

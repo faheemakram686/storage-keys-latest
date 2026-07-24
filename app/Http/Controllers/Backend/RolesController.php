@@ -38,8 +38,13 @@ class RolesController extends Controller
 
     public function getRoles()
     {
-        $admin = Type::findByAlias('admin')->id;
-       return $role_count = Role::with('users')->where('type_id',$admin)->get();
+        $adminTypeId = Type::findByAlias('admin')->id;
+        $appTypeId = Type::findByAlias('app')->id;
+
+        return Role::with('users')
+            ->whereIn('type_id', [$adminTypeId, $appTypeId])
+            ->orderBy('id')
+            ->get();
     }
     /**
      * Show the form for creating a new resource.
@@ -74,46 +79,92 @@ class RolesController extends Controller
 
     public function assignRole(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:roles,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
 
         $role = Role::find($request->id);
-        $user= User::find($request->user_id);
-//        $userrole = $user->roles()->detach($role->id);
-        $userrole = $user->assignRole($role);
-        if($userrole)
-        {
-            return response()->json(['success' => 'Role Assigned successfully'], 200);
+        $user = User::find($request->user_id);
+
+        if (!$role || !$user) {
+            return response()->json(['errors' => 'Role or user not found'], 404);
         }
 
+        $user->assignRole($role);
+
+        return response()->json(['success' => 'Role Assigned successfully'], 200);
     }
+
     public function deattachRole(Request $request)
     {
-        $role = Role::find($request->role_id);
-        $user= User::find($request->user_id_assigned);
-        $userrole = $user->roles()->detach($role->id);
-        if($userrole)
-        {
-            return response()->json(['success' => 'Role Deattached successfully'], 200);
+        $validator = Validator::make($request->all(), [
+            'role_id' => 'required|exists:roles,id',
+            'user_id_assigned' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
         }
 
+        $role = Role::find($request->role_id);
+        $user = User::find($request->user_id_assigned);
+
+        if (!$role || !$user) {
+            return response()->json(['errors' => 'Role or user not found'], 404);
+        }
+
+        $user->roles()->detach($role->id);
+
+        return response()->json(['success' => 'Role Deattached successfully'], 200);
     }
 
     public function getAssignedUsers(Request $request)
     {
         $roleUsers = Role::with('users')->find($request->id);
+
+        if (!$roleUsers) {
+            return response()->json(['errors' => 'Role not found'], 404);
+        }
+
         return $roleUsers;
     }
+
     public function updateRole(Request $request)
     {
-        return $request->all();
-        $this->role->deleteRole($request->id);
-        return response()->json(['success' => 'Record deleted successfully'], 200);
-
+        // Handled by Core RoleController@updatesk via update-role route
+        return response()->json(['errors' => 'Use update-role endpoint'], 400);
     }
+
     public function deleteRole(Request $request)
     {
-        $this->role->deleteRole($request->id);
-        return response()->json(['success' => 'Record deleted successfully'], 200);
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:roles,id',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $role = Role::withCount('users')->find($request->id);
+
+        if (!$role) {
+            return response()->json(['errors' => 'Role not found'], 404);
+        }
+
+        if ($role->users_count > 0) {
+            return response()->json([
+                'errors' => 'Cannot delete role while users are assigned. Detach users first.'
+            ], 422);
+        }
+
+        $this->role->deleteRole($request->id);
+
+        return response()->json(['success' => 'Record deleted successfully'], 200);
     }
 
 
@@ -138,28 +189,28 @@ class RolesController extends Controller
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-
-//        try{
+        try {
+            $adminTypeId = Type::findByAlias('admin')->id;
             $new_role = Role::create([
-                'name' => strtolower($request->name)
+                'name' => strtolower($request->name),
+                'alias' => strtolower($request->name),
+                'type_id' => $adminTypeId,
             ]);
-           return $new_role;
 
-            if($request->has('permissions')){
+            if ($request->has('permissions')) {
                 $new_role->permissions()->sync($request->permissions);
             }
 
-//            return response()->json([
-//                'success' => JsonResponse::HTTP_OK,
-//                'message' => 'Role added successfully.',
-//            ], JsonResponse::HTTP_OK);
-//
-//        }catch(Exception $e){
-//            return response()->json([
-//                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-//                'message' => $e->getMessage(),
-//            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-//        }
+            return response()->json([
+                'success' => JsonResponse::HTTP_OK,
+                'message' => 'Role added successfully.',
+            ], JsonResponse::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

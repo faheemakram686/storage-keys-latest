@@ -75,6 +75,27 @@
                                 </div>
                             </div>
                             <div class="col-lg-12">
+                                <h6 class="title">Alternative Contact Information</h6>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input class="form-control" type="text" name="alt_contact_name" id="alt_contact_name" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" name="alt_contact_email" id="alt_contact_email" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Mobile number</label>
+                                    <input class="form-control" type="text" name="alt_contact_mobile" id="alt_contact_mobile" placeholder="Mobile number">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="status">Status</label>
                                     <select class="form-control form-select " id="status" name="status" required>
@@ -166,6 +187,7 @@
                     data: { customer_id: customer_id },
                     success: function(data) {
                         console.log(data);
+                        window._estimateAltContacts = {};
                         $('.EstimateSection').empty();
                         var html3 = '';
                         var i;
@@ -173,6 +195,11 @@
                         $('.EstimateSection').html('<option value="">Select Estimate</option>');
                         if (data.length > 0) {
                             for (i = 0; i < data.length; i++) {
+                                window._estimateAltContacts[data[i].id] = {
+                                    name: data[i].alt_contact_name || '',
+                                    email: data[i].alt_contact_email || '',
+                                    mobile: data[i].alt_contact_mobile || ''
+                                };
                                 var termLengthTitle = (data[i].term_length && data[i].term_length.title) ? data[i].term_length.title : 'N/A';
                                 var storageUnitName = 'N/A';
                                 if (data[i].estimate_storage_units && data[i].estimate_storage_units.length > 0) {
@@ -197,6 +224,16 @@
                     }
                 });
             }
+
+            $(document).on('change', '.EstimateSection', function() {
+                var id = $(this).val();
+                var alt = (window._estimateAltContacts && window._estimateAltContacts[id]) ? window._estimateAltContacts[id] : null;
+                if (alt) {
+                    $('#alt_contact_name').val(alt.name);
+                    $('#alt_contact_email').val(alt.email);
+                    $('#alt_contact_mobile').val(alt.mobile);
+                }
+            });
 
 
         });

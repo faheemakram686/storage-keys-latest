@@ -237,6 +237,9 @@ class EstimateClass implements EstimateInterface {
         $estimate->phone=$request->phone;
         $estimate->mobile1=$request->mobile1;
         $estimate->mobile2=$request->mobile2;
+        $estimate->alt_contact_name = $request->alt_contact_name ?? null;
+        $estimate->alt_contact_email = $request->alt_contact_email ?? null;
+        $estimate->alt_contact_mobile = $request->alt_contact_mobile ?? null;
         $estimate->user_id =Auth::id();
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= (string)array_sum(array_map('floatval', array_values($priceMap)));
@@ -331,6 +334,9 @@ class EstimateClass implements EstimateInterface {
         $estimate->l_name=$data['contact']->last_name;
         $estimate->email=$data['contact']->email;
         $estimate->phone=$data['contact']->phone;
+        $estimate->alt_contact_name = $request->alt_contact_name ?? null;
+        $estimate->alt_contact_email = $request->alt_contact_email ?? null;
+        $estimate->alt_contact_mobile = $request->alt_contact_mobile ?? null;
         $estimate->term_length= $request->term_length;
         $estimate->unit_price= (string)array_sum(array_map('floatval', array_values($priceMap)));
         $estimate->addon = $this->toCsvOrNull($addonIds);
@@ -466,6 +472,11 @@ class EstimateClass implements EstimateInterface {
         $estimate->status=$request->status;
         $estimate->estimate_date=$request->estimate_date;
         $estimate->expiry_date=$request->expiry_date;
+        if ($request->has('alt_contact_name') || $request->has('alt_contact_email') || $request->has('alt_contact_mobile')) {
+            $estimate->alt_contact_name = $request->alt_contact_name ?? null;
+            $estimate->alt_contact_email = $request->alt_contact_email ?? null;
+            $estimate->alt_contact_mobile = $request->alt_contact_mobile ?? null;
+        }
         
         if($estimate->save()){
             $this->syncEstimateStorageUnits($estimate, $suIds, $priceMap);

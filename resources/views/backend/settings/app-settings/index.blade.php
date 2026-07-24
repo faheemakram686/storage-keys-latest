@@ -157,11 +157,9 @@
                 e.preventDefault();
                 var formData=$('#updateCountryForm').serialize()
                 $.ajax({
-                    type: "get",
+                    type: "POST",
                     url: '{{ url('admin/update-app-settings') }}',
                     data: formData,
-                    contentType: false,
-                    processData: false,
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
