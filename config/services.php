@@ -34,6 +34,7 @@ return [
         'base_url' => env('NGENIUS_BASE_URL', 'https://api-gateway.sandbox.ngenius-payments.com'),
         'outlet_reference' => env('NGENIUS_OUTLET_REFERENCE'),
         'access_token' => env('NGENIUS_ACCESS_TOKEN'),
+        // Optional public site base or full URL. Path is always forced to /redirect-response.
         'callback_url' => env('NGENIUS_CALLBACK_URL'),
     ],
 

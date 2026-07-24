@@ -356,25 +356,29 @@ class InvoiceController extends Controller
     {
         $ref = $request->query('ref'); // The order reference
         if (!$ref) {
-            return back()->with('error', 'Invalid payment reference');
+            return redirect('/')
+                ->with('error', 'Invalid payment reference');
         }
-        // Update your local DB
+
         $invoice = Invoice::where('invoice_ref', $ref)->first();
         if (!$invoice) {
-            return back()->with('error', 'Invalid payment reference');
+            return redirect('/')
+                ->with('error', 'Invalid payment reference');
         }
+
+        $invoiceUrl = url('invoice-to-customer/' . hashid_encode($invoice->id));
 
         $invoice->load(array_keys(Invoice::paymentStatusRelations()));
         $invoice->syncPaymentStatus();
 
         if ($invoice->isFullyPaid()) {
-            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('success', 'Payment successful!');
+            return redirect()->to($invoiceUrl)->with('success', 'Payment successful!');
         }
 
         // Verify the payment with Ngenius before marking the invoice paid.
         $order = $this->paymentService->getOrderStatus($ref);
         if (!$order || !$this->paymentService->isPaid($order)) {
-            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('error', 'Payment failed or cancelled.');
+            return redirect()->to($invoiceUrl)->with('error', 'Payment failed or cancelled.');
         }
 
         $capturedMinor = $this->paymentService->extractCapturedAmount($order);
@@ -382,33 +386,31 @@ class InvoiceController extends Controller
             ? round($capturedMinor / 100, 2)
             : $invoice->balanceAmount();
 
-        $inovicePayment = (object)[
-            'invoice_ref'   => $ref,
-            'invoice_id'    => $invoice->id,
-            'customer_id'   => $invoice->customer_id,
-            'contract_id'   => $invoice->contract_id,
-            'order_id'      => $invoice->order_id,
+        $inovicePayment = (object) [
+            'invoice_ref' => $ref,
+            'invoice_id' => $invoice->id,
+            'customer_id' => $invoice->customer_id,
+            'contract_id' => $invoice->contract_id,
+            'order_id' => $invoice->order_id,
             'payment_method' => 3,
-            'payment_date'  => now(),
-            'amount_received'=> $amountReceived,
-            'note'          => 'This invoice has been received via online payment method',
+            'payment_date' => now(),
+            'amount_received' => $amountReceived,
+            'note' => 'This invoice has been received via online payment method',
         ];
         $paymentResponse = $this->payment->savePayment($inovicePayment);
         $responseData = $paymentResponse->getData();
         $payment = $responseData->data;
         $payload = $this->payment->savePaymentToQuickbook($payment);
-        if ($payload){
+        if ($payload) {
             $this->zapier->send('add_payment', $payload);
         }
 
         $this->invoice->syncPaymentStatus($invoice->id);
 
-        // Redirect user with status
         if ($payment) {
-            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('success', 'Payment successful!');
-        } else {
-            return redirect('invoice-to-customer/'.hashid_encode($invoice->id))->with('error', 'Payment failed or cancelled.');
+            return redirect()->to($invoiceUrl)->with('success', 'Payment successful!');
         }
 
+        return redirect()->to($invoiceUrl)->with('error', 'Payment failed or cancelled.');
     }
 }

@@ -532,6 +532,8 @@ require __DIR__.'/auth.php';
     Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice'])->middleware('hashid');
     Route::any('pay-now/{id}',[InvoiceController::class,'payNowByCustomer'])->middleware('hashid');
     Route::any('/redirect-response',[InvoiceController::class,'saveResponse'])->name('invoice.redirect-response');
+    // Legacy N-Genius callback path (older env used /payment/callback)
+    Route::any('/payment/callback',[InvoiceController::class,'saveResponse']);
 
 Route::get('/oauth/gmail', function (){
     return LaravelGmail::redirect();

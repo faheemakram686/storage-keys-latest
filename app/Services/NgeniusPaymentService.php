@@ -97,20 +97,32 @@ class NgeniusPaymentService
     }
 
     /**
-     * N-Genius rejects hostname "localhost". Prefer the live request host
-     * (e.g. http://127.0.0.1:8000), then a configured public callback URL.
+     * Build the N-Genius return URL.
+     * Always uses /redirect-response (invoice) or /redirectPaymentRef (orders).
+     * Live servers must have a public APP_URL (not 127.0.0.1 / localhost).
      */
     protected function resolveRedirectUrl(bool $forInvoice = true): ?string
     {
         $path = $forInvoice ? '/redirect-response' : '/redirectPaymentRef';
-
+        $allowPrivate = !app()->environment('production');
         $candidates = [];
 
+        // Optional override: treat as site base (ignore wrong paths like /payment/callback).
         $configured = trim((string) config('services.ngenius.callback_url', ''));
-        if ($configured !== '') {
-            $candidates[] = $configured;
+        if ($configured !== '' && stripos($configured, 'yourdomain.com') === false) {
+            $base = $this->extractBaseUrl($configured);
+            if ($base) {
+                $candidates[] = $base . $path;
+            }
         }
 
+        // Prefer APP_URL — this must be the live public domain on production.
+        $appUrl = rtrim((string) config('app.url'), '/');
+        if ($appUrl !== '') {
+            $candidates[] = $appUrl . $path;
+        }
+
+        // Current browser host (useful for local artisan serve on 127.0.0.1:8000).
         if (!app()->runningInConsole() && request()) {
             $candidates[] = rtrim(request()->getSchemeAndHttpHost(), '/') . $path;
         }
@@ -123,16 +135,25 @@ class NgeniusPaymentService
             // Named route may be unavailable in some contexts.
         }
 
-        $candidates[] = rtrim((string) config('app.url'), '/') . $path;
-
-        foreach ($candidates as $url) {
+        foreach (array_unique($candidates) as $url) {
             $normalized = $this->normalizeRedirectUrl($url);
-            if ($this->isUsableRedirectUrl($normalized)) {
+            if ($this->isUsableRedirectUrl($normalized, $allowPrivate)) {
                 return $normalized;
             }
         }
 
         return null;
+    }
+
+    protected function extractBaseUrl(string $url): ?string
+    {
+        $parts = parse_url($url);
+        if (empty($parts['scheme']) || empty($parts['host'])) {
+            return null;
+        }
+
+        return $parts['scheme'] . '://' . $parts['host']
+            . (isset($parts['port']) ? ':' . $parts['port'] : '');
     }
 
     protected function normalizeRedirectUrl(?string $url): ?string
@@ -141,11 +162,23 @@ class NgeniusPaymentService
             return null;
         }
 
-        // N-Genius rejects the hostname "localhost" but accepts 127.0.0.1.
+        // N-Genius rejects hostname "localhost" but accepts 127.0.0.1.
         return preg_replace('#://localhost(?=[:/]|$)#i', '://127.0.0.1', $url);
     }
 
-    protected function isUsableRedirectUrl(?string $url): bool
+    protected function isPrivateHost(?string $host): bool
+    {
+        $host = strtolower((string) $host);
+
+        return $host === ''
+            || $host === 'localhost'
+            || $host === '127.0.0.1'
+            || $host === '::1'
+            || str_ends_with($host, '.local')
+            || str_ends_with($host, '.test');
+    }
+
+    protected function isUsableRedirectUrl(?string $url, bool $allowPrivate = true): bool
     {
         if (!$url || !preg_match('#^https?://#i', $url)) {
             return false;
@@ -156,8 +189,15 @@ class NgeniusPaymentService
         }
 
         $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        if ($host === '' || $host === 'localhost') {
+            return false;
+        }
 
-        return $host !== '' && $host !== 'localhost';
+        if (!$allowPrivate && $this->isPrivateHost($host)) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function resolveBillingDetails($customerRef): array
