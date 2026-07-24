@@ -113,18 +113,48 @@ class RoleController extends Controller
 
     public function updatesk(Request $request)
     {
-        $role = Role::findOrFail($request->id);
-        $adminTypeId = Type::findByAlias('admin')->id;
-
-        $request->merge([
-            'alias' => $request->name,
-            'type_id' => $adminTypeId,
+        $request->validate([
+            'id' => 'required|exists:roles,id',
+            'name' => 'required|regex:/^[A-Za-z 0-9_]+$/|unique:roles,name,' . $request->id . ',id',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'integer|exists:permissions,id',
         ]);
 
-        $this->service
-            ->setModel($role)
-            ->beforeUpdated()
-            ->update();
+        $role = Role::with('users')->findOrFail($request->id);
+
+        // App Admin must not be changed from the backend roles UI.
+        if ($role->isAdmin()) {
+            return redirect()
+                ->route('roles.index')
+                ->withErrors(['You are not allowed to update the App Admin role.']);
+        }
+
+        $role->name = $request->name;
+        $role->save();
+
+        // Blade form posts permission IDs as permissions[]; normalize either format.
+        $permissionIds = collect($request->input('permissions', []))
+            ->map(function ($permission) {
+                if (is_array($permission)) {
+                    return (int) ($permission['permission_id'] ?? $permission['id'] ?? 0);
+                }
+
+                return (int) $permission;
+            })
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        $role->permissions()->sync($permissionIds);
+
+        // Clear cached permissions for users assigned to this role.
+        foreach ($role->users as $user) {
+            cache()->forget('user-' . $user->id);
+            cache()->forget('user-roles-permissions-' . $user->id);
+            cache()->forget('user-roles-' . $user->id);
+            cache()->forget('auth-user-permissions-' . $user->id);
+        }
 
         return redirect()->route('roles.index')->withSuccess(['Record Updated successfully']);
     }

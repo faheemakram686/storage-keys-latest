@@ -20,10 +20,129 @@
             width: 100% !important;
             height: 200px !important;
         }
+
+        /* Contract customer summary — prevent collapse / overflow */
+        .contract-view-page.checkout-page {
+            padding-top: 200px;
+            padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+        .contract-view-page .contract-content-col {
+            padding-right: 20px;
+        }
+        .contract-view-page .contract-content-col .term-section-body {
+            width: 100%;
+            max-width: 100%;
+            padding: 36px 28px 28px;
+            overflow-x: auto;
+        }
+        .contract-view-page .contract-content-col .term-section-body img,
+        .contract-view-page .contract-content-col .term-section-body table {
+            max-width: 100%;
+            height: auto;
+        }
+        .contract-view-page .order-summary {
+            margin-left: 0;
+            max-width: 100%;
+        }
+        .contract-view-page .order-summary .locations-section {
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+        }
+        .contract-view-page .order-section-header {
+            margin-left: auto;
+            margin-right: auto;
+            float: none;
+            max-width: 70%;
+        }
+        .contract-view-page .order-section-body {
+            padding: 28px 16px 18px;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .contract-view-page .order-section-body .form-check {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .contract-view-page .order-section-body .row {
+            margin-left: 0;
+            margin-right: 0;
+            align-items: center;
+        }
+        .contract-view-page .order-section-body .row > [class*="col-"] {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        .contract-view-page .order-summary .summary-row-value {
+            justify-content: flex-end;
+            text-align: right;
+            flex-wrap: wrap;
+            word-break: break-word;
+        }
+        .contract-view-page .order-summary .summary-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .contract-view-page .order-summary .summary-actions .btn-qoutation {
+            flex: 1 1 calc(50% - 4px);
+            min-width: 0;
+            max-width: 100%;
+            margin-top: 0;
+            padding: 8px 10px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #F58320;
+            color: #fff3e9;
+            border-color: #F58320;
+            box-sizing: border-box;
+        }
+        .contract-view-page .order-summary .summary-actions .btn-qoutation:only-child {
+            flex: 1 1 100%;
+        }
+        .contract-view-page .order-summary .img-thumbnail {
+            max-width: 100%;
+            height: auto;
+        }
+        @media (max-width: 991.98px) {
+            .contract-view-page.checkout-page {
+                padding-top: 140px;
+            }
+            .contract-view-page .contract-content-col {
+                padding-right: 15px;
+            }
+            .contract-view-page .order-summary {
+                margin-top: 24px;
+            }
+            .contract-view-page .contract-content-col .term-section-body,
+            .contract-view-page .order-section-body {
+                padding: 24px 16px 16px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .contract-view-page.checkout-page {
+                padding-top: 110px;
+            }
+            .contract-view-page .greeting-user h3 {
+                font-size: 1.3rem;
+            }
+            .contract-view-page .order-section-header {
+                font-size: 0.95rem;
+                max-width: 80%;
+            }
+            .contract-view-page .order-summary .summary-actions .btn-qoutation {
+                flex: 1 1 100%;
+            }
+        }
     </style>
     @isset($data)
 {{--    {{dd($data)}}--}}
-    <div class="justify-content-center checkout-page">
+    <div class="justify-content-center checkout-page contract-view-page">
         @foreach ($data['contract'] as $contract)
         <div class="container">
 
@@ -42,88 +161,87 @@
                     <form method="post" action="#" id="EstimateForm111">
                         @csrf
                         <input type="hidden" name="contract_id" id="contract_id" value="{{$contract->id}}">
-                    <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
-                            Contract Content</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 term-section-body">
+                    <div class="row reservations-sections align-items-start">
+                        <div class="col-12 col-lg-9 contract-content-col">
                             <div class="row">
-                                <div class=" col-12 col-sm-12 col-md-10 col-lg-12">
-                                    @isset($contract->contractTemplate)
-                                    {!! $contract->contractTemplate->temp_body !!}
-                                    @endisset
+                                <div class="offset-1 offset-sm-2 col-8 col-sm-5 col-md-4 col-lg-3 term-section-header">
+                                    Contract Content</div>
+                                <div class="col-12 term-section-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @isset($contract->contractTemplate)
+                                            {!! $contract->contractTemplate->temp_body !!}
+                                            @endisset
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-3  order-summary" >
-                            <div class="row locations-section" >
-                                <div class="offset-2 offset-md-2 offset-lg-2 col-6 col-sm-6 col-md-8 col-lg-7 order-section-header"> Summary</div>
+                        <div class="col-12 col-lg-3 order-summary">
+                            <div class="row locations-section justify-content-center">
+                                <div class="col-10 col-sm-8 col-md-6 col-lg-10 order-section-header">Summary</div>
                                 <div class="col-12 order-section-body">
-                                    <div class="row">
-                                        <div class="col-lg-12">
+                                    <div class="row mb-2">
+                                        <div class="col-12">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault"><b>{{$contract->customer->company_name}}</b></label>
-                                                <label class="check-container" for="flexCheckDefault">{{$contract->customer->address}}</label>
-                                                <label class="check-container" for="flexCheckDefault">{{$contract->customer->city}}</label>
-                                                <label class="check-container" for="flexCheckDefault">{{$contract->customer->country}}</label>
+                                                <label class="check-container"><b>{{$contract->customer->company_name}}</b></label>
+                                                <label class="check-container">{{$contract->customer->address}}</label>
+                                                <label class="check-container">{{$contract->customer->city}}</label>
+                                                <label class="check-container">{{$contract->customer->country}}</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault">Contract Value</label>
+                                                <label class="check-container">Contract Value</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
-                                            <span class="no-bottom-margin mt-1 text-right">AED </span>
-                                            <span class="no-bottom-margin mt-1 text-right ml-1"> {{$contract->contract_value}} </span>
+                                        <div class="col-6 d-flex summary-row-value">
+                                            <span class="no-bottom-margin mt-1 text-right">AED</span>
+                                            <span class="no-bottom-margin mt-1 text-right ml-1">{{$contract->contract_value}}</span>
                                         </div>
                                     </div>
 
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault"># Contract Number</label>
+                                                <label class="check-container">Contract Number</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
                                             <span class="no-bottom-margin mt-1 text-right">{{$contract->id}}</span>
-
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault">Start Date</label>
+                                                <label class="check-container">Start Date</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
-                                            <span class="no-bottom-margin mt-1 text-right">{{$contract->start_date}} </span>
-
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
+                                        <div class="col-6 d-flex summary-row-value">
+                                            <span class="no-bottom-margin mt-1 text-right">{{$contract->start_date}}</span>
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6">
                                             <div class="form-check">
-                                                <label class="check-container" for="flexCheckDefault">End Date</label>
+                                                <label class="check-container">End Date</label>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 d-flex">
-                                            <span class="no-bottom-margin mt-1 text-right">{{$contract->end_date }} </span>
-{{--                                            <span class="no-bottom-margin mt-1 sub_total text-right ml-1 "  id="subtotal">{{$data['lead'][0]->estimateAddon->sum('price') + $data['su'][0]->price +  (( $data['lead'][0]->insurence == 'nothanks')? 0 : 25) }} </span>--}}
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
+                                        <div class="col-6 d-flex summary-row-value">
+                                            <span class="no-bottom-margin mt-1 text-right">{{$contract->end_date}}</span>
                                         </div>
                                     </div>
                                     @if($contract->is_signed == 'Signed')
                                     <div class="separator-item"></div>
                                     <div class="row">
                                         @if($contract->sign_image != null)
-                                            <div class="col-lg-12">
+                                            <div class="col-12">
                                                 <div class="text-center">
                                                 <img src="{{ asset('storage/uploads/contract_sign_images').'/'.$contract->sign_image}}" alt="image not found" class="img-thumbnail" >
                                                 </div>
@@ -132,16 +250,10 @@
                                     </div>
                                     @endif
                                     <div class="separator-item"></div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-check">
-                                                <a href={{url('contract-pdf/').'/'.hashid_encode($contract->id)}} class="btn btn-qoutation btn-sm active mt-1 text-right" style="padding:8px;background-color: #F58320; color: #fff3e9" >Download</a>
-                                            </div>
-                                        </div>
+                                    <div class="summary-actions">
+                                        <a href="{{ url('contract-pdf/').'/'.hashid_encode($contract->id) }}" class="btn btn-qoutation btn-sm active">Download</a>
                                         @if($contract->is_signed == 'Not Signed')
-                                        <div class="col-lg-6 d-flex">
-                                            <a href="#" class="btn btn-qoutation btn-sm active mt-1 text-right btn-sign " style="padding:8px;background-color: #F58320;color: #fff3e9">Sign</a>
-                                        </div>
+                                        <a href="#" class="btn btn-qoutation btn-sm active btn-sign">Sign</a>
                                         @endif
                                     </div>
                                 </div>

@@ -10,22 +10,101 @@
             padding-bottom: 60px;
             overflow-x: hidden;
         }
-        .estimate-view-page .order-summary .d-flex {
+        .estimate-view-page .estimate-content-col {
+            padding-right: 20px;
+        }
+        .estimate-view-page .estimate-content-col .term-section-body,
+        .estimate-view-page .estimate-content-col .padlock-section-body,
+        .estimate-view-page .estimate-content-col .insurance-section-body,
+        .estimate-view-page .estimate-content-col .terms-conditions-section-body {
+            width: 100%;
+            max-width: 100%;
+            padding: 36px 28px 28px;
+        }
+        .estimate-view-page .order-summary {
+            margin-left: 0;
+            max-width: 100%;
+        }
+        .estimate-view-page .order-summary .locations-section {
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+        }
+        .estimate-view-page .order-section-header {
+            margin-left: auto;
+            margin-right: auto;
+            float: none;
+            max-width: 70%;
+        }
+        .estimate-view-page .order-section-body {
+            padding: 28px 16px 18px;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .estimate-view-page .order-section-body .form-check {
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .estimate-view-page .order-section-body .row {
+            margin-left: 0;
+            margin-right: 0;
+            align-items: center;
+        }
+        .estimate-view-page .order-section-body .row > [class*="col-"] {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        .estimate-view-page .order-summary .d-flex,
+        .estimate-view-page .order-summary .summary-row-value {
             justify-content: flex-end;
+            text-align: right;
+            flex-wrap: wrap;
+            word-break: break-word;
+        }
+        .estimate-view-page .order-summary .summary-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .estimate-view-page .order-summary .summary-actions .btn-qoutation {
+            flex: 1 1 100%;
+            min-width: 0;
+            max-width: 100%;
+            margin-top: 0;
+            padding: 8px 10px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #F58320;
+            color: #fff3e9;
+            border-color: #F58320;
+            box-sizing: border-box;
+        }
+        @media (min-width: 992px) {
+            .estimate-view-page .order-summary-sticky {
+                position: sticky;
+                top: 100px;
+            }
         }
         @media (max-width: 991.98px) {
             .estimate-view-page.checkout-page {
                 padding-top: 140px;
             }
-            .estimate-view-page .order-summary {
-                margin-top: 20px;
+            .estimate-view-page .estimate-content-col {
+                padding-right: 15px;
             }
-            .estimate-view-page .term-section-body,
-            .estimate-view-page .padlock-section-body,
-            .estimate-view-page .insurance-section-body,
-            .estimate-view-page .terms-conditions-section-body,
+            .estimate-view-page .order-summary {
+                margin-top: 24px;
+            }
+            .estimate-view-page .estimate-content-col .term-section-body,
+            .estimate-view-page .estimate-content-col .padlock-section-body,
+            .estimate-view-page .estimate-content-col .insurance-section-body,
+            .estimate-view-page .estimate-content-col .terms-conditions-section-body,
             .estimate-view-page .order-section-body {
-                padding: 20px 15px;
+                padding: 24px 16px 16px;
             }
         }
         @media (max-width: 575.98px) {
@@ -44,10 +123,7 @@
             .estimate-view-page .terms-conditions-section-header,
             .estimate-view-page .order-section-header {
                 font-size: 0.95rem;
-            }
-            .estimate-view-page .order-summary .btn-qoutation {
-                width: 100%;
-                text-align: center;
+                max-width: 80%;
             }
             .estimate-view-page .modal-body {
                 padding: 20px !important;
@@ -122,42 +198,132 @@
                             <input type="hidden" name="su_ids[]" value="{{ is_array($euHid) ? ($euHid['storage_unit_id'] ?? '') : ($euHid->storage_unit_id ?? '') }}">
                         @endforeach
 
-                    <div class="row reservations-sections">
-                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 term-section-header">
-                            Select term length</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-md-7 col-lg-7 term-section-body">
+                    <div class="row reservations-sections align-items-start">
+                        <div class="col-12 col-lg-9 estimate-content-col">
                             <div class="row">
-                                <div class="col-12 col-md-10 offset-md-1">
-                                    <p>Select longer periods to enjoy massive savings!</p>
-                                    @isset($data['term_lengths'])
-                                        @foreach($data['term_lengths'] as $term_length)
+                                <div class="offset-1 offset-sm-2 col-8 col-sm-5 col-md-4 col-lg-3 term-section-header">
+                                    Select term length</div>
+                                <div class="col-12 term-section-body">
                                     <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="term_length" type="radio" value="{{$term_length->id}}"  {{ ($lead->term_length== $term_length->id)? "checked" : "" }}  id="flexCheckDefault" disabled />
-                                                <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>
-                                                <p class="no-bottom-margin text-left on-sale-text"><small>({{$term_length->description}})</small></p>
+                                        <div class="col-12">
+                                            <p>Select longer periods to enjoy massive savings!</p>
+                                            @isset($data['term_lengths'])
+                                                @foreach($data['term_lengths'] as $term_length)
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" name="term_length" type="radio" value="{{$term_length->id}}"  {{ ($lead->term_length== $term_length->id)? "checked" : "" }}  id="flexCheckDefault" disabled />
+                                                        <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>
+                                                        <p class="no-bottom-margin text-left on-sale-text"><small>({{$term_length->description}})</small></p>
+                                                    </div>
+                                                </div>
+                                                    @php
+                                                        $total2 = $monthlySum * $term_length->term_period;
+                                                    @endphp
+                                                    <div class="col-6">
+                                                        <p class="no-bottom-margin text-right">AED {{$total2 - ($total2 * $term_length->discount_percentage/100)}}</p>
+                                                        <p class="no-bottom-margin text-right"><del>AED {{$total2}}</del></p>
+                                                        <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>
+                                                    </div>
+                                            </div>
+                                            <div class="separator-item"></div>
+                                                @endforeach
+                                            @endisset
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row padlock-sections mt-3">
+                                <div class="offset-1 offset-sm-2 col-8 col-sm-5 col-md-4 col-lg-3 padlock-section-header">
+                                    Addons</div>
+                                <div class="col-12 padlock-section-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row">
+                                        @isset($data['addon'])
+                                            @foreach ($data['lead'][0]->estimateAddon as $addon)
+                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-checkbox">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                            <input class="form-check-input addon" name="addon[]" id="cctv_for_customer_check" readonly type="checkbox" value="{{$addon->id}}" @foreach($data['leadaddon'] as $selected) {{ ($selected == $addon->addon_id) ? "checked" : "" }} @endforeach id="flexCheckDefault" disabled />
+                                                            <label class="check-container" for="flexCheckDefault">{{$addon->addon->name}}</label>
+                                                        </div>
+                                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                            <span class="no-bottom-margin addon-price">{{$addon->price}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endisset
                                             </div>
                                         </div>
-                                            @php
-                                                $total2 = $monthlySum * $term_length->term_period;
-                                            @endphp
-                                            <div class="col-6">
-                                                <p class="no-bottom-margin text-right">AED {{$total2 - ($total2 * $term_length->discount_percentage/100)}}</p>
-                                                <p class="no-bottom-margin text-right"><del>AED {{$total2}}</del></p>
-                                                <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>
-                                            </div>
                                     </div>
-                                    <div class="separator-item"></div>
-                                        @endforeach
-                                    @endisset
+                                </div>
+                            </div>
 
+                            <div class="row insurance-sections mt-3">
+                                <div class="offset-1 offset-sm-2 col-8 col-sm-5 col-md-4 col-lg-3 insurance-section-header">
+                                    Insurance</div>
+                                <div class="col-12 insurance-section-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p>Insure your goods</p>
+                                            <div class="separator"></div>
+                                            @if((float) ($lead->insurance_amount ?? 0) > 0 || ($lead->insurence ?? '') === 'cover')
+                                                <div class="row">
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" checked disabled />
+                                                            <label class="check-container">
+                                                                {{ optional($lead->insurance)->name ?? 'Insurance cover' }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                        <p class="text-right">AED {{ number_format((float) ($lead->insurance_amount ?? 0), 2) }}/mo</p>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                        <input type="text" class="form-control" readonly value="{{ $lead->goods }}" style="height:35px;" disabled>
+                                                    </div>
+                                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                        <p class="text-right">Cover AED {{ $lead->insurance_cover ?? '—' }}</p>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" checked disabled />
+                                                    <label class="check-container">No Thanks</label>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row terms-conditions-sections mt-3">
+                                <div class="offset-1 offset-sm-2 col-8 col-sm-5 col-md-4 col-lg-3 terms-conditions-section-header">
+                                    TERMS &amp; CONDITIONS
+                                </div>
+                                <div class="col-12 terms-conditions-section-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"  name="terms" value="agree"  id="flexCheckDefault" required />
+                                                <label class="check-container" for="flexCheckDefault">I agree to the standard terms and conditions of storage
+                                                    keys<a href="#" data-toggle="modal" data-target="#quick_view_modal" class="form-link"> (click here)</a></label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-sm-12 col-md-4 col-lg-3  order-summary">
+
+                        <div class="col-12 col-lg-3 order-summary">
+                            <div class="order-summary-sticky">
                             <div class="row locations-section justify-content-center">
-                                <div class="col-10 col-sm-8 col-md-10 col-lg-10 order-section-header">Order Summary</div>
+                                <div class="col-10 col-sm-8 col-md-6 col-lg-10 order-section-header">Order Summary</div>
                                 <div class="col-12 order-section-body">
                                     <div class="row mb-2">
                                         <div class="col-12">
@@ -178,7 +344,7 @@
                                                 <label class="check-container" for="flexCheckDefault">Storage</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
                                             <span class="no-bottom-margin ml-1 mt-1 text-right st_amount">{{ number_format($storageDiscounted, 2, '.', '') }}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                         </div>
@@ -191,14 +357,13 @@
                                                 <label class="check-container" for="flexCheckDefault">PadLock</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
 
                                             @isset($data['lead'][0]->estimateAddon)
 
                                             <span class="no-bottom-margin mt-1 addon_amount ml-1 text-right">{{$data['lead'][0]->estimateAddon->sum('price')}}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                             @endisset
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
@@ -208,13 +373,12 @@
                                                 <label class="check-container" for="flexCheckDefault">Insurance</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
 
                                             @isset($data['lead'][0])
                                             <span class="no-bottom-margin inc_amount mt-1 ml-1 text-right">{{ number_format((float) ($data['lead'][0]->insurance_amount ?? 0), 2, '.', '') }}</span>
                                                 <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                             @endisset
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
@@ -224,38 +388,25 @@
                                                 <label class="check-container" for="flexCheckDefault">Sub Total</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
 
                                             <span class="no-bottom-margin mt-1 sub_total text-right ml-1 "  id="subtotal">{{ number_format($subTotal, 2, '.', '') }}</span>
                                             <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
                                         </div>
                                     </div>
-{{--                                    <div class="separator-item"></div>--}}
-{{--                                    <div class="row">--}}
-{{--                                        <div class="col-lg-8">--}}
-{{--                                            <div class="form-check">--}}
-{{--                                                <input type="text" class="form-control" name="promo" placeholder="Promo Code" style="height:35px;">--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="col-lg-4 d-flex">--}}
-{{--                                            <a href="#" class=" btn btn-qoutation btn-sm active mt-1 text-right">APPLY</a>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
                                 </div>
-                                <div class="col-12 mt-2 order-section-body ">
+                                <div class="col-12 mt-2 order-section-body">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-check">
-{{--                                                <input class="form-check-input" name="term_length" type="radio" value="monthly" {{ ($lead->price=="monthly")? "checked" : "" }}  id="flexCheckDefault" />--}}
                                                 <label class="check-container" for="flexCheckDefault">VAT</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
 
 
                                             <span class="no-bottom-margin mt-1 text-right vat_amount">0</span>
                                             <span class="no-bottom-margin mt-1 ml-1 text-right">AED </span>
-{{--                                            <span class="no-bottom-margin mt-1 text-right"> /mo</span>--}}
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
@@ -265,114 +416,21 @@
                                                 <label class="check-container" for="flexCheckDefault">Total</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 d-flex">
+                                        <div class="col-6 d-flex summary-row-value">
 
                                             <span class="no-bottom-margin mt-1 total_amount ml-1  text-right" id="total_amount"></span>
-{{--                                            <span class="no-bottom-margin mt-1 text-right">/mo</span>--}}
                                             <span class="no-bottom-margin mt-1 ml-1 text-right">AED</span>
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-check">
-                                                <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active mt-1 text-right" >Accept</a>
-                                            </div>
-                                        </div>
-{{--                                        <div class="col-6 d-flex">--}}
-{{--                                            <a href="#" class="btn btn-qoutation btn-sm active mt-1 text-right">Reject</a>--}}
-{{--                                        </div>--}}
+                                    <div class="summary-actions">
+                                        <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active">Accept</a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row padlock-sections">
-                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 padlock-section-header">
-                            Addons</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 padlock-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <div class="row">
-
-                                @isset($data['addon'])
-                                    @foreach ($data['lead'][0]->estimateAddon as $addon)
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-checkbox">
-                                            <div class="row">
-                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                    <input class="form-check-input addon" name="addon[]" id="cctv_for_customer_check" readonly type="checkbox" value="{{$addon->id}}" @foreach($data['leadaddon'] as $selected) {{ ($selected == $addon->addon_id) ? "checked" : "" }} @endforeach id="flexCheckDefault" disabled />
-                                                    <label class="check-container" for="flexCheckDefault">{{$addon->addon->name}}</label>
-                                                </div>
-                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                    <span class="no-bottom-margin addon-price">{{$addon->price}}</span>
-                                                </div>
-
-{{--                                                <input type="text" class="no-bottom-margin addon-price form-control" placeholder="Price" name="addonprice[]" value="{{$addon->price}}" style="height:35px;width:100px;padding: 0px 8px" disabled>--}}
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endisset
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="row insurance-sections">
-                        <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 insurance-section-header">
-                            Insurance</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-9 col-lg-7 insurance-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <p>Insure your goods</p>
-                                    <div class="separator"></div>
-                                    @if((float) ($lead->insurance_amount ?? 0) > 0 || ($lead->insurence ?? '') === 'cover')
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" checked disabled />
-                                                    <label class="check-container">
-                                                        {{ optional($lead->insurance)->name ?? 'Insurance cover' }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <p class="text-right">AED {{ number_format((float) ($lead->insurance_amount ?? 0), 2) }}/mo</p>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <input type="text" class="form-control" readonly value="{{ $lead->goods }}" style="height:35px;" disabled>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <p class="text-right">Cover AED {{ $lead->insurance_cover ?? '—' }}</p>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" checked disabled />
-                                            <label class="check-container">No Thanks</label>
-                                        </div>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>
-                        <div class="row terms-conditions-sections">
-                            <div class="offset-1 offset-sm-2 offset-md-1 offset-lg-1 col-10 col-sm-8 col-md-5 col-lg-4 terms-conditions-section-header">
-                                TERMS &amp; CONDITIONS
-                            </div>
-                            <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-7 terms-conditions-section-body">
-                                <div class="row">
-                                    <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox"  name="terms" value="agree"  id="flexCheckDefault" required />
-                                            <label class="check-container" for="flexCheckDefault">I agree to the standard terms and conditions of storage
-                                                keys<a href="#" data-toggle="modal" data-target="#quick_view_modal" class="form-link"> (click here)</a></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 {{--                    <div class="row submission-sections">--}}
 {{--                        <button class="offset-md-1 offset-lg-1 btn btn-qoutation btn-sm active btn-submit float-end" type="submit">Save Estimate</button>--}}
 {{--                    </div>--}}

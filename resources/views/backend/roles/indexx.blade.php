@@ -43,6 +43,15 @@
                         @endif
                     </div>
                 @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $message)
+                                <li>{{ $message }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="card-inner">
                     <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true"  id="datatable" >
                         <thead>
@@ -237,9 +246,11 @@
                                 if(data[i].users.length != 0){
                                     html += '<li><a data-toggle="modal" href="#deattachuser"  class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Deattach User</span></a></li>';
                                 }
-                            html +='<li><a href={{url('admin/edit-role')}}/'+data[i].id+' class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Manage Role</span></a></li>'+
-                                '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
-                                '</ul>'+
+                            if (!data[i].is_admin) {
+                                html +='<li><a href={{url('admin/edit-role')}}/'+data[i].id+' class="btn-edit" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Manage Role</span></a></li>'+
+                                '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>';
+                            }
+                            html +='</ul>'+
                                 ' </div>'+
                                 '</div>'+
                                 ' </li>'+

@@ -5,18 +5,18 @@
 
 <div class="card">
     <div class="card-inner">
-        <form class="gy-3 form-validate is-alter " action="{{ Route('update-role')}}"  method="post" >
+        <form class="gy-3 form-validate is-alter " action="{{ route('update-role') }}" method="post">
             @csrf
-            @if($isEdit)
-                @method('put')
-            @endif
             <div class="row g-4">
                 <div class="col-lg-9">
                     <div class="form-group">
                         <label class="form-label" for="role_name">Role Name</label>
                         <div class="form-control-wrap">
-                            <input type="hidden" name="id" value="{{$role->id}}">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Role Name" value="{{$role->name}}" required >
+                            <input type="hidden" name="id" value="{{ $role->id }}">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Role Name" value="{{ old('name', $role->name) }}" required>
+                            @error('name')
+                                <span class="text-danger small">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                 </div>

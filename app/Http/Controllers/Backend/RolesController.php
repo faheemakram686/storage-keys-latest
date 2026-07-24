@@ -70,10 +70,18 @@ class RolesController extends Controller
 
     public function editRole($id)
     {
+        $role = \App\Models\Core\Auth\Role::with('permissions')->findOrFail($id);
+
+        if ($role->isAdmin()) {
+            return redirect()
+                ->route('roles.index')
+                ->withErrors(['You are not allowed to edit the App Admin role.']);
+        }
+
         $admin = Type::findByAlias('admin')->id;
-        $permissions = Permission::where('type_id',$admin)->get();
+        $permissions = Permission::where('type_id', $admin)->get();
         $permission_groups = $this->formatPermissions($permissions);
-        $role = \App\Models\Core\Auth\Role::with('permissions')->find($id);
+
         return view('backend.roles.edit', compact('role', 'permission_groups', 'permissions'));
     }
 
