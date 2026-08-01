@@ -254,6 +254,14 @@
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
+                                    <label class="form-label" for="remarks">Remarks</label>
+                                    <div class="form-control-wrap">
+                                        <textarea class="form-control" name="remarks" id="remarks">{{$data['invoice'][0]->remarks}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
                                     <label class="form-label" for="status">Status</label>
                                     <select class="form-control form-select " id="status" name="status" required>
                                         <option value="1" {{(($data['invoice'][0]->status == 'Active')? 'selected':'')}}>Active</option>

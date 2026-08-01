@@ -87,14 +87,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="status">Customer</label>
-                                            <select class="form-control"  name="customer_id" required readonly="">
-                                                <option value="">Choose One</option>
+                                            <select class="form-control" disabled>
                                                 @isset($data)
-                                                    @foreach ($data['customer_list'] as $sl)
-                                                        <option value="{{ $sl->id }} " {{$sl->id == $data['customer']->id ? 'selected' : ''}}>{{ $sl->company_name }}</option>
-                                                    @endforeach
+                                                    <option value="{{ $data['customer']->id }}" selected>{{ $data['customer']->full_display_name }}</option>
                                                 @endisset
                                             </select>
+                                            <input type="hidden" name="customer_id" id="contact_customer_id" value="{{ $data['customer']->id ?? '' }}">
 
                                         </div>
                                     </div>
@@ -194,10 +192,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="status">Customer</label>
-                                            <select class="form-control"  name="edit_customer_id" required readonly="">
-                                                <option value="">Choose One</option>
-
+                                            <select class="form-control" id="edit_customer_display" disabled>
+                                                @isset($data)
+                                                    <option value="{{ $data['customer']->id }}" selected>{{ $data['customer']->full_display_name }}</option>
+                                                @endisset
                                             </select>
+                                            <input type="hidden" name="edit_customer_id" id="edit_customer_id">
 
                                         </div>
                                     </div>
@@ -360,7 +360,7 @@
 
             getAllCities();
             function getAllCities() {
-                var customer_id=$('select[name=customer_id]').val();
+                var customer_id=$('#contact_customer_id').val();
 
                 $.ajax({
 
@@ -476,16 +476,15 @@
                                 `<option value="1" ${res.contact.status == 'Active' ? 'selected' : ''}>Active</option>`+
                                 `<option value="0" ${res.contact.status== 'In-Active' ? 'selected' : ''}>In-Active</option>`
                             )
-                        $('select[name="edit_customer_id"]')
-                            .empty()
+                        $('#edit_customer_id').val(res.contact.customer_id);
+                        $('#edit_customer_display').empty();
 
-                        //edit dropdown in ajax
                         $.each(res.customer, function(key, customer) {
-
-                            $('select[name="edit_customer_id"]')
-                                .append(
-                                    `<option value="${customer.id}" ${customer.id == res.contact.customer_id ? 'selected' : ''}>${customer.company_name}</option>`
+                            if (customer.id == res.contact.customer_id) {
+                                $('#edit_customer_display').append(
+                                    `<option value="${customer.id}" selected>${customer.full_display_name}</option>`
                                 )
+                            }
                         });
                     },
                     error: function() {

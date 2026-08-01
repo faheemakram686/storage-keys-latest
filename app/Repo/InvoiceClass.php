@@ -44,6 +44,7 @@ class InvoiceClass implements InvoiceInterface {
         $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
+        $invoice->remarks = $request->remarks;
         $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){
@@ -97,6 +98,7 @@ class InvoiceClass implements InvoiceInterface {
                     'grand_total' => $invoice->grand_total,
                     'due_date' => $invoice->due_date,
                     'note' => $invoice->note,
+                    'remarks' => $invoice->remarks,
                     'payment_method' => $invoice->payment_method,
                     'status' => $invoice->status,
                 ],
@@ -301,6 +303,7 @@ class InvoiceClass implements InvoiceInterface {
         $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
+        $invoice->remarks = $request->remarks;
         $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){

@@ -26,3 +26,15 @@ a.link:hover {
   margin-top: -20px;
   font-family: sans-serif;
 }
+
+/* Show the compact company icon only while the desktop sidebar is collapsed. */
+.nk-sidebar .logo-img-small {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1200px) {
+  .nk-sidebar.is-compact:not(:hover) .logo-img-small {
+    opacity: 1;
+  }
+}

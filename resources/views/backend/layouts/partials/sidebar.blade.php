@@ -16,7 +16,7 @@
                 <img class="logo-light logo-img" src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" srcset="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="logo">
                 <img class="logo-dark logo-img" src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" srcset="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}"
                     alt="logo-dark">
-                <img class="logo-small logo-img logo-img-small d-none" src="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}"
+                <img class="logo-small logo-img logo-img-small" src="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}"
                     srcset="{{ asset('sk-assets/assets/images/frontend/favicon.png') }} 2x" alt="logo-small">
             </a>
         </div>

@@ -55,6 +55,7 @@
                             <th class="nk-tb-col"><span class="sub-text">Balance</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                             <th class="nk-tb-col"><span class="sub-text">Payment</span></th>
+                            <th class="nk-tb-col"><span class="sub-text">Remarks</span></th>
                             <th class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Actions</span></th>
                         </tr>
                         </thead>
@@ -179,6 +180,7 @@
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge '+ paymentStatusBadgeClass(data[i].payment_status) +' ">'+data[i].payment_status+'</span>'+
                                 ' </td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+(data[i].remarks ? data[i].remarks : '-')+'</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
                                 ' <ul class="nk-tb-actions gx-1">'+
                                 '  <li>'+
