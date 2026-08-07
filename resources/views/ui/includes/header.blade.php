@@ -12,10 +12,8 @@
 <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>
 
 
-<header class="ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-transparent gradient-color-2">
-    <!-- ltn__header-top-area start -->
-    <div class="ltn__header-top-area top-area-color-white">
-        <div class="container">
+<div class="pv-banner-note">
+    <div class="container">
             <div class="row">
                 <div class="col-md-7">
                     <div class="ltn__top-bar-menu">
@@ -62,73 +60,39 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- ltn__header-top-area end -->
-
-    <!-- ltn__header-middle-area start -->
-    <div class="ltn__header-middle-area ltn__header-sticky ltn__sticky-bg-black">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="site-logo-wrap">
-                        <div class="site-logo">
-                            <a href="{{url('/')}}"><img
-                                        src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="Logo"></a>
-                        </div>
-                        <div class="get-support clearfix d-none">
-                            <div class="get-support-icon">
-                                <i class="icon-call"></i>
-                            </div>
-                            <div class="get-support-info">
-                                <h6>Get Support</h6>
-                                <h4><a href="tel:+971 56 501 8785">+971 56 501 8785</a></h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col header-menu-column menu-color-white">
-                    <div class="header-menu d-none d-xl-block">
-                        <nav>
-                            <div class="ltn__main-menu">
-                                <ul>
-                                    <li><a href="{{ url('/') }}">Home</a></li>
-                                    <li><a href="{{ url('/about-us') }}">About Us</a></li>
-                                    <li><a href="{{ url('/storage-options') }}">Storage Options</a></li>
-                                    <li><a href="{{ url('/shop') }}">Shop</a></li>
-                                    <li><a href="{{ url('/booking') }}">Booking</a></li>
-                                    <li><a href="{{ url('/blogs') }}">Blogs</a></li>
-                                    <li><a href="{{ url('/contact-us') }}">Contact Us</a></li>
-                                    <li class="special-link">
-                                        <a href="{{ url('/booking') }}">Book Now</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-                <div class="ltn__header-options ltn__header-options-2 ">
-                    <!-- Mobile Menu Button -->
-                    <div class="mobile-menu-toggle d-xl-none">
-                        <a href="#ltn__utilize-mobile-menu" class="ltn__utilize-toggle">
-                            <svg viewBox="0 0 800 600">
-                                <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200"
-                                      id="top"></path>
-                                <path d="M300,320 L540,320" id="middle"></path>
-                                <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190"
-                                      id="bottom"
-                                      transform="translate(480, 320) scale(1, -1) translate(-480, -318) "></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
+</div>
+<header class="pv-header">
+  <div class="sk-container pv-header-in">
+    <a href="{{ url('/') }}" class="pv-logo"><img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys"></a>
+    <nav class="pv-nav">
+      <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
+      <a href="{{ url('/about-us') }}" class="{{ request()->is('about-us') ? 'active' : '' }}">About Us</a>
+      <div class="pv-has-sub">
+        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage') ? 'active' : '' }}">Storage Options</a>
+        <div class="pv-sub">
+          <a href="{{ url('/personal-storage') }}" class="{{ request()->is('personal-storage') ? 'active' : '' }}">Personal Storage</a>
+          <a href="{{ url('/business-storage') }}" class="{{ request()->is('business-storage') ? 'active' : '' }}">Business Storage</a>
+          <a href="{{ url('/warehouse-storage') }}" class="{{ request()->is('warehouse-storage') ? 'active' : '' }}">Warehouse Storage</a>
+          <a href="{{ url('/climate-controlled-storage') }}" class="{{ request()->is('climate-controlled-storage') ? 'active' : '' }}">Climate Controlled Storage</a>
         </div>
+      </div>
+      <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details') ? 'active' : '' }}">Shop</a>
+      <a href="{{ url('/booking') }}" class="{{ request()->is('booking') ? 'active' : '' }}">Booking</a>
+      <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs', 'blog-details') ? 'active' : '' }}">Blogs</a>
+      <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>
+    </nav>
+    <div class="pv-header-cta">
+      <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+      <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
     </div>
-    <!-- ltn__header-middle-area end -->
+    <button type="button" class="pv-nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
 </header>
+
 <!-- Utilize Mobile Menu Start -->
-<div id="ltn__utilize-mobile-menu" class="ltn__utilize ltn__utilize-mobile-menu">
+<!-- <div id="ltn__utilize-mobile-menu" class="ltn__utilize ltn__utilize-mobile-menu">
     <div class="ltn__utilize-menu-inner ltn__scrollbar">
         <div class="ltn__utilize-menu-head">
             <div class="site-logo">
@@ -164,11 +128,11 @@
         {{--            </ul>--}}
         {{--        </div>--}}
     </div>
-</div>
+</div> -->
 <!-- Utilize Mobile Menu End -->
 
 <!-- Utilize Cart Menu Start -->
-<div id="ltn__utilize-cart-menu" class="ltn__utilize ltn__utilize-cart-menu">
+<!-- <div id="ltn__utilize-cart-menu" class="ltn__utilize ltn__utilize-cart-menu">
     <div class="ltn__utilize-menu-inner ltn__scrollbar">
         <div class="ltn__utilize-menu-head">
             <span class="ltn__utilize-menu-title">Cart</span>
@@ -232,5 +196,63 @@
         </div>
 
     </div>
-</div>
+</div> -->
 <!-- Utilize Cart Menu End -->
+
+{{-- Site nav: mobile menu button + "Storage Options" submenu --}}
+<script>
+(function () {
+    var MOBILE = '(max-width: 991px)';
+
+    function ready(fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else {
+            fn();
+        }
+    }
+
+    ready(function () {
+        var header = document.querySelector('.pv-header');
+        if (!header) return;
+
+        var nav = header.querySelector('.pv-nav');
+        var toggle = header.querySelector('.pv-nav-toggle');
+
+        function closeNav() {
+            if (!nav || !toggle) return;
+            nav.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+
+        if (nav && toggle) {
+            toggle.addEventListener('click', function () {
+                var isOpen = nav.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                toggle.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            });
+
+            // Leaving mobile width with the panel open would strand the .open class
+            window.addEventListener('resize', function () {
+                if (!window.matchMedia(MOBILE).matches) closeNav();
+            });
+        }
+
+        // On mobile the parent link expands its submenu instead of navigating;
+        // on desktop it stays a normal link and the submenu opens on hover.
+        var parents = header.querySelectorAll('.pv-has-sub');
+        for (var i = 0; i < parents.length; i++) {
+            (function (parent) {
+                var link = parent.querySelector(':scope > a');
+                if (!link) return;
+                link.addEventListener('click', function (e) {
+                    if (!window.matchMedia(MOBILE).matches) return;
+                    e.preventDefault();
+                    parent.classList.toggle('open');
+                });
+            })(parents[i]);
+        }
+    });
+})();
+</script>

@@ -15,6 +15,7 @@ use App\Http\Controllers\{Common\CronJobSettingController,
     Core\Notification\NotificationEventController,
     Core\Setting\StatusController,
     Core\Setting\TypeController};
+    
 
 Route::group(['prefix' => 'app'], function () {
     Route::get('types', [TypeController::class, 'index'])
