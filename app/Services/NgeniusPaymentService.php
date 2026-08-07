@@ -115,6 +115,7 @@ class NgeniusPaymentService
                 $candidates[] = $base . $path;
             }
         }
+        
 
         // Prefer APP_URL — this must be the live public domain on production.
         $appUrl = rtrim((string) config('app.url'), '/');
