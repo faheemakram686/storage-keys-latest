@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/custom.css') }}" />
     <!-- HEADER AREA START (header-5) -->
     <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
     
 </head>
 <body>
