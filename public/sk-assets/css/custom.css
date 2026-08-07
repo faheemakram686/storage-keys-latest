@@ -27,6 +27,7 @@ a.link:hover {
   font-family: sans-serif;
 }
 
+
 /* Show the compact company icon only while the desktop sidebar is collapsed. */
 .nk-sidebar .logo-img-small {
   opacity: 0;
