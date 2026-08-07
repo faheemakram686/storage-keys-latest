@@ -188,7 +188,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $contact = $passwordResetService->findUserByEmail($request->email, Contact::class);
+            $contact = $passwordResetService->findContactByEmail($request->email);
 
             // Always return a generic success to avoid leaking which emails exist.
             if (!$contact) {

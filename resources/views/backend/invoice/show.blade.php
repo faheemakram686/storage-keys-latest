@@ -101,6 +101,8 @@
                                                         <span class="overline-title" style="display:block;margin-top:1rem;">Bill From</span>
                                                         <div class="invoice-contact-info">
                                                             <h4 class="title">MUFATEEH AL MAKHAZAN</h4>
+                                                            <h5 class="title">Storage Keys</h5>
+                                                            <div class="company-trn" style="color:#8094ae;font-size:12px;margin-top:4px;">TRN: 100368001200003</div>
                                                         </div>
                                                     </div>
                                                     <div class="invoice-desc mt-5">

@@ -170,6 +170,10 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="fw-password">Password</label>
                                                 <div class="form-control-wrap">
+                                                    <a href="#" class="form-icon form-icon-right passcode-switch" data-target="fw-password">
+                                                        <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                        <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                    </a>
                                                     <input type="password" data-msg="Required" class="form-control required" id="fw-password" name="fw-password" required>
                                                 </div>
                                             </div>
@@ -178,6 +182,10 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="fw-re-password">Re-Password</label>
                                                 <div class="form-control-wrap">
+                                                    <a href="#" class="form-icon form-icon-right passcode-switch" data-target="fw-re-password">
+                                                        <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                        <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                    </a>
                                                     <input type="password" data-msg="Required" class="form-control required" id="fw-re-password" name="fw-re-password" required>
                                                 </div>
                                             </div>

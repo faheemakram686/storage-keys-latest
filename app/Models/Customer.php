@@ -45,15 +45,22 @@ class Customer extends Model
 
     public function getFullDisplayNameAttribute()
     {
+        $contactName = $this->primaryContact
+            ? trim($this->primaryContact->first_name . ' ' . $this->primaryContact->last_name)
+            : '';
+
         if ($this->customer_type == 'company') {
-            $displayName = $this->company_name ?? 'No Company Name';
-            if ($this->primaryContact) {
-                $displayName .= ' (' . $this->primaryContact->first_name . ' ' . $this->primaryContact->last_name . ')';
+            $companyName = $this->company_name ?: $this->customer_name;
+
+            if (!$companyName) {
+                return $contactName ?: ($this->email ?: 'Customer #' . $this->id);
             }
-            return $displayName;
+
+            return $contactName ? $companyName . ' (' . $contactName . ')' : $companyName;
         }
-        
-        return $this->customer_name ?? 'No Name';
+
+        return $this->customer_name
+            ?: ($this->company_name ?: ($contactName ?: ($this->email ?: 'Customer #' . $this->id)));
     }
 
     public function getStatusAttribute($value)

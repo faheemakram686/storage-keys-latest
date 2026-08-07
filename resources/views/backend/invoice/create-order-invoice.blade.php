@@ -90,48 +90,59 @@
                                 <div class="col-lg-6" >
                                     <div class="form-group">
                                         <label>Recurring Invoice?<span class="text-danger"></span></label>
-                                        <select name="recurring" id="recurring" class="form-control select2" data-live-search="true" required >
-                                            <option  value="0"  selected>
-                                                No
-                                            </option>
-                                            <option value="1" >
-                                                Every 1 month
-                                            </option>
-                                            <option value="2" >
-                                                Every 2 months
-                                            </option>
-                                            <option value="3" >
-                                                Every 3 months
-                                            </option>
-                                            <option value="4" >
-                                                Every 4 months
-                                            </option>
-                                            <option value="5" >
-                                                Every 5 months
-                                            </option>
-                                            <option value="6" >
-                                                Every 6 months
-                                            </option>
-                                            <option value="7" >
-                                                Every 7 months
-                                            </option>
-                                            <option value="8" >
-                                                Every 8 months
-                                            </option>
-                                            <option value="9" >
-                                                Every 9 months
-                                            </option>
-                                            <option value="10" >
-                                                Every 10 months
-                                            </option>
-                                            <option value="11" >
-                                                Every 11 months
-                                            </option>
-                                            <option value="12" >
-                                                Every 12 months
-                                            </option>
-                                            <option value="custom" >Custom</option>
-                                        </select>
+                                        <div class="recurring-interval-wrap d-flex align-items-center flex-wrap">
+                                            <select name="recurring" id="recurring" class="form-control recurring-select" required >
+                                                <option  value="0"  selected>
+                                                    No
+                                                </option>
+                                                <option value="1" >
+                                                    Every 1 month
+                                                </option>
+                                                <option value="2" >
+                                                    Every 2 months
+                                                </option>
+                                                <option value="3" >
+                                                    Every 3 months
+                                                </option>
+                                                <option value="4" >
+                                                    Every 4 months
+                                                </option>
+                                                <option value="5" >
+                                                    Every 5 months
+                                                </option>
+                                                <option value="6" >
+                                                    Every 6 months
+                                                </option>
+                                                <option value="7" >
+                                                    Every 7 months
+                                                </option>
+                                                <option value="8" >
+                                                    Every 8 months
+                                                </option>
+                                                <option value="9" >
+                                                    Every 9 months
+                                                </option>
+                                                <option value="10" >
+                                                    Every 10 months
+                                                </option>
+                                                <option value="11" >
+                                                    Every 11 months
+                                                </option>
+                                                <option value="12" >
+                                                    Every 12 months
+                                                </option>
+                                                <option value="custom" >Custom</option>
+                                            </select>
+                                            <div class="custom-recurring d-none align-items-center">
+                                                <input type="number" name="duration" id="duration" class="form-control" min="1" step="1" value="1">
+                                                <select name="duration_type" id="duration_type" class="form-control">
+                                                    <option value="days" selected>Day(s)</option>
+                                                    <option value="weeks">Week(s)</option>
+                                                    <option value="months">Month(s)</option>
+                                                    <option value="years">Year(s)</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6" >
@@ -146,23 +157,6 @@
                                             </div>
                                             <input id="no_cycle" name="no_cycle" type="number" step="1" min="0" value="0" class="form-control" disabled>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 custom-recurring" >
-                                    <div class="form-group">
-                                        <label>Duration <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="number" step="any" name="duration" id="duration" placeholder="Enter Value" value="1">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 custom-recurring">
-                                    <div class="form-group">
-                                        <label>Duration Type<span class="text-danger"></span></label>
-                                        <select name="duration_type" id="" class="form-control select2" data-live-search="true" required>
-                                            <option value="days" selected>Days</option>
-                                            <option value="weeks">Weeks</option>
-                                            <option value="months">Months</option>
-                                            <option value="years">Years</option>
-                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -246,6 +240,14 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
+                                        <label class="form-label" for="remarks">Remarks</label>
+                                        <div class="form-control-wrap">
+                                            <textarea class="form-control" name="remarks" id="remarks"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
                                         <label class="form-label" for="status">Status</label>
                                         <select class="form-control form-select " id="status" name="status" required>
                                             <option value="1">Active</option>
@@ -269,7 +271,13 @@
     <script>
         $(document).ready(function() {
             var dr=0;
-            $(".custom-recurring").css({display: "none"});
+
+            function toggleCustomRecurring() {
+                var isCustom = $('#recurring').val() === 'custom';
+                $('.custom-recurring').toggleClass('d-none', !isCustom);
+            }
+            $('#recurring').on('change', toggleCustomRecurring);
+            toggleCustomRecurring();
 
             $("#invoice_type").on('change', function() {
                 var type = $(this).val();
@@ -317,18 +325,6 @@
                 var order_id = $(this).val();
                 getOrderProcucts(order_id);
             });
-            $("#recurring").on('change', function() {
-                var duration = $(this).val();
-                if (duration == 'custom')
-                {
-                    $(".custom-recurring").css({display: "block"});
-                }else {
-                    $(".custom-recurring").css({display: "none"});
-                }
-
-            });
-
-
 
             getProducts();
 

@@ -43,9 +43,7 @@
                                     <li><a class="{{ Route::is('customer-invoices') ? 'active' : '' }}" href="{{url('admin/customer/invoices/'.$data['customer']->id)}}"><em class="icon ni ni-file-text-fill"></em><span>Invoices</span></a></li>
                                     <li><a class="{{ Route::is('customer-tasks') ? 'active' : '' }}" href="{{url('admin/customer/tasks/'.$data['customer']->id)}}"><em class="icon ni ni-activity-round-fill"></em><span>Tasks</span></a></li>
                                     <li><a class="{{ Route::is('customer-attachments') ? 'active' : '' }}" href="{{url('admin/customer/attachments/'.$data['customer']->id)}}"><em class="icon ni ni-activity-round-fill"></em><span>Attachments</span></a></li>
-                                    <li><a class="{{ Route::is('customer-reminders') ? 'active' : '' }}" href="{{url('admin/customer/reminders/'.$data['customer']->id)}}"><em class="icon ni ni-activity-round-fill"></em><span>Reminders</span></a>
-                                    </li><li><a href="#"><em class="icon ni ni-activity-round-fill"></em><span>Notes</span></a>
-                                    </li><li><a href="#"><em class="icon ni ni-activity-round-fill"></em><span>Activity Logs</span></a>
+                                    <li><a class="{{ Route::is('customer-reminders') ? 'active' : '' }}" href="{{url('admin/customer/reminders/'.$data['customer']->id)}}"><em class="icon ni ni-activity-round-fill"></em><span>Reminders</span></a></li>
 
                                 </ul>
                             </div>

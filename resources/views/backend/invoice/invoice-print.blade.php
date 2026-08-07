@@ -283,21 +283,17 @@
         @isset($data['invoice'][0])
         <div class="invoice-wrap">
             <div class="row invoice-header">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-6">
                     <div class="invoice-brand">
                         <img src="/sk-assets/assets/images/frontend/front-logo.png" alt="Storage Keys">
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-4 invoice-company">
-                    <h5 class="title">Storage Keys</h5>
-                    <div class="company-trn">TRN: 100368001200003</div>
-                </div>
-                <div class="col-6 col-sm-3 col-md-2 invoice-title-block">
+                <div class="col-6 col-sm-6 col-md-3 invoice-title-block">
                     <h5 class="title">Tax Invoice</h5>
                     <span>{{$data['invoice'][0]->invoice_no}}</span>
                 </div>
 
-                <div class="col-6 col-sm-3 col-md-2 invoice-pay-block">
+                <div class="col-6 col-sm-6 col-md-3 invoice-pay-block">
                     @if($data['invoice'][0]->payment_status !== "Paid")
                     <a href="{{url('pay-now/'.hashid_encode($data['invoice'][0]->id))}}" class="btn btn-primary pay-now-btn">Pay Now</a>
                         @endif
@@ -323,6 +319,8 @@
                     <span class="overline-title" style="display:block;margin-top:1rem;">Bill From</span>
                     <div class="invoice-contact-info">
                         <h6 class="title">MUFATEEH AL MAKHAZAN</h6>
+                        <h6 class="title">Storage Keys</h6>
+                        <div class="company-trn">TRN: 100368001200003</div>
                     </div>
                 </div>
                 <div class="invoice-desc">

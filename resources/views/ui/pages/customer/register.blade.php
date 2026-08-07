@@ -140,8 +140,18 @@
                             <input type="text" name="first_name" placeholder="First Name" required>
                             <input type="text" name="last_name" placeholder="Last Name" required>
                             <input type="text" name="email" placeholder="Email*" required>
-                            <input type="password" name="password" placeholder="Password*" required>
-                            <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
+                            <div class="password-field-wrap">
+                                <input type="password" name="password" placeholder="Password*" required>
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-field-wrap">
+                                <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
 
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {

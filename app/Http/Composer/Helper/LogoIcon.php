@@ -12,17 +12,22 @@ class LogoIcon
 
     public function logoIcon()
     {
-        $logo = empty(settings('tenant_logo', 'app_logo'))
-            ? url('/images/logo.png') :
-            url(settings('tenant_logo', 'app_logo'));
-
-        $icon = empty(settings('tenant_icon', 'app_icon')) ?
-            url('/images/icon.png') :
-            url(settings('tenant_icon', 'app_icon'));
-
         return [
-            'logo' => $logo,
-            'icon' => $icon
+            'logo' => $this->resolve(settings('tenant_logo', 'app_logo'), '/images/logo.png'),
+            'icon' => $this->resolve(settings('tenant_icon', 'app_icon'), '/images/icon.png')
         ];
+    }
+
+    /**
+     * A stored path can outlive the file it points at, so fall back to the
+     * bundled default rather than rendering a broken image.
+     */
+    protected function resolve($path, $default)
+    {
+        if (empty($path) || !is_file(public_path(ltrim($path, '/')))) {
+            return url($default);
+        }
+
+        return url($path);
     }
 }

@@ -133,7 +133,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password <span class="text-danger"></span></label>
-                                            <input class="form-control" type="password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="lead_create_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="lead_create_password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -237,7 +243,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password <span class="text-danger">*</span></label>
-                                            <input class="form-control" type="password" name="edit_password" placeholder="Password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="lead_edit_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="lead_edit_password" name="edit_password" placeholder="Password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

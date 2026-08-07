@@ -194,7 +194,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 {{--' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/contact')}}/' + data[i].id + ' class="btn-edit" data='+data[i].id+'>' + data[i].first_name + ' ' + data[i].last_name + '</a></td>' +--}}
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href="{{ asset('storage/files/') }}/' + data[i].name + '" class="btn-edit" data='+data[i].id+' >' + data[i].name + '</a></td>' +
-                                ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].require_document.title + '</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">' + (data[i].require_document?.title || '-') + '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].created_at + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+

@@ -325,11 +325,26 @@
                                                             <div class="row">
                                                                 <div class="col-md-12">
                                                                     <label>Current password (leave blank to leave unchanged):</label>
-                                                                    <input type="password" name="current_password">
+                                                                    <div class="password-field-wrap">
+                                                                        <input type="password" name="current_password">
+                                                                        <button type="button" class="password-toggle" aria-label="Show password">
+                                                                            <i class="far fa-eye"></i>
+                                                                        </button>
+                                                                    </div>
                                                                     <label>New password (leave blank to leave unchanged):</label>
-                                                                    <input type="password" name="password">
+                                                                    <div class="password-field-wrap">
+                                                                        <input type="password" name="password">
+                                                                        <button type="button" class="password-toggle" aria-label="Show password">
+                                                                            <i class="far fa-eye"></i>
+                                                                        </button>
+                                                                    </div>
                                                                     <label>Confirm new password:</label>
-                                                                    <input type="password" name="password_confirmation">
+                                                                    <div class="password-field-wrap">
+                                                                        <input type="password" name="password_confirmation">
+                                                                        <button type="button" class="password-toggle" aria-label="Show password">
+                                                                            <i class="far fa-eye"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </fieldset>

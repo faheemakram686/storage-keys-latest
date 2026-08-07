@@ -29,6 +29,9 @@ class InvoiceClass implements InvoiceInterface {
 
     public function saveInvoice($request)
     {
+        if ($error = $this->validateCustomRecurring($request)) {
+            return response()->json(['errors' => $error], 200);
+        }
 
         $invoice =new Invoice();
         $invoice->customer_id = $request->customer_id;
@@ -44,6 +47,7 @@ class InvoiceClass implements InvoiceInterface {
         $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
+        $invoice->remarks = $request->remarks;
         $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){
@@ -97,6 +101,7 @@ class InvoiceClass implements InvoiceInterface {
                     'grand_total' => $invoice->grand_total,
                     'due_date' => $invoice->due_date,
                     'note' => $invoice->note,
+                    'remarks' => $invoice->remarks,
                     'payment_method' => $invoice->payment_method,
                     'status' => $invoice->status,
                 ],
@@ -287,6 +292,10 @@ class InvoiceClass implements InvoiceInterface {
 
     public function updateInvoice($request)
     {
+        if ($error = $this->validateCustomRecurring($request)) {
+            return response()->json(['errors' => $error], 200);
+        }
+
         $invoice =Invoice::find($request->invoice_id);
         $invoice->customer_id = $request->customer_id;
         $invoice->type = $request->invoice_type;
@@ -301,6 +310,7 @@ class InvoiceClass implements InvoiceInterface {
         $this->applyVatTotals($invoice, $request);
         $invoice->due_date = $request->due_date;
         $invoice->note = $request->note;
+        $invoice->remarks = $request->remarks;
         $invoice->payment_method = $request->payment_method;
         $invoice->status = $request->status;
         if($invoice->save()){
@@ -343,6 +353,26 @@ class InvoiceClass implements InvoiceInterface {
         return (string) $request->no_cycle;
     }
 
+    private function validateCustomRecurring($request): ?string
+    {
+        if ($request->recurring !== 'custom') {
+            return null;
+        }
+
+        $duration = (int) $request->duration;
+        $allowedTypes = ['days', 'weeks', 'months', 'years'];
+
+        if ($duration < 1) {
+            return 'Custom recurring duration must be at least 1.';
+        }
+
+        if (!in_array($request->duration_type, $allowedTypes, true)) {
+            return 'Please select a valid custom recurring duration type.';
+        }
+
+        return null;
+    }
+
     private function applyRecurringSettings(Invoice $invoice, $request): void
     {
         if ($request->recurring == '0' || $request->recurring === null || $request->recurring === '') {
@@ -353,7 +383,7 @@ class InvoiceClass implements InvoiceInterface {
         }
 
         if ($request->recurring == 'custom') {
-            $invoice->duration = $request->duration;
+            $invoice->duration = (string) max(1, (int) $request->duration);
             $invoice->duration_type = $request->duration_type;
         } else {
             $invoice->duration = null;

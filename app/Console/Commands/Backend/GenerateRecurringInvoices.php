@@ -84,6 +84,7 @@ class GenerateRecurringInvoices extends Command
                     $child->vat_type = $parent->vat_type;
                     $child->grand_total = $parent->grand_total;
                     $child->note = $parent->note;
+                    $child->remarks = $parent->remarks;
                     $child->payment_method = $parent->payment_method;
                     $child->status = 1;
                     $child->payment_status = Invoice::PAYMENT_PENDING;

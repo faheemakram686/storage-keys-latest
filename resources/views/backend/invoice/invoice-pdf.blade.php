@@ -184,7 +184,7 @@
             <div class="invoice-wrap">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 40%;">
+                        <td style="width: 60%;">
                             <div class="invoice-brand">
                                 @php
                                     $logoPath = public_path('sk-assets/assets/images/frontend/front-logo.png');
@@ -195,11 +195,7 @@
                                 @endif
                             </div>
                         </td>
-                        <td style="width: 30%;">
-                            <h5 class="title">Storage Keys</h5>
-                            <div class="company-trn">TRN: 100368001200003</div>
-                        </td>
-                        <td style="width: 30%;">
+                        <td style="width: 40%;">
                             <h5 class="title">Tax Invoice</h5>
                             <span>{{ $data['invoice'][0]->invoice_no }}</span>
                         </td>
@@ -233,6 +229,8 @@
                                 <span class="overline-title" style="display:block;margin-top:12px;">Bill From</span>
                                 <div class="invoice-contact-info">
                                     <h6 class="title">MUFATEEH AL MAKHAZAN</h6>
+                                    <h6 class="title">Storage Keys</h6>
+                                    <div class="company-trn">TRN: 100368001200003</div>
                                 </div>
                             </div>
                         </td>

@@ -87,14 +87,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="status">Customer</label>
-                                            <select class="form-control"  name="customer_id" required readonly="">
-                                                <option value="">Choose One</option>
+                                            <select class="form-control" disabled>
                                                 @isset($data)
-                                                    @foreach ($data['customer_list'] as $sl)
-                                                        <option value="{{ $sl->id }} " {{$sl->id == $data['customer']->id ? 'selected' : ''}}>{{ $sl->company_name }}</option>
-                                                    @endforeach
+                                                    <option value="{{ $data['customer']->id }}" selected>{{ $data['customer']->full_display_name }}</option>
                                                 @endisset
                                             </select>
+                                            <input type="hidden" name="customer_id" id="contact_customer_id" value="{{ $data['customer']->id ?? '' }}">
 
                                         </div>
                                     </div>
@@ -131,7 +129,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password <span class="text-danger"></span></label>
-                                            <input class="form-control" type="password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="contact_create_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="contact_create_password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -194,10 +198,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label" for="status">Customer</label>
-                                            <select class="form-control"  name="edit_customer_id" required readonly="">
-                                                <option value="">Choose One</option>
-
+                                            <select class="form-control" id="edit_customer_display" disabled>
+                                                @isset($data)
+                                                    <option value="{{ $data['customer']->id }}" selected>{{ $data['customer']->full_display_name }}</option>
+                                                @endisset
                                             </select>
+                                            <input type="hidden" name="edit_customer_id" id="edit_customer_id">
 
                                         </div>
                                     </div>
@@ -235,7 +241,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password</label>
-                                            <input class="form-control" type="password" name="edit_password" placeholder="Leave blank to keep current password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="contact_edit_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="contact_edit_password" name="edit_password" placeholder="Leave blank to keep current password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -291,11 +303,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Password <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                                    <div class="form-control-wrap">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="set_password_password">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input class="form-control" type="password" id="set_password_password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Confirm Password <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password" required>
+                                    <div class="form-control-wrap">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="set_password_confirmation">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input class="form-control" type="password" id="set_password_confirmation" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password" required>
+                                    </div>
                                 </div>
                                 <div class="float-right">
                                     <button class="btn btn-primary mt-2 btn-set-password-submit" type="submit">Save Password</button>
@@ -360,7 +384,7 @@
 
             getAllCities();
             function getAllCities() {
-                var customer_id=$('select[name=customer_id]').val();
+                var customer_id=$('#contact_customer_id').val();
 
                 $.ajax({
 
@@ -476,16 +500,15 @@
                                 `<option value="1" ${res.contact.status == 'Active' ? 'selected' : ''}>Active</option>`+
                                 `<option value="0" ${res.contact.status== 'In-Active' ? 'selected' : ''}>In-Active</option>`
                             )
-                        $('select[name="edit_customer_id"]')
-                            .empty()
+                        $('#edit_customer_id').val(res.contact.customer_id);
+                        $('#edit_customer_display').empty();
 
-                        //edit dropdown in ajax
                         $.each(res.customer, function(key, customer) {
-
-                            $('select[name="edit_customer_id"]')
-                                .append(
-                                    `<option value="${customer.id}" ${customer.id == res.contact.customer_id ? 'selected' : ''}>${customer.company_name}</option>`
+                            if (customer.id == res.contact.customer_id) {
+                                $('#edit_customer_display').append(
+                                    `<option value="${customer.id}" selected>${customer.full_display_name}</option>`
                                 )
+                            }
                         });
                     },
                     error: function() {

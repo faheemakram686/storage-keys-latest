@@ -42,6 +42,7 @@ class Invoice extends Model
         'grand_total',
         'due_date',
         'note',
+        'remarks',
         'payment_method',
         'status',
         'invoice_ref',

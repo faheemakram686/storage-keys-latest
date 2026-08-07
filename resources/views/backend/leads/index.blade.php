@@ -261,7 +261,13 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Password <span class="text-danger"></span></label>
-                                        <input class="form-control" type="password" name="password" placeholder="Password" autocomplete="new-password" >
+                                        <div class="form-control-wrap">
+                                            <a href="#" class="form-icon form-icon-right passcode-switch" data-target="leads_index_password">
+                                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                            </a>
+                                            <input class="form-control" type="password" id="leads_index_password" name="password" placeholder="Password" autocomplete="new-password" >
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
