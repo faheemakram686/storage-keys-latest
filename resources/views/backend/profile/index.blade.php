@@ -130,6 +130,10 @@
                                         <div class="form-group">
                                             <label class="form-label" for="password">New Password</label>
                                             <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
                                                 <input type="password" class="form-control" id="password" name="password" required="">
                                             </div>
                                         </div>
@@ -138,6 +142,10 @@
                                         <div class="form-group">
                                             <label class="form-label" for="password_confirmation">Confirm New Password</label>
                                             <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="password_confirmation">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
                                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required="">
                                                 <div style="margin-top: 7px;" id="CheckPasswordMatch"></div>
                                             </div>

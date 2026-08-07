@@ -2,9 +2,11 @@
 
 namespace App\Services\Auth;
 
+use App\Models\Contact;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PasswordResetService
 {
@@ -15,11 +17,20 @@ class PasswordResetService
         return $modelClass::where('email', $email)->first();
     }
 
+    public function findContactByEmail(string $email): ?Contact
+    {
+        return Contact::query()
+            ->whereRaw('LOWER(email) = ?', [Str::lower($email)])
+            ->where('is_deleted', 0)
+            ->where('status', 1)
+            ->first();
+    }
+
     public function createToken(string $email): string
     {
         DB::table('password_resets')->where('email', $email)->delete();
 
-        $token = base64_encode(microtime(true) . '|' . $email);
+        $token = Str::random(64);
 
         DB::table('password_resets')->insert([
             'email' => $email,

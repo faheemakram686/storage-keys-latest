@@ -153,6 +153,7 @@
     <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}"></script>
     <!-- Main JS -->
     <script src="{{ asset('sk-assets/js/frontend/main.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/password-toggle.js') }}"></script>
 
     <script src="{{ asset('sk-assets/js/common.js') }}"></script>
     <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>

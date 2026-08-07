@@ -34,8 +34,18 @@
                             @csrf
                             <input type="hidden" name="token" value="{{ $token }}">
                             <input type="hidden" name="email" value="{{ $email }}">
-                            <input type="password" name="password" placeholder="New Password*" required>
-                            <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
+                            <div class="password-field-wrap">
+                                <input type="password" name="password" placeholder="New Password*" required>
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-field-wrap">
+                                <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
                             <div class="btn-wrapper mt-0">
                                 <button class="theme-btn-1 btn btn-block" type="submit">RESET PASSWORD</button>
                             </div>

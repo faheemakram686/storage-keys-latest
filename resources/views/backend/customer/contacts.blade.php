@@ -129,7 +129,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password <span class="text-danger"></span></label>
-                                            <input class="form-control" type="password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="contact_create_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="contact_create_password" name="password" placeholder="Password"  autocomplete="new-password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -235,7 +241,13 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Password</label>
-                                            <input class="form-control" type="password" name="edit_password" placeholder="Leave blank to keep current password" >
+                                            <div class="form-control-wrap">
+                                                <a href="#" class="form-icon form-icon-right passcode-switch" data-target="contact_edit_password">
+                                                    <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                    <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                </a>
+                                                <input class="form-control" type="password" id="contact_edit_password" name="edit_password" placeholder="Leave blank to keep current password" >
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -291,11 +303,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Password <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                                    <div class="form-control-wrap">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="set_password_password">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input class="form-control" type="password" id="set_password_password" name="password" placeholder="Enter password" autocomplete="new-password" required>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Confirm Password <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password" required>
+                                    <div class="form-control-wrap">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="set_password_confirmation">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input class="form-control" type="password" id="set_password_confirmation" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password" required>
+                                    </div>
                                 </div>
                                 <div class="float-right">
                                     <button class="btn btn-primary mt-2 btn-set-password-submit" type="submit">Save Password</button>

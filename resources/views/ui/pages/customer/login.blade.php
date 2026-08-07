@@ -57,7 +57,12 @@
                     <form method="POST" action="{{ route('customer.login.post') }}" class="ltn__form-box contact-form-box">
                         @csrf
                             <input type="text" name="email" placeholder="Email*">
-                            <input type="password" name="password" placeholder="Password*" >
+                            <div class="password-field-wrap">
+                                <input type="password" name="password" placeholder="Password*" >
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </div>
                             <div class="btn-wrapper mt-0">
                                 <button class="theme-btn-1 btn btn-block" type="submit">SIGN IN</button>
                             </div>

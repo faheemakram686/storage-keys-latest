@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\Contact\ContactPasswordResetMail;
-use App\Models\Contact;
 use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,10 +30,7 @@ class CustomerPasswordResetController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        $contact = $this->passwordResetService->findUserByEmail(
-            $request->email,
-            Contact::class
-        );
+        $contact = $this->passwordResetService->findContactByEmail($request->email);
 
         if (!$contact) {
             return back()
@@ -42,7 +38,7 @@ class CustomerPasswordResetController extends Controller
                 ->withErrors(['email' => __('passwords.user')]);
         }
 
-        $token = $this->passwordResetService->createToken($request->email);
+        $token = $this->passwordResetService->createToken($contact->email);
 
         $resetUrl = URL::signedRoute('customer.password.reset', [
             'token' => $token,
@@ -69,12 +65,9 @@ class CustomerPasswordResetController extends Controller
             'email' => 'required|email',
         ]);
 
-        $contact = $this->passwordResetService->findUserByEmail(
-            $request->email,
-            Contact::class
-        );
+        $contact = $this->passwordResetService->findContactByEmail($request->email);
 
-        $token = $this->passwordResetService->findToken($request->email, $request->token);
+        $token = $this->passwordResetService->findToken($contact?->email ?? $request->email, $request->token);
 
         if (!$contact || !$this->passwordResetService->tokenIsValid($token)) {
             return redirect()
@@ -83,7 +76,7 @@ class CustomerPasswordResetController extends Controller
         }
 
         return view('auth.customer-reset-password', [
-            'email' => $request->email,
+            'email' => $contact->email,
             'token' => $request->token,
         ]);
     }
@@ -96,12 +89,9 @@ class CustomerPasswordResetController extends Controller
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
-        $contact = $this->passwordResetService->findUserByEmail(
-            $request->email,
-            Contact::class
-        );
+        $contact = $this->passwordResetService->findContactByEmail($request->email);
 
-        $token = $this->passwordResetService->findToken($request->email, $request->token);
+        $token = $this->passwordResetService->findToken($contact?->email ?? $request->email, $request->token);
 
         if (!$contact || !$this->passwordResetService->tokenIsValid($token)) {
             return back()
@@ -113,7 +103,7 @@ class CustomerPasswordResetController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $this->passwordResetService->deleteToken($request->email);
+        $this->passwordResetService->deleteToken($contact->email);
 
         return redirect()
             ->route('customer.login')

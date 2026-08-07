@@ -548,20 +548,20 @@ Route::get('/oauth/gmail/logout', function (){
     LaravelGmail::logout(); //It returns exception if fails
     return redirect()->to('/admin/emails');
 });
-Route::get('/test-create-customer', function () {
-    $customer  = Customer::create([
-        'customer_name' => 'Muhammad Aleem Akram',
-        'email' => 'Aleem@example.com',
-        'phone' => '123456789',
-        'address' => 'Lahore, Pakistan',
-        'status' => 1,
-    ]);
-
-    return response()->json([
-        'message' => 'Customer created successfully!',
-        'customer' => $customer
-    ]);
-});
+// Route::get('/test-create-customer', function () {
+//     $customer  = Customer::create([
+//         'customer_name' => 'Muhammad Aleem Akram',
+//         'email' => 'Aleem@example.com',
+//         'phone' => '123456789',
+//         'address' => 'Lahore, Pakistan',
+//         'status' => 1,
+//     ]);
+//
+//     return response()->json([
+//         'message' => 'Customer created successfully!',
+//         'customer' => $customer
+//     ]);
+// });
 
 Route::get('/test-product-create', function () {
     $product = \App\Models\Product::create([

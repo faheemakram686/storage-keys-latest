@@ -112,17 +112,25 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="password">Password</label>
+                                    <label class="form-label" for="create_password">Password</label>
                                     <div class="form-control-wrap">
-                                        <input type="password" class="form-control" id="password" name="password" required="" value="">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="create_password">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input type="password" class="form-control" id="create_password" name="password" required="" value="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="password_confirmation">Confirm Password</label>
+                                    <label class="form-label" for="create_password_confirmation">Confirm Password</label>
                                     <div class="form-control-wrap">
-                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required="" value="">
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="create_password_confirmation">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input type="password" class="form-control" id="create_password_confirmation" name="password_confirmation" required="" value="">
                                     </div>
                                 </div>
                             </div>
@@ -237,17 +245,25 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="password">Password</label>
+                                    <label class="form-label" for="edit_password">Password</label>
                                     <div class="form-control-wrap">
-                                        <input type="password" class="form-control" id="password" name="password" >
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="edit_password">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input type="password" class="form-control" id="edit_password" name="password" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="password_confirmation">Confirm Password</label>
+                                    <label class="form-label" for="edit_password_confirmation">Confirm Password</label>
                                     <div class="form-control-wrap">
-                                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" >
+                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="edit_password_confirmation">
+                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                        </a>
+                                        <input type="password" class="form-control" id="edit_password_confirmation" name="password_confirmation" >
                                     </div>
                                 </div>
                             </div>

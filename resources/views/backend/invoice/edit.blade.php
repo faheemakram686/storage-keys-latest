@@ -95,48 +95,59 @@
                             <div class="col-lg-6" >
                                 <div class="form-group">
                                     <label>Recurring Invoice?<span class="text-danger"></span></label>
-                                    <select name="recurring" id="recurring" class="form-control select2" data-live-search="true" required >
-                                        <option  value="0"  {{(($data['invoice'][0]->recurring == "0")? 'selected':'')}}  >
-                                            No
-                                        </option>
-                                        <option value="1" {{(($data['invoice'][0]->recurring == "1")? 'selected':'')}} >
-                                            Every 1 month
-                                        </option>
-                                        <option value="2" {{(($data['invoice'][0]->recurring == "2")? 'selected':'')}}>
-                                            Every 2 months
-                                        </option>
-                                        <option value="3" {{(($data['invoice'][0]->recurring == "3")? 'selected':'')}} >
-                                            Every 3 months
-                                        </option>
-                                        <option value="4" {{(($data['invoice'][0]->recurring == "4")? 'selected':'')}}>
-                                            Every 4 months
-                                        </option>
-                                        <option value="5" {{(($data['invoice'][0]->recurring == "5")? 'selected':'')}}>
-                                            Every 5 months
-                                        </option>
-                                        <option value="6" {{(($data['invoice'][0]->recurring == "6")? 'selected':'')}}>
-                                            Every 6 months
-                                        </option>
-                                        <option value="7" {{(($data['invoice'][0]->recurring == "7")? 'selected':'')}}>
-                                            Every 7 months
-                                        </option>
-                                        <option value="8" {{(($data['invoice'][0]->recurring == "8")? 'selected':'')}}>
-                                            Every 8 months
-                                        </option>
-                                        <option value="9" {{(($data['invoice'][0]->recurring == "9")? 'selected':'')}}>
-                                            Every 9 months
-                                        </option>
-                                        <option value="10" {{(($data['invoice'][0]->recurring == "10")? 'selected':'')}}>
-                                            Every 10 months
-                                        </option>
-                                        <option value="11" {{(($data['invoice'][0]->recurring == "11")? 'selected':'')}}>
-                                            Every 11 months
-                                        </option>
-                                        <option value="12" {{(($data['invoice'][0]->recurring == "12")? 'selected':'')}}>
-                                            Every 12 months
-                                        </option>
-                                        <option value="custom" {{(($data['invoice'][0]->recurring == "custom")? 'selected':'')}}>Custom</option>
-                                    </select>
+                                    <div class="recurring-interval-wrap d-flex align-items-center flex-wrap">
+                                        <select name="recurring" id="recurring" class="form-control recurring-select" required >
+                                            <option  value="0"  {{(($data['invoice'][0]->recurring == "0")? 'selected':'')}}  >
+                                                No
+                                            </option>
+                                            <option value="1" {{(($data['invoice'][0]->recurring == "1")? 'selected':'')}} >
+                                                Every 1 month
+                                            </option>
+                                            <option value="2" {{(($data['invoice'][0]->recurring == "2")? 'selected':'')}}>
+                                                Every 2 months
+                                            </option>
+                                            <option value="3" {{(($data['invoice'][0]->recurring == "3")? 'selected':'')}} >
+                                                Every 3 months
+                                            </option>
+                                            <option value="4" {{(($data['invoice'][0]->recurring == "4")? 'selected':'')}}>
+                                                Every 4 months
+                                            </option>
+                                            <option value="5" {{(($data['invoice'][0]->recurring == "5")? 'selected':'')}}>
+                                                Every 5 months
+                                            </option>
+                                            <option value="6" {{(($data['invoice'][0]->recurring == "6")? 'selected':'')}}>
+                                                Every 6 months
+                                            </option>
+                                            <option value="7" {{(($data['invoice'][0]->recurring == "7")? 'selected':'')}}>
+                                                Every 7 months
+                                            </option>
+                                            <option value="8" {{(($data['invoice'][0]->recurring == "8")? 'selected':'')}}>
+                                                Every 8 months
+                                            </option>
+                                            <option value="9" {{(($data['invoice'][0]->recurring == "9")? 'selected':'')}}>
+                                                Every 9 months
+                                            </option>
+                                            <option value="10" {{(($data['invoice'][0]->recurring == "10")? 'selected':'')}}>
+                                                Every 10 months
+                                            </option>
+                                            <option value="11" {{(($data['invoice'][0]->recurring == "11")? 'selected':'')}}>
+                                                Every 11 months
+                                            </option>
+                                            <option value="12" {{(($data['invoice'][0]->recurring == "12")? 'selected':'')}}>
+                                                Every 12 months
+                                            </option>
+                                            <option value="custom" {{(($data['invoice'][0]->recurring == "custom")? 'selected':'')}}>Custom</option>
+                                        </select>
+                                        <div class="custom-recurring d-none align-items-center">
+                                            <input type="number" name="duration" id="duration" class="form-control" min="1" step="1" value="{{ $data['invoice'][0]->duration ?: 1 }}">
+                                            <select name="duration_type" id="duration_type" class="form-control">
+                                                <option value="days" {{(($data['invoice'][0]->duration_type == "days")? 'selected':'')}}>Day(s)</option>
+                                                <option value="weeks" {{(($data['invoice'][0]->duration_type == "weeks")? 'selected':'')}}>Week(s)</option>
+                                                <option value="months" {{(($data['invoice'][0]->duration_type == "months" || !$data['invoice'][0]->duration_type)? 'selected':'')}}>Month(s)</option>
+                                                <option value="years" {{(($data['invoice'][0]->duration_type == "years")? 'selected':'')}}>Year(s)</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-6" >
@@ -151,23 +162,6 @@
                                         </div>
                                         <input id="no_cycle" name="no_cycle" type="number" step="1" min="0" value="{{ $data['invoice'][0]->no_cycle == 'infinity' ? 0 : $data['invoice'][0]->no_cycle }}" class="form-control" {{(($data['invoice'][0]->no_cycle == "infinity")? 'disabled':'')}}>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 custom-recurring" >
-                                <div class="form-group">
-                                    <label>Duration <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="number" step="any" name="duration" id="duration" placeholder="Enter Value" value="{{$data['invoice'][0]->duration}}">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 custom-recurring">
-                                <div class="form-group">
-                                    <label>Duration Type<span class="text-danger"></span></label>
-                                    <select name="duration_type" id="" class="form-control select2" data-live-search="true" required>
-                                        <option value="days" {{(($data['invoice'][0]->duration_type == "days")? 'selected':'')}}>Days</option>
-                                        <option value="weeks" {{(($data['invoice'][0]->duration_type == "weeks")? 'selected':'')}}>Weeks</option>
-                                        <option value="months" {{(($data['invoice'][0]->duration_type == "months")? 'selected':'')}}>Months</option>
-                                        <option value="years" {{(($data['invoice'][0]->duration_type == "years")? 'selected':'')}}>Years</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -287,7 +281,13 @@
         $(document).ready(function() {
 
             var dr=0;
-            $(".custom-recurring").css({display: "none"});
+
+            function toggleCustomRecurring() {
+                var isCustom = $('#recurring').val() === 'custom';
+                $('.custom-recurring').toggleClass('d-none', !isCustom);
+            }
+            $('#recurring').on('change', toggleCustomRecurring);
+            toggleCustomRecurring();
 
 
             $("#invoice_type").on('change', function() {
@@ -336,28 +336,10 @@
                 var order_id = $(this).val();
                 getOrderProcucts(order_id);
             });
-            $("#recurring").on('change', function() {
-                var duration = $(this).val();
-                if (duration == 'custom')
-                {
-                    $(".custom-recurring").css({display: "block"});
-                }else {
-                    $(".custom-recurring").css({display: "none"});
-                }
-
-            });
 
             var customer_id=$('select[name=customer_id]').val();
             var type_selected=$('select[name=invoice_type]').val();
             var invoice_id=$('input[name=invoice_id]').val();
-            var recurring=$('select[name=recurring]').val();
-
-            if (recurring == 'custom')
-            {
-                $(".custom-recurring").css({display: "block"});
-            }else {
-                $(".custom-recurring").css({display: "none"});
-            }
 
             getContracts(customer_id);
             getOrders(customer_id);

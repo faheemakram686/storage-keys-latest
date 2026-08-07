@@ -3,6 +3,7 @@ namespace App\Repo;
 use App\Models\Attachment;
 use App\Models\Country;
 use App\Models\EmailTemplate;
+use App\Models\Estimate;
 use App\Models\LeadStatus;
 use App\Repo\Interfaces\AttachmentInterface;
 use App\Repo\Interfaces\CountryInterface;
@@ -74,12 +75,31 @@ class AttachmentClass implements AttachmentInterface {
     }
     public function getRelatedAttachment($request)
     {
-        $qry=Attachment::with('requireDocument');
-        $qry=$qry->where('type','=', $request->type);
-        $qry=$qry->where('type_id','=', $request->type_id);
-        $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        $qry = Attachment::with('requireDocument');
+
+        if ($request->type === 'customer') {
+            $estimateIds = Estimate::where('customer_id', $request->type_id)->pluck('id');
+
+            $qry = $qry->where(function ($q) use ($request, $estimateIds) {
+                $q->where(function ($q2) use ($request) {
+                    $q2->where('type', 'customer')
+                        ->where('type_id', $request->type_id);
+                });
+
+                if ($estimateIds->isNotEmpty()) {
+                    $q->orWhere(function ($q2) use ($estimateIds) {
+                        $q2->where('type', 'estimate')
+                            ->whereIn('type_id', $estimateIds);
+                    });
+                }
+            });
+        } else {
+            $qry = $qry->where('type', '=', $request->type);
+            $qry = $qry->where('type_id', '=', $request->type_id);
+        }
+
+        $qry = $qry->where('is_deleted', 0)->orderBy('id', 'DESC');
+        return $qry->get();
     }
 
 
