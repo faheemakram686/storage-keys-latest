@@ -203,6 +203,15 @@
                                 </div>
                                 @isset($data['order'])
                                     @foreach($data['order'] as $order)
+                                        @php
+                                            $contact = optional($order->customer)->primaryContact;
+                                            $firstName = $contact->first_name ?? '';
+                                            $lastName = $contact->last_name ?? '';
+                                            $initials = strtoupper(mb_substr($firstName, 0, 1) . mb_substr($lastName, 0, 1));
+                                            $customerName = optional($order->customer)->full_display_name
+                                                ?: trim($firstName . ' ' . $lastName)
+                                                ?: 'N/A';
+                                        @endphp
                                         <div class="nk-tb-item">
                                             <div class="nk-tb-col">
                                                 <span class="tb-lead"><a href="#">#{{$order->id}}</a></span>
@@ -210,10 +219,10 @@
                                             <div class="nk-tb-col tb-col-sm">
                                                 <div class="user-card">
                                                     <div class="user-avatar sm bg-purple-dim">
-                                                        <span>{{$order->customer->contact->first_name[0]}}{{$order->customer->contact->last_name[0]}} </span>
+                                                        <span>{{ $initials ?: '?' }}</span>
                                                     </div>
                                                     <div class="user-name">
-                                                        <span class="tb-lead">{{$order->customer->contact->first_name}} {{$order->customer->contact->last_name}}</span>
+                                                        <span class="tb-lead">{{ $customerName }}</span>
                                                     </div>
                                                 </div>
                                             </div>

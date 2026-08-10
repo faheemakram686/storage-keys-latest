@@ -68,7 +68,7 @@ class OrderClass implements OrderInterface {
 
     public function getAllOrders()
     {
-        $qry=Order::with('customer.contact');
+        $qry=Order::with('customer.primaryContact');
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
