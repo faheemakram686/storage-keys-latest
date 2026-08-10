@@ -7,7 +7,6 @@ namespace App\Models\Core\Auth\Traits\Boot;
 use App\Hooks\User\AfterUserPivotAction;
 use App\Hooks\User\AfterUserSaved;
 use App\Hooks\User\WhileUserDeleting;
-use App\Models\Core\Auth\User;
 
 trait UserBootTrait
 {
@@ -64,7 +63,8 @@ trait UserBootTrait
                 ->handle();
         });
 
-        static::deleting(function (User $user) {
+        // Do not type-hint Core\Auth\User — App\Models\User also uses this trait.
+        static::deleting(function ($user) {
             WhileUserDeleting::new(true)
                 ->setModel($user)
                 ->handle();
