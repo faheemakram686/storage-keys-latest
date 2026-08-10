@@ -62,22 +62,23 @@
             flex-wrap: wrap;
             word-break: break-word;
         }
-        .estimate-view-page .order-summary .summary-actions {
+        .estimate-view-page .terms-accept-actions {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 8px;
-            margin-top: 4px;
+            margin-top: 12px;
         }
-        .estimate-view-page .order-summary .summary-actions .btn-qoutation {
-            flex: 1 1 100%;
-            min-width: 0;
-            max-width: 100%;
+        .estimate-view-page .terms-accept-actions .btn-qoutation {
+            flex: 0 0 auto;
+            min-width: 140px;
+            max-width: 220px;
+            width: auto;
             margin-top: 0;
-            padding: 8px 10px;
+            padding: 8px 28px;
+            font-size: 0.95rem;
             text-align: center;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
             background-color: #F58320;
             color: #fff3e9;
             border-color: #F58320;
@@ -318,6 +319,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="terms-accept-actions mt-3">
+                                <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active">Accept</a>
+                            </div>
                         </div>
 
                         <div class="col-12 col-lg-3 order-summary">
@@ -423,9 +427,6 @@
                                         </div>
                                     </div>
                                     <div class="separator-item"></div>
-                                    <div class="summary-actions">
-                                        <a href="{{url('estimate-upload-document')}}/{{hashid_encode($data['lead'][0]->id)}}" class="btn btn-qoutation btn-sm active">Accept</a>
-                                    </div>
                                 </div>
                             </div>
                             </div>

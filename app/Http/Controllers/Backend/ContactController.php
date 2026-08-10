@@ -46,7 +46,12 @@ class ContactController extends Controller
     }
     public function updateContact(Request $request)
     {
-        $res=$this->contact->updateContact($request);
+        $res = $this->contact->updateContact($request);
+
+        if ($res instanceof \Illuminate\Http\JsonResponse) {
+            return $res;
+        }
+
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 

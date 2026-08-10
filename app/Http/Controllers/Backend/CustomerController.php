@@ -67,8 +67,12 @@ class CustomerController extends Controller
     }
     public function updateCustomer(Request $request)
     {
+        $res = $this->customer->updateCustomer($request);
 
-        $res=$this->customer->updateCustomer($request);
+        if ($res instanceof \Illuminate\Http\JsonResponse) {
+            return $res;
+        }
+
         return response()->json(['success' => 'Record updated successfully'], 200);
     }
 

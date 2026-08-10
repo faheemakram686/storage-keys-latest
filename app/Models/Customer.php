@@ -21,11 +21,15 @@ class Customer extends Model
 
     public function contact()
     {
-        return $this->belongsTo(Contact::class, 'id', 'customer_id');
+        return $this->hasMany(Contact::class, 'customer_id', 'id');
     }
+
     public function primaryContact()
     {
-        return $this->contact()->where('contact_type','=', 'primary');
+        return $this->hasOne(Contact::class, 'customer_id', 'id')
+            ->where('contact_type', 'primary')
+            ->where('is_deleted', 0)
+            ->orderBy('id');
     }
 
     protected $casts = [

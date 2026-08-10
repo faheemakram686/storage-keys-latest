@@ -101,6 +101,20 @@ class CustomerClass implements CustomerInterface {
     public function updateCustomer($request)
     {
         $customer=Customer::find($request->id);
+        if (!$customer) {
+            return response()->json(['errors' => 'Customer not found.'], 404);
+        }
+
+        $email = trim((string) $request->email);
+        $emailTaken = Contact::whereRaw('LOWER(email) = ?', [strtolower($email)])
+            ->where('is_deleted', 0)
+            ->where('customer_id', '!=', $customer->id)
+            ->exists();
+
+        if ($emailTaken) {
+            return response()->json(['errors' => ['email' => ['This email is already used by another contact.']]], 200);
+        }
+
         $customer->customer_type = $request->customer_type;
         if($request->customer_type == 'company')
         {
@@ -115,7 +129,7 @@ class CustomerClass implements CustomerInterface {
             $customer->dob = $request->dob;
         }
         $customer->customer_name = $request->f_name ." ". $request->l_name ;
-        $customer->email = $request->email;
+        $customer->email = $email;
         $customer->mobile = $request->mobile;
         $customer->home = $request->home;
         $customer->phone = $request->phone;
@@ -125,6 +139,38 @@ class CustomerClass implements CustomerInterface {
         $customer->country = $request->country;
         $customer->status=$request->status;
         $customer->save();
+
+        // Keep the login contact in sync — otherwise email changes only on customers
+        // and a second primary contact often gets created for the new email.
+        $primaryContact = Contact::where('customer_id', $customer->id)
+            ->where('contact_type', 'primary')
+            ->where('is_deleted', 0)
+            ->orderBy('id')
+            ->first();
+
+        if ($primaryContact) {
+            Contact::where('customer_id', $customer->id)
+                ->where('contact_type', 'primary')
+                ->where('is_deleted', 0)
+                ->where('id', '!=', $primaryContact->id)
+                ->update(['contact_type' => 'general']);
+
+            // If another contact on this customer already has the new email, soft-delete it
+            // so the primary can take ownership of that address.
+            Contact::where('customer_id', $customer->id)
+                ->where('id', '!=', $primaryContact->id)
+                ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+                ->where('is_deleted', 0)
+                ->update(['is_deleted' => 1]);
+
+            $primaryContact->first_name = $request->f_name;
+            $primaryContact->last_name = $request->l_name;
+            $primaryContact->email = $email;
+            $primaryContact->phone = $request->phone;
+            $primaryContact->status = $request->status;
+            $primaryContact->save();
+        }
+
         return 1;
     }
 
@@ -137,15 +183,35 @@ class CustomerClass implements CustomerInterface {
     {
 
         $validator = Validator::make($request->all(), [
-            'email'=>'required|email|unique:contacts',
+            'email' => 'required|email',
         ]);
-        if ($validator->fails())
-            return response()->json(['errors' => $validator->errors() ], 200);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 200);
+        }
 
-        $comp_id = 0;
-        DB::transaction(function() use ($request)
+        $lead = Lead::find($request->lead_id);
+        $existingCustomerId = $lead && $lead->customer_id ? (int) $lead->customer_id : 0;
+
+        $emailQuery = Contact::whereRaw('LOWER(email) = ?', [strtolower($request->email)])
+            ->where('is_deleted', 0);
+        if ($existingCustomerId > 0) {
+            $emailQuery->where('customer_id', '!=', $existingCustomerId);
+        }
+        if ($emailQuery->exists()) {
+            return response()->json(['errors' => ['email' => ['The email has already been taken.']]], 200);
+        }
+
+        DB::transaction(function() use ($request, $existingCustomerId)
         {
-        $customer=new Customer();
+        if ($existingCustomerId > 0) {
+            $customer = Customer::find($existingCustomerId);
+            if (!$customer) {
+                $customer = new Customer();
+            }
+        } else {
+            $customer = new Customer();
+        }
+
         $customer->customer_type = $request->lead_type;
         $customer->customer_name = $request->first_name.' '.$request->last_name;
         $customer->company_name = $request->company_name;
@@ -160,8 +226,25 @@ class CustomerClass implements CustomerInterface {
         $customer->lead_id=$request->lead_id;
         if($customer->save()){
             $this->customer_id = $customer->id;
-            $contact =new Contact();
-            $contact->customer_id = $customer->id;
+
+            $contact = Contact::where('customer_id', $customer->id)
+                ->where('contact_type', 'primary')
+                ->where('is_deleted', 0)
+                ->orderBy('id')
+                ->first();
+
+            if (!$contact) {
+                $contact = new Contact();
+                $contact->customer_id = $customer->id;
+                $contact->contact_type = $request->contact_type ?: 'primary';
+            } else {
+                Contact::where('customer_id', $customer->id)
+                    ->where('contact_type', 'primary')
+                    ->where('is_deleted', 0)
+                    ->where('id', '!=', $contact->id)
+                    ->update(['contact_type' => 'general']);
+            }
+
             $contact->first_name = $request->first_name;
             $contact->last_name = $request->last_name;
             $contact->position = $request->position;
@@ -170,7 +253,9 @@ class CustomerClass implements CustomerInterface {
             if($request->password){
                 $contact->password =  Hash::make($request->password);
             }
-            $contact->contact_type = $request->contact_type;
+            if (!$contact->exists) {
+                $contact->contact_type = $request->contact_type ?: 'primary';
+            }
             $contact->status=$request->status;
             if($contact->save()){
 
@@ -224,64 +309,6 @@ class CustomerClass implements CustomerInterface {
                     Notification::route('mail', $contact_email->email)->notify(new SetPasswordNotification($passwordemail));
                 }
 
-//                $refreshtoken = $this->refreshToken();
-//                $config = config('quickbooks');
-//                $dataService = DataService::Configure([
-//                    'auth_mode' => 'oauth2',
-//                    'ClientID' => $config['client_id'],
-//                    'ClientSecret' => $config['client_secret'],
-//                    'RedirectURI' => $config['redirect_uri'],
-//                    'accessTokenKey' => $refreshtoken['access_token'],
-//                    'refreshTokenKey' => $refreshtoken['refresh_token'],
-//                    'QBORealmID' => $config['realm_id'],
-//                    'baseUrl' => $config['base_url'],
-//                ]);
-//                $displayname =  $contact->first_name.' '.$contact->last_name;
-//                $query = "SELECT * FROM Customer WHERE DisplayName = '{$displayname}'";
-//                $customer = $dataService->Query($query);
-//                if (isset($customer) && !empty($customer) && count($customer) > 0){
-//                    $customer = $customer[0];
-//                    $customer->Id = $customer->Id;
-//                    $customer->GivenName = $displayname;
-//                    $customer -> DisplayName = $displayname;
-//                    $customer -> CompanyName = $request->company_name;
-//                    $customer -> BusinessNumber = '1111111';
-//                    $customer -> Mobile = $contact->phone;
-//                    $customer -> PrimaryEmailAddr->Address = $contact->email;//$customer-PrimaryEmailAddr-Address;
-//                    $customer -> PrimaryPhone->FreeFormNumber = $contact->phone;
-//                    try {
-//                        $result = $dataService->Update($customer);
-////                    echo 'Successfully update';
-//                    }catch (ServiceException $ex) {
-//                        echo "Updation Error message: " . $ex->getMessage();
-//                    }
-//
-//                }else{
-//                    $customerdata = \QuickBooksOnline\API\Facades\Customer::create([
-//                        "GivenName" => $displayname,
-//                        "DisplayName" => $displayname,
-//                        "CompanyName" => $request->company_name,
-//                        "PrimaryEmailAddr" => [
-//                            "Address" => $contact->email
-//                        ],
-//                        "BillAddr" => [
-//                            "Line1" => "123 Main Street",
-//                            "City" => "Mountain View",
-//                            "Country" => "USA",
-//                        ],
-//                        "PrimaryPhone" => [
-//                            "FreeFormNumber" => $contact->phone
-//                        ]
-//                    ]);
-//                    try {
-//                        $result = $dataService->Add($customerdata);
-////                    echo 'Successfully added';
-//                    } catch (ServiceException $ex) {
-//                        echo "Error message: " . $ex->getMessage();
-//                    }
-//                }
-//
-//                return response()->json(['success' => 'Record save successfully'], 200);
             }
 
         }

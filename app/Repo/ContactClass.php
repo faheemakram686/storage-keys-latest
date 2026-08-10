@@ -29,10 +29,19 @@ class ContactClass implements ContactInterface {
     public function saveContact($request)
     {
         $validator = Validator::make($request->all(), [
-            'email'=>'required|email|unique:contacts',
+            'email'=>'required|email|unique:contacts,email,NULL,id,is_deleted,0',
         ]);
         if ($validator->fails())
             return response()->json(['errors' => $validator->errors()], 200);
+
+        $contactType = $request->contact_type;
+        if ($contactType === 'primary') {
+            // Only one primary contact per customer — demote any existing primary.
+            Contact::where('customer_id', $request->customer_id)
+                ->where('contact_type', 'primary')
+                ->where('is_deleted', 0)
+                ->update(['contact_type' => 'general']);
+        }
 
         $mycontract='';
         $contact =new Contact();
@@ -45,9 +54,18 @@ class ContactClass implements ContactInterface {
         if($request->password)
             $contact->password =  Hash::make($request->password);
 
-        $contact->contact_type = $request->contact_type;
+        $contact->contact_type = $contactType;
         $contact->status=$request->status;
         if($contact->save()){
+            if ($contactType === 'primary') {
+                $customer = Customer::find($request->customer_id);
+                if ($customer) {
+                    $customer->email = $request->email;
+                    $customer->phone = $request->phone;
+                    $customer->customer_name = trim($request->first_name . ' ' . $request->last_name);
+                    $customer->save();
+                }
+            }
             $mycontract = $contact;
             if($request->dont_welcome != 1)
             {
@@ -171,6 +189,26 @@ class ContactClass implements ContactInterface {
     public function updateContact($request)
     {
         $contact=Contact::find($request->id);
+        if (!$contact) {
+            return response()->json(['errors' => 'Contact not found.'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'edit_email' => 'required|email|unique:contacts,email,' . $contact->id . ',id,is_deleted,0',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 200);
+        }
+
+        $contactType = $request->edit_contact_type;
+        if ($contactType === 'primary') {
+            Contact::where('customer_id', $request->edit_customer_id)
+                ->where('contact_type', 'primary')
+                ->where('is_deleted', 0)
+                ->where('id', '!=', $contact->id)
+                ->update(['contact_type' => 'general']);
+        }
+
         $contact->customer_id = $request->edit_customer_id;
         $contact->first_name = $request->edit_first_name;
         $contact->last_name = $request->edit_last_name;
@@ -180,9 +218,20 @@ class ContactClass implements ContactInterface {
         if ($request->filled('edit_password')) {
             $contact->password = Hash::make($request->edit_password);
         }
-        $contact->contact_type = $request->edit_contact_type;
+        $contact->contact_type = $contactType;
         $contact->status=$request->edit_status;
         $contact->save();
+
+        if ($contactType === 'primary') {
+            $customer = Customer::find($contact->customer_id);
+            if ($customer) {
+                $customer->email = $request->edit_email;
+                $customer->phone = $request->edit_phone;
+                $customer->customer_name = trim($request->edit_first_name . ' ' . $request->edit_last_name);
+                $customer->save();
+            }
+        }
+
         return 1;
     }
 

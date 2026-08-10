@@ -26,7 +26,7 @@ class TestingController extends Controller
         $project = [
             'greeting' => 'Hi '.$user->f_name.' '.$user->l_name.',',
             'body' => $body,
-            'thanks' => 'Thank you this is from storage Key',
+            'thanks' => 'Thank you for reviewing this estimate from Storage Keys.',
             'actionText' => 'View Estimate',
             'actionURL' => url('estimatetocustomer').'/'.hashid_encode($user->id),
             'id' => $user->id,

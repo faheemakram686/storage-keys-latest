@@ -14,18 +14,162 @@
             <div class="card">
                 <div class="card-inner">
                     @isset($data)
+                    <style>
+                        .estimate-selected-units {
+                            margin: 0;
+                        }
+                        .term-section-header .estimate-selected-units__count {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-width: 1.35rem;
+                            height: 1.35rem;
+                            margin-left: 0.35rem;
+                            padding: 0 0.35rem;
+                            border-radius: 999px;
+                            background: #FF8820;
+                            color: #fff;
+                            font-size: 0.75rem;
+                            font-weight: 700;
+                            vertical-align: middle;
+                            position: relative;
+                            top: -1px;
+                        }
+                        .estimate-selected-units__groups {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.75rem;
+                        }
+                        .estimate-unit-group {
+                            border: 1px solid #d1dae0;
+                            border-radius: 8px;
+                            background: #fff;
+                            overflow: hidden;
+                        }
+                        .estimate-unit-group__location {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            gap: 0.35rem 0.15rem;
+                            padding: 0.85rem 1.1rem 0.7rem;
+                            background: #fffaf5;
+                            border-bottom: 1px solid #eef1f5;
+                            color: #8094ae;
+                            font-size: 0.8125rem;
+                            line-height: 1.4;
+                        }
+                        .estimate-unit-group__crumb {
+                            color: #526484;
+                            font-weight: 500;
+                        }
+                        .estimate-unit-group__crumb--facility {
+                            color: #364a63;
+                            font-weight: 600;
+                        }
+                        .estimate-unit-group__sep {
+                            color: #c4cedb;
+                            margin: 0 0.2rem;
+                            font-weight: 400;
+                            user-select: none;
+                        }
+                        .estimate-unit-group__units {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 0.5rem;
+                            padding: 0.85rem 1.1rem 1rem;
+                        }
+                        .estimate-unit-chip {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 0.45rem;
+                            padding: 0.45rem 0.85rem;
+                            border-radius: 8px;
+                            background: #FF8820;
+                            color: #fff;
+                            font-size: 0.95rem;
+                            font-weight: 700;
+                            letter-spacing: 0.01em;
+                            line-height: 1.2;
+                            box-shadow: 0 2px 6px rgba(255, 136, 32, 0.28);
+                        }
+                        .estimate-unit-chip__icon {
+                            display: inline-flex;
+                            opacity: 0.9;
+                            font-size: 1rem;
+                        }
+                        @media (max-width: 575.98px) {
+                            .estimate-unit-group__location {
+                                padding: 0.75rem 0.9rem 0.6rem;
+                                font-size: 0.75rem;
+                            }
+                            .estimate-unit-group__units {
+                                padding: 0.75rem 0.9rem 0.9rem;
+                            }
+                            .estimate-unit-chip {
+                                font-size: 0.875rem;
+                            }
+                        }
+                    </style>
                     <div class="container">
-                        @foreach ($data['su'] as $su)
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 greeting-user">
-                                    <h3 class="animated fadeIn" style="color:#FF8820;" >{{$su->warehouse->loc->city->city_name}} <span class="area-name">-{{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</span> </h3>
-                                </div>
-                                {{--                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 selected-plot-message"> <p> {{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</p></div>--}}
-                            </div>
-                        @endforeach
                         @php
                             $primarySu = isset($data['su'][0]) ? $data['su'][0] : null;
+                            $selectedUnits = collect($data['su'] ?? []);
+                            $unitGroups = $selectedUnits->groupBy(function ($su) {
+                                $city = optional(optional(optional($su->warehouse)->loc)->city)->city_name;
+                                $loc = optional(optional($su->warehouse)->loc)->loc_name;
+                                $wh = optional($su->warehouse)->name;
+                                return implode('|', [$city, $loc, $wh]);
+                            });
                         @endphp
+                        @if($selectedUnits->isNotEmpty())
+                            <div class="row reservations-sections">
+                                <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
+                                    Selected Units
+                                    <span class="estimate-selected-units__count">{{ $selectedUnits->count() }}</span>
+                                </div>
+                                <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
+                                    <div class="row">
+                                        <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
+                                            <div class="estimate-selected-units animated fadeIn">
+                                                <div class="estimate-selected-units__groups">
+                                                    @foreach($unitGroups as $groupKey => $groupUnits)
+                                                        @php
+                                                            $first = $groupUnits->first();
+                                                            $cityName = optional(optional(optional($first->warehouse)->loc)->city)->city_name;
+                                                            $locName = optional(optional($first->warehouse)->loc)->loc_name;
+                                                            $whName = optional($first->warehouse)->name;
+                                                        @endphp
+                                                        <div class="estimate-unit-group">
+                                                            <div class="estimate-unit-group__location">
+                                                                @if($cityName)
+                                                                    <span class="estimate-unit-group__crumb">{{ $cityName }}</span>
+                                                                @endif
+                                                                @if($locName)
+                                                                    @if($cityName)<span class="estimate-unit-group__sep">›</span>@endif
+                                                                    <span class="estimate-unit-group__crumb">{{ $locName }}</span>
+                                                                @endif
+                                                                @if($whName)
+                                                                    @if($cityName || $locName)<span class="estimate-unit-group__sep">›</span>@endif
+                                                                    <span class="estimate-unit-group__crumb estimate-unit-group__crumb--facility">{{ $whName }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="estimate-unit-group__units">
+                                                                @foreach($groupUnits as $su)
+                                                                    <span class="estimate-unit-chip">
+                                                                        <em class="icon ni ni-home estimate-unit-chip__icon"></em>
+                                                                        {{ $su->storage_unit_name }}
+                                                                    </span>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         @foreach ($data['lead'] as $lead)
                             <div class="row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">

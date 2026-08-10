@@ -282,7 +282,7 @@ class EstimateClass implements EstimateInterface {
             $email = [
                 'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
                 'body' => $templateBody,
-                'thanks' => 'Thank you this Estimate from storage Key',
+                'thanks' => 'Thank you for reviewing this estimate from Storage Keys.',
                 'actionText' => 'View Estimate',
                 'actionURL' => url('estimatetocustomer').'/'.hashid_encode($estimate_email->id),
                 'id' => $estimate_email->id,
@@ -677,7 +677,7 @@ class EstimateClass implements EstimateInterface {
         $email = [
             'greeting' => 'Hi '.$estimate_email->f_name.' '.$estimate_email->l_name.',',
             'body' => $templateBody,
-            'thanks' => 'Thank you this Estimate from storage Key',
+            'thanks' => 'Thank you for reviewing this estimate from Storage Keys.',
             'actionText' => 'View Estimate',
             'actionURL' => url('estimatetocustomer').'/'.hashid_encode($estimate_email->id),
             'id' => $estimate_email->id,

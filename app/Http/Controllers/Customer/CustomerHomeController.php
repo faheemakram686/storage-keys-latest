@@ -71,6 +71,8 @@ class CustomerHomeController extends Controller
 
         if($contact->save()){
             $contact->customer()->update([
+                'email' => $request->email,
+                'customer_name' => trim($request->first_name . ' ' . $request->last_name),
                 'address' => $request->address,
                 'city' => $request->city,
                 'country' => $request->country,
@@ -161,6 +163,13 @@ class CustomerHomeController extends Controller
             $contact->email = $request->email;
             $contact->phone = $request->phone;
             if($contact->save()){
+                if ($contact->contact_type === 'primary' || $contact->contact_type === 'Primary') {
+                    $contact->customer()->update([
+                        'email' => $request->email,
+                        'phone' => $request->phone,
+                        'customer_name' => trim($request->first_name . ' ' . $request->last_name),
+                    ]);
+                }
                 return response()->json([
                     'user' => $contact,
                     'status' => true,
