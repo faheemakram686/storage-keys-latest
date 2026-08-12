@@ -40,11 +40,17 @@ class CustomerWelcomeNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $mail = (new MailMessage)
             ->greeting($this->welcome['greeting'])
             ->line($this->welcome['body'])
             ->action($this->welcome['actionText'], $this->welcome['actionURL'])
             ->line($this->welcome['thanks']);
+
+        if (!empty($this->welcome['subject'])) {
+            $mail->subject($this->welcome['subject']);
+        }
+
+        return $mail;
     }
 
     public function toDatabase($notifiable)

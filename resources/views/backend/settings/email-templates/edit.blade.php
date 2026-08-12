@@ -34,6 +34,7 @@
                                             <option value="lead" {{$data['st']->temp_for == 'lead' ? 'selected' : ''}}>Lead</option>
                                             <option value="estimate" {{$data['st']->temp_for == 'estimate' ? 'selected' : ''}}>Estimate</option>
                                             <option value="project" {{$data['st']->temp_for == 'project' ? 'selected' : ''}}>Project</option>
+                                            <option value="customer" {{$data['st']->temp_for == 'customer' ? 'selected' : ''}}>Customer</option>
 
                                         </select>
                                     </div>
@@ -61,7 +62,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="">Use these strings in template:</label>
-                                        <p> @verbatim{{f_name}} - {{l_name}} - {{company_name}} - {{email}} - {{phone}} - {{address}} - {{city}} - {{country}} @endverbatim</p>
+                                        <p> @verbatim{{f_name}} - {{l_name}} - {{company_name}} - {{email}} - {{phone}} - {{address}} - {{city}} - {{country}} - {{set_password_url}} (set password only) @endverbatim</p>
                                         <label class="form-label" for="reviewer">Template Body</label>
                                         <div id="toolbar-container"></div>
                                         <div id="editor">

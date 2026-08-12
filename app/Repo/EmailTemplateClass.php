@@ -141,4 +141,37 @@ class EmailTemplateClass implements EmailTemplateInterface {
             'country' => $data['country'] ?? '',
         ];
     }
+
+    public function getCustomerEmailTemplate(string $templateName)
+    {
+        return $this->getTemplateByName('customer', 'email', $templateName);
+    }
+
+    public function buildCustomerEmailPayload($contact, string $templateName, string $actionText, string $actionURL, array $extraVariables = []): ?array
+    {
+        $notification = $this->getCustomerEmailTemplate($templateName);
+        if (empty($notification) || empty($notification[0]) || empty($notification[0]->temp_body)) {
+            return null;
+        }
+
+        $variables = array_merge($this->buildRecipientVariables($contact), $extraVariables);
+        $firstName = $variables['f_name'] ?? '';
+        $lastName = $variables['l_name'] ?? '';
+
+        return [
+            'greeting' => 'Hi '.trim($firstName.' '.$lastName).',',
+            'body' => $this->applyTemplateVariables(
+                html_entity_decode($notification[0]->temp_body),
+                $variables
+            ),
+            'subject' => $this->applyTemplateVariables(
+                (string) ($notification[0]->temp_subject ?? ''),
+                $variables
+            ),
+            'thanks' => 'Thank you this is from storage Keys',
+            'actionText' => $actionText,
+            'actionURL' => $actionURL,
+            'id' => is_object($contact) ? $contact->id : ($contact['id'] ?? null),
+        ];
+    }
 }

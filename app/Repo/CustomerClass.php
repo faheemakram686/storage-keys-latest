@@ -6,9 +6,7 @@ use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\LeadStatus;
 use App\Notifications\Backend\CustomerWelcomeNotification;
-use App\Notifications\Backend\EstimateNotification;
 use App\Notifications\Backend\SetPasswordNotification;
-use App\Notifications\EmailNotification;
 use App\Repo\Interfaces\CountryInterface;
 use App\Repo\Interfaces\CustomerInterface;
 use App\Repo\Interfaces\LeadStatusInterface;
@@ -201,7 +199,25 @@ class CustomerClass implements CustomerInterface {
             return response()->json(['errors' => ['email' => ['The email has already been taken.']]], 200);
         }
 
-        DB::transaction(function() use ($request, $existingCustomerId)
+        $emailTemplate = new EmailTemplateClass();
+        if ($request->dont_welcome != 1) {
+            $welcomeTemplate = $emailTemplate->getCustomerEmailTemplate('Customer_welcome_email');
+            if (empty($welcomeTemplate) || empty($welcomeTemplate[0]) || empty($welcomeTemplate[0]->temp_body)) {
+                return response()->json([
+                    'errors' => 'Welcome email template (Customer_welcome_email) not found. Please configure email templates and try again.',
+                ], 422);
+            }
+        }
+        if ($request->set_password == 1) {
+            $passwordTemplate = $emailTemplate->getCustomerEmailTemplate('Customer_set_password_email');
+            if (empty($passwordTemplate) || empty($passwordTemplate[0]) || empty($passwordTemplate[0]->temp_body)) {
+                return response()->json([
+                    'errors' => 'Set password email template (Customer_set_password_email) not found. Please configure email templates and try again.',
+                ], 422);
+            }
+        }
+
+        DB::transaction(function() use ($request, $existingCustomerId, $emailTemplate)
         {
         if ($existingCustomerId > 0) {
             $customer = Customer::find($existingCustomerId);
@@ -285,27 +301,25 @@ class CustomerClass implements CustomerInterface {
                 if($request->dont_welcome != 1)
                 {
                     $contact_email = Contact::find($contact->id);
-                    $email = [
-                        'greeting' => 'Hi '.$contact_email->first_name.' '.$contact_email->last_name.',',
-                        'body' => "Welcome to Storage Keys",
-                        'thanks' => 'Thank you this is from storage Keys',
-                        'actionText' => 'Visit Storage Keys',
-                        'actionURL' => url('/'),
-                        'id' => $contact_email->id,
-                    ];
+                    $email = $emailTemplate->buildCustomerEmailPayload(
+                        $contact_email,
+                        'Customer_welcome_email',
+                        'Visit Storage Keys',
+                        url('/')
+                    );
                     Notification::route('mail', $contact_email->email)->notify(new CustomerWelcomeNotification($email));
                 }
                 if($request->set_password == 1)
                 {
                     $contact_email = Contact::find($contact->id);
-                    $passwordemail = [
-                        'greeting' => 'Hi '.$contact_email->first_name.' '.$contact_email->last_name.',',
-                        'body' => "Welcome to Storage Keys Please Set Your Password",
-                        'thanks' => 'Thank you this is from storage Keys',
-                        'actionText' => 'Set Password',
-                        'actionURL' => \App\Helpers\ContactPasswordToken::url($contact_email->id),
-                        'id' => $contact_email->id,
-                    ];
+                    $setPasswordUrl = \App\Helpers\ContactPasswordToken::url($contact_email->id);
+                    $passwordemail = $emailTemplate->buildCustomerEmailPayload(
+                        $contact_email,
+                        'Customer_set_password_email',
+                        'Set Password',
+                        $setPasswordUrl,
+                        ['set_password_url' => $setPasswordUrl]
+                    );
                     Notification::route('mail', $contact_email->email)->notify(new SetPasswordNotification($passwordemail));
                 }
 
