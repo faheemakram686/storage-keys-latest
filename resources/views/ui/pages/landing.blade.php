@@ -1,9 +1,9 @@
 @extends('ui.layouts.frontend')
 @section('title', '| Home')
+@section('metaTitle', 'Secure Self Storage Across the UAE | Storagekeys')
+@section('metaDescription', 'Secure, climate-controlled self storage across the UAE. Flexible plans, 24/7 access, no hidden costs. Get a free quote today.')
 
-@section('css')
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
-@endsection
+
 
 @section('content')
 
@@ -24,7 +24,7 @@
                         <span><i class="fas fa-sliders-h"></i> Flexible Plans</span>
                     </div>
                     <div class="sk-hero-cta">
-                        <a href="#" class="sk-btn sk-btn-primary"><i class="fas fa-boxes"></i> Book Your Unit</a>
+                        <a href="booking" class="sk-btn sk-btn-primary"><i class="fas fa-boxes"></i> Book Your Unit</a>
                         <a href="https://wa.me/971565018785" class="sk-btn sk-btn-ghost"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
                     </div>
                     <div class="sk-hero-chips">

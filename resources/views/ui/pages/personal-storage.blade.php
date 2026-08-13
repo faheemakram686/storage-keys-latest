@@ -1,6 +1,8 @@
 
 @extends('ui.layouts.frontend')
 @section('title', 'Personal Storage Solutions in Dubai & Abu Dhabi | Storage Keys')
+@section('metaTitle', 'Affordable Personal Storage Solutions in Dubai | StorageKeys')
+@section('metaDescription', 'Store furniture, boxes and seasonal items with secure personal storage units across the UAE. Flexible terms, 24/7 access. Get a free quote.')
 @section('content')
 
 
@@ -9,7 +11,7 @@
     <!-- ============ HERO ============ -->
     <section class="ps-hero">
         <div class="sk-container">
-            <div class="ps-crumb"><a href="#">Home</a> <i class="fas fa-chevron-right"></i> <a href="#">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Personal Storage</span></div>
+            <div class="ps-crumb"><a href="/">Home</a> <i class="fas fa-chevron-right"></i> <a href="/">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Personal Storage</span></div>
             <span class="sk-eyebrow" style="color:#ffcf9e;">Personal Storage</span>
             <h1>Personal Storage Solutions in <span>Dubai &amp; Abu Dhabi</span></h1>
             <p class="lead">Create more space at home with flexible personal storage in Dubai and Abu Dhabi. Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible.</p>

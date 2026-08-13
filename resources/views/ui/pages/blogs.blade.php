@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend2')
+@extends('ui.layouts.frontend')
 @section('title', '| Blogs')
 @section('content')
 {{-- <div class="body-wrapper"> --}}

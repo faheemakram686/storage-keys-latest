@@ -24,11 +24,11 @@
       </div>
       <div>
         <h5>Company</h5>
-        <a href="#">About Us</a><a href="#">Storage Options</a><a href="#">Booking</a><a href="#">Blogs</a>
+        <a href="about-us">About Us</a><a href="storage-options">Storage Options</a><a href="booking">Booking</a><a href="blogs">Blogs</a>
       </div>
       <div>
         <h5>Support</h5>
-        <a href="#">Contact Us</a><a href="#">Shop</a><a href="#">FAQ</a><a href="#">Get a Quote</a>
+        <a href="contact-us">Contact Us</a><a href="shop">Shop</a><a href="faq">FAQ</a><a href="get-a-quote">Get a Quote</a>
       </div>
       <div>
         <h5>Get in Touch</h5>

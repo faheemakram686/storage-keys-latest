@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend2')
+@extends('ui.layouts.frontend')
 @section('title', '| About-Us')
 @section('content')
 

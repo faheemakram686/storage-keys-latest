@@ -79,6 +79,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Canonical URL
+    |--------------------------------------------------------------------------
+    |
+    | The public, live root URL of the site. Frontend pages build their
+    | <link rel="canonical"> from this rather than from the incoming request,
+    | so every host variant (www / non-www, http / https, staging, localhost)
+    | points search engines at one single indexable URL per page.
+    |
+    */
+
+    'canonical_url' => env('CANONICAL_URL', 'http://storagekeys.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

@@ -1,5 +1,7 @@
 @extends('ui.layouts.frontend')
-@section('title', '| Business Storage')
+@section('title', '| Warehouse Storage')
+@section('metaTitle', 'Reliable Warehouse Storage in UAE | StorageKeys')
+@section('metaDescription', 'Scalable warehouse storage for bulk inventory and equipment across the UAE. Secure, climate-controlled storage units. Get a free quote today!')
 
 
 @section('content')

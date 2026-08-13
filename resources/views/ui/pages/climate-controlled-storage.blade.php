@@ -1,5 +1,7 @@
 @extends('ui.layouts.frontend')
 @section('title', 'Climate-Controlled Storage in Dubai & Sharjah, UAE | Storage Keys')
+@section('metaTitle', 'Climate-Controlled Storage Solutions in UAE | StorageKeys')
+@section('metaDescription', 'Protect documents, electronics and furniture from heat and humidity with climate-controlled storage across the UAE. Book your storage unit now!')
 @section('content')
 
 <div class="sk-home">

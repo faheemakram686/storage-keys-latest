@@ -1,5 +1,7 @@
 @extends('ui.layouts.frontend')
 @section('title', '| Business Storage')
+@section('metaTitle', 'Business Storage Solutions in the UAE | Storagekeys')
+@section('metaDescription', 'Organised, secure business storage for retailers, distributors and e-commerce across the UAE. Flexible plans. Book your storage unit today!')
 
 
 @section('content')
