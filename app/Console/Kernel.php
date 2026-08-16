@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Backend\PaymentReminder;
 use App\Console\Commands\Backend\GenerateRecurringInvoices;
 use App\Console\Commands\Backend\RecalculateStorageUnitStatus;
+use App\Console\Commands\DB\FlushTransactionalDataCommand;
 use App\Jobs\Tenant\AssignLeaveByStatusJob;
 use App\Jobs\Tenant\AssignLeaveJob;
 use App\Jobs\Tenant\AssignUpcomingWorkingShiftJob;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         PaymentReminder::class,
         GenerateRecurringInvoices::class,
         RecalculateStorageUnitStatus::class,
+        FlushTransactionalDataCommand::class,
     ];
 
     /**

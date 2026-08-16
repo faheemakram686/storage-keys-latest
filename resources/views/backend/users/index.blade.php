@@ -144,6 +144,96 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label">Gender</label>
+                                    <div class="form-control-wrap">
+                                        <ul class="custom-control-group">
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="gender" id="gender_male" value="male" required>
+                                                    <label class="custom-control-label" for="gender_male">Male</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="gender" id="gender_female" value="female">
+                                                    <label class="custom-control-label" for="gender_female">Female</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="gender" id="gender_other" value="other">
+                                                    <label class="custom-control-label" for="gender_other">Other</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="employee_id">Employee ID</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="employee_id" name="employee_id" required value="{{ $data['employee_id'] ?? '' }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="department_id">Department</label>
+                                    <select class="form-control" id="department_id" name="department_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['departments'])
+                                            @foreach ($data['departments'] as $department)
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="designation_id">Designation</label>
+                                    <select class="form-control" id="designation_id" name="designation_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['designations'])
+                                            @foreach ($data['designations'] as $designation)
+                                                <option value="{{ $designation->id }}">{{ $designation->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="employment_status_id">Employment Status</label>
+                                    <select class="form-control" id="employment_status_id" name="employment_status_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['employment_statuses'])
+                                            @foreach ($data['employment_statuses'] as $employmentStatus)
+                                                <option value="{{ $employmentStatus->id }}">{{ $employmentStatus->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="salary">Salary</label>
+                                    <div class="form-control-wrap">
+                                        <input type="number" class="form-control" id="salary" name="salary" min="0" step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="joining_date">Joining Date</label>
+                                    <div class="form-control-wrap">
+                                        <input type="date" class="form-control" id="joining_date" name="joining_date" required>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="role">Role</label>
@@ -274,6 +364,88 @@
                                     <label class="form-label" for="address">Address</label>
                                     <div class="form-control-wrap">
                                         <textarea type="text" class="form-control" id="address" name="e_address" value="" placeholder="Your Address"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label">Gender</label>
+                                    <div class="form-control-wrap">
+                                        <ul class="custom-control-group">
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="e_gender" id="e_gender_male" value="male" required>
+                                                    <label class="custom-control-label" for="e_gender_male">Male</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="e_gender" id="e_gender_female" value="female">
+                                                    <label class="custom-control-label" for="e_gender_female">Female</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="custom-control-input" name="e_gender" id="e_gender_other" value="other">
+                                                    <label class="custom-control-label" for="e_gender_other">Other</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_employee_id">Employee ID</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="e_employee_id" name="e_employee_id" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_department_id">Department</label>
+                                    <select class="form-control" id="e_department_id" name="e_department_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['departments'])
+                                            @foreach ($data['departments'] as $department)
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_designation_id">Designation</label>
+                                    <select class="form-control" id="e_designation_id" name="e_designation_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['designations'])
+                                            @foreach ($data['designations'] as $designation)
+                                                <option value="{{ $designation->id }}">{{ $designation->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_employment_status_id">Employment Status</label>
+                                    <select class="form-control" id="e_employment_status_id" name="e_employment_status_id" required>
+                                        <option value="">Choose One</option>
+                                        @isset($data['employment_statuses'])
+                                            @foreach ($data['employment_statuses'] as $employmentStatus)
+                                                <option value="{{ $employmentStatus->id }}">{{ $employmentStatus->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="e_joining_date">Joining Date</label>
+                                    <div class="form-control-wrap">
+                                        <input type="date" class="form-control" id="e_joining_date" name="e_joining_date" required>
                                     </div>
                                 </div>
                             </div>
@@ -464,6 +636,23 @@
                         $('input[name=e_email]').val(res.st.email);
                         $('input[name=e_phone]').val(res.st.phone);
                         $('textarea[name=e_address]').val(res.st.address);
+
+                        var gender = (res.st.profile && res.st.profile.gender) ? res.st.profile.gender.toLowerCase() : '';
+                        $('input[name=e_gender]').prop('checked', false);
+                        if (gender) {
+                            $('input[name=e_gender][value="' + gender + '"]').prop('checked', true);
+                        }
+
+                        $('input[name=e_employee_id]').val(res.st.profile ? res.st.profile.employee_id : '');
+                        $('select[name=e_department_id]').val(res.st.department ? res.st.department.id : '');
+                        $('select[name=e_designation_id]').val(res.st.designation ? res.st.designation.id : '');
+                        $('select[name=e_employment_status_id]').val(res.st.employment_status ? res.st.employment_status.id : '');
+
+                        var joiningDate = res.st.profile && res.st.profile.joining_date ? res.st.profile.joining_date : '';
+                        if (joiningDate) {
+                            joiningDate = joiningDate.substring(0, 10);
+                        }
+                        $('input[name=e_joining_date]').val(joiningDate);
 
 
                         $('select[name="e_status"]')

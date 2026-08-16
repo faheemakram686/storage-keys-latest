@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\ReminderController;
 use App\Http\Controllers\Backend\RequireDocumentController;
 use App\Http\Controllers\Backend\Settings\ContractTemplateController;
 use App\Http\Controllers\Backend\Settings\EmailTemplateController;
+use App\Http\Controllers\Backend\Settings\InvoiceReminderController;
 use App\Http\Controllers\Backend\Settings\LeadSourceController;
 use App\Http\Controllers\Backend\Settings\LeadStatusController;
 use App\Http\Controllers\Backend\StorageTypeController;
@@ -313,6 +314,14 @@ require __DIR__.'/auth.php';
     Route::any('edit-email-template/{id}', [EmailTemplateController::class,'editEmailTemplate']);
     Route::any('update-email-template', [EmailTemplateController::class,'updateEmailTemplate']);
 
+    Route::any('invoice-reminders', [InvoiceReminderController::class, 'index'])->name('invoice-reminders.index');
+    Route::any('save-invoice-reminder', [InvoiceReminderController::class, 'saveInvoiceReminder']);
+    Route::any('get-invoice-reminders', [InvoiceReminderController::class, 'getInvoiceReminders']);
+    Route::any('delete-invoice-reminder', [InvoiceReminderController::class, 'deleteInvoiceReminder']);
+    Route::any('edit-invoice-reminder', [InvoiceReminderController::class, 'editInvoiceReminder']);
+    Route::any('update-invoice-reminder', [InvoiceReminderController::class, 'updateInvoiceReminder']);
+    Route::any('toggle-invoice-reminder', [InvoiceReminderController::class, 'toggleInvoiceReminder']);
+
 
     //Contract Template routes
     Route::get('contract-template', [ContractTemplateController::class,'index'])->name('contract-template.index');
@@ -342,6 +351,7 @@ require __DIR__.'/auth.php';
     Route::any('customer/leads/{id}', [CustomerController::class,'showLeads'])->name('customer-leads');
     Route::any('customer/estimates/{id}', [CustomerController::class,'showEstimates'])->name('customer-estimates');
     Route::any('customer/invoices/{id}', [CustomerController::class,'showInvoices'])->name('customer-invoices');
+    Route::any('customer/toggle-invoice-reminders', [CustomerController::class, 'toggleInvoiceReminders']);
     Route::any('customer/reminders/{id}', [CustomerController::class,'showReminders'])->name('customer-reminders');
 
 

@@ -1,11 +1,6 @@
 <template>
     <div class="content-wrapper">
         <app-page-top-section :title="$t('all_employees')" icon="briefcase">
-            <app-default-button btn-class="btn btn-success mr-2"
-                                :title="$fieldTitle('add', 'employee', true)"
-                                @click="isEmployeeCreateOpenModalActive = true"
-                                v-if="$can('add_employees')"
-            />
             <app-default-button
                 v-if="$can('invite_employees')"
                 @click="isModalActive = true"
@@ -24,12 +19,6 @@
             v-if="isModalActive"
             v-model="isModalActive"
             :selected-url="selectedUrl"
-        />
-
-        <employee-create-edit-model
-            v-if="isEmployeeCreateOpenModalActive "
-            v-model="isEmployeeCreateOpenModalActive"
-            :selected-url="''"
         />
 
         <app-confirmation-modal
@@ -91,10 +80,9 @@ import EmployeeMixin from "../../Mixins/EmployeeMixin";
 import EmployeeContextMenu from "./Components/EmployeeContextMenu";
 import JobHistoryEditModal from "./Components/JobHistory/components/JobHistoryEditModal";
 import {axiosGet} from "../../../../common/Helper/AxiosHelper";
-import EmployeeCreateEditModel from "./EmployeeCreateEditModal"
 
 export default {
-    components: {EmployeeContextMenu, JobHistoryEditModal, EmployeeCreateEditModel},
+    components: {EmployeeContextMenu, JobHistoryEditModal},
     mixins: [EmployeeMixin],
     mounted() {
         this.getSalaryRange();

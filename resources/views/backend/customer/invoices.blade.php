@@ -26,7 +26,15 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex align-center">
-                                                <div class="nk-tab-actions me-n1">
+                                                <div class="nk-tab-actions me-n1 d-flex align-items-center">
+                                                    @php
+                                                        $remindersOn = (int) ($data['customer']->getRawOriginal('invoice_reminders_enabled') ?? $data['customer']->invoice_reminders_enabled);
+                                                    @endphp
+                                                    <span class="mr-2">Invoice reminders</span>
+                                                    <div class="custom-control custom-switch mr-3">
+                                                        <input type="checkbox" class="custom-control-input customer-invoice-reminders-toggle" id="customerInvoiceReminders" {{ $remindersOn ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="customerInvoiceReminders">{{ $remindersOn ? 'On' : 'Off' }}</label>
+                                                    </div>
                                                     <a href="{{ route('create-invoice') }}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Invoice</span></a>
                                                 </div>
                                                 <div class="nk-block-head-content align-self-start d-lg-none">

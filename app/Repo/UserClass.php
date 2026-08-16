@@ -2,6 +2,7 @@
 namespace App\Repo;
 
 use App\Models\Core\Auth\Role;
+use App\Models\Core\Auth\User as AuthUser;
 use App\Models\Location;
 use App\Models\StorageType;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Models\Warehouse;
 use App\Repo\Interfaces\StorageTypeInterface;
 use App\Repo\Interfaces\UserInterface;
 use App\Repo\Interfaces\WarehouseInterface;
+use App\Services\Tenant\Employee\EmployeeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +35,13 @@ class UserClass implements UserInterface {
             'role'       => 'required|integer|exists:roles,id',
             'status'     => 'required|integer',
             'file'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'gender'     => 'required|in:male,female,other',
+            'employee_id' => 'required|string|min:2|unique:profiles,employee_id',
+            'department_id' => 'required|integer|exists:departments,id',
+            'designation_id' => 'required|integer|exists:designations,id',
+            'employment_status_id' => 'required|integer|exists:employment_statuses,id',
+            'salary' => 'required|numeric|min:0',
+            'joining_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +79,8 @@ class UserClass implements UserInterface {
 
             $role = Role::findOrFail($request->role);
             $user->roles()->sync([$role->id]);
+
+            $this->syncEmployeeFields($user, $request, true);
 
             DB::commit();
 
@@ -109,7 +120,8 @@ class UserClass implements UserInterface {
 
     public function editUser($id)
     {
-        return User::with('roles')->findOrFail($id);
+        return User::with(['roles', 'profile', 'department', 'designation', 'employmentStatus'])
+            ->findOrFail($id);
     }
 
     public function updateUser($request)
@@ -126,6 +138,12 @@ class UserClass implements UserInterface {
             'e_status'     => 'required|integer',
             'e_file'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'password'     => 'nullable|string|min:8|confirmed',
+            'e_gender'     => 'required|in:male,female,other',
+            'e_employee_id' => 'required|string|min:2|unique:profiles,employee_id,' . $request->id . ',user_id',
+            'e_department_id' => 'required|integer|exists:departments,id',
+            'e_designation_id' => 'required|integer|exists:designations,id',
+            'e_employment_status_id' => 'required|integer|exists:employment_statuses,id',
+            'e_joining_date' => 'required|date',
         ]);
 
         if ($validator->fails()) {
@@ -173,6 +191,8 @@ class UserClass implements UserInterface {
             $role = Role::findOrFail($request->e_role);
             $user->roles()->sync([$role->id]);
 
+            $this->syncEmployeeFields($user, $request, false);
+
             DB::commit();
 
             return response()->json([
@@ -216,6 +236,42 @@ class UserClass implements UserInterface {
         $sy->address=$request->address;
         $sy->save();
         return 1;
+    }
+
+    protected function syncEmployeeFields($user, $request, bool $withSalary): void
+    {
+        $isCreate = $withSalary;
+
+        $attributes = $isCreate ? [
+            'gender' => $request->gender,
+            'employee_id' => $request->employee_id,
+            'department_id' => $request->department_id,
+            'designation_id' => $request->designation_id,
+            'employment_status_id' => $request->employment_status_id,
+            'joining_date' => $request->joining_date,
+            'salary' => $request->salary,
+        ] : [
+            'gender' => $request->e_gender,
+            'employee_id' => $request->e_employee_id,
+            'department_id' => $request->e_department_id,
+            'designation_id' => $request->e_designation_id,
+            'employment_status_id' => $request->e_employment_status_id,
+            'joining_date' => $request->e_joining_date,
+        ];
+
+        $service = resolve(EmployeeService::class)
+            ->setModel(AuthUser::findOrFail($user->id))
+            ->setAttributes($attributes)
+            ->saveEmployeeId()
+            ->saveJoiningDate()
+            ->setIsInvite(false)
+            ->assignToDepartment()
+            ->assignToDesignation()
+            ->assignEmploymentStatus();
+
+        if ($withSalary) {
+            $service->saveSalary();
+        }
     }
 
     public function updatePassword($request)

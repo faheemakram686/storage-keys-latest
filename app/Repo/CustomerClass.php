@@ -384,4 +384,17 @@ class CustomerClass implements CustomerInterface {
     {
         // TODO: Implement syncCustomerQuickbook() method.
     }
+
+    public function toggleInvoiceReminders($id, $enabled)
+    {
+        $customer = Customer::find($id);
+        if (!$customer) {
+            return response()->json(['errors' => 'Customer not found.'], 404);
+        }
+
+        $customer->invoice_reminders_enabled = (int) $enabled ? 1 : 0;
+        $customer->save();
+
+        return $customer->invoice_reminders_enabled;
+    }
 }

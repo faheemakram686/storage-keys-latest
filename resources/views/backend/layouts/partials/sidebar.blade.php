@@ -310,6 +310,10 @@
                                         <a href=" {{ route('email-template.index') }}" class="nk-menu-link" data-original-title="" title="">
                                             <span class="nk-menu-text">Email Templates</span></a>
                                     </li>
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route('invoice-reminders.index') }}" class="nk-menu-link" data-original-title="" title="">
+                                            <span class="nk-menu-text">Invoice Reminders</span></a>
+                                    </li>
                                         @endif
                                         @if($role->hasPermission('view_contract_template'))
                                     <li class="nk-menu-item">

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\User;
+use App\Models\Tenant\Employee\Department;
+use App\Models\Tenant\Employee\Designation;
+use App\Models\Tenant\Employee\EmploymentStatus;
 use App\Repo\Interfaces\UserInterface;
 use App\Repo\RoleClass;
 
@@ -31,6 +34,15 @@ class UserController extends Controller
    public function index()
     {
          $data['role']=$this->role->getRole();
+         $data['departments'] = Department::query()->get(['id', 'name']);
+         $data['designations'] = Designation::query()->get(['id', 'name']);
+         $data['employment_statuses'] = EmploymentStatus::query()
+             ->where(function ($query) {
+                 $query->where('alias', '!=', 'terminated')->orWhereNull('alias');
+             })
+             ->get(['id', 'name', 'alias']);
+         $data['employee_id'] = 'EMP-' . (User::count() + 1);
+
         return view('backend.users.index')->with(compact('data'));
     }
     public function getUser()

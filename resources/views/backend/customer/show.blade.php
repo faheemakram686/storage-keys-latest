@@ -156,6 +156,19 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Invoice Reminders</label>
+                                                            <div class="custom-control custom-switch">
+                                                                @php
+                                                                    $remindersOn = (int) ($data['customer']->getRawOriginal('invoice_reminders_enabled') ?? $data['customer']->invoice_reminders_enabled);
+                                                                @endphp
+                                                                <input type="checkbox" class="custom-control-input customer-invoice-reminders-toggle" id="profileInvoiceReminders" {{ $remindersOn ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="profileInvoiceReminders">Enable invoice reminders for this customer</label>
+                                                            </div>
+                                                            <small class="text-soft">When enabled, due-date reminder emails from Settings will be sent for this customer's unpaid invoices.</small>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-12">
                                                         <div class="float-right m-2">
                                                             <button type="submit" class="btn btn-md btn-primary" data-button="submit">Save Changes</button>

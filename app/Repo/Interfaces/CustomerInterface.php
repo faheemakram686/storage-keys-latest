@@ -12,4 +12,5 @@ interface CustomerInterface{
     public function getCustomer($id);
     public function isCustomer($id);
     public function syncCustomerQuickbook();
+    public function toggleInvoiceReminders($id, $enabled);
 }

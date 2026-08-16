@@ -130,4 +130,15 @@ class CustomerController extends Controller
         return view('backend.customer.invoices')->with(compact('data'));
     }
 
+    public function toggleInvoiceReminders(Request $request)
+    {
+        $res = $this->customer->toggleInvoiceReminders($request->id, $request->enabled);
+
+        if ($res instanceof \Illuminate\Http\JsonResponse) {
+            return $res;
+        }
+
+        return response()->json(['success' => 'Invoice reminders updated', 'enabled' => (bool) $res]);
+    }
+
 }
