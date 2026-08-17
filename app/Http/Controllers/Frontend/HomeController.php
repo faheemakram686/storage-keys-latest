@@ -19,6 +19,7 @@ use App\Repo\StorageUnitLevelClass;
 use App\Repo\StorageUnitSizeClass;
 use App\Repo\TermLengthClass;
 use App\Services\InsurancePricingService;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -104,7 +105,12 @@ class HomeController extends Controller
         return view('ui.pages.booking')->with(compact('data'));;
     }
     public function blogs(){
-        return view('ui.pages.blogs');
+        $blogs = Blog::query()
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->paginate(9);
+
+        return view('ui.pages.blogs', compact('blogs'));
     }
     public function aboutUs(){
         return view('ui.pages.about-us');
@@ -112,13 +118,29 @@ class HomeController extends Controller
     public function contactUs(){
         return view('ui.pages.contact-us');
     }
+    public function privacyPolicy(){
+        return view('ui.pages.privacy-policy');
+    }
 
     public function thankYou()
     {
         return view('ui.pages.thank-you');
     }
-    public function blogDetails(){
-        return view('ui.pages.blog-details');
+    public function blogDetails($slug)
+    {
+        $blog = Blog::query()
+            ->where('is_deleted', 0)
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $recent = Blog::query()
+            ->where('is_deleted', 0)
+            ->where('id', '!=', $blog->id)
+            ->orderBy('id', 'DESC')
+            ->limit(4)
+            ->get();
+
+        return view('ui.pages.blog-details', compact('blog', 'recent'));
     }
     public function businessStorage(){
         return view('ui.pages.business-storage');

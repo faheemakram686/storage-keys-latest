@@ -74,6 +74,9 @@ font-family: 'Poppins', sans-serif;
 @import url("personal-storage.css");
 @import url("climate-controlled-storage.css");
 @import url("about-us.css");
+@import url("contact-us.css");
+@import url("blogs.css");
+@import url("privacy-policy.css");
 /*
 font-family: 'Nunito Sans', sans-serif;
 font-family: 'Rajdhani', sans-serif;

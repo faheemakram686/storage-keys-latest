@@ -24,11 +24,17 @@
       </div>
       <div>
         <h5>Company</h5>
-        <a href="about-us">About Us</a><a href="storage-options">Storage Options</a><a href="booking">Booking</a><a href="blogs">Blogs</a>
+        <a href="{{ url('/about-us') }}">About Us</a>
+        <a href="{{ url('/storage-options') }}">Storage Options</a>
+        <a href="{{ url('/booking') }}">Booking</a>
+        <a href="{{ url('/blogs') }}">Blogs</a>
       </div>
       <div>
         <h5>Support</h5>
-        <a href="contact-us">Contact Us</a><a href="shop">Shop</a><a href="faq">FAQ</a><a href="get-a-quote">Get a Quote</a>
+        <a href="{{ url('/contact-us') }}">Contact Us</a>
+        <a href="{{ url('/shop') }}">Shop</a>
+        <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
+        <a href="{{ url('/contact-us') }}#ct-quote">Get a Quote</a>
       </div>
       <div>
         <h5>Get in Touch</h5>
@@ -37,7 +43,7 @@
         <p><i class="fas fa-envelope"></i> sales@storagekeys.com</p>
       </div>
     </div>
-    <div class="pv-copy">© StorageKeys — All rights reserved.</div>
+    <div class="pv-copy">© StorageKeys — All rights reserved. <a href="{{ url('https://mait.ae/') }}">MAIT</a></div>
   </div>
 </footer>  
   

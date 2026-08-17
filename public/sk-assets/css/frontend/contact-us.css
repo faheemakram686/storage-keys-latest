@@ -1,0 +1,55 @@
+/* Contact Us — layout aligned with about-us / storage-options */
+
+.ct-trust .ps-trust-in {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.ct-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.ct-card {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ct-card p {
+    flex: 1;
+}
+
+.ct-card h4 {
+    color: var(--sk-dark);
+}
+
+.ct-map {
+    border-radius: var(--sk-radius);
+    overflow: hidden;
+    box-shadow: var(--sk-shadow);
+    border: 1px solid var(--sk-line);
+    min-height: 450px;
+}
+
+.ct-map iframe {
+    display: block;
+    width: 100%;
+    min-height: 450px;
+}
+
+@media (max-width: 991px) {
+    .ct-trust .ps-trust-in,
+    .ct-cards {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .ct-trust .ps-trust-in,
+    .ct-cards {
+        grid-template-columns: 1fr;
+    }
+}

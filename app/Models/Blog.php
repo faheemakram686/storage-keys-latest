@@ -31,4 +31,20 @@ class Blog extends Model
         }
         return $getVal;
     }
+
+    public function getImageUrlAttribute()
+    {
+        if (!empty($this->image) && $this->image !== 'empty') {
+            return asset('storage/uploads/blog-images/' . $this->image);
+        }
+
+        return asset('sk-assets/assets/images/frontend/blog/Image_8.png');
+    }
+
+    public function excerpt($limit = 140)
+    {
+        $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $this->description)));
+
+        return \Illuminate\Support\Str::limit($text, $limit);
+    }
 }

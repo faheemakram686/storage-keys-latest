@@ -1,0 +1,107 @@
+/* Privacy Policy / legal page */
+
+.lp-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+}
+
+.lp-toc {
+    position: sticky;
+    top: 92px;
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius);
+    padding: 24px;
+}
+
+.lp-toc h4 {
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+
+.lp-toc a {
+    display: block;
+    color: var(--sk-body);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sk-line);
+}
+
+.lp-toc a:last-child {
+    border-bottom: none;
+}
+
+.lp-toc a:hover {
+    color: var(--sk-accent-2);
+}
+
+.lp-article {
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius);
+    padding: 40px 44px;
+}
+
+.lp-article section + section {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--sk-line);
+}
+
+.lp-article h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.lp-article p,
+.lp-article li {
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--sk-body);
+}
+
+.lp-article ul {
+    margin: 0 0 1em;
+    padding-left: 20px;
+}
+
+.lp-article a {
+    color: var(--sk-primary-2);
+    font-weight: 600;
+}
+
+.lp-contact {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+}
+
+.lp-contact li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.lp-contact i {
+    color: var(--sk-accent);
+    margin-top: 5px;
+    width: 16px;
+}
+
+@media (max-width: 991px) {
+    .lp-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-toc {
+        position: static;
+    }
+
+    .lp-article {
+        padding: 28px 22px;
+    }
+}

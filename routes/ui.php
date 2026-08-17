@@ -41,9 +41,13 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/booking', [HomeController::class, 'booking'])->name('booking');
     Route::get('/reservation/{id}', [HomeController::class, 'bookingReservation'])->name('booking-res');
     Route::get('/blogs', [HomeController::class, 'blogs'])->name('blogs');
+    Route::get('/blogs/{slug}', [HomeController::class, 'blogDetails'])->name('blogDetails');
+    Route::get('/blog-details', function () {
+        return redirect()->route('blogs');
+    });
     Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
     Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
-    Route::get('/blog-details', [HomeController::class, 'blogDetails'])->name('blogDetails');
+    Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
     Route::get('/estimatetocustomer/{id}', [EstimateController::class, 'estimateToCustomer'])->name('estimate-customer')->middleware('hashid');
     Route::get('/contract-to-customer/{id}', [ContractController::class, 'contractToCustomer'])->name('contract-customer')->middleware('hashid');
     Route::any('estimate-upload-document/{id}', [EstimateController::class, 'showUploadDocuments'])->name('show-upload-document')->middleware('hashid');

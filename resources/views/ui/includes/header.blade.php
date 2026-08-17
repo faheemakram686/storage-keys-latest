@@ -81,7 +81,7 @@
       </div>
       <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details') ? 'active' : '' }}">Shop</a>
       <a href="{{ url('/booking') }}" class="{{ request()->is('booking') ? 'active' : '' }}">Booking</a>
-      <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs', 'blog-details') ? 'active' : '' }}">Blogs</a>
+      <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs', 'blogs/*', 'blog-details') ? 'active' : '' }}">Blogs</a>
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>
     </nav>
     <div class="pv-header-cta">
