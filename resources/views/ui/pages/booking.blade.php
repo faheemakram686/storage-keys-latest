@@ -114,12 +114,29 @@
                         <div>
                             <h2>Available Units</h2>
                             <p id="search_title">Choose a location and filters to view units.</p>
+                            <p class="bk-range" id="bk-range"></p>
                         </div>
-                        <span class="bk-count" id="bk-count"></span>
+                        <div class="bk-head-actions">
+                            <label class="bk-perpage" for="bk-per-page">
+                                Show
+                                <select id="bk-per-page">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="200">200</option>
+                                    <option value="all">All</option>
+                                </select>
+                            </label>
+                            <span class="bk-count" id="bk-count"></span>
+                        </div>
                     </div>
                     <div class="product-section" id="results">
                         <div class="bk-empty">Searching available units…</div>
                     </div>
+                    <nav class="bk-pagination" id="bk-pagination" hidden></nav>
                 </div>
             </div>
         </div>
@@ -140,6 +157,10 @@
             var slevel = [];
             var stype = [];
             var ssize = '';
+            var allUnits = [];
+            var addonList = [];
+            var currentPage = 1;
+            var perPage = 5;
             var unitImg = @json(asset('sk-assets/assets/images/frontend/blog/Image_8.png'));
             var reserveBase = @json(url('reservation'));
 
@@ -244,6 +265,98 @@
                 $(this).toggleClass('checked');
             });
 
+            $('#bk-per-page').on('change', function() {
+                var val = $(this).val();
+                perPage = (val === 'all') ? 0 : (parseInt(val, 10) || 5);
+                currentPage = 1;
+                renderUnits();
+            });
+
+            $(document).on('click', '#bk-pagination a[data-page]', function(e) {
+                e.preventDefault();
+                var page = parseInt($(this).attr('data-page'), 10);
+                if (!page || page === currentPage) return;
+                currentPage = page;
+                renderUnits();
+                var search = document.getElementById('bk-search');
+                if (search) search.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            function unitCardHtml(unit) {
+                var city = (unit.warehouse && unit.warehouse.loc && unit.warehouse.loc.city) ? unit.warehouse.loc.city.city_name : '';
+                var loc = (unit.warehouse && unit.warehouse.loc) ? unit.warehouse.loc.loc_name : '';
+                var size = unit.storagesize ? unit.storagesize.unit_type_name : '';
+                var level = unit.storagelevel ? unit.storagelevel.name : '';
+                var name = unit.storage_unit_name || '';
+                var tags = '';
+                for (var ie = 0; ie < addonList.length; ie++) {
+                    tags += '<span class="feature-name">' + addonList[ie].name + '</span>';
+                }
+                return '<article class="bk-unit apartment">' +
+                    '<div class="bk-unit-img apartment-img" style="background-image:url(\'' + unitImg + '\')"></div>' +
+                    '<div class="bk-unit-body apartment-details">' +
+                    '<div class="city-name-option">' + city + ' <span class="area-name">' + loc + '</span></div>' +
+                    '<h3 class="apartment-size">' + size + ' <span>(' + level + ' / Unit ' + name + ')</span></h3>' +
+                    '<div class="bk-unit-tags apartment-features">' + tags + '</div>' +
+                    '<div class="apartment-reserve"><a href="' + reserveBase + '/' + unit.id + '" class="sk-btn sk-btn-primary btn-reserve">Enquire about this unit</a></div>' +
+                    '</div></article>';
+            }
+
+            function renderPagination(totalPages) {
+                var $nav = $('#bk-pagination');
+                if (totalPages <= 1) {
+                    $nav.attr('hidden', true).empty();
+                    return;
+                }
+                var html = '';
+                if (currentPage > 1) {
+                    html += '<a href="#" data-page="' + (currentPage - 1) + '" class="bk-page-btn">&lsaquo;</a>';
+                } else {
+                    html += '<span class="bk-page-btn is-disabled">&lsaquo;</span>';
+                }
+                for (var p = 1; p <= totalPages; p++) {
+                    if (p === currentPage) {
+                        html += '<span class="bk-page-btn is-active">' + p + '</span>';
+                    } else {
+                        html += '<a href="#" data-page="' + p + '" class="bk-page-btn">' + p + '</a>';
+                    }
+                }
+                if (currentPage < totalPages) {
+                    html += '<a href="#" data-page="' + (currentPage + 1) + '" class="bk-page-btn">&rsaquo;</a>';
+                } else {
+                    html += '<span class="bk-page-btn is-disabled">&rsaquo;</span>';
+                }
+                $nav.html(html).removeAttr('hidden');
+            }
+
+            function renderUnits() {
+                var total = allUnits.length;
+                if (!total) {
+                    $('#bk-count').text('0 units');
+                    $('#bk-range').text('Showing 0 to 0 of 0');
+                    $('#results').html('<div class="bk-empty"><i class="fas fa-box-open"></i><h3>No units found</h3><p>Try another location, type or size to see available storage units.</p></div>');
+                    renderPagination(0);
+                    return;
+                }
+
+                var size = (perPage > 0) ? perPage : total;
+                var totalPages = Math.ceil(total / size) || 1;
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                var start = (currentPage - 1) * size;
+                var end = Math.min(start + size, total);
+                var html = '';
+                for (var i = start; i < end; i++) {
+                    html += unitCardHtml(allUnits[i]);
+                }
+
+                $('#bk-count').text(total + (total === 1 ? ' unit' : ' units'));
+                $('#bk-range').text('Showing ' + (start + 1) + ' to ' + end + ' of ' + total);
+                $('#results').html(html);
+                renderPagination(totalPages);
+            }
+
             function getFilterResults(slevel, stype, ssize) {
                 var country_id = $('select[name=country_id]').val();
                 var city_id = $('select[name=city_id]').val();
@@ -256,36 +369,10 @@
                     dataType: 'json',
                     data: { country_id: country_id, city_id: city_id, id: loc_id, level: slevel, sType: stype, sSize: ssize },
                     success: function(data) {
-                        var html = '';
-                        if (data.su && data.su.length > 0) {
-                            $('#bk-count').text(data.su.length + (data.su.length === 1 ? ' unit' : ' units'));
-                            for (var i = 0; i < data.su.length; i++) {
-                                var unit = data.su[i];
-                                var city = (unit.warehouse && unit.warehouse.loc && unit.warehouse.loc.city) ? unit.warehouse.loc.city.city_name : '';
-                                var loc = (unit.warehouse && unit.warehouse.loc) ? unit.warehouse.loc.loc_name : '';
-                                var size = unit.storagesize ? unit.storagesize.unit_type_name : '';
-                                var level = unit.storagelevel ? unit.storagelevel.name : '';
-                                var name = unit.storage_unit_name || '';
-                                var tags = '';
-                                if (data.addon) {
-                                    for (var ie = 0; ie < data.addon.length; ie++) {
-                                        tags += '<span class="feature-name">' + data.addon[ie].name + '</span>';
-                                    }
-                                }
-                                html += '<article class="bk-unit apartment">' +
-                                    '<div class="bk-unit-img apartment-img" style="background-image:url(\'' + unitImg + '\')"></div>' +
-                                    '<div class="bk-unit-body apartment-details">' +
-                                    '<div class="city-name-option">' + city + ' <span class="area-name">' + loc + '</span></div>' +
-                                    '<h3 class="apartment-size">' + size + ' <span>(' + level + ' / Unit ' + name + ')</span></h3>' +
-                                    '<div class="bk-unit-tags apartment-features">' + tags + '</div>' +
-                                    '<div class="apartment-reserve"><a href="' + reserveBase + '/' + unit.id + '" class="sk-btn sk-btn-primary btn-reserve">Enquire about this unit</a></div>' +
-                                    '</div></article>';
-                            }
-                        } else {
-                            $('#bk-count').text('0 units');
-                            html = '<div class="bk-empty"><i class="fas fa-box-open"></i><h3>No units found</h3><p>Try another location, type or size to see available storage units.</p></div>';
-                        }
-                        $('#results').html(html);
+                        allUnits = (data.su && data.su.length) ? data.su : [];
+                        addonList = data.addon || [];
+                        currentPage = 1;
+                        renderUnits();
                     },
                     error: function() {
                         toastr.error('any technical error');
