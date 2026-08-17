@@ -50,6 +50,7 @@ Route::middleware(['set.guard'])->group(function () {
     Route::any('contract-pdf/{id}', [ContractController::class, 'contractPdf'])->name('contract-pdf')->middleware('hashid');
 
     Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('inquiry.store');
+    Route::get('/thank-you', [HomeController::class, 'thankYou'])->name('inquiry.thankyou');
 
 //booking filter routes
     Route::any('/get-cities', [CityController::class, 'getCountryBaseCity'])->name('country-cities');

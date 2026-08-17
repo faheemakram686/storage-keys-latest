@@ -295,39 +295,24 @@
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
                 </div>
-                <form class="wh-form" action="#" method="GET">
-                    <h3>Request your free quote</h3>
-                    <div class="wh-frow">
-                        <div class="wh-field"><label>Company name</label><input type="text" name="company" placeholder="Your company"></div>
-                        <div class="wh-field"><label>Contact name</label><input type="text" name="name" placeholder="Your name" required></div>
-                    </div>
-                    <div class="wh-frow">
-                        <div class="wh-field"><label>Phone / WhatsApp</label><input type="tel" name="phone" placeholder="+971 __ ___ ____" required></div>
-                        <div class="wh-field"><label>Email</label><input type="email" name="email" placeholder="you@company.com"></div>
-                    </div>
-                    <div class="wh-frow">
-                        <div class="wh-field">
-                            <label>What are you storing?</label>
-                            <select name="storing">
-                                <option value="bulk">Bulk inventory</option>
-                                <option value="pallets">Palletised goods</option>
-                                <option value="equipment">Commercial equipment</option>
-                                <option value="climate">Climate-sensitive stock</option>
-                                <option value="mixed">A mix of the above</option>
-                            </select>
-                        </div>
-                        <div class="wh-field">
-                            <label>Approx. volume</label>
-                            <select name="volume" id="whFormVolume">
-                                <option value="small">Small (1–3 pallets)</option>
-                                <option value="medium" selected>Medium (4–10 pallets)</option>
-                                <option value="large">Large (11–25 pallets)</option>
-                                <option value="custom">Custom (26+ pallets)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="sk-btn sk-btn-primary"><i class="fas fa-paper-plane"></i> Request Free Quote</button>
-                </form>
+                @include('ui.partials.inquiry-form', [
+                    'variant' => 'warehouse',
+                    'formClass' => 'wh-form',
+                    'fieldClass' => 'wh-field',
+                    'rowClass' => 'wh-frow',
+                    'title' => 'Request your free quote',
+                    'submitLabel' => 'Request Free Quote',
+                    'source' => 'warehouse-storage',
+                    'showStorageSelect' => false,
+                    'defaultStorage' => 'Warehouse Storage',
+                    'storingOptions' => [
+                        'Bulk inventory' => 'Bulk inventory',
+                        'Palletised goods' => 'Palletised goods',
+                        'Commercial equipment' => 'Commercial equipment',
+                        'Climate-sensitive stock' => 'Climate-sensitive stock',
+                        'A mix of the above' => 'A mix of the above',
+                    ],
+                ])
             </div>
         </div>
     </section>

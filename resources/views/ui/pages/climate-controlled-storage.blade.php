@@ -222,10 +222,19 @@
                     <h2>Get a Free Climate-Controlled Storage Quote Today</h2>
                     <p>Protect your valuable belongings with secure climate-controlled storage from Storage Keys. Contact our team today for a free quote and the right temperature-controlled solution for your needs.</p>
                     <div class="btns">
-                        <a href="#cc-quote" class="sk-btn sk-btn-white"><i class="fas fa-snowflake"></i> Request a Free Quote</a>
                         <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
                     </div>
                 </div>
+                @include('ui.partials.inquiry-form', [
+                    'variant' => 'simple',
+                    'formClass' => 'sk-quote',
+                    'fieldClass' => 'sk-field',
+                    'title' => 'Request a Free Quote',
+                    'submitLabel' => 'Request a Free Quote',
+                    'source' => 'climate-controlled-storage',
+                    'showStorageSelect' => false,
+                    'defaultStorage' => 'Climate Controlled Storage',
+                ])
             </div>
         </div>
     </section>

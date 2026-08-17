@@ -273,12 +273,24 @@
     <section class="sk-section" id="ps-quote">
         <div class="sk-container">
             <div class="ps-quote sk-reveal">
-                <h2>Get Started with Personal Storage Today</h2>
-                <p>Need extra space? Tell us what you'd like to store and we'll find the right personal storage solution for your home — and send you a free, no-obligation quote.</p>
-                <div class="btns">
-                    <a href="#" class="sk-btn sk-btn-white" id="psQuoteBtn"><i class="fas fa-box-open"></i> Request a Free Quote</a>
-                    <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+                <div>
+                    <h2>Get Started with Personal Storage Today</h2>
+                    <p>Need extra space? Tell us what you'd like to store and we'll find the right personal storage solution for your home — and send you a free, no-obligation quote.</p>
+                    <div class="btns">
+                        <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+                    </div>
                 </div>
+                @include('ui.partials.inquiry-form', [
+                    'variant' => 'simple',
+                    'formClass' => 'sk-quote',
+                    'fieldClass' => 'sk-field',
+                    'title' => 'Request a Free Quote',
+                    'submitLabel' => 'Request a Free Quote',
+                    'source' => 'personal-storage',
+                    'showStorageSelect' => false,
+                    'defaultStorage' => 'Personal Storage',
+                    'showItemsField' => true,
+                ])
             </div>
         </div>
     </section>

@@ -196,10 +196,13 @@ p { margin: 0 0 1em; }
 .ps-faq .a { padding: 0 0 22px; font-size: 14.5px; color: var(--sk-muted); line-height: 1.75; }
 
 /* ---------- Quote ---------- */
-.ps-quote { background: linear-gradient(120deg, var(--sk-accent), var(--sk-accent-2)); border-radius: 22px; padding: 52px; text-align: center; color: #fff; }
-.ps-quote h2 { color: #fff; font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 10px; max-width: 720px; margin-left: auto; margin-right: auto; }
-.ps-quote p { color: rgba(255, 255, 255, .92); font-size: 16px; max-width: 620px; margin: 0 auto 26px; }
-.ps-quote .btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.ps-quote { background: linear-gradient(120deg, var(--sk-accent), var(--sk-accent-2)); border-radius: 22px; padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; color: #fff; text-align: left; }
+.ps-quote h2 { color: #fff; font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 10px; max-width: none; }
+.ps-quote > div > p { color: rgba(255, 255, 255, .92); font-size: 16px; max-width: 620px; margin: 0 0 26px; }
+.ps-quote .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+.ps-quote .sk-quote { text-align: left; color: var(--sk-body); }
+.ps-quote .sk-quote h3 { color: var(--sk-dark); }
+.ps-quote .sk-quote p { color: var(--sk-muted); margin-bottom: 16px; }
 
 /* ---------- Sticky mobile bar ---------- */
 .ps-mobilebar { display: none; }
@@ -213,7 +216,7 @@ p { margin: 0 0 1em; }
    Responsive
 ============================================================ */
 @media (max-width: 991px) {
-    .ps-split, .ps-split.rev { grid-template-columns: 1fr; }
+    .ps-split, .ps-split.rev, .ps-quote { grid-template-columns: 1fr; }
     .ps-trust-in { grid-template-columns: repeat(2, 1fr); }
     .ps-items { grid-template-columns: repeat(3, 1fr); }
     .ps-term, .ps-cover { grid-template-columns: 1fr; }

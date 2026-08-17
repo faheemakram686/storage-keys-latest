@@ -112,6 +112,11 @@ class HomeController extends Controller
     public function contactUs(){
         return view('ui.pages.contact-us');
     }
+
+    public function thankYou()
+    {
+        return view('ui.pages.thank-you');
+    }
     public function blogDetails(){
         return view('ui.pages.blog-details');
     }

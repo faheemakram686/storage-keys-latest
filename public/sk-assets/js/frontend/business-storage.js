@@ -338,6 +338,7 @@
             var listEl = document.getElementById('psList');
             var cartBtn = document.getElementById('psCartBtn');
             var quoteBtn = document.getElementById('psQuoteBtn');
+            var itemsField = document.getElementById('psItemsField');
             var tmp = document.createElement('textarea');
 
             function decode(s) {
@@ -356,10 +357,12 @@
                     var q = '?storing=personal&items=' + encodeURIComponent(sel.join(', '));
                     if (cartBtn) cartBtn.href = '#ps-quote' + q;
                     if (quoteBtn) quoteBtn.href = '#ps-quote' + q;
+                    if (itemsField) itemsField.value = sel.join(', ');
                 } else {
                     listEl.textContent = 'Tap the items above to build your list.';
                     if (cartBtn) cartBtn.href = '#ps-quote';
                     if (quoteBtn) quoteBtn.href = '#ps-quote';
+                    if (itemsField) itemsField.value = '';
                 }
             }
 

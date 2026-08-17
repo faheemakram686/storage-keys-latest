@@ -225,8 +225,8 @@ p { margin: 0 0 1em; }
 .wh-frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .wh-field { margin-bottom: 14px; }
 .wh-field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--sk-dark); margin-bottom: 6px; }
-.wh-field input, .wh-field select { width: 100%; padding: 12px 14px; border: 1.5px solid var(--sk-line); border-radius: 10px; font-size: 14px; color: var(--sk-dark); background: var(--sk-soft); font-family: inherit; }
-.wh-field input:focus, .wh-field select:focus { outline: none; border-color: var(--sk-primary-2); background: #fff; }
+.wh-field input, .wh-field select, .wh-field textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--sk-line); border-radius: 10px; font-size: 14px; color: var(--sk-dark); background: var(--sk-soft); font-family: inherit; }
+.wh-field input:focus, .wh-field select:focus, .wh-field textarea:focus { outline: none; border-color: var(--sk-primary-2); background: #fff; }
 .wh-form .sk-btn { width: 100%; justify-content: center; margin-top: 4px; }
 
 /* ---------- Sticky mobile bar ---------- */

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\InquiryMail;
 use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class InquiryController extends Controller
 {
@@ -20,23 +22,49 @@ class InquiryController extends Controller
     public function store(Request $request)
     {
         try {
-            DB::beginTransaction();
-
             $validated = $request->validate([
                 'name'   => 'required|string|max:255',
                 'email'  => 'required|email',
                 'storage_type' => 'required|string',
-                'phone'  => 'required|string|max:20',
+                'phone'  => 'required|string|max:40',
                 'message'=> 'nullable|string',
             ]);
 
-            Inquiry::create($validated);
+            $extras = [];
+            foreach (['source', 'company', 'size', 'storing', 'duration', 'volume', 'items'] as $key) {
+                $val = trim((string) $request->input($key, ''));
+                if ($val !== '') {
+                    $extras[] = ucfirst(str_replace('_', ' ', $key)) . ': ' . $val;
+                }
+            }
+
+            if ($extras) {
+                $validated['message'] = trim(($validated['message'] ?? '') . "\n\n" . implode("\n", $extras));
+            }
+
+            DB::beginTransaction();
+
+            $inquiry = Inquiry::create($validated);
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Your inquiry has been submitted successfully!');
+            try {
+                $notifyTo = config('mail.inquiry_to');
+                if (!empty($notifyTo)) {
+                    Mail::to($notifyTo)->send(new InquiryMail($inquiry));
+                }
+            } catch (\Exception $mailEx) {
+                \Log::error('Inquiry email failed: '.$mailEx->getMessage());
+            }
+
+            return redirect()->route('inquiry.thankyou')->with('inquiry', [
+                'name' => $inquiry->name,
+                'email' => $inquiry->email,
+                'phone' => $inquiry->phone,
+                'storage_type' => $inquiry->storage_type,
+                'reference' => 'SK-' . str_pad((string) $inquiry->id, 5, '0', STR_PAD_LEFT),
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            DB::rollBack();
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             DB::rollBack();

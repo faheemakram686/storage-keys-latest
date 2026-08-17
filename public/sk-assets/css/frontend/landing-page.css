@@ -308,6 +308,49 @@
     font-weight: 600;
 }
 
+.sk-field textarea {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1.5px solid var(--sk-line);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--sk-dark);
+    background: var(--sk-soft);
+    transition: .2s;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 84px;
+}
+
+.sk-field textarea:focus {
+    outline: none;
+    border-color: var(--sk-primary-2);
+    background: #fff;
+}
+
+.sk-inquiry-alert {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.sk-inquiry-alert.success {
+    background: #e8f7ee;
+    color: #146c43;
+}
+
+.sk-inquiry-alert.error {
+    background: #fde8e8;
+    color: #b42318;
+}
+
+.sk-inquiry-alert ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
 /* ---------- USP strip ---------- */
 .sk-usp {
     background: #fff;

@@ -473,39 +473,25 @@
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
                 </div>
-                <form class="svc-form" action="#" method="GET">
-                    <h3>Request your quote</h3>
-                    <div class="svc-frow">
-                        <div class="svc-field"><label>Company name</label><input type="text" name="company" placeholder="Your company"></div>
-                        <div class="svc-field"><label>Contact name</label><input type="text" name="name" placeholder="Your name" required></div>
-                    </div>
-                    <div class="svc-frow">
-                        <div class="svc-field"><label>Phone / WhatsApp</label><input type="tel" name="phone" placeholder="+971 __ ___ ____" required></div>
-                        <div class="svc-field"><label>Email</label><input type="email" name="email" placeholder="you@company.com"></div>
-                    </div>
-                    <div class="svc-frow">
-                        <div class="svc-field">
-                            <label>What are you storing?</label>
-                            <select name="storing">
-                                <option value="inventory">Retail / e-commerce inventory</option>
-                                <option value="documents">Documents &amp; archives</option>
-                                <option value="furniture">Office furniture &amp; equipment</option>
-                                <option value="sensitive">Climate-sensitive stock</option>
-                                <option value="mixed">A mix of the above</option>
-                            </select>
-                        </div>
-                        <div class="svc-field">
-                            <label>Approx. duration</label>
-                            <select name="duration">
-                                <option value="short">1–3 months</option>
-                                <option value="medium">3–12 months</option>
-                                <option value="long">12 months +</option>
-                                <option value="unsure">Not sure yet</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="sk-btn sk-btn-primary svc-form-submit"><i class="fas fa-paper-plane"></i> Request Free Quote</button>
-                </form>
+                @include('ui.partials.inquiry-form', [
+                    'variant' => 'business',
+                    'formClass' => 'svc-form',
+                    'fieldClass' => 'svc-field',
+                    'rowClass' => 'svc-frow',
+                    'title' => 'Request your quote',
+                    'submitLabel' => 'Request Free Quote',
+                    'submitClass' => 'sk-btn sk-btn-primary svc-form-submit',
+                    'source' => 'business-storage',
+                    'showStorageSelect' => false,
+                    'defaultStorage' => 'Business Storage',
+                    'storingOptions' => [
+                        'Retail / e-commerce inventory' => 'Retail / e-commerce inventory',
+                        'Documents & archives' => 'Documents & archives',
+                        'Office furniture & equipment' => 'Office furniture & equipment',
+                        'Climate-sensitive stock' => 'Climate-sensitive stock',
+                        'A mix of the above' => 'A mix of the above',
+                    ],
+                ])
             </div>
         </div>
     </section>

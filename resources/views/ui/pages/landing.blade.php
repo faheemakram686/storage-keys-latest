@@ -36,38 +36,23 @@
                 </div>
 
                 <div class="sk-hero-form">
-                    <form class="sk-quote" action="#" method="GET">
-                        <h3>Get a Free Quote</h3>
-                        <p>Tell us what you need to store and we'll help you find the right space.</p>
-                        <div class="sk-field">
-                            <label>Your Name</label>
-                            <input type="text" name="name" placeholder="e.g. Ahmed Khan" required="">
-                        </div>
-                        <div class="sk-field">
-                            <label>Phone / WhatsApp</label>
-                            <input type="tel" name="phone" placeholder="+971 __ ___ ____" required="">
-                        </div>
-                        <div class="sk-field">
-                            <label>Storage type</label>
-                            <select name="storage_type">
-                                <option value="personal">Personal Storage</option>
-                                <option value="business">Business Storage</option>
-                                <option value="warehouse">Warehouse Storage</option>
-                                <option value="moving">Moving / Temporary Storage</option>
-                            </select>
-                        </div>
-                        <div class="sk-field">
-                            <label>Unit size</label>
-                            <select name="size">
-                                <option value="unsure">Not sure — help me choose</option>
-                                <option value="small">Small (boxes &amp; small items)</option>
-                                <option value="medium">Medium (1–2 bedroom)</option>
-                                <option value="large">Large / Warehouse</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="sk-btn sk-btn-primary"><i class="fas fa-paper-plane"></i> Get My Free Quote</button>
-                        <p class="sk-quote-note">Or call us now: <a href="tel:+971565018785">+971 56 501 8785</a></p>
-                    </form>
+                    @include('ui.partials.inquiry-form', [
+                        'variant' => 'hero',
+                        'formClass' => 'sk-quote',
+                        'fieldClass' => 'sk-field',
+                        'title' => 'Get a Free Quote',
+                        'subtitle' => 'Tell us what you need to store and we\'ll help you find the right space.',
+                        'submitLabel' => 'Get My Free Quote',
+                        'source' => 'landing-hero',
+                        'noteHtml' => 'Or call us now: <a href="tel:+971565018785">+971 56 501 8785</a>',
+                        'storageOptions' => [
+                            'Personal Storage' => 'Personal Storage',
+                            'Business Storage' => 'Business Storage',
+                            'Warehouse Storage' => 'Warehouse Storage',
+                            'Climate Controlled Storage' => 'Climate Controlled Storage',
+                            'Moving' => 'Moving / Temporary Storage',
+                        ],
+                    ])
                 </div>
             </div>
         </div>
@@ -319,7 +304,7 @@
                     <p>Reserve your unit this month and lock in our best price. Speak to our team for current offers on personal, business and warehouse storage.</p>
                 </div>
                 <div class="pc" style="display:flex; gap:14px; flex-wrap:wrap;">
-                    <a href="#" class="sk-btn sk-btn-primary"><i class="fas fa-tag"></i> Claim This Offer</a>
+                    <a href="/booking/" class="sk-btn sk-btn-primary"><i class="fas fa-tag"></i> Claim This Offer</a>
                     <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Call Us</a>
                 </div>
             </div>
@@ -756,7 +741,7 @@
                     <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>
                 </div>
                 <div class="btns">
-                    <a href="#" class="sk-btn sk-btn-white"><i class="fas fa-boxes"></i> Book Your Storage Unit</a>
+                    <a href="/booking" class="sk-btn sk-btn-white"><i class="fas fa-boxes"></i> Book Your Storage Unit</a>
                     <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
                 </div>
             </div>

@@ -53,8 +53,14 @@
 
                 typeEl.textContent = tier.t;
                 descEl.textContent = tier.d;
+                var volumeLabels = {
+                    small: 'Small (1–3 pallets)',
+                    medium: 'Medium (4–10 pallets)',
+                    large: 'Large (11–25 pallets)',
+                    custom: 'Custom (26+ pallets)'
+                };
                 if (quote) quote.href = '#warehouse-quote?storing=warehouse&volume=' + tier.key + '&pallets=' + v;
-                if (formVol) formVol.value = tier.key;
+                if (formVol) formVol.value = volumeLabels[tier.key] || tier.key;
 
                 cards.forEach(function (c) {
                     var mn = parseInt(c.getAttribute('data-min'), 10);

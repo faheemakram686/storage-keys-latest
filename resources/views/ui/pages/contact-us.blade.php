@@ -91,36 +91,38 @@
 
                         <form id="contact-form" action="{{ route('inquiry.store') }}" method="post">
                             @csrf
+                            <input type="hidden" name="source" value="contact-us">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-item input-item-name ltn__custom-icon">
-                                        <input type="text" name="name" placeholder="Enter your name" required>
+                                        <input type="text" name="name" placeholder="Enter your name" value="{{ old('name') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-item input-item-email ltn__custom-icon">
-                                        <input type="email" name="email" placeholder="Enter email address" required>
+                                        <input type="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-item">
                                         <select class="nice-select" name="storage_type" required>
                                             <option value="">Select Storage Type</option>
-                                            <option value="Personal Storage">Personal Storage</option>
-                                            <option value="Business Storage">Business Storage</option>
-                                            <option value="Warehouse Storage">Warehouse Storage</option>
-                                            <option value="Moving">Moving</option>
+                                            <option value="Personal Storage" {{ old('storage_type') === 'Personal Storage' ? 'selected' : '' }}>Personal Storage</option>
+                                            <option value="Business Storage" {{ old('storage_type') === 'Business Storage' ? 'selected' : '' }}>Business Storage</option>
+                                            <option value="Warehouse Storage" {{ old('storage_type') === 'Warehouse Storage' ? 'selected' : '' }}>Warehouse Storage</option>
+                                            <option value="Climate Controlled Storage" {{ old('storage_type') === 'Climate Controlled Storage' ? 'selected' : '' }}>Climate Controlled Storage</option>
+                                            <option value="Moving" {{ old('storage_type') === 'Moving' ? 'selected' : '' }}>Moving</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-item input-item-phone ltn__custom-icon">
-                                        <input type="text" name="phone" placeholder="Enter phone number" required>
+                                        <input type="text" name="phone" placeholder="Enter phone number" value="{{ old('phone') }}" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="input-item input-item-textarea ltn__custom-icon">
-                                <textarea name="message" placeholder="Enter message"></textarea>
+                                <textarea name="message" placeholder="Enter message">{{ old('message') }}</textarea>
                             </div>
                             <div class="btn-wrapper mt-0">
                                 <button class="btn theme-btn-1 btn-effect-1 text-uppercase" type="submit">get a free service</button>

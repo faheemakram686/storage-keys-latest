@@ -195,12 +195,15 @@ p { margin: 0 0 1em; }
 .cc-faq .a { padding: 0 0 22px; font-size: 14.5px; color: var(--sk-muted); line-height: 1.75; }
 
 /* ---------- Quote ---------- */
-.cc-quote { background: linear-gradient(120deg, var(--sk-primary), var(--sk-primary-2)); border-radius: 22px; padding: 52px; text-align: center; color: #fff; position: relative; overflow: hidden; }
+.cc-quote { background: linear-gradient(120deg, var(--sk-primary), var(--sk-primary-2)); border-radius: 22px; padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; color: #fff; text-align: left; position: relative; overflow: hidden; }
 .cc-quote::after { content: "\f2dc"; font-family: "Font Awesome 5 Free"; font-weight: 900; position: absolute; right: -10px; bottom: -30px; font-size: 190px; opacity: .06; }
 .cc-quote .in { position: relative; z-index: 2; }
-.cc-quote h2 { color: #fff; font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 10px; max-width: 720px; margin-left: auto; margin-right: auto; }
-.cc-quote p { color: rgba(255, 255, 255, .9); font-size: 16px; max-width: 640px; margin: 0 auto 26px; }
-.cc-quote .btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.cc-quote h2 { color: #fff; font-size: clamp(26px, 3.4vw, 38px); margin-bottom: 10px; max-width: none; }
+.cc-quote .in p { color: rgba(255, 255, 255, .9); font-size: 16px; max-width: 640px; margin: 0 0 26px; }
+.cc-quote .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+.cc-quote .sk-quote { position: relative; z-index: 2; text-align: left; color: var(--sk-body); }
+.cc-quote .sk-quote h3 { color: var(--sk-dark); }
+.cc-quote .sk-quote p { color: var(--sk-muted); margin-bottom: 16px; }
 
 /* ---------- Sticky mobile bar ---------- */
 .cc-mobilebar { display: none; }
@@ -214,7 +217,7 @@ p { margin: 0 0 1em; }
    Responsive
 ============================================================ */
 @media (max-width: 991px) {
-    .cc-split, .cc-split.rev { grid-template-columns: 1fr; }
+    .cc-split, .cc-split.rev, .cc-quote { grid-template-columns: 1fr; }
     .cc-trust-in { grid-template-columns: repeat(2, 1fr); }
     .cc-sol { grid-template-columns: repeat(2, 1fr); }
     .cc-why { grid-template-columns: 1fr; }

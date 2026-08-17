@@ -153,4 +153,12 @@ return [
     */
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Frontend inquiry notifications
+    |--------------------------------------------------------------------------
+    */
+
+    'inquiry_to' => env('INQUIRY_NOTIFY_EMAIL', 'sales@storagekeys.com'),
 ];
