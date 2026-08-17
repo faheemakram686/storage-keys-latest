@@ -239,7 +239,7 @@
         var q = '?type=' + encodeURIComponent(answers.store || '') +
                 '&size=' + encodeURIComponent(answers.size || '') +
                 '&location=' + encodeURIComponent(answers.loc || '');
-        if (recBook) recBook.href = '#' + q;
+        if (recBook) recBook.href = '/booking' + q;
 
         var msg = 'Hi Storage Keys, I used your size finder. Storing: ' + (answers.store || '') +
                   ', space: ' + (answers.size || '') +

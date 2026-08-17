@@ -1,0 +1,251 @@
+/* Cart page */
+
+.ca-alert-error {
+    background: #fdecec;
+    border-color: #f5c2c2;
+    color: #b42318;
+}
+
+.ca-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+.ca-items,
+.ca-summary {
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius);
+    padding: 24px;
+}
+
+.ca-table-wrap {
+    overflow-x: auto;
+}
+
+.ca-items .table {
+    margin: 0;
+    width: 100%;
+}
+
+.ca-items .table thead th {
+    background: var(--sk-soft);
+    border: none;
+    color: var(--sk-dark);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 14px 12px;
+}
+
+.ca-items .table tbody td {
+    vertical-align: middle;
+    border-top: 1px solid var(--sk-line);
+    padding: 18px 12px;
+    background: #fff;
+}
+
+.ca-items .table tr:nth-child(odd),
+.ca-items .table tr:nth-child(even) {
+    background: transparent;
+}
+
+.ca-product {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ca-thumb {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: var(--sk-soft) center/cover no-repeat;
+    display: block;
+}
+
+.ca-product h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.ca-product h4 a {
+    color: var(--sk-dark);
+    text-decoration: none;
+}
+
+.ca-product h4 a:hover {
+    color: var(--sk-accent-2);
+}
+
+.ca-remove {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--sk-line);
+    border-radius: 50%;
+    background: var(--sk-soft);
+    color: var(--sk-muted);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.ca-remove:hover {
+    background: #fdecec;
+    border-color: #f5c2c2;
+    color: #b42318;
+}
+
+.sk-home .ca-items .cart-plus-minus {
+    width: 128px;
+    height: 46px;
+    line-height: 42px;
+    border: 1.5px solid var(--sk-line);
+    border-radius: 10px;
+    background: var(--sk-soft);
+    overflow: hidden;
+}
+
+.sk-home .ca-items .cart-plus-minus,
+.sk-home .ca-items .dec.qtybutton,
+.sk-home .ca-items .inc.qtybutton {
+    background-color: var(--sk-soft);
+    border-color: var(--sk-line);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sk-dark);
+}
+
+.sk-home .ca-items .qtybutton {
+    cursor: pointer;
+}
+
+.ca-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--sk-line);
+}
+
+.ca-coupon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+}
+
+.ca-coupon input {
+    min-width: 180px;
+    flex: 1;
+    max-width: 260px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--sk-line);
+    border-radius: 10px;
+    background: var(--sk-soft);
+}
+
+.ca-summary h4 {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.ca-summary .table {
+    margin-bottom: 18px;
+}
+
+.ca-summary .table td {
+    border-top: 1px solid var(--sk-line);
+    padding: 12px 0;
+    background: #fff;
+}
+
+.ca-summary .table tr:nth-child(odd),
+.ca-summary .table tr:nth-child(even) {
+    background: transparent;
+}
+
+.ca-total-row td {
+    font-size: 16px;
+}
+
+.ca-summary .btn-wrapper {
+    display: grid;
+    gap: 10px;
+}
+
+.ca-checkout {
+    justify-content: center;
+    text-align: center;
+}
+
+.ca-clear {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.ca-clear button {
+    background: none;
+    border: none;
+    color: var(--sk-muted);
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ca-clear button:hover {
+    color: #b42318;
+}
+
+@media (max-width: 991px) {
+    .ca-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .ca-items .table thead {
+        display: none;
+    }
+
+    .ca-items .table,
+    .ca-items .table tbody,
+    .ca-items .table tr,
+    .ca-items .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .ca-items .table tr {
+        border: 1px solid var(--sk-line);
+        border-radius: 14px;
+        margin-bottom: 14px;
+        padding: 8px 12px 12px;
+    }
+
+    .ca-items .table tbody td {
+        border: none;
+        padding: 8px 0;
+    }
+
+    .ca-product {
+        padding-right: 40px;
+    }
+
+    .cart-product-remove {
+        position: relative;
+    }
+
+    .ca-remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}

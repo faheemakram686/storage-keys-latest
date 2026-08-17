@@ -5,7 +5,7 @@
     <div class="wh-mobilebar">
         <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-        <a href="#warehouse-quote"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
+        <a href="{{ url('/contact-us') }}#ct-quote"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
     </div>
 
 </div>
@@ -17,9 +17,9 @@
         <h4>StorageKeys</h4>
         <p>Secure, climate-controlled self storage with free collection &amp; delivery across the UAE. Store your home or business items with confidence.</p>
         <div class="pv-social">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.facebook.com/storagekeysllc" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.linkedin.com/company/storage-keys-uae" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
       <div>
@@ -39,11 +39,11 @@
       <div>
         <h5>Get in Touch</h5>
         <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
-        <p><i class="fas fa-phone-alt"></i> +971 56 501 8785</p>
-        <p><i class="fas fa-envelope"></i> sales@storagekeys.com</p>
+        <p><i class="fas fa-phone-alt"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
       </div>
     </div>
-    <div class="pv-copy">© StorageKeys — All rights reserved. <a href="{{ url('https://mait.ae/') }}">MAIT</a></div>
+    <div class="pv-copy">© StorageKeys — All rights reserved.</div>
   </div>
 </footer>  
   

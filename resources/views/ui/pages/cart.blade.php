@@ -1,123 +1,193 @@
 @extends('ui.layouts.frontend')
 @section('title', '| Cart')
+@section('metaTitle', 'Shopping Cart | Storage Keys')
+@section('metaDescription', 'Review packing supplies in your StorageKeys cart, update quantities and proceed to checkout.')
+
 @section('content')
+@php
+    $cartCount = $cartItems->count();
+    $cartTotal = \Cart::getTotal();
+@endphp
+<div class="sk-home">
 
-   
-<div class="ltn__utilize-overlay"></div>
+    <section class="ps-hero">
+        <div class="sk-container">
+            <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/shop') }}">Shop</a> <i class="fas fa-chevron-right"></i> <span>Cart</span></div>
+            <span class="sk-eyebrow" style="color:#ffcf9e;">Your Cart</span>
+            <h1>Review your <span>packing supplies</span></h1>
+            <p class="lead">Check quantities, apply a coupon if you have one, then continue to checkout or keep shopping for boxes, tape and wrap.</p>
+            <div class="ps-hero-cta">
+                <a href="{{ url('/shop') }}" class="sk-btn sk-btn-primary"><i class="fas fa-box-open"></i> Continue Shopping</a>
+                @if($cartCount)
+                    <a href="{{ route('checkout') }}" class="sk-btn sk-btn-ghost"><i class="fas fa-lock"></i> Checkout</a>
+                @endif
+            </div>
+            <div class="ps-hero-badges">
+                <span class="ps-hbadge"><i class="fas fa-shopping-cart"></i> {{ $cartCount }} {{ $cartCount === 1 ? 'item' : 'items' }}</span>
+                <span class="ps-hbadge"><i class="fas fa-tag"></i> Coupon support</span>
+                <span class="ps-hbadge"><i class="fas fa-box"></i> Packing supplies</span>
+            </div>
+        </div>
+    </section>
 
-    <!-- BREADCRUMB AREA START -->
-    <div class="ltn__breadcrumb-area text-left bg-overlay-white-30 bg-image "  data-bg="{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_3.jpg') }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ltn__breadcrumb-inner">
-                        <h1 class="page-title">Cart</h1>
-                        <div class="ltn__breadcrumb-list">
-                            <ul>
-                                <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
-                                <li>Cart</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    <div class="ps-trust ct-trust">
+        <div class="sk-container">
+            <div class="ps-trust-in">
+                <div class="ps-trust-i"><i class="fas fa-shopping-cart"></i> Review items</div>
+                <div class="ps-trust-i"><i class="fas fa-sync-alt"></i> Update quantities</div>
+                <div class="ps-trust-i"><i class="fas fa-ticket-alt"></i> Apply a coupon</div>
+                <div class="ps-trust-i"><i class="fas fa-credit-card"></i> Proceed to checkout</div>
             </div>
         </div>
     </div>
-    <!-- BREADCRUMB AREA END -->
 
-    <!-- SHOPING CART AREA START -->
-    <div class="liton__shoping-cart-area mb-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="shoping-cart-inner">
-                        <div class="shoping-cart-table table-responsive">
+    <section class="sk-section" id="ca-cart">
+        <div class="sk-container">
+            <div class="sk-section-head">
+                <span class="sk-eyebrow" style="justify-content:center;">Shopping Cart</span>
+                <h2>Your Selected Products</h2>
+                <p>Update quantities and continue to checkout when you are ready.</p>
+            </div>
+
+            @if(session('success'))
+                <div class="sh-alert">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="sh-alert ca-alert-error">{{ session('error') }}</div>
+            @endif
+
+            @if($cartCount)
+                <div class="ca-layout sk-reveal">
+                    <div class="ca-items">
+                        <div class="ca-table-wrap shoping-cart-table table-responsive">
                             <table class="table">
-{{--                                <thead>--}}
-{{--                                    <th class="cart-product-remove">Remove</th>--}}
-{{--                                    <th class="cart-product-image">Image</th>--}}
-{{--                                    <th class="cart-product-info">Product</th>--}}
-{{--                                    <th class="cart-product-price">Price</th>--}}
-{{--                                    <th class="cart-product-quantity">Quantity</th>--}}
-{{--                                    <th class="cart-product-subtotal">Subtotal</th>--}}
-{{--                                </thead>--}}
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                 @foreach ($cartItems as $item)
-                                <tr>
-                                    <td class="cart-product-remove">
-                                        <form action="{{ route('cart.remove') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{ $item->id }}" name="id">
-                                            <button class="px-4 py-2 text-white bg-red">x</button>
-                                        </form></td>
-                                    <td class="cart-product-image">
-                                        <a href="product-details.html"><img src="{{ asset('storage/uploads/product-images/'.$item->attributes->image) }}" alt="#"></a>
-                                    </td>
-                                    <td class="cart-product-info">
-                                        <h4><a href="#">{{ $item->name }}</a></h4>
-                                    </td>
-                                    <td class="cart-product-price"> {{ $item->price }}</td>
-                                    <td class="cart-product-quantity">
-                                        <form action="{{ route('cart.update') }}" id="cart_update" method="get">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $item->id}}" >
-                                        <div class="cart-plus-minus">
-                                            <input type="number" step="any" value="{{ $item->quantity }}" name="quantity" min="1" class="cart-plus-minus-box">
-
-                                        </div>
-                                        </form>
-                                    </td>
-                                    <td class="cart-product-subtotal">{{ $item->price * $item->quantity }}</td>
-                                </tr>
-                                @endforeach
-                                <tr class="cart-coupon-row">
-                                    <td colspan="6">
-                                        <div class="cart-coupon">
-                                            <form action="{{ route('apply.coupon') }}" method="post">
-                                            @csrf
-                                            <input type="text" name="cart-coupon" placeholder="Coupon code">
-                                            <button type="submit" class="btn theme-btn-2 btn-effect-2">Apply Coupon</button>
+                                    @php
+                                        $img = !empty($item->attributes->image)
+                                            ? asset('storage/uploads/product-images/'.$item->attributes->image)
+                                            : asset('sk-assets/assets/images/frontend/product/1.png');
+                                        $lineTotal = $item->price * $item->quantity;
+                                    @endphp
+                                    <tr>
+                                        <td class="cart-product-remove">
+                                            <form action="{{ route('cart.remove') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{ $item->id }}" name="id">
+                                                <button type="submit" class="ca-remove" title="Remove item" aria-label="Remove {{ $item->name }}">&times;</button>
                                             </form>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button href="javascript:{}" onclick="document.getElementById('cart_update').submit();" class="btn theme-btn-2 btn-effect-2-- disabled">Update Cart</button>
-                                    </td>
-
-                                </tr>
+                                        </td>
+                                        <td class="cart-product-info">
+                                            <div class="ca-product">
+                                                <a href="{{ url('/shop') }}" class="ca-thumb" style="background-image:url('{{ $img }}');"></a>
+                                                <h4><a href="{{ url('/shop') }}">{{ $item->name }}</a></h4>
+                                            </div>
+                                        </td>
+                                        <td class="cart-product-price">AED {{ number_format((float) $item->price, 2) }}</td>
+                                        <td class="cart-product-quantity">
+                                            <form action="{{ route('cart.update') }}" id="cart_update_{{ $item->id }}" class="ca-qty-form" method="get">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $item->id }}">
+                                                <div class="cart-plus-minus">
+                                                    <input type="number" step="any" value="{{ $item->quantity }}" name="quantity" min="1" class="cart-plus-minus-box">
+                                                </div>
+                                            </form>
+                                        </td>
+                                        <td class="cart-product-subtotal">AED {{ number_format((float) $lineTotal, 2) }}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
-                        <div class="shoping-cart-total mt-50">
-                            <h4>Cart Totals</h4>
-                            <table class="table">
-                                <tbody>
-                                <tr>
-                                    <td>Cart Subtotal</td>
-                                    <td>{{Cart::getTotal()}}</td>
-                                </tr>
-{{--                                <tr>--}}
-{{--                                    <td>Shipping and Handing</td>--}}
-{{--                                    <td>$15.00</td>--}}
-{{--                                </tr>--}}
-{{--                                <tr>--}}
-{{--                                    <td>Vat</td>--}}
-{{--                                    <td>$00.00</td>--}}
-{{--                                </tr>--}}
-{{--                                <tr>--}}
-{{--                                    <td><strong>Order Total</strong></td>--}}
-{{--                                    <td><strong>$633.00</strong></td>--}}
-{{--                                </tr>--}}
-                                </tbody>
-                            </table>
-                            <div class="btn-wrapper text-right">
-                                <a href="{{url(Route('checkout'))}}" class="theme-btn-1 btn btn-effect-1">Proceed to checkout</a>
-                            </div>
+
+                        <div class="ca-toolbar">
+                            <form action="{{ route('apply.coupon') }}" method="post" class="ca-coupon cart-coupon">
+                                @csrf
+                                <input type="text" name="coupon_code" placeholder="Coupon code">
+                                <button type="submit" class="sk-btn sk-btn-ghost">Apply Coupon</button>
+                            </form>
+                            <button type="button" id="ca-update-all" class="sk-btn sk-btn-primary">Update Cart</button>
                         </div>
                     </div>
+
+                    <aside class="ca-summary shoping-cart-total">
+                        <h4>Cart Totals</h4>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Items</td>
+                                    <td>{{ $cartCount }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Cart Subtotal</td>
+                                    <td>AED {{ number_format((float) $cartTotal, 2) }}</td>
+                                </tr>
+                                <tr class="ca-total-row">
+                                    <td><strong>Order Total</strong></td>
+                                    <td><strong>AED {{ number_format((float) $cartTotal, 2) }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="btn-wrapper">
+                            <a href="{{ route('checkout') }}" class="sk-btn sk-btn-primary ca-checkout">Proceed to checkout</a>
+                            <a href="{{ url('/shop') }}" class="sk-btn sk-btn-ghost">Continue shopping</a>
+                        </div>
+                        <form action="{{ route('cart.clear') }}" method="POST" class="ca-clear">
+                            @csrf
+                            <button type="submit">Clear cart</button>
+                        </form>
+                    </aside>
                 </div>
-            </div>
+            @else
+                <div class="bl-empty">
+                    <div class="ic"><i class="fas fa-shopping-cart"></i></div>
+                    <h3>Your cart is empty</h3>
+                    <p>Add packing supplies from the shop, then return here to update quantities and checkout.</p>
+                    <a href="{{ url('/shop') }}" class="sk-btn sk-btn-primary"><i class="fas fa-box-open"></i> Browse Shop</a>
+                </div>
+            @endif
         </div>
+    </section>
+
+    <div class="ps-mobilebar">
+        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="{{ url('/shop') }}"><i class="fas fa-box-open"></i> Shop</a>
     </div>
-    <!-- SHOPING CART AREA END -->
+</div>
+@endsection
+
+@section('javascriptWork')
+<script>
+    (function () {
+        var btn = document.getElementById('ca-update-all');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+            var forms = Array.prototype.slice.call(document.querySelectorAll('.ca-qty-form'));
+            if (!forms.length) return;
+            btn.disabled = true;
+            var run = Promise.resolve();
+            forms.forEach(function (form) {
+                run = run.then(function () {
+                    var params = new URLSearchParams(new FormData(form));
+                    return fetch(form.action + '?' + params.toString(), { credentials: 'same-origin' });
+                });
+            });
+            run.then(function () {
+                window.location.href = {{ json_encode(route('cart.list')) }};
+            }).catch(function () {
+                btn.disabled = false;
+            });
+        });
+    })();
+</script>
 @endsection

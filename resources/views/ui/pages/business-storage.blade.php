@@ -12,7 +12,7 @@
     <!-- ============ HERO ============ -->
     <section class="svc-hero">
         <div class="sk-container">
-            <div class="svc-crumb"><a href="#">Home</a> <i class="fas fa-chevron-right"></i> <a href="#">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Business Storage</span></div>
+            <div class="svc-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Business Storage</span></div>
             <div class="svc-hero-grid">
                 <div>
                     <span class="sk-eyebrow" style="color:#ffcf9e;">Business Storage</span>
@@ -388,7 +388,7 @@
                     <span class="sk-eyebrow">Logistics Included</span>
                     <h2>Business Storage &amp; Moving Under One Roof</h2>
                     <p>Getting stock into storage is a job in itself — pallets need transport, furniture needs careful handling, and every hour your staff spend shifting boxes is an hour taken from actual work. That's why Storage Keys pairs business storage with its own moving service, instead of leaving the logistics to you.</p>
-                    <p class="svc-move-note">Packing materials — boxes, wraps and protective covers — are available from our <a href="#">shop</a>, so nothing gets damaged in transit.</p>
+                    <p class="svc-move-note">Packing materials — boxes, wraps and protective covers — are available from our <a href="{{ url('/shop') }}">shop</a>, so nothing gets damaged in transit.</p>
                     <a href="#business-quote" class="sk-btn sk-btn-primary svc-move-cta"><i class="fas fa-truck-moving"></i> Arrange Collection</a>
                 </div>
                 <div class="svc-flow">

@@ -8,7 +8,7 @@
                         <ul>
                             <li><a href="mailto:sales@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
                                             class="icon-mail"></i> sales@storagekeys.com</a></li>
-                            <li><a href="#"><i class="icon-placeholder"></i> Storage Keys - Sharjah - Dubai - United
+                            <li><a href="{{ url('/contact-us') }}"><i class="icon-placeholder"></i> Storage Keys - Sharjah - Dubai - United
                                     Arab Emirates</a></li>
                         </ul>
                     </div>

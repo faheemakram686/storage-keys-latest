@@ -14,7 +14,7 @@
                         <h1 class="page-title">Account</h1>
                         <div class="ltn__breadcrumb-list">
                             <ul>
-                                <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                                <li><a href="{{ url('/') }}"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
                                 <li>Register</li>
                             </ul>
                         </div>
@@ -185,7 +185,7 @@
                         </form>
                         <div class="by-agree text-center">
                             <p>By creating an account, you agree to our:</p>
-                            <p><a href="#">TERMS OF CONDITIONS  &nbsp; &nbsp; | &nbsp; &nbsp;  PRIVACY POLICY</a></p>
+                            <p><a href="{{ url('/privacy-policy') }}">PRIVACY POLICY</a></p>
                             <div class="go-to-btn mt-50">
                                 <a href="{{ route('customer.login') }}">ALREADY HAVE AN ACCOUNT ?</a>
                             </div>

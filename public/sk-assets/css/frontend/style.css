@@ -77,6 +77,14 @@ font-family: 'Poppins', sans-serif;
 @import url("contact-us.css");
 @import url("blogs.css");
 @import url("privacy-policy.css");
+@import url("booking-layout.css");
+@import url("shop.css");
+@import url("cart.css");
+
+/* FA 5.5 does not include phone-alt — map it to the phone glyph */
+.fa-phone-alt:before {
+    content: "\f095";
+}
 /*
 font-family: 'Nunito Sans', sans-serif;
 font-family: 'Rajdhani', sans-serif;

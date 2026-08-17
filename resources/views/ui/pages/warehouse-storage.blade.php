@@ -11,7 +11,7 @@
     <!-- ============ HERO ============ -->
     <section class="wh-hero">
         <div class="sk-container">
-            <div class="wh-crumb"><a href="#">Home</a> <i class="fas fa-chevron-right"></i> <a href="#">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Warehouse Storage</span></div>
+            <div class="wh-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Warehouse Storage</span></div>
             <span class="sk-eyebrow" style="color:#ffcf9e;">Warehouse Storage</span>
             <h1>Warehouse Storage in <span>Dubai &amp; Sharjah, UAE</span></h1>
             <p class="lead">Flexible warehouse storage solutions for bulk inventory, palletised goods and commercial equipment. Secure, climate-controlled facilities with scalable rental terms for businesses across Dubai, Sharjah and the wider UAE.</p>

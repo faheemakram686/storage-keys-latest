@@ -1,0 +1,186 @@
+/* Shop page */
+
+.sh-alert {
+    background: #e9f8ef;
+    border: 1px solid #b7e4c7;
+    color: #1b7a43;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-weight: 600;
+}
+
+.sh-alert a {
+    color: var(--sk-primary-2);
+    margin-left: 8px;
+}
+
+.sh-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.sh-card {
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: .3s;
+}
+
+.sh-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--sk-shadow);
+    border-color: transparent;
+}
+
+.sh-card-img {
+    position: relative;
+    height: 200px;
+    background: var(--sk-soft) center/cover no-repeat;
+}
+
+.sh-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--sk-accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 5px 10px;
+}
+
+.sh-quick {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--sk-dark);
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(18, 58, 99, .12);
+}
+
+.sh-quick:hover {
+    background: var(--sk-accent);
+    color: #fff;
+}
+
+.sh-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.sh-card-body h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.sh-price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.sh-price span {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sk-accent-2);
+}
+
+.sh-price del {
+    font-size: 13px;
+    color: var(--sk-muted);
+}
+
+.sh-add {
+    width: 100%;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.sh-modal .modal-content {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 28px;
+    position: relative;
+}
+
+.sh-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--sk-muted);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.sh-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: center;
+}
+
+.sh-modal-img img {
+    width: 100%;
+    border-radius: 12px;
+    background: var(--sk-soft);
+}
+
+.sh-qty {
+    margin: 18px 0 20px;
+}
+
+.sh-qty label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.sh-qty input {
+    width: 110px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--sk-line);
+    border-radius: 10px;
+    background: var(--sk-soft);
+}
+
+@media (max-width: 1199px) {
+    .sh-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 991px) {
+    .sh-grid,
+    .sh-modal-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 575px) {
+    .sh-grid,
+    .sh-modal-grid {
+        grid-template-columns: 1fr;
+    }
+}

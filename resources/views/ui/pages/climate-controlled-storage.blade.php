@@ -9,7 +9,7 @@
     <!-- ============ HERO ============ -->
     <section class="cc-hero">
         <div class="sk-container">
-            <div class="cc-crumb"><a href="#">Home</a> <i class="fas fa-chevron-right"></i> <a href="#">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Climate-Controlled Storage</span></div>
+            <div class="cc-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Climate-Controlled Storage</span></div>
             <span class="sk-eyebrow" style="color:#ffcf9e;">Climate-Controlled Storage</span>
             <h1>Climate-Controlled Storage in <span>Dubai &amp; Sharjah, UAE</span></h1>
             <p class="lead">Protect furniture, electronics, documents and valuable belongings with secure climate-controlled storage. Flexible, temperature-controlled units for personal and business needs across Dubai, Sharjah and the UAE.</p>

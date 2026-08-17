@@ -18,9 +18,8 @@
                 <div class="col-md-7">
                     <div class="ltn__top-bar-menu">
                         <ul>
-                            <li><a href="mailto:sales@storagekeys.com?Subject=Flower%20greetings%20to%20you"><i
-                                            class="icon-mail"></i> sales@storagekeys.com</a></li>
-                            <li></li>
+                            <li><a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a></li>
+                            <li><a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a></li>
                         </ul>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
           <a href="{{ url('/car-storage') }}" class="{{ request()->is('car-storage') ? 'active' : '' }}">Car Storage</a>
         </div>
       </div>
-      <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details') ? 'active' : '' }}">Shop</a>
+      <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>
       <a href="{{ url('/booking') }}" class="{{ request()->is('booking') ? 'active' : '' }}">Booking</a>
       <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs', 'blogs/*', 'blog-details') ? 'active' : '' }}">Blogs</a>
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>

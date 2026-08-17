@@ -70,7 +70,7 @@ class CartController extends Controller
     }
 
     public function applyCoupon(Request $request) {
-        $couponCode = $request->input('coupon_code');
+        $couponCode = $request->input('coupon_code', $request->input('cart-coupon'));
         $coupon = Coupon::where('code', $couponCode)->first();
 
         if ($coupon) {

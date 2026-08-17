@@ -14,7 +14,7 @@
                     <h1 class="page-title">Product Details</h1>
                     <div class="ltn__breadcrumb-list">
                         <ul>
-                            <li><a href="index.html"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
+                            <li><a href="{{ url('/') }}"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
                             <li>Product Details</li>
                         </ul>
                     </div>
@@ -285,7 +285,7 @@
                             <li>
                                 <div class="top-rated-product-item clearfix">
                                     <div class="top-rated-product-img">
-                                        <a href="product-details.html"><img src="{{ asset('assets/images/frontend/product/1.png') }}" alt="#"></a>
+                                        <a href="{{ url('/shop') }}"><img src="{{ asset('assets/images/frontend/product/1.png') }}" alt="#"></a>
                                     </div>
                                     <div class="top-rated-product-info">
                                         <div class="product-ratting">
@@ -297,7 +297,7 @@
                                                 <li><a href="#"><i class="fas fa-star"></i></a></li>
                                             </ul>
                                         </div>
-                                        <h6><a href="product-details.html">Mixel Solid Seat Cover</a></h6>
+                                        <h6><a href="{{ url('/shop') }}">Mixel Solid Seat Cover</a></h6>
                                         <div class="product-price">
                                             <span>$49.00</span>
                                             <del>$65.00</del>
@@ -310,7 +310,7 @@
                     </div>
                     <!-- Banner Widget -->
                     <div class="widget ltn__banner-widget">
-                        <a href="shop.html"><img src="{{ asset('assets/images/frontend/banner/2.jpg') }}" alt="#"></a>
+                        <a href="{{ url('/shop') }}"><img src="{{ asset('assets/images/frontend/banner/2.jpg') }}" alt="#"></a>
                     </div>
                 </aside>
             </div>
@@ -336,7 +336,7 @@
             <div class="col-lg-12">
                 <div class="ltn__product-item ltn__product-item-3 text-center">
                     <div class="product-img">
-                        <a href="product-details.html"><img src="{{ asset('assets/images/frontend/product/7.png') }}" alt="#"></a>
+                        <a href="{{ url('/shop') }}"><img src="{{ asset('assets/images/frontend/product/7.png') }}" alt="#"></a>
                         <div class="product-badge">
                             <ul>
                                 <li class="sale-badge">New</li>
@@ -371,7 +371,7 @@
                                 <li><a href="#"><i class="far fa-star"></i></a></li>
                             </ul>
                         </div>
-                        <h2 class="product-title"><a href="product-details.html">Wheel Bearing Retainer</a></h2>
+                        <h2 class="product-title"><a href="{{ url('/shop') }}">Wheel Bearing Retainer</a></h2>
                         <div class="product-price">
                             <span>$149.00</span>
                             <del>$162.00</del>
@@ -509,11 +509,11 @@
                                             <img src="{{ asset('assets/images/frontend/product/1.png') }}" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="product-details.html">Brake Conversion Kit</a></h5>
+                                            <h5><a href="{{ url('/shop') }}">Brake Conversion Kit</a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Cart</p>
                                             <div class="btn-wrapper">
-                                                <a href="cart.html" class="theme-btn-1 btn btn-effect-1">View Cart</a>
-                                                <a href="checkout.html" class="theme-btn-2 btn btn-effect-2">Checkout</a>
+                                                <a href="{{ url('/cart') }}" class="theme-btn-1 btn btn-effect-1">View Cart</a>
+                                                <a href="{{ url('/checkout') }}" class="theme-btn-2 btn btn-effect-2">Checkout</a>
                                             </div>
                                          </div>
                                          <!-- additional-info -->
@@ -553,10 +553,10 @@
                                             <img src="{{ asset('assets/images/frontend/product/7.png') }}" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="product-details.html">Brake Conversion Kit</a></h5>
+                                            <h5><a href="{{ url('/shop') }}">Brake Conversion Kit</a></h5>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Wishlist</p>
                                             <div class="btn-wrapper">
-                                                <a href="wishlist.html" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>
+                                                <a href="{{ url('/shop') }}" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>
                                             </div>
                                          </div>
                                          <!-- additional-info -->

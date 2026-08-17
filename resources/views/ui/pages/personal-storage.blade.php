@@ -11,7 +11,7 @@
     <!-- ============ HERO ============ -->
     <section class="ps-hero">
         <div class="sk-container">
-            <div class="ps-crumb"><a href="/">Home</a> <i class="fas fa-chevron-right"></i> <a href="/">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Personal Storage</span></div>
+            <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Personal Storage</span></div>
             <span class="sk-eyebrow" style="color:#ffcf9e;">Personal Storage</span>
             <h1>Personal Storage Solutions in <span>Dubai &amp; Abu Dhabi</span></h1>
             <p class="lead">Create more space at home with flexible personal storage in Dubai and Abu Dhabi. Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible.</p>
@@ -137,7 +137,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Avoid overloading boxes to make lifting safer and prevent damage.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Keep a simple inventory of stored belongings for easier organisation.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-circle-check"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="#" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-circle-check"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
         </div>
     </section>
