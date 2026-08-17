@@ -88,15 +88,17 @@
 }
 
 .sk-home .booking-page .size-sqft-section-body {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
 }
 
 .sk-home .booking-page .size-container {
     font-family: inherit;
-    width: auto;
-    min-width: 52px;
+    width: 100%;
+    min-width: 0;
     height: auto;
     margin: 0;
     border-radius: 50px;
@@ -132,8 +134,9 @@
 }
 
 .bk-range {
-    margin: 6px 0 0 !important;
+    margin: 0 !important;
     font-size: 13px !important;
+    color: var(--sk-muted);
 }
 
 .bk-head-actions {
@@ -171,28 +174,40 @@
     cursor: pointer;
 }
 
-.bk-pagination {
+.bk-pager {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 28px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--sk-line);
+}
+
+.bk-pages {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    margin-left: auto;
 }
 
 .bk-page-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 42px;
-    height: 42px;
-    padding: 0 12px;
-    border-radius: 10px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
     border: 1px solid var(--sk-line);
     background: #fff;
     color: var(--sk-dark);
     text-decoration: none;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1;
 }
 
 a.bk-page-btn:hover {
@@ -207,7 +222,17 @@ a.bk-page-btn:hover {
 }
 
 .bk-page-btn.is-disabled {
-    opacity: .4;
+    opacity: .35;
+    pointer-events: none;
+}
+
+.bk-page-btn.is-gap {
+    min-width: 18px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    pointer-events: none;
+    color: var(--sk-muted);
 }
 
 .bk-results-head h2 {
@@ -358,6 +383,16 @@ a.bk-page-btn:hover {
 
     .bk-layout {
         grid-template-columns: 1fr;
+    }
+
+    .bk-pager {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .bk-pages {
+        margin-left: 0;
+        flex-wrap: wrap;
     }
 
     .bk-unit,

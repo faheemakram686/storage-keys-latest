@@ -100,7 +100,7 @@
                         <div class="size-sqft-section-body">
                             @isset($data)
                                 @foreach ($data['ss'] as $ss)
-                                    <div class="size-container checked" data="{{ $ss->id }}">
+                                    <div class="size-container" data="{{ $ss->id }}">
                                         <span>{{ $ss->unit_type_name }}</span>
                                     </div>
                                 @endforeach
@@ -114,7 +114,6 @@
                         <div>
                             <h2>Available Units</h2>
                             <p id="search_title">Choose a location and filters to view units.</p>
-                            <p class="bk-range" id="bk-range"></p>
                         </div>
                         <div class="bk-head-actions">
                             <label class="bk-perpage" for="bk-per-page">
@@ -136,7 +135,10 @@
                     <div class="product-section" id="results">
                         <div class="bk-empty">Searching available units…</div>
                     </div>
-                    <nav class="bk-pagination" id="bk-pagination" hidden></nav>
+                    <div class="bk-pager" id="bk-pagination" hidden>
+                        <p class="bk-range" id="bk-pager-range"></p>
+                        <nav class="bk-pages" id="bk-pages"></nav>
+                    </div>
                 </div>
             </div>
         </div>
@@ -260,9 +262,15 @@
             });
 
             $(".size-container").click(function() {
-                ssize = $(this).attr('data');
+                if ($(this).hasClass('checked')) {
+                    $(this).removeClass('checked');
+                    ssize = '';
+                } else {
+                    $('.size-container').removeClass('checked');
+                    $(this).addClass('checked');
+                    ssize = $(this).attr('data');
+                }
                 getFilterResults(slevel, stype, ssize);
-                $(this).toggleClass('checked');
             });
 
             $('#bk-per-page').on('change', function() {
@@ -302,38 +310,66 @@
                     '</div></article>';
             }
 
+            function pageItem(page, label) {
+                if (!page) {
+                    return '<span class="bk-page-btn is-gap">' + (label || '…') + '</span>';
+                }
+                if (page === currentPage) {
+                    return '<span class="bk-page-btn is-active">' + (label || page) + '</span>';
+                }
+                return '<a href="#" data-page="' + page + '" class="bk-page-btn">' + (label || page) + '</a>';
+            }
+
+            function visiblePages(current, total) {
+                var marks = {};
+                var list = [];
+                function add(n) {
+                    n = parseInt(n, 10);
+                    if (n >= 1 && n <= total && !marks[n]) {
+                        marks[n] = true;
+                        list.push(n);
+                    }
+                }
+                add(1);
+                add(total);
+                add(current - 1);
+                add(current);
+                add(current + 1);
+                list.sort(function (a, b) { return a - b; });
+                var out = [];
+                for (var i = 0; i < list.length; i++) {
+                    if (i > 0 && list[i] - list[i - 1] > 1) out.push(0);
+                    out.push(list[i]);
+                }
+                return out;
+            }
+
             function renderPagination(totalPages) {
-                var $nav = $('#bk-pagination');
+                var $pages = $('#bk-pages');
                 if (totalPages <= 1) {
-                    $nav.attr('hidden', true).empty();
+                    $pages.empty();
                     return;
                 }
                 var html = '';
-                if (currentPage > 1) {
-                    html += '<a href="#" data-page="' + (currentPage - 1) + '" class="bk-page-btn">&lsaquo;</a>';
-                } else {
-                    html += '<span class="bk-page-btn is-disabled">&lsaquo;</span>';
+                html += currentPage > 1
+                    ? pageItem(currentPage - 1, '‹')
+                    : '<span class="bk-page-btn is-disabled">‹</span>';
+                var pages = visiblePages(currentPage, totalPages);
+                for (var i = 0; i < pages.length; i++) {
+                    html += pages[i] ? pageItem(pages[i]) : pageItem(0, '…');
                 }
-                for (var p = 1; p <= totalPages; p++) {
-                    if (p === currentPage) {
-                        html += '<span class="bk-page-btn is-active">' + p + '</span>';
-                    } else {
-                        html += '<a href="#" data-page="' + p + '" class="bk-page-btn">' + p + '</a>';
-                    }
-                }
-                if (currentPage < totalPages) {
-                    html += '<a href="#" data-page="' + (currentPage + 1) + '" class="bk-page-btn">&rsaquo;</a>';
-                } else {
-                    html += '<span class="bk-page-btn is-disabled">&rsaquo;</span>';
-                }
-                $nav.html(html).removeAttr('hidden');
+                html += currentPage < totalPages
+                    ? pageItem(currentPage + 1, '›')
+                    : '<span class="bk-page-btn is-disabled">›</span>';
+                $pages.html(html);
             }
 
             function renderUnits() {
                 var total = allUnits.length;
                 if (!total) {
                     $('#bk-count').text('0 units');
-                    $('#bk-range').text('Showing 0 to 0 of 0');
+                    $('#bk-pager-range').text('');
+                    $('#bk-pagination').attr('hidden', true);
                     $('#results').html('<div class="bk-empty"><i class="fas fa-box-open"></i><h3>No units found</h3><p>Try another location, type or size to see available storage units.</p></div>');
                     renderPagination(0);
                     return;
@@ -352,8 +388,9 @@
                 }
 
                 $('#bk-count').text(total + (total === 1 ? ' unit' : ' units'));
-                $('#bk-range').text('Showing ' + (start + 1) + ' to ' + end + ' of ' + total);
+                $('#bk-pager-range').text('Showing ' + (start + 1) + ' to ' + end + ' of ' + total);
                 $('#results').html(html);
+                $('#bk-pagination').removeAttr('hidden');
                 renderPagination(totalPages);
             }
 
