@@ -33,6 +33,9 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/warehouse-storage', [HomeController::class, 'warehouseStorage'])->name('warehouseStorage');
     Route::get('/personal-storage', [HomeController::class, 'personalStorage'])->name('personalStorage');
     Route::get('/climate-controlled-storage', [HomeController::class, 'climateControlledStorage'])->name('climateControlledStorage');
+    Route::get('/moving-services', [HomeController::class, 'movingServices'])->name('movingServices');
+    Route::get('/luggage-storage', [HomeController::class, 'luggageStorage'])->name('luggageStorage');
+    Route::get('/car-storage', [HomeController::class, 'carStorage'])->name('carStorage');
     Route::get('/product-details', [HomeController::class, 'productDetails'])->name('productDetails');
     Route::any('/product-detail', [HomeController::class, 'productDetail'])->name('productDetails');
     Route::get('/booking', [HomeController::class, 'booking'])->name('booking');

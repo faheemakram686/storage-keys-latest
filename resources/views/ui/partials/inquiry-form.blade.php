@@ -16,6 +16,8 @@
         'Warehouse Storage' => 'Warehouse Storage',
         'Climate Controlled Storage' => 'Climate Controlled Storage',
         'Moving' => 'Moving',
+        'Luggage Storage' => 'Luggage Storage',
+        'Car Storage' => 'Car Storage',
     ];
     $showCompany = in_array($variant, ['business', 'warehouse'], true);
     $showSize = $variant === 'hero';
@@ -26,6 +28,7 @@
     $showItemsField = $variant === 'simple' && ($showItemsField ?? false);
     $storingOptions = $storingOptions ?? [];
     $submitClass = $submitClass ?? 'sk-btn sk-btn-primary';
+    $compact = $compact ?? false;
 @endphp
 
 <form class="{{ $formClass }}" action="{{ route('inquiry.store') }}" method="POST">
@@ -69,21 +72,51 @@
             </div>
         </div>
     @else
-        <div class="{{ $fieldClass }}">
-            <label>Your Name</label>
-            <input type="text" name="name" placeholder="e.g. Ahmed Khan" value="{{ old('name') }}" required>
-        </div>
-        <div class="{{ $fieldClass }}">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required>
-        </div>
-        <div class="{{ $fieldClass }}">
-            <label>Phone / WhatsApp</label>
-            <input type="tel" name="phone" placeholder="+971 __ ___ ____" value="{{ old('phone') }}" required>
-        </div>
+        @if($compact)
+            <div class="{{ $rowClass }}">
+                <div class="{{ $fieldClass }}">
+                    <label>Your Name</label>
+                    <input type="text" name="name" placeholder="e.g. Ahmed Khan" value="{{ old('name') }}" required>
+                </div>
+                <div class="{{ $fieldClass }}">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required>
+                </div>
+            </div>
+            <div class="{{ $rowClass }}">
+                <div class="{{ $fieldClass }}">
+                    <label>Phone / WhatsApp</label>
+                    <input type="tel" name="phone" placeholder="+971 __ ___ ____" value="{{ old('phone') }}" required>
+                </div>
+                @if($showStorageSelect)
+                    <div class="{{ $fieldClass }}">
+                        <label>Storage type</label>
+                        <select name="storage_type" required>
+                            <option value="">Select Storage Type</option>
+                            @foreach($storageOptions as $value => $label)
+                                <option value="{{ $value }}" {{ (string) old('storage_type', $defaultStorage) === (string) $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
+        @else
+            <div class="{{ $fieldClass }}">
+                <label>Your Name</label>
+                <input type="text" name="name" placeholder="e.g. Ahmed Khan" value="{{ old('name') }}" required>
+            </div>
+            <div class="{{ $fieldClass }}">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required>
+            </div>
+            <div class="{{ $fieldClass }}">
+                <label>Phone / WhatsApp</label>
+                <input type="tel" name="phone" placeholder="+971 __ ___ ____" value="{{ old('phone') }}" required>
+            </div>
+        @endif
     @endif
 
-    @if($showStorageSelect)
+    @if($showStorageSelect && !$compact)
         <div class="{{ $fieldClass }}">
             <label>Storage type</label>
             <select name="storage_type" required>

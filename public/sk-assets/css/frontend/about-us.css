@@ -1,0 +1,105 @@
+/* About Us — layout aligned with personal-storage service page */
+
+.ab-services {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.ab-svc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--sk-accent-2);
+    text-decoration: none;
+}
+
+.ab-svc-link:hover {
+    color: var(--sk-primary);
+}
+
+.ab-reviews {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+}
+
+@media (max-width: 991px) {
+    .ab-services {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .ab-services,
+    .ab-reviews {
+        grid-template-columns: 1fr;
+    }
+}
+
+.so-services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.so-services .ps-whyc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.so-services .ps-whyc p {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.so-quote-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 26px;
+}
+
+.so-quote-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: rgba(255, 255, 255, .92);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.so-quote-points li i {
+    color: var(--sk-accent);
+    margin-top: 3px;
+}
+
+.so-quote.svc-quote {
+    align-items: stretch;
+}
+
+.so-quote .svc-form h3 {
+    margin-bottom: 6px;
+}
+
+.so-quote .svc-form > p {
+    color: var(--sk-muted);
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 1199px) {
+    .so-services {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .so-services {
+        grid-template-columns: 1fr;
+    }
+}

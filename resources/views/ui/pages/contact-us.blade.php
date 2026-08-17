@@ -112,6 +112,8 @@
                                             <option value="Warehouse Storage" {{ old('storage_type') === 'Warehouse Storage' ? 'selected' : '' }}>Warehouse Storage</option>
                                             <option value="Climate Controlled Storage" {{ old('storage_type') === 'Climate Controlled Storage' ? 'selected' : '' }}>Climate Controlled Storage</option>
                                             <option value="Moving" {{ old('storage_type') === 'Moving' ? 'selected' : '' }}>Moving</option>
+                                            <option value="Luggage Storage" {{ old('storage_type') === 'Luggage Storage' ? 'selected' : '' }}>Luggage Storage</option>
+                                            <option value="Car Storage" {{ old('storage_type') === 'Car Storage' ? 'selected' : '' }}>Car Storage</option>
                                         </select>
                                     </div>
                                 </div>

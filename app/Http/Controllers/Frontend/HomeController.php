@@ -132,6 +132,18 @@ class HomeController extends Controller
     public function warehouseStorage(){
         return view('ui.pages.warehouse-storage');
     }
+    public function movingServices()
+    {
+        return view('ui.pages.moving-services');
+    }
+    public function luggageStorage()
+    {
+        return view('ui.pages.luggage-storage');
+    }
+    public function carStorage()
+    {
+        return view('ui.pages.car-storage');
+    }
     public function bookingReservation($id)
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();
