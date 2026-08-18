@@ -15,7 +15,7 @@
     <div class="pv-foot-grid">
       <div>
         <h4>StorageKeys</h4>
-        <p>Secure, climate-controlled self storage with free collection &amp; delivery across the UAE. Store your home or business items with confidence.</p>
+        <p>StorageKeys provides secure, flexible self storage solutions for individuals and businesses across Dubai, Sharjah and the UAE. From personal belongings and luggage to business inventory and warehouse space, we offer convenient storage units tailored to your needs.</p>
         <div class="pv-social">
           <a href="https://www.facebook.com/storagekeysllc" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
           <a href="https://www.linkedin.com/company/storage-keys-uae" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
@@ -44,7 +44,7 @@
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
       </div>
     </div>
-    <div class="pv-copy">© StorageKeys — All rights reserved.</div>
+    <div class="pv-copy">© StorageKeys 2026 — All rights reserved.</div>
   </div>
 </footer>  
   
@@ -74,7 +74,7 @@
 
     <script async src='https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js'></script>
     <script>
-        var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"left","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
+        var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"right","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
         window.onload = () => {
             _waEmbed(wa_btnSetting);
         };

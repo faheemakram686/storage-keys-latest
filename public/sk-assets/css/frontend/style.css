@@ -85,6 +85,10 @@ font-family: 'Poppins', sans-serif;
 .fa-phone-alt:before {
     content: "\f095";
 }
+.fa-phone,
+.fa-phone-alt {
+    transform: rotate(90deg);
+}
 /*
 font-family: 'Nunito Sans', sans-serif;
 font-family: 'Rajdhani', sans-serif;
