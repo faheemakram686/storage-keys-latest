@@ -36,10 +36,11 @@
         <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
         <a href="{{ url('/contact-us') }}#ct-quote">Get a Quote</a>
       </div>
-      <div>
+      <div class="pv-foot-contact">
         <h5>Get in Touch</h5>
         <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
         <p><i class="fas fa-phone-alt"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
+        <p><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
       </div>
     </div>

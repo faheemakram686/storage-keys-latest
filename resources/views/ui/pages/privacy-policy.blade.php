@@ -123,6 +123,7 @@
                         <ul class="lp-contact">
                             <li><i class="fas fa-map-marker-alt"></i> Storage Keys, Plot # 4202, Sharjah, United Arab Emirates</li>
                             <li><i class="fas fa-phone-alt"></i> <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                             <li><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
                             <li><i class="fas fa-globe"></i> <a href="{{ url('/contact-us') }}">Contact Us page</a></li>
                         </ul>

@@ -16,6 +16,7 @@
             <div class="ps-hero-cta">
                 <a href="#ct-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get A Quote</a>
                 <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
             </div>
             <div class="ps-hero-badges">
                 <span class="ps-hbadge"><i class="fas fa-phone-alt"></i> Call or WhatsApp</span>
@@ -31,6 +32,7 @@
         <div class="sk-container">
             <div class="ps-trust-in">
                 <div class="ps-trust-i"><i class="fas fa-phone-alt"></i> +971 56 501 8785</div>
+                <div class="ps-trust-i"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</div>
                 <div class="ps-trust-i"><i class="fas fa-envelope"></i> info@storagekeys.com</div>
                 <div class="ps-trust-i"><i class="fab fa-whatsapp"></i> WhatsApp support</div>
                 <div class="ps-trust-i"><i class="fas fa-map-marker-alt"></i> Sharjah, UAE</div>
@@ -53,12 +55,13 @@
                     <p>info@storagekeys.com</p>
                     <span class="ab-svc-link">Send an email <i class="fas fa-arrow-right"></i></span>
                 </a>
-                <a class="ps-whyc ct-card" href="tel:+971565018785">
+                <div class="ps-whyc ct-card">
                     <div class="ic"><i class="fas fa-phone-alt"></i></div>
                     <h4>Phone Number</h4>
-                    <p>+971 56 501 8785</p>
-                    <span class="ab-svc-link">Call our team <i class="fas fa-arrow-right"></i></span>
-                </a>
+                    <p><a href="tel:+971565018785">+971 56 501 8785</a></p>
+                    <p>Toll Free: <a href="tel:8005397">800 5397</a></p>
+                    <a class="ab-svc-link" href="tel:+971565018785">Call our team <i class="fas fa-arrow-right"></i></a>
+                </div>
                 <div class="ps-whyc ct-card">
                     <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
                     <h4>Office Address</h4>
@@ -86,6 +89,7 @@
                     </ul>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                         <a href="mailto:info@storagekeys.com"><i class="fas fa-envelope"></i> info@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>

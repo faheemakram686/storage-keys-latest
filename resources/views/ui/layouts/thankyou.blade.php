@@ -20,6 +20,7 @@
             <a href="{{ url('/') }}">Home</a>
             <a href="{{ url('/booking') }}">Book a unit</a>
             <a href="tel:+971565018785">+971 56 501 8785</a>
+            <a href="tel:8005397">Toll Free: 800 5397</a>
         </div>
     </footer>
 </body>

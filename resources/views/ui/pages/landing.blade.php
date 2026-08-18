@@ -44,7 +44,7 @@
                         'subtitle' => 'Tell us what you need to store and we\'ll help you find the right space.',
                         'submitLabel' => 'Get My Free Quote',
                         'source' => 'landing-hero',
-                        'noteHtml' => 'Or call us now: <a href="tel:+971565018785">+971 56 501 8785</a>',
+                        'noteHtml' => 'Or call us now: <a href="tel:+971565018785">+971 56 501 8785</a> · Toll Free: <a href="tel:8005397">800 5397</a>',
                         'storageOptions' => [
                             'Personal Storage' => 'Personal Storage',
                             'Business Storage' => 'Business Storage',
@@ -306,6 +306,7 @@
                 <div class="pc" style="display:flex; gap:14px; flex-wrap:wrap;">
                     <a href="/booking/" class="sk-btn sk-btn-primary"><i class="fas fa-tag"></i> Claim This Offer</a>
                     <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Call Us</a>
+                    <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                 </div>
             </div>
         </div>

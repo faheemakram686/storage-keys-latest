@@ -20,6 +20,7 @@
                         <ul>
                             <li><a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a></li>
                             <li><a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a></li>
+                            <li><a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a></li>
                         </ul>
                     </div>
                 </div>
@@ -84,7 +85,10 @@
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>
     </nav>
     <div class="pv-header-cta">
-      <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+      <div class="pv-phones">
+        <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+        <a href="tel:8005397" class="pv-phone"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+      </div>
       <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
     </div>
     <button type="button" class="pv-nav-toggle" aria-label="Open menu" aria-expanded="false">

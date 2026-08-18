@@ -21,6 +21,7 @@
                     <div class="svc-hero-cta">
                         <a href="#business-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get a Free Quote</a>
                         <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                     </div>
                 </div>
                 <div class="svc-hero-card">
@@ -469,6 +470,7 @@
                     <p>Stop paying office rent for storage space. Tell us what your company needs to store, and we'll recommend the right unit at a fair, quote-based price — collection included when you need it.</p>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>

@@ -56,6 +56,7 @@
                         <h4>Need storage help?</h4>
                         <p>Tell us what you need to store and our team will recommend a practical option.</p>
                         <a href="tel:+971565018785" class="sk-btn sk-btn-primary"><i class="fas fa-phone-alt"></i> Call Us</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                         <a href="{{ url('/contact-us') }}" class="ab-svc-link">Contact Us <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </aside>

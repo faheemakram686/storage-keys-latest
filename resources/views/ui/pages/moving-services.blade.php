@@ -16,6 +16,7 @@
                     <div class="svc-hero-cta">
                         <a href="#moving-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get a Free Quote</a>
                         <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                     </div>
                 </div>
                 <div class="svc-hero-card">
@@ -41,6 +42,7 @@
                     <p>Need moving and storage in one place? Contact StorageKeys for a flexible solution tailored to your schedule.</p>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
