@@ -1,6 +1,6 @@
 @extends('ui.layouts.frontend')
 @section('title', '| Home')
-@section('metaTitle', 'Secure Self Storage Across the UAE | Storagekeys')
+@section('metaTitle', 'Self Storage in UAE | Secure Storage Units | Storagekeys')
 @section('metaDescription', 'Secure, climate-controlled self storage across the UAE. Flexible plans, 24/7 access, no hidden costs. Get a free quote today.')
 
 
@@ -38,8 +38,10 @@
                 <div class="sk-hero-form">
                     @include('ui.partials.inquiry-form', [
                         'variant' => 'hero',
+                        'compact' => true,
                         'formClass' => 'sk-quote',
                         'fieldClass' => 'sk-field',
+                        'rowClass' => 'sk-frow',
                         'title' => 'Get a Free Quote',
                         'subtitle' => 'Tell us what you need to store and we\'ll help you find the right space.',
                         'submitLabel' => 'Get My Free Quote',

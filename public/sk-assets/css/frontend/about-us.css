@@ -79,17 +79,22 @@
 }
 
 .so-quote.svc-quote {
-    align-items: stretch;
+    align-items: start;
+}
+
+.so-quote .svc-form {
+    align-self: start;
+    height: auto;
 }
 
 .so-quote .svc-form h3 {
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .so-quote .svc-form > p {
     color: var(--sk-muted);
-    font-size: 14px;
-    margin-bottom: 18px;
+    font-size: 13px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 1199px) {

@@ -190,6 +190,105 @@ a.link:hover {
   color: rgba(255, 255, 255, .65);
 }
 
+/* Compact quote / inquiry forms — override global 65px inputs + 30px gaps */
+.sk-quote,
+.svc-form {
+  padding: 20px 22px 18px;
+}
+.sk-hero .sk-quote {
+  padding: 32px 24px 16px;
+}
+.sk-quote h3,
+.svc-form h3 {
+  margin: 0 0 4px !important;
+  font-size: 20px;
+}
+.sk-quote > p,
+.svc-form > p {
+  margin: 0 0 10px !important;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.sk-field,
+.svc-field {
+  margin-bottom: 8px;
+}
+.sk-field label,
+.svc-field label {
+  margin-bottom: 4px;
+  font-size: 12.5px;
+}
+.sk-field input,
+.sk-field select,
+.sk-field textarea,
+.svc-field input,
+.svc-field select,
+.svc-field textarea,
+.sk-quote input[type="text"],
+.sk-quote input[type="email"],
+.sk-quote input[type="tel"],
+.sk-quote textarea,
+.svc-form input[type="text"],
+.svc-form input[type="email"],
+.svc-form input[type="tel"],
+.svc-form textarea {
+  height: 40px !important;
+  min-height: 40px;
+  margin-bottom: 0 !important;
+  padding: 8px 12px !important;
+  font-size: 14px;
+  border-radius: 8px;
+  line-height: 1.3;
+}
+.sk-field textarea,
+.svc-field textarea,
+.sk-quote textarea,
+.svc-form textarea {
+  height: auto !important;
+  min-height: 68px;
+  padding-top: 8px !important;
+}
+.sk-frow,
+.svc-frow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 10px;
+  margin-bottom: 0;
+}
+.sk-quote .sk-btn,
+.svc-form .sk-btn,
+.svc-form-submit {
+  margin-top: 4px;
+  padding: 10px 16px;
+}
+.sk-quote-note {
+  margin: 8px 0 0 !important;
+}
+.sk-hero .sk-quote-note {
+  margin-top: 18px !important;
+}
+.svc-quote .svc-form {
+  align-self: start;
+  height: auto;
+}
+.so-quote.svc-quote {
+  align-items: start;
+}
+
+@media (max-width: 575px) {
+  .sk-frow,
+  .svc-frow {
+    grid-template-columns: 1fr;
+  }
+  .sk-quote,
+  .svc-form {
+    padding: 16px;
+  }
+  .sk-hero .sk-quote {
+    padding: 28px 16px 16px;
+  }
+}
+
 /* ---------- "Storage Options" dropdown ---------- */
 .pv-has-sub { position: relative; }
 .pv-has-sub > a { display: inline-flex; align-items: center; gap: 7px; }
@@ -238,4 +337,71 @@ a.link:hover {
   }
   .pv-has-sub.open > .pv-sub { display: flex; }
   .pv-nav .pv-sub a { padding: 11px 4px; border-top: 1px solid var(--sk-line); border-radius: 0; }
+}
+
+@media (max-width: 424px) {
+  .pv-banner-note {
+    padding: 5px 10px;
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+  .pv-banner-note .container {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+  }
+  .pv-banner-note .row {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .pv-banner-note [class*="col-"] {
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    padding: 0;
+  }
+  .pv-banner-note .ltn__top-bar-menu > ul,
+  .pv-banner-note .ltn__social-media > ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 10px;
+    margin: 0;
+    padding: 0;
+  }
+  .pv-banner-note .ltn__top-bar-menu > ul > li,
+  .pv-banner-note .ltn__social-media ul li {
+    display: inline-flex !important;
+    margin: 0 !important;
+    font-size: 11.5px;
+    line-height: 1.25;
+  }
+  .pv-banner-note .top-bar-right,
+  .pv-banner-note .text-right {
+    text-align: center !important;
+    display: block;
+    justify-content: center;
+  }
+  .pv-banner-note a[title="Admin Area"] {
+    display: none;
+  }
+  .pv-header-in {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+  .pv-logo img {
+    height: 28px;
+  }
+  .pv-book {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .pv-nav-toggle {
+    padding: 4px;
+    font-size: 18px;
+  }
 }

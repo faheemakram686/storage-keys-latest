@@ -178,7 +178,7 @@
     @if($showMessage)
         <div class="{{ $fieldClass }}">
             <label>Message</label>
-            <textarea name="message" rows="3" placeholder="Enter message">{{ old('message') }}</textarea>
+            <textarea name="message" rows="2" placeholder="Enter message">{{ old('message') }}</textarea>
         </div>
     @endif
 
