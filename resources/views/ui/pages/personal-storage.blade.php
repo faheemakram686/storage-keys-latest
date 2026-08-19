@@ -100,14 +100,14 @@
                 <p>From a few boxes to the contents of an entire home. Tap what you're planning to store and we'll pass the list straight to our team for a quick quote.</p>
             </div>
             <div class="ps-items sk-reveal" id="psItems">
-                <button type="button" class="ps-item" data-item="Furniture &amp; home décor"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-couch"></i></div><h4>Furniture &amp; Home Décor</h4></button>
-                <button type="button" class="ps-item" data-item="Household goods &amp; appliances"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-blender"></i></div><h4>Household Goods &amp; Appliances</h4></button>
-                <button type="button" class="ps-item" data-item="Documents &amp; personal records"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-folder-open"></i></div><h4>Documents &amp; Records</h4></button>
-                <button type="button" class="ps-item" data-item="Luggage &amp; travel accessories"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-suitcase-rolling"></i></div><h4>Luggage &amp; Travel</h4></button>
-                <button type="button" class="ps-item" data-item="Seasonal clothing &amp; decorations"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-tshirt"></i></div><h4>Seasonal Clothing &amp; Decor</h4></button>
-                <button type="button" class="ps-item" data-item="Sports &amp; hobby equipment"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-bicycle"></i></div><h4>Sports &amp; Hobby Gear</h4></button>
-                <button type="button" class="ps-item" data-item="Electronics &amp; valuables"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-tv"></i></div><h4>Electronics &amp; Valuables</h4></button>
-                <button type="button" class="ps-item" data-item="Something else"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-ellipsis-h"></i></div><h4>Something Else</h4></button>
+                <button type="button" class="ps-item" data-item="Furniture &amp; home décor"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-couch"></i></div><span class="h4">Furniture &amp; Home Décor</span></button>
+                <button type="button" class="ps-item" data-item="Household goods &amp; appliances"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-blender"></i></div><span class="h4">Household Goods &amp; Appliances</span></button>
+                <button type="button" class="ps-item" data-item="Documents &amp; personal records"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-folder-open"></i></div><span class="h4">Documents &amp; Records</span></button>
+                <button type="button" class="ps-item" data-item="Luggage &amp; travel accessories"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-suitcase-rolling"></i></div><span class="h4">Luggage &amp; Travel</span></button>
+                <button type="button" class="ps-item" data-item="Seasonal clothing &amp; decorations"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-tshirt"></i></div><span class="h4">Seasonal Clothing &amp; Decor</span></button>
+                <button type="button" class="ps-item" data-item="Sports &amp; hobby equipment"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-bicycle"></i></div><span class="h4">Sports &amp; Hobby Gear</span></button>
+                <button type="button" class="ps-item" data-item="Electronics &amp; valuables"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-tv"></i></div><span class="h4">Electronics &amp; Valuables</span></button>
+                <button type="button" class="ps-item" data-item="Something else"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-ellipsis-h"></i></div><span class="h4">Something Else</span></button>
             </div>
             <div class="ps-cart sk-reveal">
                 <div class="txt"><b><span id="psCount">0</span> item type(s)</b> selected<small id="psList">Tap the items above to build your list.</small></div>
@@ -208,11 +208,11 @@
             <div class="ps-cover sk-reveal">
                 <div class="ps-covc">
                     <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
-                    <div><h4>Dubai</h4><p>Flexible personal and home storage for households and apartment residents across Dubai — declutter, renovate, relocate or store seasonal items with ease.</p></div>
+                    <div><span class="h4">Dubai</span><p>Flexible personal and home storage for households and apartment residents across Dubai — declutter, renovate, relocate or store seasonal items with ease.</p></div>
                 </div>
                 <div class="ps-covc">
                     <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
-                    <div><h4>Abu Dhabi</h4><p>Secure, on-demand personal storage for customers in Abu Dhabi — short-term during a move or long-term for belongings you want to keep safe and accessible.</p></div>
+                    <div><span class="h4">Abu Dhabi</span><p>Secure, on-demand personal storage for customers in Abu Dhabi — short-term during a move or long-term for belongings you want to keep safe and accessible.</p></div>
                 </div>
             </div>
         </div>
@@ -227,12 +227,12 @@
                 <p>A storage provider focused on flexibility, security and customer convenience — from small personal units to larger household storage solutions.</p>
             </div>
             <div class="ps-why sk-reveal">
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><h4>Flexible Rental Options</h4><p>Short-term or long-term plans that fit your schedule — you only pay for the storage space you actually need.</p></div>
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-ruler-combined"></i></div><h4>Multiple Unit Sizes</h4><p>From a few boxes to the contents of an entire home, units in different sizes to match your belongings and budget.</p></div>
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><h4>Safe &amp; Secure Storage</h4><p>CCTV monitoring, controlled access and professionally managed premises help protect your belongings throughout their stay.</p></div>
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-temperature-low"></i></div><h4>Climate-Controlled Storage</h4><p>Sensitive items like furniture, electronics and documents benefit from conditions that minimise heat and humidity.</p></div>
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-key"></i></div><h4>Convenient Access</h4><p>Reach your belongings whenever you need them through flexible access arrangements that keep things hassle-free.</p></div>
-                <div class="ps-whyc"><div class="ic"><i class="fas fa-headset"></i></div><h4>Professional Support</h4><p>Our experienced team helps you choose the right unit and ensures a smooth experience from start to finish.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><span class="h4">Flexible Rental Options</span><p>Short-term or long-term plans that fit your schedule — you only pay for the storage space you actually need.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-ruler-combined"></i></div><span class="h4">Multiple Unit Sizes</span><p>From a few boxes to the contents of an entire home, units in different sizes to match your belongings and budget.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><span class="h4">Safe &amp; Secure Storage</span><p>CCTV monitoring, controlled access and professionally managed premises help protect your belongings throughout their stay.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-temperature-low"></i></div><span class="h4">Climate-Controlled Storage</span><p>Sensitive items like furniture, electronics and documents benefit from conditions that minimise heat and humidity.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-key"></i></div><span class="h4">Convenient Access</span><p>Reach your belongings whenever you need them through flexible access arrangements that keep things hassle-free.</p></div>
+                <div class="ps-whyc"><div class="ic"><i class="fas fa-headset"></i></div><span class="h4">Professional Support</span><p>Our experienced team helps you choose the right unit and ensures a smooth experience from start to finish.</p></div>
             </div>
         </div>
     </section>

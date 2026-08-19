@@ -48,6 +48,11 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
     Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
     Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
+    Route::get('/security-policy', [HomeController::class, 'securityPolicy'])->name('securityPolicy');
+    Route::get('/support-policy', [HomeController::class, 'supportPolicy'])->name('supportPolicy');
+    Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookiePolicy');
+    Route::get('/terms-of-service', [HomeController::class, 'termsOfService'])->name('termsOfService');
+    Route::get('/frequently-asked-questions', [HomeController::class, 'frequentlyAskedQuestions'])->name('frequentlyAskedQuestions');
     Route::get('/estimatetocustomer/{id}', [EstimateController::class, 'estimateToCustomer'])->name('estimate-customer')->middleware('hashid');
     Route::get('/contract-to-customer/{id}', [ContractController::class, 'contractToCustomer'])->name('contract-customer')->middleware('hashid');
     Route::any('estimate-upload-document/{id}', [EstimateController::class, 'showUploadDocuments'])->name('show-upload-document')->middleware('hashid');

@@ -4869,7 +4869,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
     font-size: 14px;
     font-weight: 600; }
 
-.mini-cart-header h5 {
+.mini-cart-header h5,
+.mini-cart-header .h5 {
   margin-bottom: 0; }
 
 .mini-cart-product-area {
@@ -4934,7 +4935,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   border-top: 1px solid var(--border-color-1);
   border-bottom: 1px solid var(--border-color-1);
   padding: 20px 0; }
-  .mini-cart-sub-total h5 {
+  .mini-cart-sub-total h5,
+  .mini-cart-sub-total .h5 {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -5247,12 +5249,14 @@ ul.wp-block-latest-posts.is-grid.alignwide {
       margin: 0;
       font-weight: 600;
       font-size: 14px; }
-    .get-support .get-support-info h4 {
+    .get-support .get-support-info h4,
+    .get-support .get-support-info .h4 {
       margin: 5px 0 0;
       line-height: 1; }
 
 .get-support-color-white .get-support-info h6,
-.get-support-color-white .get-support-info h4 {
+.get-support-color-white .get-support-info h4,
+.get-support-color-white .get-support-info .h4 {
   color: var(--white); }
 
 .special-link {
@@ -5841,7 +5845,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
       display: none; }
     .get-support .get-support-info h6 {
       font-size: 13px; }
-    .get-support .get-support-info h4 {
+    .get-support .get-support-info h4,
+    .get-support .get-support-info .h4 {
       font-size: 16px; } }
 
 @media (max-width: 370px) {
@@ -11147,7 +11152,7 @@ input.cart-plus-minus-box {
     padding: 20px 10px; }
   .cart-product-image img {
     max-width: 80px; }
-  .cart-product-info h4 {
+  .cart-product-info h4, .cart-product-info .h4 {
     font-size: 18px; } }
 
 @media (max-width: 767px) {
@@ -13386,7 +13391,7 @@ input.cart-plus-minus-box {
 ---------------------------------------------------- */
 .ltn__checkout-single-content {
   margin-bottom: 30px; }
-  .ltn__checkout-single-content h5 {
+  .ltn__checkout-single-content h5, .ltn__checkout-single-content .h5 {
     background-color: var(--section-bg-1);
     padding: 20px 30px; }
 
@@ -13961,7 +13966,8 @@ input.cart-plus-minus-box {
 .ltn__footer-color-1 .get-support-info h6 {
   color: var(--ltn__color-4); }
 
-.ltn__footer-color-1 .get-support-info h4 {
+.ltn__footer-color-1 .get-support-info h4,
+.ltn__footer-color-1 .get-support-info .h4 {
   color: var(--white); }
 
 .ltn__footer-color-1 .ltn__copyright-menu ul li {

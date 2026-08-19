@@ -69,7 +69,7 @@
                             </div>
                             <div class="get-support-info">
                                 <h6>Get Support</h6>
-                                <h4><a href="tel:+971 56 501 8785">+971 56 501 8785</a></h4>
+                                <span class="h4"><a href="tel:+971 56 501 8785">+971 56 501 8785</a></span>
                             </div>
                         </div>
                     </div>
@@ -176,7 +176,7 @@
         </div>
         <div class="mini-cart-footer">
             <div class="mini-cart-sub-total">
-                <h5>Subtotal: <span>$310.00</span></h5>
+                <span class="h5">Subtotal: <span>$310.00</span></span>
             </div>
             <div class="btn-wrapper">
                 <a href="cart.html" class="theme-btn-1 btn btn-effect-1">View Cart</a>

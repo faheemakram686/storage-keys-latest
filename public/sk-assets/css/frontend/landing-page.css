@@ -56,7 +56,9 @@
 .sk-home h2,
 .sk-home h3,
 .sk-home h4,
-.sk-home h5 {
+.sk-home .h4,
+.sk-home h5,
+.sk-home .h5 {
     color: var(--sk-dark);
     font-weight: 700;
     line-height: 1.2;
@@ -409,7 +411,8 @@
     display: block;
 }
 
-.sk-usp-item h4 {
+.sk-usp-item h4,
+.sk-usp-item .h4 {
     font-size: 15px;
     margin-bottom: 4px;
 }
@@ -836,7 +839,8 @@
     font-size: 22px;
 }
 
-.sk-value h4 {
+.sk-value h4,
+.sk-value .h4 {
     font-size: 18px;
     margin-bottom: 8px;
 }
@@ -890,7 +894,8 @@
     display: block;
 }
 
-.sk-city h4 {
+.sk-city h4,
+.sk-city .h4 {
     color: #fff;
     font-size: 19px;
     margin-bottom: 6px;
@@ -1075,7 +1080,8 @@
     font-size: 20px;
 }
 
-.sk-secure-list h4 {
+.sk-secure-list h4,
+.sk-secure-list .h4 {
     font-size: 16px;
     margin-bottom: 4px;
 }
@@ -1219,7 +1225,8 @@
     object-fit: cover;
 }
 
-.sk-review .who h4 {
+.sk-review .who h4,
+.sk-review .who .h4 {
     font-size: 15px;
     margin: 0;
 }

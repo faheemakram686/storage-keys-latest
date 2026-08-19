@@ -89,7 +89,7 @@
                                         <td class="cart-product-info">
                                             <div class="ca-product">
                                                 <a href="{{ url('/shop') }}" class="ca-thumb" style="background-image:url('{{ $img }}');"></a>
-                                                <h4><a href="{{ url('/shop') }}">{{ $item->name }}</a></h4>
+                                                <span class="h4"><a href="{{ url('/shop') }}">{{ $item->name }}</a></span>
                                             </div>
                                         </td>
                                         <td class="cart-product-price">AED {{ number_format((float) $item->price, 2) }}</td>
@@ -120,7 +120,7 @@
                     </div>
 
                     <aside class="ca-summary shoping-cart-total">
-                        <h4>Cart Totals</h4>
+                        <span class="h4">Cart Totals</span>
                         <table class="table">
                             <tbody>
                                 <tr>

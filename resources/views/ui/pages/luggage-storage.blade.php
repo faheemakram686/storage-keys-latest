@@ -133,12 +133,12 @@
                 <p class="svc-feat-lead">StorageKeys provides more than a place to leave your bags. Our storage solutions are designed for customers who want a straightforward way to keep their belongings stored while they travel, relocate or manage a temporary gap between plans.</p>
             </div>
             <div class="svc-feat-grid sk-reveal">
-                <div class="svc-feat-i"><i class="fas fa-clock"></i><h4>Flexible storage periods</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-layer-group"></i><h4>Suitable space for different luggage quantities</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-shield-alt"></i><h4>Secure storage arrangements</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-hand-holding"></i><h4>Convenient collection when required</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-calendar-check"></i><h4>Options for short-term and long-term needs</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-users"></i><h4>Support from a professional storage team</h4></div>
+                <div class="svc-feat-i"><i class="fas fa-clock"></i><span class="h4">Flexible storage periods</span></div>
+                <div class="svc-feat-i"><i class="fas fa-layer-group"></i><span class="h4">Suitable space for different luggage quantities</span></div>
+                <div class="svc-feat-i"><i class="fas fa-shield-alt"></i><span class="h4">Secure storage arrangements</span></div>
+                <div class="svc-feat-i"><i class="fas fa-hand-holding"></i><span class="h4">Convenient collection when required</span></div>
+                <div class="svc-feat-i"><i class="fas fa-calendar-check"></i><span class="h4">Options for short-term and long-term needs</span></div>
+                <div class="svc-feat-i"><i class="fas fa-users"></i><span class="h4">Support from a professional storage team</span></div>
             </div>
             <p class="svc-vs-note">Whether you need baggage storage Dubai options for a short trip or a longer storage arrangement, we can help you find a suitable solution.</p>
         </div>

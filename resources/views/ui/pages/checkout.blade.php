@@ -51,7 +51,7 @@
                         @endif
 
                         <div class="ltn__checkout-single-content mt-50">
-                            <h4 class="title-2">Billing Details</h4>
+                            <span class="h4 title-2">Billing Details</span>
                             <div class="ltn__checkout-single-content-info">
                                 <form action="{{route('order.save')}}" method="post" id="place_order1">
                                     @csrf
@@ -158,17 +158,17 @@
                 </div>
                 <div class="col-lg-6">
                     <div class=" mt-50">
-                        <h4 class="title-2">Payment Method</h4>
+                        <span class="h4 title-2">Payment Method</span>
                         <div id="checkout_accordion_1 ">
                             <!-- Cash on Delivery -->
                             <div class="card">
-                                <h5 class="ltn__card-title" data-toggle="collapse" data-target="#faq-item-2-2"
+                                <span class="h5 ltn__card-title" data-toggle="collapse" data-target="#faq-item-2-2"
                                     aria-expanded="false" style=" padding: 15px;">
                                     <label>
                                         <input type="radio" name="payment_method" value="cod" required="" style=" margin-right: 14px;">
                                         Cash on Delivery
                                     </label>
-                                </h5>
+                                </span>
                                 <div id="faq-item-2-2" class="collapse" data-parent="#checkout_accordion_1">
                                     <div class="card-body">
                                         <p>Pay with cash upon delivery.</p>
@@ -180,13 +180,13 @@
                         <div id="checkout_accordion_2">
                             <!-- Online Payment -->
                             <div class="card">
-                                <h5 class="ltn__card-title" data-toggle="collapse" data-target="#faq-item-3-3"
+                                <span class="h5 ltn__card-title" data-toggle="collapse" data-target="#faq-item-3-3"
                                     aria-expanded="false" style="padding: 15px;">
                                     <label style="">
                                         <input type="radio" name="payment_method" value="online" required="" style="margin-right: 14px;">
                                         Online Payment
                                     </label>
-                                </h5>
+                                </span>
                                 <div id="faq-item-3-3" class="collapse" data-parent="#checkout_accordion_2">
                                     <div class="card-body">
                                         <p>Pay with Network upon online payment.</p>
@@ -206,7 +206,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="shoping-cart-total mt-50">
-                        <h4 class="title-2">Cart Totals</h4>
+                        <span class="h4 title-2">Cart Totals</span>
                         <table class="table">
                             <tbody>
                             @foreach ($cartItems as $item)

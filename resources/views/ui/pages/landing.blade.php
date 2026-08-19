@@ -66,27 +66,27 @@
             <div class="sk-usp-inner">
                 <div class="sk-usp-item">
                     <i class="fas fa-shield-alt"></i>
-                    <h4>Secure Storage</h4>
+                    <span class="h4">Secure Storage</span>
                     <p>CCTV surveillance &amp; access control</p>
                 </div>
                 <div class="sk-usp-item">
                     <i class="fas fa-temperature-low"></i>
-                    <h4>Climate Controlled</h4>
+                    <span class="h4">Climate Controlled</span>
                     <p>Protects sensitive belongings</p>
                 </div>
                 <div class="sk-usp-item">
                     <i class="fas fa-clock"></i>
-                    <h4>24/7 Access</h4>
+                    <span class="h4">24/7 Access</span>
                     <p>Reach your unit any time</p>
                 </div>
                 <div class="sk-usp-item">
                     <i class="fas fa-sliders-h"></i>
-                    <h4>Flexible Plans</h4>
+                    <span class="h4">Flexible Plans</span>
                     <p>Short-term &amp; long-term terms</p>
                 </div>
                 <div class="sk-usp-item">
                     <i class="fas fa-tags"></i>
-                    <h4>Transparent Pricing</h4>
+                    <span class="h4">Transparent Pricing</span>
                     <p>No hidden costs</p>
                 </div>
             </div>
@@ -375,19 +375,19 @@
                     <div class="sk-secure-list">
                         <div class="row-i">
                             <div class="ic"><i class="fas fa-video"></i></div>
-                            <div><h4>24/7 CCTV Surveillance</h4><p>Facilities are monitored around the clock by security cameras.</p></div>
+                            <div><span class="h4">24/7 CCTV Surveillance</span><p>Facilities are monitored around the clock by security cameras.</p></div>
                         </div>
                         <div class="row-i">
                             <div class="ic"><i class="fas fa-fingerprint"></i></div>
-                            <div><h4>Controlled Access</h4><p>Only authorised, registered customers can access the storage areas.</p></div>
+                            <div><span class="h4">Controlled Access</span><p>Only authorised, registered customers can access the storage areas.</p></div>
                         </div>
                         <div class="row-i">
                             <div class="ic"><i class="fas fa-temperature-low"></i></div>
-                            <div><h4>Climate-Controlled Units</h4><p>Temperature-controlled spaces protect items from heat and humidity.</p></div>
+                            <div><span class="h4">Climate-Controlled Units</span><p>Temperature-controlled spaces protect items from heat and humidity.</p></div>
                         </div>
                         <div class="row-i">
                             <div class="ic"><i class="fas fa-fire-extinguisher"></i></div>
-                            <div><h4>Fire &amp; Safety Measures</h4><p>Clean, well-maintained facilities built with safety in mind.</p></div>
+                            <div><span class="h4">Fire &amp; Safety Measures</span><p>Clean, well-maintained facilities built with safety in mind.</p></div>
                         </div>
                     </div>
                 </div>
@@ -507,32 +507,32 @@
             <div class="sk-values">
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-shield-alt"></i></div>
-                    <h4>Secure &amp; Climate-Controlled</h4>
+                    <span class="h4">Secure &amp; Climate-Controlled</span>
                     <p>Every unit is monitored with CCTV surveillance and kept in a climate-controlled environment for complete peace of mind.</p>
                 </div>
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-clock"></i></div>
-                    <h4>24/7 Access</h4>
+                    <span class="h4">24/7 Access</span>
                     <p>Registered customers can reach their belongings around the clock, whenever it suits them.</p>
                 </div>
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-headset"></i></div>
-                    <h4>Friendly Support</h4>
+                    <span class="h4">Friendly Support</span>
                     <p>A professional, responsive team is always on hand to help you choose and manage your space.</p>
                 </div>
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-sliders-h"></i></div>
-                    <h4>Flexible Plans</h4>
+                    <span class="h4">Flexible Plans</span>
                     <p>Short-term and long-term rental options that adapt to personal and business requirements.</p>
                 </div>
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-tags"></i></div>
-                    <h4>Transparent Pricing</h4>
+                    <span class="h4">Transparent Pricing</span>
                     <p>Clear, honest pricing with no hidden costs — you always know what you're paying for.</p>
                 </div>
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-award"></i></div>
-                    <h4>Trusted Across the UAE</h4>
+                    <span class="h4">Trusted Across the UAE</span>
                     <p>Relied on by households and businesses throughout Dubai, Abu Dhabi and Sharjah.</p>
                 </div>
             </div>
@@ -590,7 +590,7 @@
                     <p>Best place to store your commercial and household items. Climate controlled environment, CCTV camera and above all you can access your storage space 24/7 with nice and welcoming staff.</p>
                     <div class="who">
                         <div class="av">NB</div>
-                        <div><h4>Nadeem Baig</h4><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
+                        <div><span class="h4">Nadeem Baig</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
                     </div>
                 </div>
                 <div class="sk-review">
@@ -599,7 +599,7 @@
                     <p>I have been storing my business goods with them for over 6 months now. The staff at the location as well as the admin staff are very friendly. The facility is well maintained and the location is great.</p>
                     <div class="who">
                         <div class="av">AS</div>
-                        <div><h4>Ashik S</h4><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
+                        <div><span class="h4">Ashik S</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
                     </div>
                 </div>
                 <div class="sk-review">
@@ -608,7 +608,7 @@
                     <p>The arrangement of the storage rooms is wonderful and clean, and the place is equipped with public safety means, in addition to proactive protection against insects.</p>
                     <div class="who">
                         <div class="av">MA</div>
-                        <div><h4>Muhammed Alshebli</h4><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
+                        <div><span class="h4">Muhammed Alshebli</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
                     </div>
                 </div>
             </div>

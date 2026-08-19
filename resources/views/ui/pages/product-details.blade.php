@@ -126,7 +126,7 @@
                                 </div>
                                 <hr>
                                 <div class="ltn__safe-checkout">
-                                    <h5>Guaranteed Safe Checkout</h5>
+                                    <span class="h5">Guaranteed Safe Checkout</span>
                                     <img src="{{ asset('assets/images/frontend/icons/payment-2.png') }}" alt="Payment Image">
                                 </div>
                             </div>
@@ -144,14 +144,14 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="liton_tab_details_1_1">
                             <div class="ltn__shop-details-tab-content-inner">
-                                <h4 class="title-2">Lorem ipsum dolor sit amet elit.</h4>
+                                <span class="h4 title-2">Lorem ipsum dolor sit amet elit.</span>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p> 
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="liton_tab_details_1_2">
                             <div class="ltn__shop-details-tab-content-inner">
-                                <h4 class="title-2">Customer Reviews</h4>
+                                <span class="h4 title-2">Customer Reviews</span>
                                 <div class="product-ratting">
                                     <ul>
                                         <li><a href="#"><i class="fas fa-star"></i></a></li>
@@ -236,7 +236,7 @@
                                 <!-- comment-reply -->
                                 <div class="ltn__comment-reply-area ltn__form-box mb-30">
                                     <form action="#">
-                                        <h4 class="title-2">Add a Review</h4>
+                                        <span class="h4 title-2">Add a Review</span>
                                         <div class="mb-30">
                                             <div class="add-a-review">
                                                 <h6>Your Ratings:</h6>
@@ -279,7 +279,7 @@
                 <aside class="sidebar ltn__shop-sidebar ltn__right-sidebar">
                     <!-- Top Rated Product Widget -->
                     <div class="widget ltn__top-rated-product-widget">
-                        <h4 class="ltn__widget-title ltn__widget-title-border">Top Rated Product</h4>
+                        <span class="h4 ltn__widget-title ltn__widget-title-border">Top Rated Product</span>
                         <ul>
                             <?php for($i=1;$i<=3;$i++){ ?>
                             <li>
@@ -326,7 +326,7 @@
             <div class="col-lg-12">
                 <div class="section-title-area ltn__section-title-2">
                     <h6 class="section-subtitle ltn__secondary-color">//  cars</h6>
-                    <h1 class="section-title">Related Products<span>.</span></h1>
+                    <span class="h1 section-title">Related Products<span>.</span></span>
                 </div>
             </div>
         </div>
@@ -509,7 +509,7 @@
                                             <img src="{{ asset('assets/images/frontend/product/1.png') }}" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="{{ url('/shop') }}">Brake Conversion Kit</a></h5>
+                                            <span class="h5"><a href="{{ url('/shop') }}">Brake Conversion Kit</a></span>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Cart</p>
                                             <div class="btn-wrapper">
                                                 <a href="{{ url('/cart') }}" class="theme-btn-1 btn btn-effect-1">View Cart</a>
@@ -553,7 +553,7 @@
                                             <img src="{{ asset('assets/images/frontend/product/7.png') }}" alt="#">
                                         </div>
                                          <div class="modal-product-info">
-                                            <h5><a href="{{ url('/shop') }}">Brake Conversion Kit</a></h5>
+                                            <span class="h5"><a href="{{ url('/shop') }}">Brake Conversion Kit</a></span>
                                             <p class="added-cart"><i class="fa fa-check-circle"></i>  Successfully added to your Wishlist</p>
                                             <div class="btn-wrapper">
                                                 <a href="{{ url('/shop') }}" class="theme-btn-1 btn btn-effect-1">View Wishlist</a>

@@ -22,7 +22,8 @@
     flex: 1;
 }
 
-.ct-card h4 {
+.ct-card h4,
+.ct-card .h4 {
     color: var(--sk-dark);
 }
 

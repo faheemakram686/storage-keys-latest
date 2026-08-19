@@ -371,12 +371,12 @@
                 <p class="svc-feat-lead">Business goods are working capital — and they deserve better protection than a spare room or an aging stockroom. Our purpose-built facility in Sharjah is designed for exactly that.</p>
             </div>
             <div class="svc-feat-grid sk-reveal">
-                <div class="svc-feat-i"><i class="fas fa-fingerprint"></i><h4>Coded Access Control</h4><p>Every unit sits behind coded access control, so only authorised people reach your stock.</p></div>
-                <div class="svc-feat-i"><i class="fas fa-video"></i><h4>Round-the-Clock CCTV</h4><p>24/7 surveillance keeps your inventory monitored at all hours.</p></div>
-                <div class="svc-feat-i"><i class="fas fa-temperature-low"></i><h4>Climate Controlled</h4><p>Protects inventory from the damage heat and humidity cause over time.</p></div>
-                <div class="svc-feat-i"><i class="fas fa-broom"></i><h4>Clean &amp; Pest-Controlled</h4><p>Regularly maintained and pest-controlled, so stock comes out as it went in.</p></div>
-                <div class="svc-feat-i"><i class="fas fa-file-signature"></i><h4>Quote-Based, Flexible Terms</h4><p>No rigid long-term contracts — you pay for your unit size and duration, nothing more.</p></div>
-                <div class="svc-feat-i"><i class="fas fa-clock"></i><h4>24/7 Access</h4><p>Registered customers reach their stock whenever their schedule demands it.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-fingerprint"></i><span class="h4">Coded Access Control</span><p>Every unit sits behind coded access control, so only authorised people reach your stock.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-video"></i><span class="h4">Round-the-Clock CCTV</span><p>24/7 surveillance keeps your inventory monitored at all hours.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-temperature-low"></i><span class="h4">Climate Controlled</span><p>Protects inventory from the damage heat and humidity cause over time.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-broom"></i><span class="h4">Clean &amp; Pest-Controlled</span><p>Regularly maintained and pest-controlled, so stock comes out as it went in.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-file-signature"></i><span class="h4">Quote-Based, Flexible Terms</span><p>No rigid long-term contracts — you pay for your unit size and duration, nothing more.</p></div>
+                <div class="svc-feat-i"><i class="fas fa-clock"></i><span class="h4">24/7 Access</span><p>Registered customers reach their stock whenever their schedule demands it.</p></div>
             </div>
         </div>
     </section>
@@ -393,9 +393,9 @@
                     <a href="#business-quote" class="sk-btn sk-btn-primary svc-move-cta"><i class="fas fa-truck-moving"></i> Arrange Collection</a>
                 </div>
                 <div class="svc-flow">
-                    <div class="svc-flow-step"><div class="n">1</div><div><h4>We collect</h4><p>Our team collects goods directly from your office, shop or supplier.</p></div></div>
-                    <div class="svc-flow-step"><div class="n">2</div><div><h4>We transport &amp; load</h4><p>Goods are transported safely and loaded straight into your unit.</p></div></div>
-                    <div class="svc-flow-step"><div class="n">3</div><div><h4>We deliver back</h4><p>When you need items back, we deliver them the same way — a simple handover.</p></div></div>
+                    <div class="svc-flow-step"><div class="n">1</div><div><span class="h4">We collect</span><p>Our team collects goods directly from your office, shop or supplier.</p></div></div>
+                    <div class="svc-flow-step"><div class="n">2</div><div><span class="h4">We transport &amp; load</span><p>Goods are transported safely and loaded straight into your unit.</p></div></div>
+                    <div class="svc-flow-step"><div class="n">3</div><div><span class="h4">We deliver back</span><p>When you need items back, we deliver them the same way — a simple handover.</p></div></div>
                 </div>
             </div>
         </div>
@@ -416,17 +416,17 @@
                 <div class="svc-rev">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p>I have been storing my business goods with them for over 6 months now. The staff at the location as well as the admin staff are very friendly. The facility is well maintained and the location is great.</p>
-                    <div class="who"><div class="av">AS</div><div><h4>Ashik S</h4><span><i class="fab fa-google"></i>Local Guide</span></div></div>
+                    <div class="who"><div class="av">AS</div><div><span class="h4">Ashik S</span><span><i class="fab fa-google"></i>Local Guide</span></div></div>
                 </div>
                 <div class="svc-rev">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p>Best place to store your commercial and household items. Climate controlled environment, CCTV camera and above all you can access your storage space 24/7 with nice and welcoming staff.</p>
-                    <div class="who"><div class="av">NB</div><div><h4>Nadeem Baig</h4><span><i class="fab fa-google"></i>Local Guide</span></div></div>
+                    <div class="who"><div class="av">NB</div><div><span class="h4">Nadeem Baig</span><span><i class="fab fa-google"></i>Local Guide</span></div></div>
                 </div>
                 <div class="svc-rev">
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                     <p>The arrangement of the storage rooms is wonderful and clean, and the place is equipped with public safety means, in addition to proactive protection against insects.</p>
-                    <div class="who"><div class="av">MA</div><div><h4>Muhammed Alshebli</h4><span><i class="fab fa-google"></i>Local Guide</span></div></div>
+                    <div class="who"><div class="av">MA</div><div><span class="h4">Muhammed Alshebli</span><span><i class="fab fa-google"></i>Local Guide</span></div></div>
                 </div>
             </div>
         </div>

@@ -121,22 +121,22 @@
                 </div>
                 <div class="wh-types">
                     <div class="wh-type" data-min="1" data-max="3">
-                        <div class="h"><i class="fas fa-box"></i><h4>Small Units</h4></div>
+                        <div class="h"><i class="fas fa-box"></i><span class="h4">Small Units</span></div>
                         <span class="cap">1–3 pallets</span>
                         <p>Archived records, boxed inventory, office equipment and smaller commercial stock.</p>
                     </div>
                     <div class="wh-type active" data-min="4" data-max="10">
-                        <div class="h"><i class="fas fa-boxes"></i><h4>Medium Space</h4></div>
+                        <div class="h"><i class="fas fa-boxes"></i><span class="h4">Medium Space</span></div>
                         <span class="cap">4–10 pallets</span>
                         <p>Palletised goods, retail inventory or business equipment for growing businesses.</p>
                     </div>
                     <div class="wh-type" data-min="11" data-max="25">
-                        <div class="h"><i class="fas fa-warehouse"></i><h4>Large Units</h4></div>
+                        <div class="h"><i class="fas fa-warehouse"></i><span class="h4">Large Units</span></div>
                         <span class="cap">11–25 pallets</span>
                         <p>Substantial capacity for wholesalers, distributors and companies with bulk inventory.</p>
                     </div>
                     <div class="wh-type" data-min="26" data-max="99">
-                        <div class="h"><i class="fas fa-cubes"></i><h4>Custom Solutions</h4></div>
+                        <div class="h"><i class="fas fa-cubes"></i><span class="h4">Custom Solutions</span></div>
                         <span class="cap">26+ pallets</span>
                         <p>Scalable space tailored to specialised inventory, changing requirements or unique needs.</p>
                     </div>
@@ -175,12 +175,12 @@
                 <p>A practical solution across a wide range of industries — extra capacity to support growth without leasing an entire warehouse.</p>
             </div>
             <div class="wh-ind sk-reveal">
-                <div class="wh-indc"><div class="ic"><i class="fas fa-store"></i></div><h4>Retail &amp; E-Commerce</h4><p>Manage growing inventory and prepare for seasonal demand without overcrowding stores.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-ship"></i></div><h4>Importers &amp; Distributors</h4><p>Hold incoming shipments in organised facilities before delivery to customers or retail outlets.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-industry"></i></div><h4>Manufacturers</h4><p>Extra space for raw materials, finished products and equipment as production scales.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-hard-hat"></i></div><h4>Contractors</h4><p>Keep tools, machinery and project materials secure between jobs.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-boxes"></i></div><h4>Wholesalers</h4><p>Substantial capacity for bulk inventory, ready to distribute when orders come in.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-warehouse"></i></div><h4>Growing Businesses</h4><p>Flexible capacity that scales with company growth — pay only for what you use.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-store"></i></div><span class="h4">Retail &amp; E-Commerce</span><p>Manage growing inventory and prepare for seasonal demand without overcrowding stores.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-ship"></i></div><span class="h4">Importers &amp; Distributors</span><p>Hold incoming shipments in organised facilities before delivery to customers or retail outlets.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-industry"></i></div><span class="h4">Manufacturers</span><p>Extra space for raw materials, finished products and equipment as production scales.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-hard-hat"></i></div><span class="h4">Contractors</span><p>Keep tools, machinery and project materials secure between jobs.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-boxes"></i></div><span class="h4">Wholesalers</span><p>Substantial capacity for bulk inventory, ready to distribute when orders come in.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-warehouse"></i></div><span class="h4">Growing Businesses</span><p>Flexible capacity that scales with company growth — pay only for what you use.</p></div>
             </div>
         </div>
     </section>
@@ -235,12 +235,12 @@
                 <p>More than available space — a team that understands how businesses manage inventory and adapts as your requirements change.</p>
             </div>
             <div class="wh-why sk-reveal">
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><h4>Flexible Rental Terms</h4><p>Increase or reduce your units as inventory levels change — never locked into space you don't need.</p></div>
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-temperature-low"></i></div><h4>Climate-Controlled Facilities</h4><p>Protect valuable assets from heat and humidity while keeping operations running efficiently.</p></div>
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-sitemap"></i></div><h4>Organised Layouts</h4><p>Well-planned space and racking that keeps stock accessible and easy to manage.</p></div>
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-truck-moving"></i></div><h4>Professional Moving Support</h4><p>Help getting goods in and out, so storage stays a simple handover for your team.</p></div>
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><h4>Secure Storage</h4><p>24/7 CCTV and controlled access protect commercial goods throughout the rental period.</p></div>
-                <div class="wh-whyc"><div class="ic"><i class="fas fa-calendar-check"></i></div><h4>Short or Long Term</h4><p>Temporary overflow or long-term warehouse storage — practical options built around your business.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><span class="h4">Flexible Rental Terms</span><p>Increase or reduce your units as inventory levels change — never locked into space you don't need.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-temperature-low"></i></div><span class="h4">Climate-Controlled Facilities</span><p>Protect valuable assets from heat and humidity while keeping operations running efficiently.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-sitemap"></i></div><span class="h4">Organised Layouts</span><p>Well-planned space and racking that keeps stock accessible and easy to manage.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-truck-moving"></i></div><span class="h4">Professional Moving Support</span><p>Help getting goods in and out, so storage stays a simple handover for your team.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><span class="h4">Secure Storage</span><p>24/7 CCTV and controlled access protect commercial goods throughout the rental period.</p></div>
+                <div class="wh-whyc"><div class="ic"><i class="fas fa-calendar-check"></i></div><span class="h4">Short or Long Term</span><p>Temporary overflow or long-term warehouse storage — practical options built around your business.</p></div>
             </div>
         </div>
     </section>

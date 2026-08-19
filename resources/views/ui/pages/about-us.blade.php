@@ -73,25 +73,25 @@
             <div class="ab-services sk-reveal">
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-home"></i></div>
-                    <h4>Personal Storage</h4>
+                    <span class="h4">Personal Storage</span>
                     <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
                     <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-briefcase"></i></div>
-                    <h4>Business Storage</h4>
+                    <span class="h4">Business Storage</span>
                     <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
                     <a class="ab-svc-link" href="{{ url('/business-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-warehouse"></i></div>
-                    <h4>Warehouse Storage</h4>
+                    <span class="h4">Warehouse Storage</span>
                     <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
                     <a class="ab-svc-link" href="{{ url('/warehouse-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-truck"></i></div>
-                    <h4>Moving</h4>
+                    <span class="h4">Moving</span>
                     <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
                     <a class="ab-svc-link" href="{{ url('/moving-services') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -114,7 +114,7 @@
                     <div class="who">
                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/1.jpg') }}" alt="Nadeem Baig">
                         <div>
-                            <h4>Nadeem Baig</h4>
+                            <span class="h4">Nadeem Baig</span>
                             <span>Local Guide</span>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                     <div class="who">
                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/2.jpg') }}" alt="Ashik S">
                         <div>
-                            <h4>Ashik S</h4>
+                            <span class="h4">Ashik S</span>
                             <span>Local Guide</span>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                     <div class="who">
                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/3.jpg') }}" alt="Muhammed Alshebli">
                         <div>
-                            <h4>Muhammed Alshebli</h4>
+                            <span class="h4">Muhammed Alshebli</span>
                             <span>Local Guide</span>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                     <div class="who">
                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/4.jpg') }}" alt="pooja nayal">
                         <div>
-                            <h4>pooja nayal</h4>
+                            <span class="h4">pooja nayal</span>
                             <span>Local Guide</span>
                         </div>
                     </div>

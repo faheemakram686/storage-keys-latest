@@ -81,7 +81,7 @@
                                                         <div class="ltn__feature-item ltn__feature-item-6 active">
 
                                                             <div class="ltn__feature-info">
-                                                                <h5><a href="#liton_tab_1_2" data-toggle="tab">Estimates</a></h5>
+                                                                <span class="h5"><a href="#liton_tab_1_2" data-toggle="tab">Estimates</a></span>
                                                                 <h3 class="mb-0 mt-2">{{($data['estimateCount'])? :"0"}}</h3>
                                                             </div>
                                                         </div>
@@ -90,7 +90,7 @@
                                                         <div class="ltn__feature-item ltn__feature-item-6">
 
                                                             <div class="ltn__feature-info">
-                                                                <h5><a href="#liton_tab_1_3" data-toggle="tab">Contracts</a></h5>
+                                                                <span class="h5"><a href="#liton_tab_1_3" data-toggle="tab">Contracts</a></span>
                                                                 <h3 class="mb-0 mt-2">{{($data['contractCount'])? :"0"}}</h3>
 
                                                             </div>
@@ -100,7 +100,7 @@
                                                         <div class="ltn__feature-item ltn__feature-item-6">
 
                                                             <div class="ltn__feature-info">
-                                                                <h5><a href="#liton_tab_1_4" data-toggle="tab">Invoices</a></h5>
+                                                                <span class="h5"><a href="#liton_tab_1_4" data-toggle="tab">Invoices</a></span>
                                                                 <h3 class="mb-0 mt-2">{{($data['invoiceCount'])? :"0"}}</h3>
                                                             </div>
                                                         </div>
@@ -109,7 +109,7 @@
                                                         <div class="ltn__feature-item ltn__feature-item-6">
 
                                                             <div class="ltn__feature-info">
-                                                                <h5><a href="#liton_tab_1_5" data-toggle="tab">Orders</a></h5>
+                                                                <span class="h5"><a href="#liton_tab_1_5" data-toggle="tab">Orders</a></span>
                                                                 <h3 class="mb-0 mt-2">{{($data['orderCount'])? :"0"}}</h3>
                                                             </div>
                                                         </div>
@@ -264,7 +264,7 @@
                                                 <p>The following addresses will be used on the checkout page by default.</p>
                                                 <div class="row">
                                                     <div class="col-md-6 col-12 learts-mb-30">
-                                                        <h4>Billing Address <small><a href="#liton_tab_1_6" data-toggle="tab">edit</a></small></h4>
+                                                        <span class="h4">Billing Address <small><a href="#liton_tab_1_6" data-toggle="tab">edit</a></small></span>
                                                         <address>
                                                             <p><strong>Alex Tuntuni</strong></p>
                                                             <p>1355 Market St, Suite 900 <br>
@@ -273,7 +273,7 @@
                                                         </address>
                                                     </div>
                                                     <div class="col-md-6 col-12 learts-mb-30">
-                                                        <h4>Shipping Address <small><a href="#liton_tab_1_6" data-toggle="tab">edit</a></small></h4>
+                                                        <span class="h4">Shipping Address <small><a href="#liton_tab_1_6" data-toggle="tab">edit</a></small></span>
                                                         <address>
                                                             <p><strong>Alex Tuntuni</strong></p>
                                                             <p>1355 Market St, Suite 900 <br>

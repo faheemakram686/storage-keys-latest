@@ -122,6 +122,26 @@ class HomeController extends Controller
         return view('ui.pages.privacy-policy');
     }
 
+    public function securityPolicy(){
+        return view('ui.pages.security-policy');
+    }
+
+    public function supportPolicy(){
+        return view('ui.pages.support-policy');
+    }
+
+    public function cookiePolicy(){
+        return view('ui.pages.cookie-policy');
+    }
+
+    public function termsOfService(){
+        return view('ui.pages.terms-of-service');
+    }
+
+    public function frequentlyAskedQuestions(){
+        return view('ui.pages.frequently-asked-questions');
+    }
+
     public function thankYou()
     {
         return view('ui.pages.thank-you');

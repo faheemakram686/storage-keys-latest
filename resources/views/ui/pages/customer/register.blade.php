@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title-area text-center">
-                        <h1 class="section-title">Register <br>Your Account</h1>
+                        <span class="h1 section-title">Register <br>Your Account</span>
 {{--                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br>--}}
 {{--                            Sit aliquid,  Non distinctio vel iste.</p>--}}
                     </div>

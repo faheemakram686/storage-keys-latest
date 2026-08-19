@@ -134,12 +134,12 @@
                 <p class="svc-feat-lead">Choosing a dedicated storage facility gives you a practical way to manage a vehicle that does not need to be on the road every day. StorageKeys provides flexible storage arrangements for different vehicle requirements, with a focus on convenience, accessibility and professional facility management.</p>
             </div>
             <div class="svc-feat-grid sk-reveal">
-                <div class="svc-feat-i"><i class="fas fa-parking"></i><h4>Need additional parking or extra car storage</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-plane"></i><h4>Are travelling or relocating for an extended period</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-calendar-check"></i><h4>Need long term car storage</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-car-side"></i><h4>Own a classic, luxury or occasional-use vehicle</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-home"></i><h4>Need temporary space between properties</h4></div>
-                <div class="svc-feat-i"><i class="fas fa-map-marker-alt"></i><h4>Want to keep a vehicle separate from your regular parking area</h4></div>
+                <div class="svc-feat-i"><i class="fas fa-parking"></i><span class="h4">Need additional parking or extra car storage</span></div>
+                <div class="svc-feat-i"><i class="fas fa-plane"></i><span class="h4">Are travelling or relocating for an extended period</span></div>
+                <div class="svc-feat-i"><i class="fas fa-calendar-check"></i><span class="h4">Need long term car storage</span></div>
+                <div class="svc-feat-i"><i class="fas fa-car-side"></i><span class="h4">Own a classic, luxury or occasional-use vehicle</span></div>
+                <div class="svc-feat-i"><i class="fas fa-home"></i><span class="h4">Need temporary space between properties</span></div>
+                <div class="svc-feat-i"><i class="fas fa-map-marker-alt"></i><span class="h4">Want to keep a vehicle separate from your regular parking area</span></div>
             </div>
         </div>
     </section>

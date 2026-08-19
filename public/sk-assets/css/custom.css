@@ -190,6 +190,15 @@ a.link:hover {
   color: rgba(255, 255, 255, .65);
 }
 
+/* Keep longer Support menu tidy in footer */
+.pv-foot-support .pv-foot-links {
+  display: block;
+}
+.pv-foot-support .pv-foot-links a {
+  margin: 0 0 10px;
+  line-height: 1.7;
+}
+
 /* Compact quote / inquiry forms — override global 65px inputs + 30px gaps */
 .sk-quote,
 .svc-form {
@@ -279,6 +288,9 @@ a.link:hover {
   .sk-frow,
   .svc-frow {
     grid-template-columns: 1fr;
+  }
+  .pv-foot-support .pv-foot-links {
+    display: block;
   }
   .sk-quote,
   .svc-form {

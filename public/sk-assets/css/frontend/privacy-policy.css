@@ -16,7 +16,9 @@
     padding: 24px;
 }
 
-.lp-toc h4 {
+.lp-toc h4,
+.lp-toc .h4,
+.lp-toc .lp-toc-title {
     font-size: 15px;
     margin-bottom: 14px;
 }
@@ -54,6 +56,17 @@
 .lp-article h2 {
     font-size: 22px;
     margin-bottom: 12px;
+}
+
+.lp-article .lp-subhead {
+    /* Originally these headings were <h3>; keep same typography */
+    margin: 0 0 15px !important;
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    color: var(--ltn__heading-color) !important;
+    font-family: var(--ltn__heading-font) !important;
+    clear: both !important;
 }
 
 .lp-article p,

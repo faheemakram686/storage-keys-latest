@@ -68,17 +68,20 @@
     display: block;
 }
 
-.ca-product h4 {
+.ca-product h4,
+.ca-product .h4 {
     margin: 0;
     font-size: 16px;
 }
 
-.ca-product h4 a {
+.ca-product h4 a,
+.ca-product .h4 a {
     color: var(--sk-dark);
     text-decoration: none;
 }
 
-.ca-product h4 a:hover {
+.ca-product h4 a:hover,
+.ca-product .h4 a:hover {
     color: var(--sk-accent-2);
 }
 
@@ -152,7 +155,8 @@
     background: var(--sk-soft);
 }
 
-.ca-summary h4 {
+.ca-summary h4,
+.ca-summary .h4 {
     font-size: 20px;
     margin-bottom: 16px;
 }

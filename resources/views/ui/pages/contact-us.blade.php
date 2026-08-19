@@ -51,20 +51,20 @@
             <div class="ct-cards sk-reveal">
                 <a class="ps-whyc ct-card" href="mailto:info@storagekeys.com">
                     <div class="ic"><i class="fas fa-envelope"></i></div>
-                    <h4>Email Address</h4>
+                    <span class="h4">Email Address</span>
                     <p>info@storagekeys.com</p>
                     <span class="ab-svc-link">Send an email <i class="fas fa-arrow-right"></i></span>
                 </a>
                 <div class="ps-whyc ct-card">
                     <div class="ic"><i class="fas fa-phone-alt"></i></div>
-                    <h4>Phone Number</h4>
+                    <span class="h4">Phone Number</span>
                     <p><a href="tel:+971565018785">+971 56 501 8785</a></p>
                     <p>Toll Free: <a href="tel:8005397">800 5397</a></p>
                     <a class="ab-svc-link" href="tel:+971565018785">Call our team <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc ct-card">
                     <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
-                    <h4>Office Address</h4>
+                    <span class="h4">Office Address</span>
                     <p>Storage Keys, Plot # 4202 — Sharjah — Dubai — United Arab Emirates</p>
                     <a class="ab-svc-link" href="#ct-map">View on map <i class="fas fa-arrow-right"></i></a>
                 </div>

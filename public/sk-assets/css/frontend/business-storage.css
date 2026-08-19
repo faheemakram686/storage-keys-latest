@@ -32,7 +32,7 @@ img { max-width: 100%; height: auto; }
     padding: 0 20px;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, .h4 {
     color: var(--sk-dark);
     font-weight: 700;
     line-height: 1.2;
@@ -109,8 +109,8 @@ p { margin: 0 0 1em; }
 ============================================================ */
 .pv-footer { background: var(--sk-dark); color: rgba(255, 255, 255, .72); padding: 64px 0 24px; }
 .pv-foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 36px; }
-.pv-footer h4 { color: #fff; font-size: 20px; margin: 0 0 14px; }
-.pv-footer h5 { color: #fff; font-size: 15px; margin: 0 0 16px; letter-spacing: .04em; }
+.pv-footer h4, .pv-footer .h4 { color: #fff; font-size: 20px; margin: 0 0 14px; }
+.pv-footer h5, .pv-footer .h5 { color: #fff; font-size: 15px; margin: 0 0 16px; letter-spacing: .04em; }
 .pv-footer p { font-size: 14px; line-height: 1.7; margin: 0 0 10px; }
 .pv-footer p i { color: var(--sk-accent); margin-right: 8px; }
 .pv-footer a { display: block; color: rgba(255, 255, 255, .72); text-decoration: none; font-size: 14px; margin-bottom: 10px; }
@@ -291,7 +291,7 @@ p { margin: 0 0 1em; }
 .svc-feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .svc-feat-i { background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12); border-radius: 14px; padding: 26px; }
 .svc-feat-i i { font-size: 26px; color: var(--sk-accent); margin-bottom: 14px; display: block; }
-.svc-feat-i h4 { color: #fff !important; font-size: 16.5px; margin-bottom: 6px; }
+.svc-feat-i h4, .svc-feat-i .h4 { color: #fff !important; font-size: 16.5px; margin-bottom: 6px; }
 .svc-feat-i p { font-size: 13.5px; color: rgba(255, 255, 255, .72); margin: 0; line-height: 1.6; }
 
 /* ---------- Moving flow ---------- */
@@ -303,7 +303,7 @@ p { margin: 0 0 1em; }
 .svc-flow-step { display: flex; gap: 18px; background: #fff; border: 1px solid var(--sk-line); border-radius: 14px; padding: 22px 24px; transition: .25s; }
 .svc-flow-step:hover { box-shadow: var(--sk-shadow); border-color: transparent; }
 .svc-flow-step .n { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 12px; background: var(--sk-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; }
-.svc-flow-step h4 { font-size: 16.5px; margin-bottom: 4px; }
+.svc-flow-step h4, .svc-flow-step .h4 { font-size: 16.5px; margin-bottom: 4px; }
 .svc-flow-step p { font-size: 14px; color: var(--sk-muted); margin: 0; }
 
 /* ---------- Business reviews ---------- */
@@ -317,7 +317,7 @@ p { margin: 0 0 1em; }
 .svc-rev p { font-size: 14.5px; color: var(--sk-body); line-height: 1.7; margin-bottom: 18px; }
 .svc-rev .who { display: flex; align-items: center; gap: 12px; }
 .svc-rev .av { width: 46px; height: 46px; border-radius: 50%; background: var(--sk-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
-.svc-rev .who h4 { font-size: 14.5px; margin: 0; }
+.svc-rev .who h4, .svc-rev .who .h4 { font-size: 14.5px; margin: 0; }
 .svc-rev .who span { font-size: 12.5px; color: var(--sk-muted); }
 .svc-rev .who span i { color: #4285F4; margin-right: 4px; }
 

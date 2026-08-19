@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="section-title-area text-center">
-                        <h1 class="section-title">Sign In <br>To  Your Account</h1>
+                        <span class="h1 section-title">Sign In <br>To  Your Account</span>
 {{--                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br>--}}
 {{--                            Sit aliquid,  Non distinctio vel iste.</p>--}}
                     </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="account-create text-center pt-50">
-                        <h4>DON'T HAVE AN ACCOUNT?</h4>
+                        <span class="h4">DON'T HAVE AN ACCOUNT?</span>
                         <p>Add items to your wishlist get personalised recommendations <br>
                             check out more quickly track your orders register</p>
                         <div class="btn-wrapper">

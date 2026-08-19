@@ -147,7 +147,8 @@
     margin-bottom: 24px;
 }
 
-.bl-widget h4 {
+.bl-widget h4,
+.bl-widget .h4 {
     font-size: 18px;
     margin-bottom: 18px;
 }

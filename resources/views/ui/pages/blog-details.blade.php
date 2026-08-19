@@ -38,7 +38,7 @@
                 <aside class="bl-side">
                     @if($recent->count())
                         <div class="bl-widget">
-                            <h4>Recent Articles</h4>
+                            <span class="h4">Recent Articles</span>
                             <ul class="bl-recent">
                                 @foreach($recent as $item)
                                     <li>
@@ -53,7 +53,7 @@
                         </div>
                     @endif
                     <div class="bl-widget bl-help">
-                        <h4>Need storage help?</h4>
+                        <span class="h4">Need storage help?</span>
                         <p>Tell us what you need to store and our team will recommend a practical option.</p>
                         <a href="tel:+971565018785" class="sk-btn sk-btn-primary"><i class="fas fa-phone-alt"></i> Call Us</a>
                         <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>

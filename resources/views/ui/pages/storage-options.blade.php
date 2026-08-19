@@ -52,43 +52,43 @@
             <div class="so-services sk-reveal">
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-home"></i></div>
-                    <h4>Personal Storage</h4>
+                    <span class="h4">Personal Storage</span>
                     <p>Our individually lockable, climate-controlled personal storage units near you, in Sharjah and Dubai, are perfect for unused furniture you’re not ready to part with, family heirlooms you don’t have space for, books and clothes you use infrequently, or all the contents of your home when you’re shifting.</p>
                     <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-briefcase"></i></div>
-                    <h4>Business Storage</h4>
+                    <span class="h4">Business Storage</span>
                     <p>It makes little sense to use your expensive office space to store unused equipment and furniture, archived documents, or excess stock and accessories. At every growth stage, your UAE business can benefit from our affordable and scalable business storage units in Sharjah, with easy access and delivery. We offer start-up business storage, small business storage, and commercial storage units for rent for corporate companies.</p>
                     <a class="ab-svc-link" href="{{ url('/business-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-warehouse"></i></div>
-                    <h4>Warehouse Storage</h4>
+                    <span class="h4">Warehouse Storage</span>
                     <p>With half of our 36,000 sq. ft. storage warehouse in Sharjah dedicated to businesses, we offer cost-effective warehousing solutions, with scalable space, flexible leases, reliable security and easy accessibility.</p>
                     <a class="ab-svc-link" href="{{ url('/warehouse-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-snowflake"></i></div>
-                    <h4>Climate Controlled Storage</h4>
+                    <span class="h4">Climate Controlled Storage</span>
                     <p>Protect furniture, electronics, documents and valuable belongings from heat and humidity with secure climate-controlled storage units for personal and business needs across Dubai, Sharjah and the UAE.</p>
                     <a class="ab-svc-link" href="{{ url('/climate-controlled-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-truck"></i></div>
-                    <h4>Moving</h4>
+                    <span class="h4">Moving</span>
                     <p>Whether you’re shifting locally or internationally, our qualified team of professional movers and packers in Dubai will carefully dismantle, efficiently pack, load, move and accurately reassemble all your things in your new home or office space.</p>
                     <a class="ab-svc-link" href="{{ url('/moving-services') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-suitcase-rolling"></i></div>
-                    <h4>Luggage Storage</h4>
+                    <span class="h4">Luggage Storage</span>
                     <p>Store your luggage safely between flights, hotel stays, moves or travel plans with flexible luggage storage in Dubai and Abu Dhabi. Keep your bags secure without carrying them around all day.</p>
                     <a class="ab-svc-link" href="{{ url('/luggage-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-car"></i></div>
-                    <h4>Car Storage</h4>
+                    <span class="h4">Car Storage</span>
                     <p>Store your vehicle in a secure, professionally managed facility with flexible short-term and long-term options for personal vehicles, classic cars, luxury vehicles and extra cars that need a suitable place between uses.</p>
                     <a class="ab-svc-link" href="{{ url('/car-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>

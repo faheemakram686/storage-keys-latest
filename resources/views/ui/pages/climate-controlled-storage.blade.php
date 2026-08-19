@@ -168,12 +168,12 @@
                 <p>More than available space — we combine climate-controlled storage with secure facilities, flexible terms and dedicated support to make storing valuable belongings simple and reliable.</p>
             </div>
             <div class="cc-why sk-reveal">
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-snowflake"></i></div><h4>True Climate Control</h4><p>Controlled temperature and humidity protect wood, leather, paper, fabric and electronics year-round.</p></div>
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><h4>Secure Facilities</h4><p>24/7 CCTV surveillance, controlled access and professionally maintained units keep belongings safe.</p></div>
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><h4>Flexible Rental Terms</h4><p>Temporary storage during a move, on-demand space or long-term protection — you choose the term.</p></div>
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-user-check"></i></div><h4>Dedicated Support</h4><p>Our team helps you choose the right unit for your sensitive items and requirements.</p></div>
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-key"></i></div><h4>Convenient Access</h4><p>Reach your belongings easily whenever you need them, with a smooth storage experience.</p></div>
-                <div class="cc-whyc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Across Dubai &amp; Sharjah</h4><p>Dependable climate-controlled storage for customers throughout Dubai, Sharjah and the UAE.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-snowflake"></i></div><span class="h4">True Climate Control</span><p>Controlled temperature and humidity protect wood, leather, paper, fabric and electronics year-round.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-shield-alt"></i></div><span class="h4">Secure Facilities</span><p>24/7 CCTV surveillance, controlled access and professionally maintained units keep belongings safe.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-expand-arrows-alt"></i></div><span class="h4">Flexible Rental Terms</span><p>Temporary storage during a move, on-demand space or long-term protection — you choose the term.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-user-check"></i></div><span class="h4">Dedicated Support</span><p>Our team helps you choose the right unit for your sensitive items and requirements.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-key"></i></div><span class="h4">Convenient Access</span><p>Reach your belongings easily whenever you need them, with a smooth storage experience.</p></div>
+                <div class="cc-whyc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><span class="h4">Across Dubai &amp; Sharjah</span><p>Dependable climate-controlled storage for customers throughout Dubai, Sharjah and the UAE.</p></div>
             </div>
         </div>
     </section>

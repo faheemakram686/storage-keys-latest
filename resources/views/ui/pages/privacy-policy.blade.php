@@ -26,7 +26,7 @@
         <div class="sk-container">
             <div class="lp-layout sk-reveal">
                 <aside class="lp-toc">
-                    <h4>On this page</h4>
+                    <span class="lp-toc-title">On this page</span>
                     <a href="#who-we-are">Who we are</a>
                     <a href="#information-we-collect">Information we collect</a>
                     <a href="#how-we-use">How we use information</a>
