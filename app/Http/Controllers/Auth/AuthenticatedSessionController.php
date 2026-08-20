@@ -38,6 +38,17 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended('/customer/dashboard');
         }
 
+        $user = Auth::guard('web')->user();
+        $sync = resolve(\App\Services\Core\Auth\UserRoleSyncService::class);
+
+        if ($user && ($user->isAppAdmin() || $sync->hasPortalAccess($user))) {
+            return redirect()->intended('/admin');
+        }
+
+        if ($user && $sync->hasHrmAccess($user)) {
+            return redirect()->intended('/dashboard');
+        }
+
         return redirect()->intended(\Session::get(RouteServiceProvider::HOME.'redirect_url', RouteServiceProvider::HOME));
     }
 

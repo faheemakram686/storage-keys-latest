@@ -82,7 +82,7 @@ class AuthController extends Controller
             $validateUser = Validator::make($request->all(),
                 [
                     'name' => 'required',
-                    'email' => 'required|email|unique:users,email',
+                    'email' => ['required', 'email', unique_active_user_email_rule()],
                     'password' => 'required',
                 ]);
 
@@ -244,10 +244,14 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = Contact::with('customer')->where('email', $request->email)->first();
+            $user = Contact::with(['customer', 'contactRole.permissions'])->where('email', $request->email)->first();
 
             return response()->json([
                 'user' => $user,
+                'role' => optional($user->contactRole)->only(['id', 'name', 'alias']),
+                'permissions' => optional($user->contactRole)->permissions
+                    ? $user->contactRole->permissions->pluck('name')
+                    : [],
                 'status' => true,
                 'message' => 'Customer Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken

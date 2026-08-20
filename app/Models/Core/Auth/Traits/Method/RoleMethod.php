@@ -30,4 +30,32 @@ trait RoleMethod
         return $this->permissions()
             ->where('name', $permission_name)->exists();
     }
+
+    /**
+     * @param  array<int, string>  $permission_names
+     */
+    public function hasAnyPermission(array $permission_names): bool
+    {
+        if (empty($permission_names)) {
+            return false;
+        }
+
+        return $this->permissions()
+            ->whereIn('name', $permission_names)
+            ->exists();
+    }
+
+    /**
+     * @param  array<int, string>  $permission_names
+     */
+    public function hasAllPermissions(array $permission_names): bool
+    {
+        if (empty($permission_names)) {
+            return true;
+        }
+
+        return $this->permissions()
+            ->whereIn('name', $permission_names)
+            ->count() === count(array_unique($permission_names));
+    }
 }

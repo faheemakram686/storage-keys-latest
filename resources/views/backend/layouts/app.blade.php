@@ -104,6 +104,22 @@
             // });
         } );
 
+        if (typeof window.statusBadgeClass !== 'function') {
+            window.statusBadgeClass = function (status) {
+                var s = String(status == null ? '' : status).toLowerCase().replace(/[\s_-]/g, '');
+                if (s === 'active' || s === '1' || s === 'yes' || s === 'approved') {
+                    return 'badge-success';
+                }
+                return 'badge-danger';
+            };
+        }
+        if (typeof window.statusBadgeHtml !== 'function') {
+            window.statusBadgeHtml = function (status) {
+                var label = (status === null || status === undefined) ? '' : status;
+                return '<span class="badge ' + window.statusBadgeClass(status) + '">' + label + '</span>';
+            };
+        }
+
         // Show real server-side errors instead of generic "any technical error"
         window.showAjaxError = function (xhr, fallbackMessage) {
             fallbackMessage = fallbackMessage || 'any technical error';

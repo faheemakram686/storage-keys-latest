@@ -270,7 +270,7 @@
                                 // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#">' + data[i].first_name + ' ' + data[i].last_name + '</a></td>' +
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + storageUnitPrice + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].created_at + '</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+

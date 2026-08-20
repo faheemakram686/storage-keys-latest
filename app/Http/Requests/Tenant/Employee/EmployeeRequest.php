@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Tenant\Employee;
 
 use App\Http\Requests\BaseRequest;
-use Illuminate\Validation\Rule;
 
 class EmployeeRequest extends BaseRequest
 {
@@ -11,14 +10,19 @@ class EmployeeRequest extends BaseRequest
     public function rules()
     {
         $employee = $this->route()->parameter('employee');
+        $employeeId = optional($employee)->id;
 
         return [
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore(optional($employee)->id)
+                unique_active_user_email_rule($employeeId)
             ],
-            'employee_id' => 'required|min:2|unique:profiles,employee_id,'.optional($employee)->id.',user_id',
+            'employee_id' => [
+                'required',
+                'min:2',
+                unique_active_employee_id_rule($employeeId)
+            ],
             'department_id' => 'required|integer',
             'designation_id' => 'required|integer',
             'employment_status_id' => 'required|integer',

@@ -92,6 +92,36 @@ class Invoice extends Model
         return $date->addMonths($months)->format('Y-m-d');
     }
 
+    /**
+     * Days between invoice_date and due_date (payment terms). Never negative.
+     */
+    public function paymentTermDays(): int
+    {
+        if (!$this->invoice_date || !$this->due_date) {
+            return 0;
+        }
+
+        $invoiceDate = Carbon::parse($this->invoice_date)->startOfDay();
+        $dueDate = Carbon::parse($this->due_date)->startOfDay();
+
+        return max(0, (int) $invoiceDate->diffInDays($dueDate, false));
+    }
+
+    /**
+     * Due date for a new invoice date using this invoice's payment terms.
+     */
+    public function dueDateFromInvoiceDate($invoiceDate): string
+    {
+        $date = Carbon::parse($invoiceDate)->startOfDay();
+        $days = $this->paymentTermDays();
+
+        if ($days > 0) {
+            $date->addDays($days);
+        }
+
+        return $date->format('Y-m-d');
+    }
+
     public function isRecurringActive(): bool
     {
         if ($this->recurring === null || $this->recurring === '' || $this->recurring === '0') {

@@ -3,18 +3,8 @@ namespace App\Repo;
 
 use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\Type;
-use App\Models\Location;
-//use App\Models\Role;
-use App\Models\StorageType;
-use App\Models\User;
-use App\Models\Warehouse;
 use App\Repo\Interfaces\RoleInterface;
-use App\Repo\Interfaces\StorageTypeInterface;
-use App\Repo\Interfaces\UserInterface;
-use App\Repo\Interfaces\WarehouseInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+use App\Services\Core\Auth\UserRoleSyncService;
 
 class RoleClass implements RoleInterface {
 
@@ -31,20 +21,48 @@ class RoleClass implements RoleInterface {
 
     }
 
+    /**
+     * Portal (admin-type) roles only — never mix HRM/tenant roles into Portal UIs.
+     */
     public function getRole()
     {
-        // TODO: Implement getRole() method.
-        $qry=Role::query();
-        $qry=$qry->orderBy('id','DESC');
-        $qry=$qry->get();
-        return $qry;
+        return resolve(UserRoleSyncService::class)->rolesForType(UserRoleSyncService::TYPE_ADMIN);
+    }
+
+    /**
+     * HRM (tenant-type) roles only.
+     */
+    public function getHrmRoles()
+    {
+        return resolve(UserRoleSyncService::class)->rolesForType(UserRoleSyncService::TYPE_TENANT);
+    }
+
+    /**
+     * @param  string|null  $typeAlias  admin|tenant|app|null (all)
+     */
+    public function getRolesByType(?string $typeAlias = null)
+    {
+        if ($typeAlias) {
+            return resolve(UserRoleSyncService::class)->rolesForType($typeAlias);
+        }
+
+        return Role::query()->with('type')->orderBy('id', 'DESC')->get();
     }
 
     public function deleteRole($id)
     {
-        // TODO: Implement deleteRole() method.
-        $country=Role::find($id);
-        $country->delete();
+        $role = Role::with('type')->findOrFail($id);
+
+        if ($role->isAdmin() || optional($role->type)->alias === 'app') {
+            return response()->json(['errors' => 'Protected role cannot be deleted'], 403);
+        }
+
+        if (optional($role->type)->alias === 'tenant' && $role->is_default) {
+            return response()->json(['errors' => 'Default HRM role cannot be deleted'], 403);
+        }
+
+        $role->delete();
+
         return 1;
     }
 

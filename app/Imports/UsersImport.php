@@ -71,11 +71,10 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithBatchI
                 'required',
                 'email',
                 'distinct',
-                Rule::unique('users', 'email')
-                    ->whereNull('deleted_at')
+                unique_active_user_email_rule(),
             ],
             '*.gender' => ['required', 'string', Rule::in(['male', 'female', 'other', 'Male', 'Female', 'Other'])],
-            '*.employee_id' => ['required', 'distinct', 'unique:profiles'],
+            '*.employee_id' => ['required', 'distinct', unique_active_employee_id_rule()],
             '*.department' => ['required', 'string', 'exists:departments,name'],
             '*.designation' => ['required', 'string', 'exists:designations,name'],
             '*.employment_status' => ['required', 'string', 'exists:employment_statuses,name'],

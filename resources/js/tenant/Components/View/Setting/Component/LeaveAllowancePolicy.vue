@@ -6,9 +6,6 @@
             content-type="html"
             :notes="`<ol>
                         <li>${$t('any_type_of_change_will_be_effected_from_next_day')}</li>
-                        <li>${$t('how_leave_settings_work_message',{
-                            link: `<a href='https://payday.gainhq.com/documentation/instruction-guide.html#appLeave' target='_blank'>${$t('documentation')}</a>`
-                        })}</li>
                         <li>${$t('leave_carry_forward_message')}</li>
                     </ol>`"
         />

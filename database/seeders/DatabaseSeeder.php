@@ -64,6 +64,8 @@ class DatabaseSeeder extends Seeder
             $this->call(EmploymentStatusSeeder::class);
             //$this->call(WorkingShiftSeeder::class);
             $this->call(RoleSeeder::class);
+            $this->call(\Database\Seeders\Auth\PortalStaffRoleSeeder::class);
+            $this->call(\Database\Seeders\Contact\ContactRoleSeeder::class);
 
             $this->call(TenantSettingSeeder::class);
             $this->call(UserJobDeskSeeder::class);

@@ -8,10 +8,12 @@ use App\Models\Invoice;
 use App\Models\InvoiceReminder;
 use App\Models\InvoiceReminderLog;
 use App\Models\Payment;
+use App\Models\User;
 use App\Notifications\Backend\PaymentReminderNotification;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
@@ -124,6 +126,105 @@ class InvoiceReminderFlowTest extends BaseTestCase
     }
 
     /** @test */
+    public function remind_customer_sends_only_to_customer_email()
+    {
+        Notification::fake();
+
+        $customer = $this->makeCustomer(true);
+        $this->makeInvoice($customer, Carbon::parse('2026-08-17'));
+        $staff = $this->staffUser();
+        $this->makeRule([
+            'recipient_type' => 'customer',
+            'from_user_id' => $staff->id,
+        ]);
+
+        Artisan::call('payment:reminder');
+        $this->assertStringContainsString('Invoice reminders sent: 1', Artisan::output());
+
+        Notification::assertSentOnDemand(PaymentReminderNotification::class, function ($notification, $channels, $notifiable) use ($customer, $staff) {
+            $mail = $notification->toMail(null);
+            $to = collect((array) ($notifiable->routes['mail'] ?? []))->flatten()->all();
+            $cc = collect($mail->cc ?? [])->flatten()->filter()->all();
+
+            return in_array($customer->email, $to, true)
+                && !in_array($staff->email, $to, true)
+                && empty($cc)
+                && ($mail->from[0] ?? null) === $staff->email;
+        });
+    }
+
+    /** @test */
+    public function remind_customer_and_copy_me_ccs_staff()
+    {
+        Notification::fake();
+
+        $customer = $this->makeCustomer(true);
+        $this->makeInvoice($customer, Carbon::parse('2026-08-17'));
+        $staff = $this->staffUser();
+        $this->makeRule([
+            'recipient_type' => 'customer_and_copy_me',
+            'from_user_id' => $staff->id,
+        ]);
+
+        Artisan::call('payment:reminder');
+        $this->assertStringContainsString('Invoice reminders sent: 1', Artisan::output());
+
+        Notification::assertSentOnDemand(PaymentReminderNotification::class, function ($notification, $channels, $notifiable) use ($customer, $staff) {
+            $mail = $notification->toMail(null);
+            $to = collect((array) ($notifiable->routes['mail'] ?? []))->flatten()->all();
+            $cc = collect($mail->cc ?? [])->flatten()->filter()->all();
+
+            return in_array($customer->email, $to, true)
+                && !in_array($staff->email, $to, true)
+                && in_array($staff->email, $cc, true);
+        });
+    }
+
+    /** @test */
+    public function remind_me_sends_only_to_staff_from_address()
+    {
+        Notification::fake();
+
+        $customer = $this->makeCustomer(true);
+        $this->makeInvoice($customer, Carbon::parse('2026-08-17'));
+        $staff = $this->staffUser();
+        $this->makeRule([
+            'recipient_type' => 'me',
+            'from_user_id' => $staff->id,
+        ]);
+
+        Artisan::call('payment:reminder');
+        $this->assertStringContainsString('Invoice reminders sent: 1', Artisan::output());
+
+        Notification::assertSentOnDemand(PaymentReminderNotification::class, function ($notification, $channels, $notifiable) use ($customer, $staff) {
+            $mail = $notification->toMail(null);
+            $to = collect((array) ($notifiable->routes['mail'] ?? []))->flatten()->all();
+            $cc = collect($mail->cc ?? [])->flatten()->filter()->all();
+
+            return in_array($staff->email, $to, true)
+                && !in_array($customer->email, $to, true)
+                && empty($cc);
+        });
+    }
+
+    /** @test */
+    public function remind_me_skips_when_no_from_address_user()
+    {
+        Notification::fake();
+
+        $customer = $this->makeCustomer(true);
+        $this->makeInvoice($customer, Carbon::parse('2026-08-17'));
+        $this->makeRule([
+            'recipient_type' => 'me',
+            'from_user_id' => null,
+        ]);
+
+        Artisan::call('payment:reminder');
+        $this->assertStringContainsString('Invoice reminders sent: 0', Artisan::output());
+        Notification::assertNothingSent();
+    }
+
+    /** @test */
     public function settings_crud_and_customer_toggle_work()
     {
         $userId = DB::table('users')->orderBy('id')->value('id');
@@ -219,5 +320,14 @@ class InvoiceReminderFlowTest extends BaseTestCase
             'status' => 1,
             'is_deleted' => 0,
         ], $overrides));
+    }
+
+    private function staffUser(): User
+    {
+        $user = User::orderBy('id')->first();
+        $this->assertNotNull($user, 'Need a staff user with email for recipient tests');
+        $this->assertNotEmpty($user->email);
+
+        return $user;
     }
 }

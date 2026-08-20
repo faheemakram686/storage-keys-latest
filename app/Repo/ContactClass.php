@@ -59,6 +59,13 @@ class ContactClass implements ContactInterface {
                 ->update(['contact_type' => 'general']);
         }
 
+        // Align portal role with contact type when primary
+        if ($contactType === 'primary') {
+            $request->merge(['contact_role' => \App\Services\Contact\ContactRoleSyncService::OWNER]);
+        } elseif (!$request->filled('contact_role')) {
+            $request->merge(['contact_role' => \App\Services\Contact\ContactRoleSyncService::VIEWER]);
+        }
+
         $mycontract='';
         $contact =new Contact();
         $contact->customer_id = $request->customer_id;
@@ -73,6 +80,12 @@ class ContactClass implements ContactInterface {
         $contact->contact_type = $contactType;
         $contact->status=$request->status;
         if($contact->save()){
+            $roleAlias = $contactType === 'primary'
+                ? \App\Services\Contact\ContactRoleSyncService::OWNER
+                : ($request->contact_role ?: \App\Services\Contact\ContactRoleSyncService::VIEWER);
+            resolve(\App\Services\Contact\ContactRoleSyncService::class)
+                ->assignRole($contact, $roleAlias, $contactType === 'primary');
+
             if ($contactType === 'primary') {
                 $customer = Customer::find($request->customer_id);
                 if ($customer) {
@@ -197,7 +210,7 @@ class ContactClass implements ContactInterface {
 
     public function editContact($id)
     {
-        return $country=Contact::find($id);
+        return Contact::with('contactRole')->find($id);
     }
 
     public function updateContact($request)
@@ -235,6 +248,12 @@ class ContactClass implements ContactInterface {
         $contact->contact_type = $contactType;
         $contact->status=$request->edit_status;
         $contact->save();
+
+        $roleAlias = $contactType === 'primary'
+            ? \App\Services\Contact\ContactRoleSyncService::OWNER
+            : ($request->edit_contact_role ?: \App\Services\Contact\ContactRoleSyncService::VIEWER);
+        resolve(\App\Services\Contact\ContactRoleSyncService::class)
+            ->assignRole($contact, $roleAlias, $contactType === 'primary');
 
         if ($contactType === 'primary') {
             $customer = Customer::find($contact->customer_id);

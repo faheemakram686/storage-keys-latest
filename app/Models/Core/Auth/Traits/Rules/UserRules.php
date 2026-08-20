@@ -10,7 +10,7 @@ trait UserRules
     {
         return [
             'first_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'email', unique_active_user_email_rule()],
             'password' => ['required', 'min:8'],
             'roles' => ['nullable', 'array'],
         ];
@@ -37,7 +37,7 @@ trait UserRules
             'gender' => 'required|in:male,female,other',
             'date_of_birth' => 'nullable|date',
             'first_name' => 'required|min:2',
-            'email' => 'required|email|unique:users,email,'.auth()->id().',id',
+            'email' => ['required', 'email', unique_active_user_email_rule(auth()->id())],
         ];
     }
 

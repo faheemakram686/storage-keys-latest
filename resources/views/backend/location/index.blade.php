@@ -301,7 +301,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lat+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].lang+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
-                            ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                            ' '+statusBadgeHtml(data[i].status)+
                             ' </td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].is_default+'</span>'+

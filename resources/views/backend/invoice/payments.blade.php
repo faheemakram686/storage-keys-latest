@@ -162,7 +162,7 @@
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].amount_received + '</td>'+
                                 // '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                // ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                // ' '+statusBadgeHtml(data[i].status)+
                                 // '</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
                                 ' <ul class="nk-tb-actions" gx-1 style="right: 1.0rem; !important">'+

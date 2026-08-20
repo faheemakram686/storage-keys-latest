@@ -60,6 +60,11 @@ class AssignLeaveByStatusJob implements ShouldQueue
 
         $paidStatuses->map(function (EmploymentStatus $status) use ($paidLeaveTypes, $unpaidLeaveTypes, $unpaidStatuses) {
             $status->employees->map(function (User $employee) use ($paidLeaveTypes, $unpaidLeaveTypes, $unpaidStatuses) {
+                $currentStatusId = optional($employee->employmentStatus->first())->id;
+                if (!$currentStatusId) {
+                    return;
+                }
+
                 $paidLeaveTypes->map(function (LeaveType $leaveType) use ($employee) {
                     $this->service
                         ->setAttr('leave_type_id', $leaveType->id)
@@ -69,7 +74,7 @@ class AssignLeaveByStatusJob implements ShouldQueue
                         ->checkAndSetMonthlyEarningAmount($leaveType)
                         ->update();
                 });
-                if (!in_array($employee->employmentStatus->first()->id, $unpaidStatuses->pluck('id')->toArray())) {
+                if (!in_array($currentStatusId, $unpaidStatuses->pluck('id')->toArray())) {
                     $employee->assignedLeaves()->whereIn('leave_type_id', $unpaidLeaveTypes->pluck('id')->toArray())->delete();
                 }
             });
@@ -77,6 +82,11 @@ class AssignLeaveByStatusJob implements ShouldQueue
 
         $unpaidStatuses->map(function (EmploymentStatus $status) use ($unpaidLeaveTypes, $paidLeaveTypes, $paidStatuses) {
             $status->employees->map(function (User $employee) use ($unpaidLeaveTypes, $paidLeaveTypes, $paidStatuses) {
+                $currentStatusId = optional($employee->employmentStatus->first())->id;
+                if (!$currentStatusId) {
+                    return;
+                }
+
                 $unpaidLeaveTypes->map(function (LeaveType $leaveType) use ($employee) {
                     $this->service
                         ->setAttr('leave_type_id', $leaveType->id)
@@ -86,7 +96,7 @@ class AssignLeaveByStatusJob implements ShouldQueue
                         ->checkAndSetMonthlyEarningAmount($leaveType)
                         ->update();
                 });
-                if (!in_array($employee->employmentStatus->first()->id, $paidStatuses->pluck('id')->toArray())) {
+                if (!in_array($currentStatusId, $paidStatuses->pluck('id')->toArray())) {
                     $employee->assignedLeaves()->whereIn('leave_type_id', $paidLeaveTypes->pluck('id')->toArray())->delete();
                 }
             });

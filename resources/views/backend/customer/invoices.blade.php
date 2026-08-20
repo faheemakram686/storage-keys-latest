@@ -118,7 +118,7 @@
                                 '<td class="nk-tb-col nk-tb-col-tools">' + contractOrOrderHtml + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].invoice_date + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].due_date + '</td>' +
-                                '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + (data[i].status === 'Active' ? 'badge-success' : 'badge-danger') + '">' + data[i].status + '</span></td>' +
+                                '<td class="nk-tb-col nk-tb-col-tools">' + statusBadgeHtml(data[i].status) + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + paymentStatusBadgeClass(data[i].payment_status) + '">' + data[i].payment_status + '</span></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' +
                                 '<ul class="nk-tb-actions gx-1">' +

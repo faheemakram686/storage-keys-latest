@@ -142,9 +142,7 @@
                   :title="$t('no_delivery_settings_found')"
                   :notes="$optional(currentTenant, 'is_single') ?
                   `<ol>
-                     <li>${$t('cron_job_settings_warning',{
-                      documentation: `<a href='https://payday.gainhq.com/documentation/important-settings.html#scheduler-queue' target='_blank'>${$t('documentation')}</a>`
-                  })}</li>
+                     <li>${$t('cron_job_settings_warning')}</li>
                      <li>${$t('no_delivery_settings_warning', {
                       location: `<a href='${urlGenerator(TENANT_EMAIL_SETUP_SETTING)}'>${$t('here')}</a>`
                   })}</li>

@@ -49,7 +49,7 @@ class EmployeeInviteService extends TenantService
         /**@var User $user*/
         $user = $this->userService
             ->create($this->getAttribute('email'), ['is_in_employee' => isset($this->attributes['is_in_employee']) ? $this->attributes['is_in_employee'] : 1])
-            ->assignRoles($this->getAttributes('roles'))
+            ->assignRoles($this->getAttr('roles') ?: [])
             ->getModel();
 
         $this->service
@@ -96,7 +96,7 @@ class EmployeeInviteService extends TenantService
                 ),
                 true
             )
-            ->assignRoles($this->getAttributes('roles'))
+            ->assignRoles($this->getAttr('roles') ?: [])
             ->getModel();
 
         $this->service

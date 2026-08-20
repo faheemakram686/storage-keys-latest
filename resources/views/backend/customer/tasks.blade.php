@@ -367,7 +367,7 @@
                                     {{--' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/contact')}}/' + data[i].id + ' class="btn-edit" data='+data[i].id+'>' + data[i].first_name + ' ' + data[i].last_name + '</a></td>' +--}}
                                         ' <td class="nk-tb-col nk-tb-col-tools"><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry">' + data[i].subject + '</a></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].start_date + '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' +  ((data[i].due_date == null) ? '-' : data[i].due_date) + '</td>'+

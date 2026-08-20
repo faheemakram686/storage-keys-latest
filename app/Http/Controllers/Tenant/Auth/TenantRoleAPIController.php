@@ -19,6 +19,7 @@ class TenantRoleAPIController extends Controller
     {
         return (new AppRoleFilter(
             Role::query()
+                ->whereHas('type', fn (Builder $q) => $q->where('alias', 'tenant'))
                 ->when(optional(tenant())->id, function (Builder $builder) {
                     $builder->where('tenant_id', optional(tenant())->id);
                 }, function (Builder $builder) {
@@ -35,6 +36,7 @@ class TenantRoleAPIController extends Controller
     {
         return (new AppRoleFilter(
             Role::query()
+                ->whereHas('type', fn (Builder $q) => $q->where('alias', 'tenant'))
                 ->when(optional(tenant())->id, function (Builder $builder) {
                     $builder->where('tenant_id', optional(tenant())->id);
                 }, function (Builder $builder) {

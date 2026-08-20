@@ -44,6 +44,10 @@ class CustomerHomeController extends Controller
         $data['contract'] = $this->contract->getCustomerContracts($customer_id);
         $data['invoice'] = $this->invoice->getCustomerInvoices($customer_id);
         $data['order'] = $this->order->getCustomerOrders($customer_id);
+        $data['can_pay'] = contact_has_permission('pay_invoices');
+        $data['can_update_account'] = contact_has_permission('update_account');
+        $data['can_manage_contacts'] = contact_has_permission('manage_contacts');
+        $data['contact_role'] = optional(Auth::user()->contactRole)->alias;
 
         return view('ui.pages.customer.account')->with(compact('data'));
     }
@@ -65,28 +69,26 @@ class CustomerHomeController extends Controller
         $contact->last_name = $request->last_name;
         $contact->email = $request->email;
 
-
         if($request->password)
             $contact->password =  Hash::make($request->password);
 
         if($contact->save()){
-            $contact->customer()->update([
-                'email' => $request->email,
-                'customer_name' => trim($request->first_name . ' ' . $request->last_name),
-                'address' => $request->address,
-                'city' => $request->city,
-                'country' => $request->country,
-            ]);
-            Auth::guard()->login($contact);
+            // Only owner (update_account) may rewrite company billing fields
+            if ($contact->hasContactPermission('update_account')) {
+                $contact->customer()->update([
+                    'email' => $request->email,
+                    'customer_name' => trim($request->first_name . ' ' . $request->last_name),
+                    'address' => $request->address,
+                    'city' => $request->city,
+                    'country' => $request->country,
+                ]);
+            }
+            Auth::guard('contact')->login($contact);
             return redirect()->back()->withSuccess(['Record Updated successfully']);
         }else
         {
             return redirect()->back()->withErrors(['Someting Wrong']);
         }
-
-
-
-
     }
 
     public function resetPassword(Request $request)
@@ -163,7 +165,7 @@ class CustomerHomeController extends Controller
             $contact->email = $request->email;
             $contact->phone = $request->phone;
             if($contact->save()){
-                if ($contact->contact_type === 'primary' || $contact->contact_type === 'Primary') {
+                if ($contact->hasContactPermission('update_account')) {
                     $contact->customer()->update([
                         'email' => $request->email,
                         'phone' => $request->phone,
@@ -171,7 +173,7 @@ class CustomerHomeController extends Controller
                     ]);
                 }
                 return response()->json([
-                    'user' => $contact,
+                    'user' => $contact->load('contactRole.permissions'),
                     'status' => true,
                     'message' => 'Profile updated Successfully',
                 ], 200);

@@ -12,6 +12,7 @@ use App\Models\Tenant\WorkingShift\DepartmentWorkingShift;
 use App\Models\Tenant\WorkingShift\WorkingShift;
 use App\Notifications\Core\User\UserNotification;
 use App\Services\Core\Auth\UserService;
+use App\Services\Core\Auth\UserRoleSyncService;
 use App\Services\Tenant\TenantService;
 use App\Services\Tenant\WorkingShift\WorkingShiftService;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +141,8 @@ class EmployeeService extends TenantService
 
     public function assignRolesFromAttribute()
     {
-        $this->model->roles()->sync($this->getAttr('roles'));
+        $roles = $this->getAttr('roles') ?: [];
+        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, (array) $roles);
 
         return $this;
     }

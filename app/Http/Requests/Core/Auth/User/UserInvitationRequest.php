@@ -26,7 +26,7 @@ class UserInvitationRequest extends BaseRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required', 'email', unique_active_user_email_rule()],
             'roles' => [
                 'required',
                 Rule::exists('roles', 'id')->where(function ($query) {

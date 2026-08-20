@@ -18,7 +18,6 @@ use App\Services\Core\BaseService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class UserService extends BaseService
 {
@@ -71,7 +70,8 @@ class UserService extends BaseService
 
     public function assignRole($roles)
     {
-        $this->model->assignRole($roles);
+        $roles = is_array($roles) ? $roles : [$roles];
+        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
 
         return $this;
     }
@@ -94,8 +94,10 @@ class UserService extends BaseService
             throw new GeneralException(trans('default.action_not_allowed'));
 
         $roles = $this->checkMakeArray(request('roles'));
-        $this->model->roles()->sync(array_unique($roles));
-        return $this->model;
+        // Only replace HRM (tenant) roles — never wipe Portal (admin) roles
+        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
+
+        return $this->model->load('roles');
     }
 
     public function detachRole()
@@ -104,7 +106,14 @@ class UserService extends BaseService
             throw new GeneralException(trans('default.action_not_allowed'));
 
         $roles = $this->checkMakeArray(request('roles'));
-        $this->model->roles()->detach($roles);
+        $tenantRoleIds = Role::query()
+            ->whereIn('id', $roles)
+            ->whereHas('type', fn ($q) => $q->where('alias', UserRoleSyncService::TYPE_TENANT))
+            ->pluck('id')
+            ->all();
+
+        $this->model->roles()->detach($tenantRoleIds);
+        resolve(UserRoleSyncService::class)->clearUserRoleCache($this->model);
         $this->model->load('roles');
         return $this->model;
     }
@@ -232,9 +241,13 @@ class UserService extends BaseService
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore(optional($this->model)->id)
+                unique_active_user_email_rule(optional($this->model)->id)
             ],
-            'employee_id' => 'required|min:2|unique:profiles,employee_id,'.optional($this->model)->id.',user_id',
+            'employee_id' => [
+                'required',
+                'min:2',
+                unique_active_employee_id_rule(optional($this->model)->id)
+            ],
             'gender' => 'required'
         ])->validate();
 

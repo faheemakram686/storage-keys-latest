@@ -99,7 +99,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + ((data[i].email == null) ? ' ' : data[i].email) + '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].phone == null) ? ' ' : data[i].phone) +'</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 ' </td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+

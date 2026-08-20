@@ -38,10 +38,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('payment:reminder')
+        $schedule->command('invoice:recurring')
             ->daily();
 
-        $schedule->command('invoice:recurring')
+        $schedule->command('payment:reminder')
             ->daily();
 
         $schedule->command('queue:work --queue=high,default --tries=2 --stop-when-empty')->everyMinute()->withoutOverlapping();

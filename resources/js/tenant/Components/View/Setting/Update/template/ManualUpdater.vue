@@ -22,10 +22,6 @@
                             </span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-center mt-2">
-                        <a href="https://payday.gainhq.com/documentation/change-log.html"
-                           target="_blank" class="text-muted hover-underline font-size-90">{{ $t('change_logs') }}</a>
-                    </div>
                 </div>
             </div>
         </div>

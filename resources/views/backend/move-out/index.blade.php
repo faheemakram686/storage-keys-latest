@@ -207,7 +207,7 @@
                             ' <td class="nk-tb-col nk-tb-col-tools">'+((data[i].moved_out_items)? data[i].moved_out_items:" ")+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].move_date_date+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
-                            ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                            ' '+statusBadgeHtml(data[i].status)+
                             ' </td>'+
                             '  <td class="nk-tb-col nk-tb-col-tools">'+
                             ' <ul class="nk-tb-actions gx-1">'+

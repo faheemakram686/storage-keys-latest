@@ -8,10 +8,6 @@
             :notes="$t('cron_job_setting_warning')"
         />
         <p>{{ this.$t('cron_job_setting_suggestion') }}</p>
-        <a href="https://payday.gainhq.com/documentation/important-settings.html#scheduler-queue" target="_blank"
-           class="btn btn-primary mb-primary">
-            <app-icon name="alert-circle" class="size-18 mr-2"/>
-            {{ this.$t('see_documentation') }}</a>
 
         <div class="mb-primary">
             <h4>1. For Cpanel service provider</h4>

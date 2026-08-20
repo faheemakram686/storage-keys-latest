@@ -1,3 +1,23 @@
+/**
+ * CRM datatable status badges: Active = green, Inactive = red.
+ * Also treats Approved as green so estimate/contract tables stay correct.
+ */
+function statusBadgeClass(status) {
+    var s = String(status == null ? '' : status).toLowerCase().replace(/[\s_-]/g, '');
+    if (s === 'active' || s === '1' || s === 'yes' || s === 'approved') {
+        return 'badge-success';
+    }
+    return 'badge-danger';
+}
+
+function statusBadgeHtml(status) {
+    var label = (status === null || status === undefined) ? '' : status;
+    return '<span class="badge ' + statusBadgeClass(status) + '">' + label + '</span>';
+}
+
+window.statusBadgeClass = statusBadgeClass;
+window.statusBadgeHtml = statusBadgeHtml;
+
 $(document).on('click', '.delete', function () {
     let url = $(this).data('url');
     let tableId = '#' + $(this).data('table');

@@ -203,7 +203,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].temp_title + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 '</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
                                 ' <ul class="nk-tb-actions" gx-1  !important">'+

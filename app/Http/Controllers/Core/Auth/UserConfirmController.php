@@ -21,11 +21,11 @@ class UserConfirmController extends Controller
 
     public function index()
     {
-        $token = str_replace('}', '', \request()->invitation_token);
+        $token = str_replace('}', '', (string) \request()->invitation_token);
 
         $user = $this->service->with('status')->where('invitation_token', $token)->first();
 
-        if ($user && optional($user->status)->name == 'status_invited') {
+        if ($user && $user->isInvited()) {
             return view('frontend.user.invitation_confirm', ['user' => $user]);
         }
 
@@ -43,13 +43,16 @@ class UserConfirmController extends Controller
             ->firstOrFail();
 
         throw_if(
-            optional($user->status)->name != 'status_invited',
+            !$user->isInvited(),
             new GeneralException(__t('action_not_allowed'))
         );
 
-        $attributes = array_merge($request->only('first_name', 'password', 'last_name'), ['status_id' => $status]);
-        $user->fill($attributes)
-            ->save();
+        $attributes = array_merge($request->only('first_name', 'password', 'last_name'), [
+            'status_id' => $status,
+        ]);
+        $user->fill($attributes);
+        $user->status = 1;
+        $user->save();
 
         AfterUserConfirmed::new()
             ->setModel($user)

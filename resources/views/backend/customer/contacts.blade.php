@@ -150,6 +150,17 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
+                                            <label>Portal Role</label>
+                                            <select name="contact_role" class="form-control">
+                                                <option value="owner">Owner (full access)</option>
+                                                <option value="billing">Billing (view &amp; pay)</option>
+                                                <option value="viewer" selected>Viewer (read-only)</option>
+                                            </select>
+                                            <small class="text-soft">Primary contacts should use Owner</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
                                             <label>Status <span class="text-danger"></span></label>
                                             <select name="status" id="" class="form-control" required>
                                                 <option value="">Choose One</option>
@@ -256,6 +267,16 @@
                                             <select name="edit_contact_type" id="" class="form-control" >
                                                 <option value="">Choose One</option>
 
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Portal Role</label>
+                                            <select name="edit_contact_role" id="edit_contact_role" class="form-control">
+                                                <option value="owner">Owner (full access)</option>
+                                                <option value="billing">Billing (view &amp; pay)</option>
+                                                <option value="viewer">Viewer (read-only)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -411,7 +432,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].email + '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].position + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].contact_type + '</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+
@@ -495,6 +516,8 @@
                                 `<option value="primary" ${res.contact.contact_type == 'primary' ? 'selected' : ''}>Primary</option>`+
                                 `<option value="general" ${res.contact.contact_type== 'general' ? 'selected' : ''}>General</option>`
                             )
+                        var roleAlias = (res.contact.role_alias || (res.contact.contact_role && res.contact.contact_role.alias) || (res.contact.contact_type == 'primary' ? 'owner' : 'viewer'));
+                        $('select[name="edit_contact_role"]').val(roleAlias);
                         $('select[name="edit_status"]')
                             .html(
                                 `<option value="1" ${res.contact.status == 'Active' ? 'selected' : ''}>Active</option>`+

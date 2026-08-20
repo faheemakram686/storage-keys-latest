@@ -54,13 +54,7 @@ class GenerateRecurringInvoices extends Command
         foreach ($parents as $parent) {
             try {
                 DB::transaction(function () use ($parent, $unitStatus, &$generated) {
-                    $dueDate = $parent->next_recurring_date;
-                    $dayGap = 0;
-
-                    if ($parent->invoice_date && $parent->due_date) {
-                        $dayGap = Carbon::parse($parent->invoice_date)
-                            ->diffInDays(Carbon::parse($parent->due_date), false);
-                    }
+                    $invoiceDate = $parent->next_recurring_date;
 
                     $child = new Invoice();
                     $child->customer_id = $parent->customer_id;
@@ -75,10 +69,8 @@ class GenerateRecurringInvoices extends Command
                     $child->next_recurring_date = null;
                     $child->parent_invoice_id = $parent->id;
                     $child->invoice_no = Invoice::generateInvoiceNumber();
-                    $child->invoice_date = $dueDate;
-                    $child->due_date = $dayGap > 0
-                        ? Carbon::parse($dueDate)->addDays($dayGap)->format('Y-m-d')
-                        : $dueDate;
+                    $child->invoice_date = $invoiceDate;
+                    $child->due_date = $parent->dueDateFromInvoiceDate($invoiceDate);
                     $child->sub_total = $parent->sub_total;
                     $child->vat = $parent->vat;
                     $child->vat_type = $parent->vat_type;
@@ -109,7 +101,7 @@ class GenerateRecurringInvoices extends Command
                     }
 
                     if ($parent->isRecurringActive()) {
-                        $parent->next_recurring_date = $parent->calculateNextRecurringDate($dueDate);
+                        $parent->next_recurring_date = $parent->calculateNextRecurringDate($invoiceDate);
                     } else {
                         $parent->next_recurring_date = null;
                     }

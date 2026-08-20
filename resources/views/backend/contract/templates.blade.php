@@ -256,7 +256,7 @@
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].temp_title + '</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge badge-success">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 '</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">' + data[i].created_at + '</td>'+
                                 '  <td class="nk-tb-col nk-tb-col-tools">'+

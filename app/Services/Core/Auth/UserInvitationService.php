@@ -43,16 +43,48 @@ class UserInvitationService extends BaseService
 
     public function assignRoles($roles)
     {
-        foreach ($roles as $key => $role) {
-            $this->model->assignRole($role);
+        $roles = $this->normalizeInviteRoles($roles);
+
+        if (count($roles)) {
+            resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
         }
 
         return $this;
     }
 
+    /**
+     * Accept a list of role IDs, or the wrapped shape from getAttributes('roles').
+     *
+     * @param  mixed  $roles
+     * @return array<int, mixed>
+     */
+    protected function normalizeInviteRoles($roles): array
+    {
+        if ($roles instanceof \Illuminate\Support\Collection) {
+            $roles = $roles->all();
+        }
+
+        if (!is_array($roles)) {
+            return $roles ? [$roles] : [];
+        }
+
+        // HasAttrs::getAttributes('roles') returns ['roles' => [1, 2]] rather than [1, 2].
+        if (array_key_exists('roles', $roles) && !isset($roles[0])) {
+            $roles = $roles['roles'];
+
+            if (!is_array($roles)) {
+                return $roles ? [$roles] : [];
+            }
+        }
+
+        return $roles;
+    }
+
     public function detachRoles()
     {
-        $this->model->roles()->sync([]);
+        $sync = resolve(UserRoleSyncService::class);
+        $sync->detachRolesOfType($this->model, UserRoleSyncService::TYPE_TENANT);
+        $sync->clearUserRoleCache($this->model);
 
         return $this;
     }

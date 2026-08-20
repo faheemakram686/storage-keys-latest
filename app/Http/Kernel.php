@@ -71,6 +71,8 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authorize' => \App\Http\Middleware\AuthorizeMiddleware::class,
         'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+        'portal.permission' => \App\Http\Middleware\PortalPermissionMiddleware::class,
+        'contact.permission' => \App\Http\Middleware\ContactPermissionMiddleware::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

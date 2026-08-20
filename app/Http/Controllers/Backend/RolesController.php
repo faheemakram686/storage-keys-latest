@@ -6,12 +6,12 @@ use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\Type;
 //use App\Models\Role;
 use App\Models\Core\Auth\User;
+use App\Models\Core\Auth\Permission;
 use App\Repo\Interfaces\RoleInterface;
 use App\Repo\RoleClass;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,10 +19,10 @@ class RolesController extends Controller
 {
     private $role;
     public function __construct(RoleInterface $role) {
-        $this->middleware('permission:view_roles', ['only' => ['index', 'show']]);
-         $this->middleware('permission:add_role', ['only' => ['create','store']]);
-        $this->middleware('permission:edit_role', ['only' => ['edit','update']]);
-         $this->middleware('permission:delete_role', ['only' => ['destroy']]);
+        $this->middleware('portal.permission:view_role', ['only' => ['index', 'show', 'getRoles', 'dataTable']]);
+        $this->middleware('portal.permission:create_role', ['only' => ['create', 'store', 'saveRole']]);
+        $this->middleware('portal.permission:edit_role', ['only' => ['edit', 'update', 'editRole', 'assignRole', 'deattachRole']]);
+        $this->middleware('portal.permission:delete_role', ['only' => ['destroy', 'deleteRole']]);
         $this->role = $role;
     }
     /**
@@ -96,14 +96,23 @@ class RolesController extends Controller
             return response()->json(['errors' => $validator->errors()->first()], 422);
         }
 
-        $role = Role::find($request->id);
+        $role = Role::with('type')->find($request->id);
         $user = User::find($request->user_id);
 
         if (!$role || !$user) {
             return response()->json(['errors' => 'Role or user not found'], 404);
         }
 
-        $user->assignRole($role);
+        $sync = resolve(\App\Services\Core\Auth\UserRoleSyncService::class);
+        $typeAlias = optional($role->type)->alias;
+
+        if ($typeAlias === 'admin') {
+            $sync->syncPortalRole($user, $role->id);
+        } elseif ($typeAlias === 'tenant') {
+            $sync->syncHrmRole($user, $role->id);
+        } else {
+            return response()->json(['errors' => 'Only Portal or HRM roles can be assigned here'], 422);
+        }
 
         return response()->json(['success' => 'Role Assigned successfully'], 200);
     }

@@ -63,6 +63,8 @@ class CustomerClass implements CustomerInterface {
             $contact->contact_type = 'primary';
             $contact->status=$request->status;
             if($contact->save()){
+                resolve(\App\Services\Contact\ContactRoleSyncService::class)
+                    ->assignRole($contact, \App\Services\Contact\ContactRoleSyncService::OWNER);
                 return response()->json(['success' => 'Record save successfully'], 200);
             }
 

@@ -30,16 +30,25 @@ class AssignLeaveJob implements ShouldQueue
     {
         $this->service = $service;
 
-        UserLeave::all()->map(function (UserLeave $userLeave){
-            if (todayFromApp() > $userLeave->end_date){
-                $this->service
-                    ->setAttr('leave_type_id', $userLeave->leaveType->id)
-                    ->setAttr('ranges', $this->leaveYear())
-                    ->setEmployee($userLeave->user)
-                    ->buildUserLeave()
-                    ->checkAndSetMonthlyEarningAmount($userLeave->leaveType)
-                    ->update();
-            }
-        });
+        UserLeave::query()
+            ->with(['user', 'leaveType'])
+            ->whereHas('user')
+            ->whereHas('leaveType')
+            ->get()
+            ->each(function (UserLeave $userLeave) {
+                if (!$userLeave->user || !$userLeave->leaveType) {
+                    return;
+                }
+
+                if (todayFromApp() > $userLeave->end_date) {
+                    $this->service
+                        ->setAttr('leave_type_id', $userLeave->leaveType->id)
+                        ->setAttr('ranges', $this->leaveYear())
+                        ->setEmployee($userLeave->user)
+                        ->buildUserLeave()
+                        ->checkAndSetMonthlyEarningAmount($userLeave->leaveType)
+                        ->update();
+                }
+            });
     }
 }

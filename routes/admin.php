@@ -61,28 +61,41 @@ require __DIR__.'/auth.php';
     Route::any('update-password', [Backend\ProfileController::class,'updatePassword']);
 
     //roles routes
-    Route::resource('roles', Backend\RolesController::class);
-    Route::get('roles-dt', [Backend\RolesController::class, 'dataTable'])->name('roles-datatable');
-    Route::get('get-role', [Backend\RolesController::class, 'getRoles'])->name('get-role');
-//  Route::any('save-role', [Backend\RolesController::class, 'saveRole'])->name('save-role');
-    Route::any('save-role', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'storesk'])->name('save-role');
-    Route::any('edit-role/{id}', [Backend\RolesController::class, 'editRole'])->name('edit-role');
-    Route::any('assign-role', [Backend\RolesController::class, 'assignRole'])->name('assign-role');
-    Route::any('get-assign-user', [Backend\RolesController::class, 'getAssignedUsers'])->name('get-assign-user');
-    Route::any('deattach-role', [Backend\RolesController::class, 'deattachRole'])->name('deattach-role');
-//  Route::any('edit-role/{id}', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'editsk'])->name('edit-role');
-//  Route::any('update-role', [Backend\RolesController::class, 'updateRole'])->name('update-role');
-    Route::any('update-role', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'updatesk'])->name('update-role');
-    Route::any('delete-role', [Backend\RolesController::class, 'deleteRole'])->name('delete-role');
+    Route::middleware('portal.permission:view_role')->group(function () {
+        Route::resource('roles', Backend\RolesController::class);
+        Route::get('roles-dt', [Backend\RolesController::class, 'dataTable'])->name('roles-datatable');
+        Route::get('get-role', [Backend\RolesController::class, 'getRoles'])->name('get-role');
+        Route::any('edit-role/{id}', [Backend\RolesController::class, 'editRole'])->name('edit-role');
+        Route::any('get-assign-user', [Backend\RolesController::class, 'getAssignedUsers'])->name('get-assign-user');
+    });
+    Route::middleware('portal.permission:create_role')->group(function () {
+        Route::any('save-role', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'storesk'])->name('save-role');
+    });
+    Route::middleware('portal.permission:edit_role')->group(function () {
+        Route::any('assign-role', [Backend\RolesController::class, 'assignRole'])->name('assign-role');
+        Route::any('deattach-role', [Backend\RolesController::class, 'deattachRole'])->name('deattach-role');
+        Route::any('update-role', [\App\Http\Controllers\Core\Auth\Role\RoleController::class, 'updatesk'])->name('update-role');
+    });
+    Route::middleware('portal.permission:delete_role')->group(function () {
+        Route::any('delete-role', [Backend\RolesController::class, 'deleteRole'])->name('delete-role');
+    });
 
     //users routes
-    Route::resource('users', Backend\UserController::class);
-    Route::get('users-dt', [Backend\UserController::class, 'dataTable'])->name('users-datatable');
-    Route::any('get-users', [Backend\UserController::class,'getUser']);
-    Route::any('save-user', [Backend\UserController::class,'saveUser']);
-    Route::any('delete-user', [Backend\UserController::class,'deleteUser']);
-    Route::any('edit-user', [Backend\UserController::class,'editUser']);
-    Route::any('update-user', [Backend\UserController::class,'updateUser']);
+    Route::middleware('portal.permission:view_user')->group(function () {
+        Route::resource('users', Backend\UserController::class);
+        Route::get('users-dt', [Backend\UserController::class, 'dataTable'])->name('users-datatable');
+        Route::any('get-users', [Backend\UserController::class,'getUser']);
+        Route::any('edit-user', [Backend\UserController::class,'editUser']);
+    });
+    Route::middleware('portal.permission:create_user')->group(function () {
+        Route::any('save-user', [Backend\UserController::class,'saveUser']);
+    });
+    Route::middleware('portal.permission:edit_user')->group(function () {
+        Route::any('update-user', [Backend\UserController::class,'updateUser']);
+    });
+    Route::middleware('portal.permission:delete_user')->group(function () {
+        Route::any('delete-user', [Backend\UserController::class,'deleteUser']);
+    });
 
     //country routes
     Route::any('country', [CountryController::class,'index'])->name('country.index');
@@ -128,7 +141,7 @@ require __DIR__.'/auth.php';
 
 
     //warehouse routes
-    Route::any('warehouse', [WarehouseController::class,'index'])->middleware('can:view_warehouse')->name('warehouse.index');
+    Route::any('warehouse', [WarehouseController::class,'index'])->middleware('portal.permission:view_warehouse')->name('warehouse.index');
     Route::any('save-warehouse', [WarehouseController::class,'saveWarehouse']);
     Route::any('get-wh', [WarehouseController::class,'getAllWareHouse']);
     Route::any('delete-wh', [WarehouseController::class,'deleteWh']);
@@ -205,7 +218,7 @@ require __DIR__.'/auth.php';
 
 
     //leads routes
-    Route::any('leads', [LeadController::class,'index'])->name('leads.index')->middleware('can_access:view_lead');
+    Route::any('leads', [LeadController::class,'index'])->name('leads.index')->middleware(['portal.permission:view_lead', 'can_access:view_lead']);
     Route::any('create-lead', [LeadController::class,'create'])->name('lead.create')->middleware('can_access:create_lead');
     Route::any('create-lead-customer/{id}', [LeadController::class,'createLeadCustomer'])->name('lead.create.customer');
     Route::any('get-leads', [LeadController::class,'getLeads']);
@@ -334,15 +347,15 @@ require __DIR__.'/auth.php';
 
 
     //Customer routes
-    Route::any('customer', [CustomerController::class,'index'])->name('customer.index');
-    Route::any('create-customer', [CustomerController::class,'create'])->name('customer.create');
-    Route::any('save-customer', [CustomerController::class,'saveCustomer']);
-    Route::any('get-customer', [CustomerController::class,'getAllCustomer']);
-    Route::any('delete-customer', [CustomerController::class,'deleteCustomer']);
-    Route::any('is-customer', [CustomerController::class,'isCustomer']);
-    Route::any('edit-customer/{id}', [CustomerController::class,'editCustomer']);
-    Route::any('update-customer', [CustomerController::class,'updateCustomer']);
-    Route::any('customer/profile/{id}', [CustomerController::class,'showCustomer'])->name('customer-profile');
+    Route::any('customer', [CustomerController::class,'index'])->name('customer.index')->middleware('portal.permission:view_customer');
+    Route::any('create-customer', [CustomerController::class,'create'])->name('customer.create')->middleware('portal.permission:create_customer');
+    Route::any('save-customer', [CustomerController::class,'saveCustomer'])->middleware('portal.permission:create_customer');
+    Route::any('get-customer', [CustomerController::class,'getAllCustomer'])->middleware('portal.permission:view_customer');
+    Route::any('delete-customer', [CustomerController::class,'deleteCustomer'])->middleware('portal.permission:delete_customer');
+    Route::any('is-customer', [CustomerController::class,'isCustomer'])->middleware('portal.permission:view_customer');
+    Route::any('edit-customer/{id}', [CustomerController::class,'editCustomer'])->middleware('portal.permission:edit_customer');
+    Route::any('update-customer', [CustomerController::class,'updateCustomer'])->middleware('portal.permission:edit_customer');
+    Route::any('customer/profile/{id}', [CustomerController::class,'showCustomer'])->name('customer-profile')->middleware('portal.permission:view_customer');
     Route::any('convert-customer', [CustomerController::class,'convertCustomer']);
     Route::any('customer/tasks/{id}', [CustomerController::class,'showTasks'])->name('customer-tasks');
     Route::any('customer/contracts/{id}', [CustomerController::class,'showContracts'])->name('customer-contracts');
@@ -407,7 +420,7 @@ require __DIR__.'/auth.php';
 
 
    //Invoices routes
-   Route::any('invoices', [InvoiceController::class,'index'])->name('invoice.index');
+   Route::any('invoices', [InvoiceController::class,'index'])->name('invoice.index')->middleware('portal.permission:view_invoice');
    Route::any('create-invoice',[InvoiceController::class,'createInvoice'])->name('create-invoice');
    Route::any('save-invoice',[InvoiceController::class,'saveInvoice']);
    Route::any('convert-invoice/{id}',[InvoiceController::class,'convertInvoice']);

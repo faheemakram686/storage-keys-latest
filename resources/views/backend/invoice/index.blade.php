@@ -175,7 +175,7 @@
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].grand_total+' AED</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].balance+' AED</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
-                                ' <span class="badge '+ (data[i].status === 'Active' ? 'badge-success' : 'badge-danger') +'">'+data[i].status+'</span>'+
+                                ' '+statusBadgeHtml(data[i].status)+
                                 ' </td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge '+ paymentStatusBadgeClass(data[i].payment_status) +' ">'+data[i].payment_status+'</span>'+

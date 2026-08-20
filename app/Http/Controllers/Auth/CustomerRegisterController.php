@@ -50,7 +50,7 @@ class CustomerRegisterController extends Controller
                 ]);
 
 
-                Contact::create([
+                $contact = Contact::create([
                     'customer_id' => $customer->id,
                     'first_name'  => $validated['first_name'],
                     'last_name'   => $validated['last_name'],
@@ -59,6 +59,9 @@ class CustomerRegisterController extends Controller
                     'status'      => 1,
                     'contact_type' => 'primary',
                 ]);
+
+                resolve(\App\Services\Contact\ContactRoleSyncService::class)
+                    ->assignRole($contact, \App\Services\Contact\ContactRoleSyncService::OWNER);
             });
 
             return redirect()->back()->with('success', 'Successfully Registered Your Account');

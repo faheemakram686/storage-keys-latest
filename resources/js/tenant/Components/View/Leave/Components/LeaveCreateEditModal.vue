@@ -41,7 +41,7 @@
                         <div class="row">
                             <div v-for="availability in availabilities" class="col-md-6">
                                 <p class="default-font-color mb-0">
-                                    <span class="text-muted">{{ availability.leave_type.name }}:</span>
+                                    <span class="text-muted">{{ leaveTypeName(availability) }}:</span>
                                     {{ numberFormatter(parseFloat(availability.amount) - parseFloat(availability.taken)) }}
                                 </p>
                             </div>
@@ -231,6 +231,7 @@ export default {
             },
             attachments: [],
             availabilities: [],
+            leaveTypes: [],
             leaveDuration: [
                 {id: 'single_day', name: 'Single Day'},
                 {id: 'multi_day', name: 'Multi Day'},
@@ -289,14 +290,36 @@ export default {
                     this.$toastr.e(response.data.message || response.statusText)
             })
         },
+        getLeaveTypes() {
+            axiosGet(this.apiUrl.SELECTABLE_LEAVE_TYPES).then(({data}) => {
+                this.leaveTypes = Array.isArray(data) ? data : [];
+            }).catch(() => {
+                this.leaveTypes = [];
+            })
+        },
+        leaveTypeFromAvailability(availability) {
+            return availability && (availability.leave_type || availability.leaveType) || null;
+        },
+        leaveTypeName(availability) {
+            const leaveType = this.leaveTypeFromAvailability(availability);
+            return leaveType ? leaveType.name : '';
+        },
         getEmployeeExistingLeaves() {
+            if (!this.formData.employee_id) {
+                this.availabilities = [];
+                return;
+            }
             this.modalPreloader = true;
             axiosGet(`${this.apiUrl.LEAVES}/${this.formData.employee_id}/allowances`).then(response => {
-                this.availabilities = response.data.allowances;
+                this.availabilities = response.data.allowances || [];
+            }).catch(() => {
+                this.availabilities = [];
             }).finally(() => this.modalPreloader=false)
         }
     },
     created() {
+        this.getLeaveTypes();
+
         if (!this.employee && !this.assignPermissions && !this.specificId) {
             this.formData.employee_id = window.user.id
             this.getEmployeeExistingLeaves()
@@ -324,12 +347,22 @@ export default {
             return this.formData.employee_id;
         },
         selectableLeaveType() {
-            let leave_type = [];
-            leave_type = addChooseInSelectArray(leave_type, 'name', this.$t('leave_type'));
-            if (this.availabilities.length !== 0) {
-                this.availabilities.map((availability) => leave_type.push(availability.leave_type))
-            }
-            return leave_type;
+            const typesById = {};
+
+            this.leaveTypes.forEach((leaveType) => {
+                if (leaveType && leaveType.id) {
+                    typesById[leaveType.id] = leaveType;
+                }
+            });
+
+            this.availabilities.forEach((availability) => {
+                const leaveType = this.leaveTypeFromAvailability(availability);
+                if (leaveType && leaveType.id) {
+                    typesById[leaveType.id] = leaveType;
+                }
+            });
+
+            return addChooseInSelectArray(Object.values(typesById), 'name', this.$t('leave_type'));
         },
         modalTitle(){
             return this.$can('assign_leaves') ? this.$t('assign_leave') : this.$t('request_leave') ;

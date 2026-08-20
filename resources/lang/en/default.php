@@ -667,7 +667,7 @@ return array_merge([
     'no_delivery_settings_warning_none' => 'For sending invitation you must set up email settings and setup cron job on your hosting server.',
     'no_delivery_settings_warning_on_import' => 'To import employees you must set up email settings. Click {location} to add email settings.',
     'no_delivery_settings_warning_none_on_import' => 'To import employees you must set up email settings and setup cron job on your hosting server.',
-    'cron_job_settings_warning' => 'Please make sure you setup the cron job on your hosted server as instructed on the {documentation} for sending emails.',
+    'cron_job_settings_warning' => 'Please make sure you setup the cron job on your hosted server for sending emails.',
 
 
     // Buttons
@@ -1529,7 +1529,7 @@ return array_merge([
     'command_without_php_path' => 'Command without php path',
     'see_documentation' => 'See Documentation',
     'cron_job_description_message' => 'For executing scheduled jobs',
-    'cron_job_setting_suggestion' => 'We are providing the cron job command and highly recommend to run it every minute(once per minute ****). Copy the command and insert it to your hosted server\'s crontab. For more help you can see the documentation.',
+    'cron_job_setting_suggestion' => 'We are providing the cron job command and highly recommend to run it every minute(once per minute ****). Copy the command and insert it to your hosted server\'s crontab.',
     'cron_job_setting_warning' => 'You must setup the cron job in your hosted server for assigning work shift, generating payslip, sending bulk emails, assigning leaves and renew holidays.',
     'export' => 'Export',
     'in_note' => 'In note',

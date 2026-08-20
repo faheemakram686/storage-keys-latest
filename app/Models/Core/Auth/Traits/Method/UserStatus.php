@@ -12,17 +12,32 @@ trait UserStatus
 {
     public function isActive()
     {
-        return optional($this->status)->name == 'status_active';
+        return $this->userStatusName() == 'status_active';
     }
 
     public function isInvited()
     {
-        return optional($this->status)->name == 'status_invited';
+        return $this->userStatusName() == 'status_invited';
     }
 
     public function isInactive()
     {
-        return optional($this->status)->name == 'status_inactive';
+        return $this->userStatusName() == 'status_inactive';
+    }
+
+    /**
+     * Resolve the statuses.name value via the status() relation.
+     *
+     * users.status is a separate boolean column with a getStatusAttribute
+     * accessor, so $this->status never returns the Status model.
+     */
+    protected function userStatusName(): ?string
+    {
+        $status = $this->relationLoaded('status')
+            ? $this->getRelation('status')
+            : $this->status()->first();
+
+        return optional($status)->name;
     }
 
     public function markAs($status)
