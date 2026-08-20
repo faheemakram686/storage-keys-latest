@@ -42,7 +42,7 @@
     @endif
 
     @if($title)
-        <h3>{{ $title }}</h3>
+        <span class="h3">{{ $title }}</span>
     @endif
     @if($subtitle)
         <p>{{ $subtitle }}</p>

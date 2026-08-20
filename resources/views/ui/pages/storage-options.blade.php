@@ -57,6 +57,12 @@
                     <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
+                    <div class="ic"><i class="fas fa-couch"></i></div>
+                    <span class="h4">Furniture Storage</span>
+                    <p>Store sofas, beds, dining sets, wardrobes and office furniture securely during moves, renovations or decluttering. Flexible furniture storage units in Dubai and Abu Dhabi keep large pieces protected without overcrowding your home.</p>
+                    <a class="ab-svc-link" href="{{ url('/furniture-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-briefcase"></i></div>
                     <span class="h4">Business Storage</span>
                     <p>It makes little sense to use your expensive office space to store unused equipment and furniture, archived documents, or excess stock and accessories. At every growth stage, your UAE business can benefit from our affordable and scalable business storage units in Sharjah, with easy access and delivery. We offer start-up business storage, small business storage, and commercial storage units for rent for corporate companies.</p>
