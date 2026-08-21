@@ -24,12 +24,22 @@ class RoleController extends Controller
 
     public function index()
     {
-        return (new AppRoleFilter(
-            $this->service
-                ->with('users:id,first_name,last_name,email', 'users.profilePicture')
-                ->orderBy('id')
-                ->filters($this->filter)
-        ))->filter()
+        $appTypeId = optional(Type::findByAlias('app'))->id;
+
+        $query = $this->service
+            ->with('users:id,first_name,last_name,email', 'users.profilePicture')
+            ->orderBy('id')
+            ->filters($this->filter);
+
+        if ($appTypeId) {
+            $query->where('type_id', '!=', $appTypeId);
+        }
+
+        $query->where(function ($q) {
+            $q->where('is_admin', 0)->orWhereNull('is_admin');
+        });
+
+        return (new AppRoleFilter($query))->filter()
             ->paginate(request()->get('per_page', 10));
     }
 
@@ -51,10 +61,12 @@ class RoleController extends Controller
 
     public function storesk(Request $request)
     {
-        $adminTypeId = Type::findByAlias('admin')->id;
+        $tenantTypeId = Type::findByAlias('tenant')->id;
         $request->merge([
             'alias' => $request->name,
-            'type_id' => $adminTypeId,
+            'type_id' => $tenantTypeId,
+            'is_admin' => 0,
+            'is_default' => 0,
         ]);
 
         $this->service

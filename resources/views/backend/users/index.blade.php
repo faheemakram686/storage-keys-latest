@@ -236,30 +236,16 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="portal_role">Portal Role</label>
-                                    <select class="form-control" id="portal_role" name="portal_role" data-select2-id="portal_role">
-                                        <option value="">None (HRM only)</option>
-                                        @isset($data['portal_roles'])
-                                            @foreach ($data['portal_roles'] as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                    <small class="text-soft">CRM / Admin Portal access</small>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="hrm_role">HRM Role</label>
-                                    <select class="form-control" id="hrm_role" name="hrm_role" data-select2-id="hrm_role">
-                                        <option value="">Default (Employee)</option>
-                                        @isset($data['hrm_roles'])
-                                            @foreach ($data['hrm_roles'] as $role)
+                                    <label class="form-label" for="role">Role</label>
+                                    <select class="form-control" id="role" name="role" data-select2-id="role" required>
+                                        <option value="">Select role</option>
+                                        @isset($data['role'])
+                                            @foreach ($data['role'] as $role)
                                                 <option value="{{ $role->id }}" @if(($role->alias ?? '') === 'employee') selected @endif>{{ $role->name }}</option>
                                             @endforeach
                                         @endisset
                                     </select>
-                                    <small class="text-soft">Leave, attendance, payroll</small>
+                                    <small class="text-soft">One shared role for CRM and HRM (permissions on the role control access)</small>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -466,20 +452,11 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="e_portal_role">Portal Role</label>
-                                    <select class="form-control" id="e_portal_role" name="e_portal_role">
-                                        <option value="">None (HRM only)</option>
+                                    <label class="form-label" for="e_role">Role</label>
+                                    <select class="form-control" id="e_role" name="e_role" required>
+                                        <option value="">Select role</option>
                                     </select>
-                                    <small class="text-soft">CRM / Admin Portal access</small>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="e_hrm_role">HRM Role</label>
-                                    <select class="form-control" id="e_hrm_role" name="e_hrm_role">
-                                        <option value="">None</option>
-                                    </select>
-                                    <small class="text-soft">Leave, attendance, payroll</small>
+                                    <small class="text-soft">One shared role for CRM and HRM (permissions on the role control access)</small>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -686,18 +663,10 @@
                                 `<option value="0" ${res.st.status== 'inactive' || res.st.status == 0 ? 'selected' : ''}>In-Active</option>`
                             );
 
-                        $('select[name="e_portal_role"]').empty().append('<option value="">None (HRM only)</option>');
-                        $.each(res.portal_roles || res.role || [], function(key, role) {
-                            var selected = (role.id == res.portal_role_id) ? 'selected' : '';
-                            $('select[name="e_portal_role"]').append(
-                                `<option value="${role.id}" ${selected}>${role.name}</option>`
-                            );
-                        });
-
-                        $('select[name="e_hrm_role"]').empty().append('<option value="">None</option>');
-                        $.each(res.hrm_roles || [], function(key, role) {
-                            var selected = (role.id == res.hrm_role_id) ? 'selected' : '';
-                            $('select[name="e_hrm_role"]').append(
+                        $('select[name="e_role"]').empty().append('<option value="">Select role</option>');
+                        $.each(res.role || res.portal_roles || res.hrm_roles || [], function(key, role) {
+                            var selected = (role.id == res.role_id || role.id == res.portal_role_id || role.id == res.hrm_role_id) ? 'selected' : '';
+                            $('select[name="e_role"]').append(
                                 `<option value="${role.id}" ${selected}>${role.name}</option>`
                             );
                         });

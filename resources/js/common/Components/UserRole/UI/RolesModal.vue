@@ -191,10 +191,14 @@ export default {
             return permissions.length === checked.length;
         },
         setFormData() {
-            const type = this.data.types.find(type => type.alias === this.alias);
-            this.formData.type_id = type.id;
+            // Unified staff roles always use tenant type (staff catalog).
+            const type = this.data.types.find(type => type.alias === 'tenant')
+                || this.data.types.find(type => type.alias === this.alias);
+            if (type) {
+                this.formData.type_id = type.id;
+            }
             this.formData.tenant_id = null;
-            if (this.alias === 'tenant') {
+            if (this.alias === 'tenant' && window.tenant) {
                 this.formData.tenant_id = window.tenant.id
             }
         }

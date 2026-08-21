@@ -217,7 +217,7 @@ export default {
                 "department",
                 "designation",
                 "employment_status",
-                "roles",
+                "role",
                 "salary",
                 "joining_date",
             ],
@@ -310,9 +310,9 @@ export default {
 
             this.downloadCSV(
                 `${keys.join(",")}\n` +
-                `sample name,email1@demo.com,male,emp-01,Main Department,Director,permanent,App Admin,10000, 2010-08-20${commas}\n` +
-                `example name,email2@demo.com,female,emp-02,Main Department,Director,probation,Manager,10000, 2010-08-20${commas}\n` +
-                `demo name,email3@demo.com,other,emp-03,Accounts,Director,permanent,Employee,10000, 2010-08-20${commas}\n`
+                `John Smith,john.smith@demo.com,male,EMP-001,Main Department,Director,permanent,Manager,10000,2010-08-20${commas}\n` +
+                `Jane Doe,jane.doe@demo.com,female,EMP-002,Main Department,Director,probation,Portal Staff,12000,2015-03-15${commas}\n` +
+                `Alex Lee,alex.lee@demo.com,other,EMP-003,Accounts,Director,permanent,Sales Person,9000,2018-11-01${commas}\n`
             );
         },
 

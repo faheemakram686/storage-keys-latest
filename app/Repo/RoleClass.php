@@ -10,31 +10,32 @@ class RoleClass implements RoleInterface {
 
     public function saveRole($request)
     {
-        $admin = Type::findByAlias('admin')->id;
-            $sy = new Role();
-            $sy->name = $request->name;
-            $sy->alias = $request->name;
-            $sy->type_id = $admin;
-            $sy->is_default = 1;
-            $sy->save();
-            return response()->json(['success' => 'Record save successfully'], 200);
+        $tenant = Type::findByAlias('tenant')->id;
+        $sy = new Role();
+        $sy->name = $request->name;
+        $sy->alias = $request->alias ?: $request->name;
+        $sy->type_id = $tenant;
+        $sy->is_default = 0;
+        $sy->is_admin = 0;
+        $sy->save();
 
+        return response()->json(['success' => 'Record save successfully'], 200);
     }
 
     /**
-     * Portal (admin-type) roles only — never mix HRM/tenant roles into Portal UIs.
+     * Staff roles (unified CRM + HRM catalog).
      */
     public function getRole()
     {
-        return resolve(UserRoleSyncService::class)->rolesForType(UserRoleSyncService::TYPE_ADMIN);
+        return resolve(UserRoleSyncService::class)->staffRoles();
     }
 
     /**
-     * HRM (tenant-type) roles only.
+     * @deprecated Alias of getRole() — staff catalog is unified.
      */
     public function getHrmRoles()
     {
-        return resolve(UserRoleSyncService::class)->rolesForType(UserRoleSyncService::TYPE_TENANT);
+        return resolve(UserRoleSyncService::class)->staffRoles();
     }
 
     /**
@@ -42,6 +43,10 @@ class RoleClass implements RoleInterface {
      */
     public function getRolesByType(?string $typeAlias = null)
     {
+        if ($typeAlias && in_array($typeAlias, ['admin', 'tenant'], true)) {
+            return resolve(UserRoleSyncService::class)->staffRoles();
+        }
+
         if ($typeAlias) {
             return resolve(UserRoleSyncService::class)->rolesForType($typeAlias);
         }
@@ -57,8 +62,8 @@ class RoleClass implements RoleInterface {
             return response()->json(['errors' => 'Protected role cannot be deleted'], 403);
         }
 
-        if (optional($role->type)->alias === 'tenant' && $role->is_default) {
-            return response()->json(['errors' => 'Default HRM role cannot be deleted'], 403);
+        if ($role->is_default && in_array($role->alias, ['employee', 'department_manager', 'manager'], true)) {
+            return response()->json(['errors' => 'Default staff role cannot be deleted'], 403);
         }
 
         $role->delete();

@@ -71,6 +71,7 @@ Vue.component('app-employee-card-view', require('./Components/View/Employee/Empl
 Vue.component('app-employee-preview-card', require('./Components/View/Employee/Components/EmployeePreviewCard').default);
 Vue.component('app-employee-list', require('./Components/View/Employee/Employees').default);
 Vue.component('app-employee-invite', require('./Components/View/Employee/EmployeeInviteEditModal').default);
+Vue.component('app-employee-create', require('./Components/View/Employee/EmployeeCreateEditModal').default);
 Vue.component('app-employee-media-object', require('./Components/View/Employee/Components/EmployeeMediaObject').default);
 Vue.component('app-employee-status', require('./Components/View/Employee/Components/EmployeeStatus').default);
 Vue.component('app-employee-termination-reason-modal', require('./Components/View/Employee/EmployeeTerminationReasonModal').default);

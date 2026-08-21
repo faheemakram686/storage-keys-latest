@@ -17,70 +17,31 @@ class UserRoleSyncService
     public const TYPE_TENANT = 'tenant';
 
     /**
-     * Replace the user's portal (admin-type) role without touching HRM roles.
-     *
-     * @param  User|AppUser  $user
+     * Staff roles are everything except App Admin (app type / is_admin).
      */
-    public function syncPortalRole($user, $roleId): User
+    public function isStaffRole(Role $role): bool
     {
-        return $this->syncRoleByType($this->toAuthUser($user), $roleId, self::TYPE_ADMIN);
-    }
+        $role->loadMissing('type');
 
-    /**
-     * Replace the user's HRM (tenant-type) role without touching portal roles.
-     *
-     * @param  User|AppUser  $user
-     */
-    public function syncHrmRole($user, $roleId): User
-    {
-        return $this->syncRoleByType($this->toAuthUser($user), $roleId, self::TYPE_TENANT);
-    }
-
-    /**
-     * Sync one or more HRM (tenant-type) roles, preserving portal/app roles.
-     *
-     * @param  User|AppUser  $user
-     * @param  array<int|string|Role>  $roles
-     */
-    public function syncHrmRoles($user, array $roles): User
-    {
-        $user = $this->toAuthUser($user);
-        $roleIds = $this->normalizeRoleIds($roles);
-
-        if (empty($roleIds)) {
-            $this->detachRolesOfType($user, self::TYPE_TENANT);
-            $this->clearUserRoleCache($user);
-
-            return $user->fresh(['roles']);
+        if ($role->isAdmin()) {
+            return false;
         }
 
-        $tenantRoles = Role::query()
-            ->whereIn('id', $roleIds)
-            ->whereHas('type', fn ($q) => $q->where('alias', self::TYPE_TENANT))
-            ->pluck('id')
-            ->all();
-
-        if (count($tenantRoles) !== count(array_unique($roleIds))) {
-            throw new GeneralException(__('Only HRM (tenant) roles can be assigned from HRM.'));
-        }
-
-        $this->detachRolesOfType($user, self::TYPE_TENANT);
-        $user->roles()->attach($tenantRoles);
-        $this->clearUserRoleCache($user);
-
-        return $user->fresh(['roles']);
+        return optional($role->type)->alias !== self::TYPE_APP;
     }
 
     /**
+     * Replace all non-app roles with exactly one staff role.
+     *
      * @param  User|AppUser  $user
      * @param  int|string|Role|null  $roleId
      */
-    public function syncRoleByType($user, $roleId, string $typeAlias): User
+    public function syncStaffRole($user, $roleId): User
     {
         $user = $this->toAuthUser($user);
 
         if ($roleId === null || $roleId === '' || $roleId === 0) {
-            $this->detachRolesOfType($user, $typeAlias);
+            $this->detachStaffRoles($user);
             $this->clearUserRoleCache($user);
 
             return $user->fresh(['roles']);
@@ -92,23 +53,101 @@ class UserRoleSyncService
 
         $role->loadMissing('type');
 
-        if (optional($role->type)->alias !== $typeAlias) {
-            throw new GeneralException(sprintf(
-                'Role "%s" is not a %s role.',
-                $role->name,
-                $typeAlias
-            ));
-        }
-
-        if ($role->isAdmin() && optional($role->type)->alias === self::TYPE_APP) {
+        if (!$this->isStaffRole($role)) {
             throw new GeneralException(__('App Admin cannot be assigned from this form.'));
         }
 
-        $this->detachRolesOfType($user, $typeAlias);
+        $this->detachStaffRoles($user);
         $user->roles()->attach($role->id);
         $this->clearUserRoleCache($user);
 
         return $user->fresh(['roles']);
+    }
+
+    /**
+     * Sync one or more staff roles (normalized to a single primary role when one id is given).
+     * When multiple ids are provided, the first staff role is kept (single-role policy).
+     *
+     * @param  User|AppUser  $user
+     * @param  array<int|string|Role>  $roles
+     */
+    public function syncStaffRoles($user, array $roles): User
+    {
+        $user = $this->toAuthUser($user);
+        $roleIds = $this->normalizeStaffRoleIds($roles);
+
+        if (empty($roleIds)) {
+            $this->detachStaffRoles($user);
+            $this->clearUserRoleCache($user);
+
+            return $user->fresh(['roles']);
+        }
+
+        // Single-role policy: use the first resolved staff role.
+        return $this->syncStaffRole($user, $roleIds[0]);
+    }
+
+    /**
+     * @deprecated Prefer syncStaffRole — kept as a thin wrapper for legacy callers.
+     *
+     * @param  User|AppUser  $user
+     */
+    public function syncPortalRole($user, $roleId): User
+    {
+        return $this->syncStaffRole($user, $roleId);
+    }
+
+    /**
+     * @deprecated Prefer syncStaffRole — kept as a thin wrapper for legacy callers.
+     *
+     * @param  User|AppUser  $user
+     */
+    public function syncHrmRole($user, $roleId): User
+    {
+        return $this->syncStaffRole($user, $roleId);
+    }
+
+    /**
+     * @deprecated Prefer syncStaffRoles — kept as a thin wrapper for legacy callers.
+     *
+     * @param  User|AppUser  $user
+     * @param  array<int|string|Role>  $roles
+     */
+    public function syncHrmRoles($user, array $roles): User
+    {
+        return $this->syncStaffRoles($user, $roles);
+    }
+
+    /**
+     * @param  User|AppUser  $user
+     * @param  int|string|Role|null  $roleId
+     */
+    public function syncRoleByType($user, $roleId, string $typeAlias): User
+    {
+        // Unified model: type alias no longer gates assignment; staff check does.
+        return $this->syncStaffRole($user, $roleId);
+    }
+
+    /**
+     * @param  User|AppUser  $user
+     */
+    public function detachStaffRoles($user): void
+    {
+        $user = $this->toAuthUser($user);
+
+        $appTypeId = optional(Type::findByAlias(self::TYPE_APP))->id;
+
+        $ids = $user->roles()
+            ->when($appTypeId, fn ($q) => $q->where('roles.type_id', '!=', $appTypeId))
+            ->where(function ($q) {
+                $q->where('roles.is_admin', 0)->orWhereNull('roles.is_admin');
+            })
+            ->pluck('roles.id')
+            ->all();
+
+        if (!empty($ids)) {
+            $user->roles()->detach($ids);
+        }
     }
 
     /**
@@ -129,11 +168,24 @@ class UserRoleSyncService
     }
 
     /**
+     * Primary staff role for the user (first non-app role).
+     *
+     * @param  User|AppUser  $user
+     */
+    public function getStaffRole($user): ?Role
+    {
+        $user = $this->toAuthUser($user);
+        $user->loadMissing('roles.type');
+
+        return $user->roles->first(fn (Role $role) => $this->isStaffRole($role));
+    }
+
+    /**
      * @param  User|AppUser  $user
      */
     public function getPortalRole($user): ?Role
     {
-        return $this->getRoleOfType($this->toAuthUser($user), self::TYPE_ADMIN);
+        return $this->getStaffRole($user);
     }
 
     /**
@@ -141,7 +193,7 @@ class UserRoleSyncService
      */
     public function getHrmRole($user): ?Role
     {
-        return $this->getRoleOfType($this->toAuthUser($user), self::TYPE_TENANT);
+        return $this->getStaffRole($user);
     }
 
     /**
@@ -234,6 +286,8 @@ class UserRoleSyncService
     }
 
     /**
+     * Portal/CRM access: App Admin or any attached permission typed as admin.
+     *
      * @param  User|AppUser  $user
      */
     public function hasPortalAccess($user): bool
@@ -245,11 +299,13 @@ class UserRoleSyncService
         }
 
         return $user->roles()
-            ->whereHas('type', fn ($q) => $q->where('alias', self::TYPE_ADMIN))
+            ->whereHas('permissions.type', fn ($q) => $q->where('alias', self::TYPE_ADMIN))
             ->exists();
     }
 
     /**
+     * HRM access: App Admin or any attached permission typed as tenant.
+     *
      * @param  User|AppUser  $user
      */
     public function hasHrmAccess($user): bool
@@ -261,12 +317,34 @@ class UserRoleSyncService
         }
 
         return $user->roles()
-            ->whereHas('type', fn ($q) => $q->whereIn('alias', [self::TYPE_TENANT, self::TYPE_APP]))
+            ->whereHas('permissions.type', fn ($q) => $q->where('alias', self::TYPE_TENANT))
             ->exists();
+    }
+
+    /**
+     * All assignable staff roles (excludes App Admin).
+     */
+    public function staffRoles(): Collection
+    {
+        $appType = Type::findByAlias(self::TYPE_APP);
+
+        return Role::query()
+            ->with('type')
+            ->when($appType, fn ($q) => $q->where('type_id', '!=', $appType->id))
+            ->where(function ($q) {
+                $q->where('is_admin', 0)->orWhereNull('is_admin');
+            })
+            ->orderBy('name')
+            ->get(['id', 'name', 'alias', 'type_id', 'is_admin', 'is_default']);
     }
 
     public function rolesForType(string $typeAlias): Collection
     {
+        // After unification, callers that asked for admin or tenant roles get the full staff catalog.
+        if (in_array($typeAlias, [self::TYPE_ADMIN, self::TYPE_TENANT], true)) {
+            return $this->staffRoles();
+        }
+
         $type = Type::findByAlias($typeAlias);
 
         if (!$type) {
@@ -322,10 +400,50 @@ class UserRoleSyncService
      * @param  array<int|string|Role>  $roles
      * @return array<int>
      */
-    protected function normalizeRoleIds(array $roles): array
+    protected function normalizeStaffRoleIds(array $roles): array
     {
         return collect($roles)
             ->map(function ($role) {
+                if ($role instanceof Role) {
+                    return $this->isStaffRole($role) ? (int) $role->id : null;
+                }
+
+                if (is_numeric($role)) {
+                    $found = Role::with('type')->find((int) $role);
+
+                    return ($found && $this->isStaffRole($found)) ? (int) $found->id : null;
+                }
+
+                if (is_string($role)) {
+                    $found = Role::query()
+                        ->with('type')
+                        ->where('name', trim($role))
+                        ->get()
+                        ->first(fn (Role $r) => $this->isStaffRole($r));
+
+                    return $found ? (int) $found->id : null;
+                }
+
+                return null;
+            })
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param  array<int|string|Role>  $roles
+     * @return array<int>
+     */
+    protected function normalizeRoleIds(array $roles, ?string $typeAlias = null): array
+    {
+        if ($typeAlias === null || in_array($typeAlias, [self::TYPE_ADMIN, self::TYPE_TENANT], true)) {
+            return $this->normalizeStaffRoleIds($roles);
+        }
+
+        return collect($roles)
+            ->map(function ($role) use ($typeAlias) {
                 if ($role instanceof Role) {
                     return (int) $role->id;
                 }
@@ -335,7 +453,13 @@ class UserRoleSyncService
                 }
 
                 if (is_string($role)) {
-                    $found = Role::findByName($role);
+                    $query = Role::query()->where('name', trim($role));
+
+                    if ($typeAlias) {
+                        $query->whereHas('type', fn ($q) => $q->where('alias', $typeAlias));
+                    }
+
+                    $found = $query->first();
 
                     return $found ? (int) $found->id : null;
                 }

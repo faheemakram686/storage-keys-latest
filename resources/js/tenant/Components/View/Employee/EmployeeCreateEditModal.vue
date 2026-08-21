@@ -103,11 +103,11 @@
             </div>
 
             <app-form-group-selectable
-                type="multi-select"
+                type="select"
                 v-if="$can('attach_users_to_roles')"
                 :label="$t('role')"
                 list-value-field="name"
-                v-model="formData.roles"
+                v-model="formData.role_id"
                 :chooseLabel="$t('role')"
                 :error-message="$errorMessage(errors, 'roles')"
                 :fetch-url="SELECTABLE_ROLE"
@@ -192,6 +192,7 @@ export default {
                 employee_id: '',
                 department: {},
                 roles: [],
+                role_id: null,
                 designation: {},
                 employment_status: {},
                 is_in_employee: false,
@@ -213,6 +214,7 @@ export default {
             this.errors = {};
             this.formData.is_in_employee = this.formData.dont_show_in_employee ? 0 : 1;
             this.formData.joining_date = formatDateForServer(this.formData.joining_date);
+            this.formData.roles = this.formData.role_id ? [this.formData.role_id] : [];
             this.submitData(this.formData);
         },
         afterSuccess({data}) {
@@ -230,6 +232,7 @@ export default {
             this.formData = {...this.formData, ...data};
             this.formData.employee_id = data.profile?.employee_id;
             this.formData.roles = this.collection(data.roles).pluck();
+            this.formData.role_id = this.formData.roles.length ? this.formData.roles[0] : null;
             this.formData.designation_id = data.designation?.id;
             this.formData.department_id = data.department?.id;
             this.formData.employment_status_id = data.employment_status?.id;

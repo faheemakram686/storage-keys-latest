@@ -46,7 +46,7 @@ class UserInvitationService extends BaseService
         $roles = $this->normalizeInviteRoles($roles);
 
         if (count($roles)) {
-            resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
+            resolve(UserRoleSyncService::class)->syncStaffRoles($this->model, $roles);
         }
 
         return $this;
@@ -83,7 +83,7 @@ class UserInvitationService extends BaseService
     public function detachRoles()
     {
         $sync = resolve(UserRoleSyncService::class);
-        $sync->detachRolesOfType($this->model, UserRoleSyncService::TYPE_TENANT);
+        $sync->detachStaffRoles($this->model);
         $sync->clearUserRoleCache($this->model);
 
         return $this;

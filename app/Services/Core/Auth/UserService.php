@@ -71,7 +71,7 @@ class UserService extends BaseService
     public function assignRole($roles)
     {
         $roles = is_array($roles) ? $roles : [$roles];
-        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
+        resolve(UserRoleSyncService::class)->syncStaffRoles($this->model, $roles);
 
         return $this;
     }
@@ -94,8 +94,7 @@ class UserService extends BaseService
             throw new GeneralException(trans('default.action_not_allowed'));
 
         $roles = $this->checkMakeArray(request('roles'));
-        // Only replace HRM (tenant) roles — never wipe Portal (admin) roles
-        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, $roles);
+        resolve(UserRoleSyncService::class)->syncStaffRoles($this->model, $roles);
 
         return $this->model->load('roles');
     }
@@ -106,14 +105,17 @@ class UserService extends BaseService
             throw new GeneralException(trans('default.action_not_allowed'));
 
         $roles = $this->checkMakeArray(request('roles'));
-        $tenantRoleIds = Role::query()
+        $sync = resolve(UserRoleSyncService::class);
+        $staffRoleIds = Role::query()
+            ->with('type')
             ->whereIn('id', $roles)
-            ->whereHas('type', fn ($q) => $q->where('alias', UserRoleSyncService::TYPE_TENANT))
+            ->get()
+            ->filter(fn (Role $role) => $sync->isStaffRole($role))
             ->pluck('id')
             ->all();
 
-        $this->model->roles()->detach($tenantRoleIds);
-        resolve(UserRoleSyncService::class)->clearUserRoleCache($this->model);
+        $this->model->roles()->detach($staffRoleIds);
+        $sync->clearUserRoleCache($this->model);
         $this->model->load('roles');
         return $this->model;
     }

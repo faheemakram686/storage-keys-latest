@@ -175,14 +175,52 @@ class EmployeeInviteService extends TenantService
 
     public function validateRoles(): self
     {
-        validator($this->getAttributes(),[
-            'roles' => [
-                'required',
-                Rule::exists('roles', 'id')->where(function ($query) {
-                    $query->whereIn('id', $this->getAttr('roles'));
-                })
+        $roles = $this->getAttr('roles');
+        if (!is_array($roles)) {
+            $roles = $roles ? [$roles] : [];
+        }
+
+        // Single-role policy: only the first role id is kept.
+        $roles = array_values(array_filter($roles));
+        if (count($roles) > 1) {
+            $roles = [reset($roles)];
+            $this->setAttr('roles', $roles);
+        }
+
+        $sync = resolve(\App\Services\Core\Auth\UserRoleSyncService::class);
+        $appTypeId = optional(\App\Models\Core\Auth\Type::findByAlias('app'))->id;
+
+        validator(
+            ['roles' => $roles],
+            [
+                'roles' => ['required', 'array', 'min:1', 'max:1'],
+                'roles.*' => [
+                    'required',
+                    'integer',
+                    Rule::exists('roles', 'id')->where(function ($query) use ($appTypeId) {
+                        $query->where(function ($q) {
+                            $q->where('is_admin', 0)->orWhereNull('is_admin');
+                        });
+                        if ($appTypeId) {
+                            $query->where('type_id', '!=', $appTypeId);
+                        }
+                    }),
+                ],
             ],
-        ])->validate();
+            [
+                'roles.*.exists' => __('Only staff roles can be assigned. App Admin cannot be assigned.'),
+            ]
+        )->validate();
+
+        // Ensure resolved roles are staff (covers edge type mismatches)
+        foreach ($roles as $roleId) {
+            $role = \App\Models\Core\Auth\Role::with('type')->find($roleId);
+            if (!$role || !$sync->isStaffRole($role)) {
+                throw ValidationException::withMessages([
+                    'roles' => [__('Only staff roles can be assigned. App Admin cannot be assigned.')],
+                ]);
+            }
+        }
 
         return $this;
     }

@@ -2,6 +2,11 @@
     <div class="content-wrapper">
         <app-page-top-section :title="$t('all_employees')" icon="briefcase">
             <app-default-button
+                v-if="$can('add_employees')"
+                class="mr-2"
+                @click="isEmployeeCreateOpenModalActive = true"
+                :title="$fieldTitle('add', 'employee', true)"/>
+            <app-default-button
                 v-if="$can('invite_employees')"
                 @click="isModalActive = true"
                 :title="$fieldTitle('invite', 'employee', true)"/>
@@ -19,6 +24,12 @@
             v-if="isModalActive"
             v-model="isModalActive"
             :selected-url="selectedUrl"
+        />
+
+        <app-employee-create
+            v-if="isEmployeeCreateOpenModalActive"
+            v-model="isEmployeeCreateOpenModalActive"
+            :selected-url="''"
         />
 
         <app-confirmation-modal

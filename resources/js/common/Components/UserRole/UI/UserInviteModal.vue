@@ -2,7 +2,7 @@
     <modal id="user-invite"
            v-model="showModal"
            :title="$fieldTitle('invite', 'user', true)"
-           @submit="submitData"
+           @submit="beforeSubmit"
            :btn-label="$t('invite')"
            :scrollable="false"
            :loading="loading"
@@ -19,10 +19,10 @@
             />
 
             <app-form-group
-                :label="$t('roles')"
-                type="multi-select"
+                :label="$t('role')"
+                type="select"
                 :list="roles"
-                v-model="formData.roles"
+                v-model="formData.role_id"
                 :error-message="$errorMessage(errors, 'roles')"
                 list-value-field="name"
                 :isAnimatedDropdown="true"
@@ -62,13 +62,18 @@ export default {
     data() {
         return {
             formData: {
-                roles: []
+                roles: [],
+                role_id: null,
             },
             isMailSettingExist: false,
             settingsLocation: urlGenerator(this.alias === 'tenant' ? TENANT_DELIVERY_SETTINGS_FRONT_END : DELIVERY_SETTINGS_FRONT_END)
         }
     },
     methods: {
+        beforeSubmit() {
+            this.formData.roles = this.formData.role_id ? [this.formData.role_id] : [];
+            this.submitData();
+        },
         afterSuccess({data}) {
             this.toastAndReload(data.message, 'user-table');
             $("#user-invite").modal('hide')
@@ -90,6 +95,7 @@ export default {
     },
     computed: {
         submitURL() {
+            // Both CRM and HRM invites assign the same staff role via UserInvitationService.
             return this.alias === 'tenant' ? TENANT_USER_INVITE : `admin/auth/users/invite-user`;
         }
     },
@@ -101,4 +107,3 @@ export default {
 
 }
 </script>
-

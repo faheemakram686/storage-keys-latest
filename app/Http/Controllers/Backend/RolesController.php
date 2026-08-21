@@ -38,12 +38,14 @@ class RolesController extends Controller
 
     public function getRoles()
     {
-        $adminTypeId = Type::findByAlias('admin')->id;
-        $appTypeId = Type::findByAlias('app')->id;
+        $appTypeId = optional(Type::findByAlias('app'))->id;
 
         return Role::with('users')
-            ->whereIn('type_id', [$adminTypeId, $appTypeId])
-            ->orderBy('id')
+            ->when($appTypeId, fn ($q) => $q->where('type_id', '!=', $appTypeId))
+            ->where(function ($q) {
+                $q->where('is_admin', 0)->orWhereNull('is_admin');
+            })
+            ->orderBy('name')
             ->get();
     }
     /**
@@ -53,9 +55,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        $admin = Type::findByAlias('admin')->id;
-        $permissions = Permission::where('type_id',$admin)->get();
-
+        $permissions = $this->staffPermissions();
         $permission_groups = $this->formatPermissions($permissions);
 
         return view('backend.roles.create', compact('permission_groups'));
@@ -78,8 +78,7 @@ class RolesController extends Controller
                 ->withErrors(['You are not allowed to edit the App Admin role.']);
         }
 
-        $admin = Type::findByAlias('admin')->id;
-        $permissions = Permission::where('type_id', $admin)->get();
+        $permissions = $this->staffPermissions();
         $permission_groups = $this->formatPermissions($permissions);
 
         return view('backend.roles.edit', compact('role', 'permission_groups', 'permissions'));
@@ -104,15 +103,12 @@ class RolesController extends Controller
         }
 
         $sync = resolve(\App\Services\Core\Auth\UserRoleSyncService::class);
-        $typeAlias = optional($role->type)->alias;
 
-        if ($typeAlias === 'admin') {
-            $sync->syncPortalRole($user, $role->id);
-        } elseif ($typeAlias === 'tenant') {
-            $sync->syncHrmRole($user, $role->id);
-        } else {
-            return response()->json(['errors' => 'Only Portal or HRM roles can be assigned here'], 422);
+        if (!$sync->isStaffRole($role)) {
+            return response()->json(['errors' => 'Only staff roles can be assigned here'], 422);
         }
+
+        $sync->syncStaffRole($user, $role->id);
 
         return response()->json(['success' => 'Role Assigned successfully'], 200);
     }
@@ -207,11 +203,13 @@ class RolesController extends Controller
         }
 
         try {
-            $adminTypeId = Type::findByAlias('admin')->id;
+            $tenantTypeId = Type::findByAlias('tenant')->id;
             $new_role = Role::create([
                 'name' => strtolower($request->name),
                 'alias' => strtolower($request->name),
-                'type_id' => $adminTypeId,
+                'type_id' => $tenantTypeId,
+                'is_admin' => 0,
+                'is_default' => 0,
             ]);
 
             if ($request->has('permissions')) {
@@ -249,7 +247,7 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        $permissions = Permission::get();
+        $permissions = $this->staffPermissions();
         $permission_groups = $this->formatPermissions($permissions);
         $role = Role::with('permissions')->find($id);
         return view('backend.roles.edit', compact('role', 'permission_groups', 'permissions'));
@@ -362,10 +360,37 @@ class RolesController extends Controller
 
     public static function formatPermissions($permissions)
     {
+        $adminTypeId = optional(Type::findByAlias('admin'))->id;
+        $tenantTypeId = optional(Type::findByAlias('tenant'))->id;
         $permissionGroups = [];
         foreach ($permissions as $permission) {
-            $permissionGroups[$permission->group_name][] = $permission;
+            $section = 'Common';
+            if ($adminTypeId && (int) $permission->type_id === (int) $adminTypeId) {
+                $section = 'CRM';
+            } elseif ($tenantTypeId && (int) $permission->type_id === (int) $tenantTypeId) {
+                $section = 'HRM';
+            }
+            $groupKey = $section . ': ' . ($permission->group_name ?: 'other');
+            $permissionGroups[$groupKey][] = $permission;
         }
         return $permissionGroups;
+    }
+
+    /**
+     * CRM + HRM + common permissions for staff role editors (excludes app-only).
+     */
+    protected function staffPermissions()
+    {
+        $appTypeId = optional(Type::findByAlias('app'))->id;
+
+        return Permission::query()
+            ->when($appTypeId, function ($q) use ($appTypeId) {
+                $q->where(function ($inner) use ($appTypeId) {
+                    $inner->whereNull('type_id')->orWhere('type_id', '!=', $appTypeId);
+                });
+            })
+            ->orderBy('group_name')
+            ->orderBy('name')
+            ->get();
     }
 }

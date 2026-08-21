@@ -29,11 +29,17 @@ class RoleSeeder extends Seeder
 
         $manager->save();
 
-        $manager->permissions()->sync(
-            Permission::all(['id', 'name'])
-                ->whereNotIn('name', ['access_own_departments'])
-                ->pluck('id')->toArray()
-        );
+        $adminTypeId = optional(Type::findByAlias('admin'))->id;
+        $managerPermissionQuery = Permission::query()
+            ->whereNotIn('name', ['access_own_departments']);
+
+        if ($adminTypeId) {
+            $managerPermissionQuery->where(function ($q) use ($adminTypeId) {
+                $q->whereNull('type_id')->orWhere('type_id', '!=', $adminTypeId);
+            });
+        }
+
+        $manager->permissions()->sync($managerPermissionQuery->pluck('id')->toArray());
 
         $depart_manager = new Role([
             'name' => 'Department Manager',

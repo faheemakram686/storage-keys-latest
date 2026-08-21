@@ -1456,11 +1456,11 @@ return array_merge([
     'csv_huge_data_guide' => 'Recommended CSV file should not contain more than 500 rows with default server configuration.',
     'csv_error_handle_guide' => 'For resolving the error download the error file and correct the incorrect cells and import that file again through .csv format.',
     'csv_after_import_message' => 'All imported employees will receive an email to reset their password in order to log in except the terminated employee.',
-    'csv_column_data_format' => 'The columns : department, designation, employment_status and roles value must be the same value that exists on the application. For the gender column three option available [male, female, other], for multiple roles use only comma(,) to separate roles and the joining_date column must be the date format of YYYY-MM-DD',
+    'csv_column_data_format' => 'The columns department, designation, employment_status and role must match values that already exist in the application. Put exactly one staff role name in the role column (for example Manager, Portal Staff, or Sales Person). Do not use App Admin, and do not put multiple roles. For gender use male, female, or other. joining_date must be YYYY-MM-DD.',
     'csv_download_label' => 'We would like to provide you a sample .CSV file - ',
 
     //Import
-    'csv_required_field_guide' => "Required field's (name, email, gender, employee_id, department, designation, employment_status, roles) column cell must not be empty.",
+    'csv_required_field_guide' => "Required field's (name, email, gender, employee_id, department, designation, employment_status, role) column cell must not be empty.",
     'partially_imported' => ':subject partially imported.',
     'has_been_imported_successfully' => ':subject has been imported successfully.',
     'is_invalid_message' => 'The selected :subject is invalid.',

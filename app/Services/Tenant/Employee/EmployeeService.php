@@ -142,7 +142,7 @@ class EmployeeService extends TenantService
     public function assignRolesFromAttribute()
     {
         $roles = $this->getAttr('roles') ?: [];
-        resolve(UserRoleSyncService::class)->syncHrmRoles($this->model, (array) $roles);
+        resolve(UserRoleSyncService::class)->syncStaffRoles($this->model, (array) $roles);
 
         return $this;
     }

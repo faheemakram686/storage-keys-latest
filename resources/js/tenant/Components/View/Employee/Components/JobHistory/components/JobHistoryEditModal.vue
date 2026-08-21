@@ -65,10 +65,10 @@
 
             <app-form-group-selectable
                 v-if="modalType === 'role'"
-                type="multi-select"
+                type="select"
                 :label="$t('role')"
                 list-value-field="name"
-                v-model="formData.roles"
+                v-model="formData.role_id"
                 :chooseLabel="$t('role')"
                 :error-message="$errorMessage(errors, 'roles')"
                 :fetch-url="apiUrl.SELECTABLE_ROLE"/>
@@ -136,6 +136,7 @@ export default {
     },
     created() {
         this.formData.roles = this.collection(this.employee.roles).pluck()
+        this.formData.role_id = this.formData.roles.length ? this.formData.roles[0] : null;
         this.formData.designation_id = this.collectPresentValues(this.employee.designations).id;
         this.formData.department_id = this.collectPresentValues(this.employee.departments).id;
         this.formData.employment_status_id = this.collectPresentValues(this.employee.employment_statuses).id;
@@ -166,6 +167,11 @@ export default {
             if (actionType == 'salary') {
                 this.formData.start_at = formatDateForServer(this.formData.start_at);
             }
+
+            if (actionType == 'roles') {
+                this.formData.roles = this.formData.role_id ? [this.formData.role_id] : [];
+            }
+
             axiosPatch(
                 `${this.apiUrl.EMPLOYEES}/${this.employee.id}/${actionType}/update`,
                 this.formData

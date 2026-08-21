@@ -10,6 +10,7 @@ use App\Models\Tenant\Employee\Department;
 use App\Models\Tenant\Employee\Designation;
 use App\Models\Tenant\Employee\EmploymentStatus;
 use App\Rules\RoleExistRule;
+use App\Services\Core\Auth\UserRoleSyncService;
 use App\Services\Tenant\Import\EmployeeImportService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -31,10 +32,16 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithBatchI
         $department = Department::query()->where('name', $row['department'])->first()->id;
         $designation = Designation::query()->where('name', $row['designation'])->first()->id;
         $employment_status = EmploymentStatus::query()->where('name', $row['employment_status'])->first()->id;
-        $roles = Role::query()
-            ->whereIn('name', $this->makeArray($row['roles']))
-            ->pluck('id')
-            ->toArray();
+
+        $roleName = $this->resolveRoleName($row);
+        $sync = resolve(UserRoleSyncService::class);
+        $role = Role::query()
+            ->with('type')
+            ->where('name', $roleName)
+            ->get()
+            ->first(fn (Role $r) => $sync->isStaffRole($r));
+
+        $roles = $role ? [$role->id] : [];
         [$first_name, $last_name] = array_values($this->getFirstnameLastnameFromName($row['name']));
 
         DB::transaction(fn() => resolve(EmployeeImportService::class)
@@ -50,6 +57,24 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithBatchI
         );
     }
 
+    /**
+     * Prefer singular `role` column; fall back to legacy `roles` (first name only).
+     */
+    protected function resolveRoleName(array $row): string
+    {
+        if (!empty($row['role'])) {
+            return trim((string) $row['role']);
+        }
+
+        if (!empty($row['roles'])) {
+            $parts = array_values(array_filter(array_map('trim', $this->makeArray($row['roles']))));
+
+            return $parts[0] ?? '';
+        }
+
+        return '';
+    }
+
     public array $requiredHeading = [
         "name",
         "email",
@@ -58,7 +83,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithBatchI
         "department",
         "designation",
         "employment_status",
-        "roles",
+        "role",
         "salary",
         "joining_date",
     ];
@@ -78,7 +103,7 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, WithBatchI
             '*.department' => ['required', 'string', 'exists:departments,name'],
             '*.designation' => ['required', 'string', 'exists:designations,name'],
             '*.employment_status' => ['required', 'string', 'exists:employment_statuses,name'],
-            '*.roles' => ['required', 'string', new RoleExistRule],
+            '*.role' => ['required', 'string', new RoleExistRule],
             '*.salary' => ['nullable', 'numeric'],
             '*.joining_date' => ['nullable', 'date'],
         ];

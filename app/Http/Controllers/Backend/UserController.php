@@ -33,10 +33,9 @@ class UserController extends Controller
     }
    public function index()
     {
-         $data['portal_roles'] = $this->role->getRole();
-         $data['hrm_roles'] = $this->role->getHrmRoles();
-         // Backward-compat for any view still expecting $data['role']
-         $data['role'] = $data['portal_roles'];
+         $data['role'] = $this->role->getRole();
+         $data['portal_roles'] = $data['role'];
+         $data['hrm_roles'] = $data['role'];
          $data['departments'] = Department::query()->get(['id', 'name']);
          $data['designations'] = Designation::query()->get(['id', 'name']);
          $data['employment_statuses'] = EmploymentStatus::query()
@@ -65,15 +64,17 @@ class UserController extends Controller
     }
     public function editUser(Request $request)
     {
-        $data['portal_roles'] = $this->role->getRole();
-        $data['hrm_roles'] = $this->role->getHrmRoles();
-        $data['role'] = $data['portal_roles'];
+        $data['role'] = $this->role->getRole();
+        $data['portal_roles'] = $data['role'];
+        $data['hrm_roles'] = $data['role'];
         $data['st'] = $this->user->editUser($request->id);
 
         $sync = resolve(\App\Services\Core\Auth\UserRoleSyncService::class);
         $user = $data['st'];
-        $data['portal_role_id'] = optional($sync->getPortalRole($user))->id;
-        $data['hrm_role_id'] = optional($sync->getHrmRole($user))->id;
+        $staffRoleId = optional($sync->getStaffRole($user))->id;
+        $data['role_id'] = $staffRoleId;
+        $data['portal_role_id'] = $staffRoleId;
+        $data['hrm_role_id'] = $staffRoleId;
 
         return $data;
     }

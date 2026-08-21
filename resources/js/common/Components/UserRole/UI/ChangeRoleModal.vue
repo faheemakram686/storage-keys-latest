@@ -10,12 +10,12 @@
     >
         <form ref="form"
               :data-url='`${getSubmitURL}/${user}`'
-              @submit.prevent="submitData"
+              @submit.prevent="beforeSubmit"
         >
             <div class="form-group">
                 <app-input
-                    type="multi-select"
-                    v-model="formData.roles"
+                    type="select"
+                    v-model="formData.role_id"
                     :list="roleList"
                     listValueField="name"
                     :isAnimatedDropdown="true"
@@ -46,13 +46,18 @@ export default {
     data() {
         return {
             formData: {
-                roles: []
+                roles: [],
+                role_id: null,
             },
             userRoles: [],
             TENANT_DEPARTMENTS_URL,
         }
     },
     methods: {
+        beforeSubmit() {
+            this.formData.roles = this.formData.role_id ? [this.formData.role_id] : [];
+            this.submitData();
+        },
         afterSuccess({data}) {
             this.formData = {}
             $('#app-change-role-modal').modal('hide');
@@ -63,6 +68,7 @@ export default {
 
         afterSuccessFromGetEditData({data}) {
             this.formData.roles = this.collection(data.roles).pluck();
+            this.formData.role_id = this.formData.roles.length ? this.formData.roles[0] : null;
             this.userRoles = data.roles;
             this.preloader = false;
         },
