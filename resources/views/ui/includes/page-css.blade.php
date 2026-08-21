@@ -22,18 +22,22 @@
         $css[] = 'climate-controlled-storage.css';
     } elseif (in_array($path, ['moving-services', 'luggage-storage', 'car-storage'], true)) {
         $css[] = 'business-storage.css';
+    } elseif ($path === 'about-us') {
+        $css[] = 'personal-storage.css';
+        $css[] = 'business-storage.css';
+        $css[] = 'about-us.css';
+    } elseif ($path === 'contact-us') {
+        $css[] = 'personal-storage.css';
+        $css[] = 'business-storage.css';
+        $css[] = 'about-us.css';
+        $css[] = 'contact-us.css';
     } elseif ($path === 'storage-options') {
         $css[] = 'personal-storage.css';
         $css[] = 'business-storage.css';
         $css[] = 'about-us.css';
-    } elseif ($path === 'about-us') {
-        $css[] = 'personal-storage.css';
-        $css[] = 'about-us.css';
-    } elseif ($path === 'contact-us') {
-        $css[] = 'personal-storage.css';
-        $css[] = 'contact-us.css';
     } elseif ($path === 'blogs' || strpos($path, 'blogs/') === 0) {
         $css[] = 'personal-storage.css';
+        $css[] = 'business-storage.css';
         $css[] = 'blogs.css';
     } elseif (in_array($path, [
         'privacy-policy',
