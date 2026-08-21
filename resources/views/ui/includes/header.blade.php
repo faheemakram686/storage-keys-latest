@@ -8,14 +8,13 @@
 <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/responsive.css') }}">
 
 <link rel="stylesheet" href="{{ asset('sk-assets/css/custom.css') }}"/>
-<link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}"/>
 <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>
 
 
 <div class="pv-banner-note">
-    <div class="container">
-            <div class="row">
-                <div class="col-md-7">
+    <div class="sk-container">
+            <div class="pv-banner-row">
+                <div class="pv-banner-left">
                     <div class="ltn__top-bar-menu">
                         <ul>
                             <li><a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a></li>
@@ -24,12 +23,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="top-bar-right text-right">
-                        <div class="ltn__top-bar-menu">
-                            <ul>
-                                <li>
-                                    <!-- ltn__social-media -->
+                <div class="pv-banner-right">
                                     <div class="ltn__social-media">
                                         <ul>
                                             @if (\Auth::user())
@@ -53,10 +47,6 @@
                                             @endguest
                                         </ul>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -89,10 +79,20 @@
     </nav>
     <div class="pv-header-cta">
       <div class="pv-phones">
-        <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-        <a href="tel:8005397" class="pv-phone"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+        <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt" aria-hidden="true"></i> +971 56 501 8785</a>
+        <a href="tel:8005397" class="pv-phone"><i class="fas fa-phone-alt" aria-hidden="true"></i> Toll Free: 800 5397</a>
       </div>
       <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
+      @php
+        $cartQty = 0;
+        try { $cartQty = (int) \Cart::getTotalQuantity(); } catch (\Throwable $e) { $cartQty = 0; }
+      @endphp
+      <a href="{{ route('cart.list') }}" class="pv-cart" aria-label="Shopping cart{{ $cartQty ? ', ' . $cartQty . ' items' : '' }}">
+        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+        @if($cartQty > 0)
+          <sup class="pv-cart-count">{{ $cartQty > 99 ? '99+' : $cartQty }}</sup>
+        @endif
+      </a>
     </div>
     <button type="button" class="pv-nav-toggle" aria-label="Open menu" aria-expanded="false">
       <i class="fas fa-bars"></i>

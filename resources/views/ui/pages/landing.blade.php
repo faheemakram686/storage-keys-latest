@@ -329,7 +329,7 @@
                         <div class="ic"><i class="fas fa-home"></i></div>
                         <span class="h3">Personal Storage</span>
                         <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
-                        <a href="/personal-storage">Learn more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/personal-storage') }}">Explore personal storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-card">
@@ -338,7 +338,7 @@
                         <div class="ic"><i class="fas fa-briefcase"></i></div>
                         <span class="h3">Business Storage</span>
                         <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory solutions and regular access to their goods.</p>
-                        <a href="/business-storage">Learn more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/business-storage') }}">Explore business storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-card">
@@ -347,7 +347,7 @@
                         <div class="ic"><i class="fas fa-warehouse"></i></div>
                         <span class="h3">Warehouse Storage</span>
                         <p>Flexible warehouse space for bulk inventory, equipment and commercial stock, supported by scalable rental terms.</p>
-                        <a href="/warehouse-storage">Learn more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/warehouse-storage') }}">Explore warehouse storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-card">
@@ -356,7 +356,7 @@
                         <div class="ic"><i class="fas fa-truck"></i></div>
                         <span class="h3">Moving Storage</span>
                         <p>A convenient moving and temporary storage solution that helps simplify relocations for both households and businesses.</p>
-                        <a href="/moving-storage">Learn more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/moving-services') }}">Explore moving &amp; storage services <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -681,7 +681,7 @@
                         <div class="meta">Packing Tips</div>
                         <span class="h3">How to Pack Your Storage Unit Efficiently</span>
                         <p>Simple techniques to protect your belongings and make the most of every square foot.</p>
-                        <a href="{{ url('/blogs') }}">Read more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/blogs') }}">Read packing tips on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-blogcard">
@@ -690,7 +690,7 @@
                         <div class="meta">Choosing a Unit</div>
                         <span class="h3">What Size Storage Unit Do You Actually Need?</span>
                         <p>A quick guide to matching unit sizes to household and business items.</p>
-                        <a href="{{ url('/blogs') }}">Read more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/blogs') }}">Read unit size guide on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-blogcard">
@@ -699,7 +699,7 @@
                         <div class="meta">Business Storage</div>
                         <span class="h3">Using Self Storage for Inventory Management</span>
                         <p>How UAE retailers and e-commerce sellers use storage to scale flexibly.</p>
-                        <a href="{{ url('/blogs') }}">Read more <i class="fas fa-arrow-right"></i></a>
+                        <a href="{{ url('/blogs') }}">Read inventory storage tips on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>

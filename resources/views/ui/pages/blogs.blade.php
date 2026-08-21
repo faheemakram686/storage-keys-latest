@@ -56,7 +56,7 @@
                                 <div class="meta"><i class="far fa-calendar-alt"></i> {{ optional($blog->created_at)->format('F j, Y') }}</div>
                                 <h3><a href="{{ route('blogDetails', $blog->slug) }}">{{ $blog->title }}</a></h3>
                                 <p>{{ $blog->excerpt() }}</p>
-                                <a href="{{ route('blogDetails', $blog->slug) }}">Read more <i class="fas fa-arrow-right"></i></a>
+                                <a href="{{ route('blogDetails', $blog->slug) }}">Read more about {{ $blog->title }} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                             </div>
                         </article>
                     @endforeach
