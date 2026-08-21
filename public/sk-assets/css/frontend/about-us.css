@@ -108,3 +108,55 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Reviews (about page uses .sk-review; styles were only on landing before CSS split) */
+.sk-review {
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius, 16px);
+    padding: 32px 30px;
+    position: relative;
+}
+.sk-review .qi {
+    position: absolute;
+    top: 22px;
+    right: 26px;
+    font-size: 40px;
+    color: var(--sk-soft);
+    line-height: 1;
+}
+.sk-review .stars {
+    color: #ffb400;
+    margin-bottom: 14px;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+.sk-review p {
+    font-size: 15px;
+    color: var(--sk-body, #4a5a6a);
+    line-height: 1.7;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 2;
+}
+.sk-review .who {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.sk-review .who img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.sk-review .who h4,
+.sk-review .who .h4 {
+    font-size: 15px;
+    margin: 0;
+    display: block;
+}
+.sk-review .who span {
+    font-size: 13px;
+    color: var(--sk-muted);
+}

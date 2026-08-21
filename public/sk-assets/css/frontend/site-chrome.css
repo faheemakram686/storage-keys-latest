@@ -1,7 +1,7 @@
 /* ============================================================
    StorageKeys — Site chrome (shared)
    Banner, header, nav dropdown, footer.
-   Loaded on every page after page CSS so chrome stays identical.
+   Loaded LAST so header/footer stay identical on every page.
 ============================================================ */
 :root {
   --sk-primary: #123a63;
@@ -11,6 +11,17 @@
   --sk-dark: #0e2036;
   --sk-line: #e6ecf2;
   --sk-soft: #f4f8fc;
+  --sk-chrome-max: 1240px;
+  --sk-chrome-pad: 40px;
+}
+
+/* Shared page container */
+.sk-container {
+  max-width: var(--sk-chrome-max);
+  margin: 0 auto;
+  padding: 0 var(--sk-chrome-pad) !important;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* ---------- Top banner ---------- */
@@ -19,9 +30,67 @@
   color: #ffcf9e;
   text-align: center;
   font-size: 13px;
-  padding: 6px 16px;
+  /* Side gutter on the bar itself — always inset from viewport */
+  padding: 10px var(--sk-chrome-pad);
   font-family: 'Poppins', system-ui, sans-serif;
   letter-spacing: .02em;
+  box-sizing: border-box;
+  width: 100%;
+}
+.pv-banner-note > .sk-container {
+  max-width: var(--sk-chrome-max);
+  margin: 0 auto;
+  padding: 0 !important;
+  width: 100%;
+}
+.pv-banner-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.pv-banner-left,
+.pv-banner-right {
+  min-width: 0;
+}
+.pv-banner-note .ltn__top-bar-menu > ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pv-banner-note .ltn__top-bar-menu > ul > li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.pv-banner-note .ltn__top-bar-menu > ul > li > a {
+  color: #ffcf9e;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.pv-banner-note .ltn__social-media > ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pv-banner-note .ltn__social-media > ul > li {
+  margin: 0 !important;
+}
+.pv-banner-note .ltn__social-media a {
+  color: #ffcf9e;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 13px;
 }
 
 /* ---------- Header ---------- */
@@ -31,30 +100,51 @@
   z-index: 50;
   background: #fff;
   box-shadow: 0 6px 20px rgba(18, 58, 99, .08);
-  padding: 0;
+  /* Side gutter on the bar itself — always inset from viewport */
+  padding: 0 var(--sk-chrome-pad);
+  box-sizing: border-box;
+  width: 100%;
+}
+.pv-header > .sk-container.pv-header-in,
+.pv-header .pv-header-in.sk-container {
+  max-width: var(--sk-chrome-max);
+  margin: 0 auto;
+  padding: 14px 0 !important;
+  width: 100%;
+  box-sizing: border-box;
 }
 .pv-header-in {
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 8px 16px;
+  gap: 16px;
+  min-height: 72px;
+}
+.pv-logo {
+  flex: 0 0 auto;
 }
 .pv-logo img {
-  height: 36px;
+  height: 40px;
   width: auto;
+  display: block;
 }
 .pv-nav {
   display: flex;
   align-items: center;
-  gap: 18px;
+  flex-wrap: nowrap;
+  gap: 4px 14px;
   margin-left: 8px;
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
-.pv-nav a {
+.pv-nav > a,
+.pv-nav > .pv-has-sub > a {
   color: var(--sk-dark);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding: 6px 0;
 }
 .pv-nav a.active,
 .pv-nav a:hover {
@@ -63,49 +153,96 @@
 .pv-header-cta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 18px;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
+/* Reference: horizontal phones, orange icon + dark blue text */
 .pv-phones {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
-  flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 10px 14px;
+  gap: 18px 28px;
 }
 .pv-phone {
   color: var(--sk-primary);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 13.5px;
   text-decoration: none;
   white-space: nowrap;
+  line-height: 1.25;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .pv-phone i {
   color: var(--sk-accent);
-  margin-right: 6px;
+  margin-right: 0;
+  font-size: 14px;
 }
 .pv-book {
   background: var(--sk-accent);
   color: #fff;
   text-decoration: none;
-  padding: 8px 18px;
+  padding: 11px 20px;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 13.5px;
+  font-size: 14px;
   white-space: nowrap;
+  line-height: 1.2;
 }
 .pv-book:hover {
   background: var(--sk-accent-2);
   color: #fff;
 }
+.pv-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--sk-primary);
+  text-decoration: none;
+  border: 1.5px solid var(--sk-line);
+  flex: 0 0 auto;
+  transition: .2s;
+}
+.pv-cart:hover {
+  color: var(--sk-accent-2);
+  border-color: var(--sk-accent);
+  background: var(--sk-soft);
+}
+.pv-cart i {
+  font-size: 16px;
+}
+.pv-cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--sk-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
 .pv-nav-toggle {
   display: none;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--sk-dark);
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
+  margin-left: 4px;
 }
 
 /* ---------- Storage Options dropdown ---------- */
@@ -168,6 +305,9 @@
   border-radius: 8px;
   font-size: 14px;
   white-space: nowrap;
+  color: var(--sk-dark);
+  text-decoration: none;
+  font-weight: 500;
 }
 .pv-nav .pv-sub a:hover,
 .pv-nav .pv-sub a.active {
@@ -179,7 +319,15 @@
 .pv-footer {
   background: var(--sk-dark);
   color: rgba(255, 255, 255, .72);
-  padding: 64px 0 24px;
+  padding: 64px var(--sk-chrome-pad) 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.pv-footer > .sk-container {
+  max-width: var(--sk-chrome-max);
+  margin: 0 auto;
+  padding: 0 !important;
+  width: 100%;
 }
 .pv-foot-grid {
   display: grid;
@@ -282,8 +430,37 @@
   line-height: 1.7;
 }
 
+/* Below chrome max: keep side padding all the way to mobile */
+@media (max-width: 1240px) {
+  :root {
+    --sk-chrome-pad: 36px;
+  }
+  .pv-phones {
+    gap: 16px 22px;
+  }
+  .pv-phone {
+    font-size: 13px;
+  }
+  .pv-nav {
+    gap: 4px 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --sk-chrome-pad: 28px;
+  }
+  /* Phones still in top bar; free space for nav + book + cart */
+  .pv-header-cta .pv-phones {
+    display: none;
+  }
+}
+
 /* ---------- Mobile nav ---------- */
 @media (max-width: 991px) {
+  :root {
+    --sk-chrome-pad: 24px;
+  }
   .pv-header-cta .pv-phones {
     display: none;
   }
@@ -301,7 +478,13 @@
   .pv-header-in {
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    min-height: 0;
+  }
+  .pv-header > .sk-container.pv-header-in,
+  .pv-header .pv-header-in.sk-container {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
   }
   .pv-logo {
     margin-right: auto;
@@ -309,7 +492,11 @@
   .pv-header-cta {
     margin-left: 0;
     flex: none;
-    gap: 8px;
+    gap: 10px;
+  }
+  .pv-book {
+    padding: 10px 16px;
+    font-size: 13px;
   }
   .pv-nav.open {
     display: flex;
@@ -319,7 +506,8 @@
     flex: 1 1 100%;
     width: 100%;
     order: 3;
-    padding-top: 6px;
+    padding-top: 8px;
+    flex-wrap: nowrap;
   }
   .pv-nav.open > a,
   .pv-nav.open .pv-has-sub > a {
@@ -359,9 +547,20 @@
   .pv-foot-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .pv-banner-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .pv-banner-note .ltn__social-media > ul {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 575px) {
+  :root {
+    --sk-chrome-pad: 16px;
+  }
   .pv-header-cta .pv-phone {
     display: none;
   }
@@ -371,71 +570,68 @@
   .pv-foot-support .pv-foot-links {
     display: block;
   }
-}
-
-@media (max-width: 424px) {
   .pv-banner-note {
-    padding: 5px 10px;
+    padding: 8px 0;
     font-size: 11.5px;
     line-height: 1.3;
   }
-  .pv-banner-note .container {
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 100%;
+  .pv-banner-note a[title="Admin Area"] {
+    display: none;
   }
-  .pv-banner-note .row {
-    margin: 0;
+  .pv-logo img {
+    height: 32px;
+  }
+  .pv-book {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+  .pv-cart {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Global sticky mobile CTA (footer) */
+.wh-mobilebar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .wh-mobilebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    background: #fff;
+    box-shadow: 0 -6px 20px rgba(18, 58, 99, .12);
+  }
+  .wh-mobilebar a {
+    padding: 12px 6px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sk-dark);
+    text-decoration: none;
+    border-right: 1px solid var(--sk-line);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
   }
-  .pv-banner-note [class*="col-"] {
-    width: 100%;
-    max-width: 100%;
-    flex: none;
-    padding: 0;
+  .wh-mobilebar a:last-child {
+    border-right: none;
   }
-  .pv-banner-note .ltn__top-bar-menu > ul,
-  .pv-banner-note .ltn__social-media > ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 4px 10px;
-    margin: 0;
-    padding: 0;
+  .wh-mobilebar a i {
+    font-size: 17px;
+    color: var(--sk-accent);
   }
-  .pv-banner-note .ltn__top-bar-menu > ul > li,
-  .pv-banner-note .ltn__social-media ul li {
-    display: inline-flex !important;
-    margin: 0 !important;
-    font-size: 11.5px;
-    line-height: 1.25;
+  .wh-mobilebar a.wa i {
+    color: #25d366;
   }
-  .pv-banner-note .top-bar-right,
-  .pv-banner-note .text-right {
-    text-align: center !important;
-    display: block;
-    justify-content: center;
-  }
-  .pv-banner-note a[title="Admin Area"] {
-    display: none;
-  }
-  .pv-header-in {
-    padding: 6px 10px;
-    gap: 6px;
-  }
-  .pv-logo img {
-    height: 28px;
-  }
-  .pv-book {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-  .pv-nav-toggle {
-    padding: 4px;
-    font-size: 18px;
+  body {
+    padding-bottom: 60px;
   }
 }

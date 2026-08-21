@@ -91,6 +91,12 @@ p { margin: 0 0 1em; }
 .sk-btn-primary:hover { background: var(--sk-accent-2); color: #fff; transform: translateY(-2px); }
 .sk-btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
 .sk-btn-ghost:hover { background: #fff; color: var(--sk-primary); border-color: #fff; }
+.sk-btn-outline { background: transparent; color: var(--sk-primary); border-color: var(--sk-line); }
+.sk-btn-outline:hover { background: var(--sk-primary); color: #fff; border-color: var(--sk-primary); }
+.sk-btn-white { background: #fff; color: var(--sk-accent-2); }
+.sk-btn-white:hover { background: var(--sk-dark); color: #fff; }
+.sk-btn-wa { background: #25d366; color: #fff; }
+.sk-btn-wa:hover { background: #1eb457; color: #fff; }
 
 /* Header / footer: site-chrome.css (loaded site-wide) */
 
