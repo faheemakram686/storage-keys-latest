@@ -54,34 +54,7 @@ p { margin: 0 0 1em; }
 .sk-btn-wa { background: #25d366; color: #fff; }
 .sk-btn-wa:hover { background: #1eb457; color: #fff; }
 
-/* ============================================================
-   Header / Footer
-============================================================ */
-.pv-header { position: sticky; padding: 0; top: 0; z-index: 50; background: #fff; box-shadow: 0 6px 20px rgba(18, 58, 99, .08); }
-.pv-header-in { display: flex; align-items: center; gap: 18px; padding: 8px 16px; }
-.pv-logo img { height: 36px; width: auto; }
-.pv-nav { display: flex; gap: 22px; margin-left: 8px; flex: 1; }
-.pv-nav a { color: var(--sk-dark); text-decoration: none; font-size: 14.5px; font-weight: 500; }
-.pv-nav a.active, .pv-nav a:hover { color: var(--sk-accent-2); }
-.pv-header-cta { display: flex; align-items: center; gap: 16px; }
-.pv-phone { color: var(--sk-primary); font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap; }
-.pv-phone i { color: var(--sk-accent); margin-right: 6px; }
-.pv-book { background: var(--sk-accent); color: #fff; text-decoration: none; padding: 11px 22px; border-radius: 50px; font-weight: 600; font-size: 14px; }
-.pv-book:hover { background: var(--sk-accent-2); }
-.pv-nav-toggle { display: none; background: none; border: none; font-size: 20px; color: var(--sk-dark); cursor: pointer; padding: 6px; }
-
-.pv-footer { background: var(--sk-dark); color: rgba(255, 255, 255, .72); padding: 64px 0 24px; }
-.pv-foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 36px; }
-.pv-footer h4, .pv-footer .h4 { color: #fff; font-size: 20px; margin: 0 0 14px; }
-.pv-footer h5, .pv-footer .h5 { color: #fff; font-size: 15px; margin: 0 0 16px; letter-spacing: .04em; }
-.pv-footer p { font-size: 14px; line-height: 1.7; margin: 0 0 10px; }
-.pv-footer p i { color: var(--sk-accent); margin-right: 8px; }
-.pv-footer a { display: block; color: rgba(255, 255, 255, .72); text-decoration: none; font-size: 14px; margin-bottom: 10px; }
-.pv-footer a:hover { color: var(--sk-accent); }
-.pv-social { display: flex; gap: 10px; margin-top: 16px; }
-.pv-social a { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, .08); display: flex; align-items: center; justify-content: center; margin: 0; }
-.pv-social a:hover { background: var(--sk-accent); color: #fff; }
-.pv-copy { border-top: 1px solid rgba(255, 255, 255, .1); margin-top: 40px; padding-top: 20px; text-align: center; font-size: 13px; }
+/* Header / footer: site-chrome.css */
 
 /* ============================================================
    Hero
@@ -226,12 +199,6 @@ p { margin: 0 0 1em; }
     .cc-detail .ic { margin: 0 auto; }
     .cc-line { text-align: left; }
     .cc-media { min-height: 280px; }
-    .pv-nav { display: none; }
-    .pv-nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
-    .pv-header-in { flex-wrap: wrap; }
-    .pv-nav.open { display: flex; flex-direction: column; gap: 4px; width: 100%; order: 3; padding-top: 14px; }
-    .pv-nav.open a { padding: 10px 4px; border-top: 1px solid #f0f0f0; margin: 0; }
-    .pv-foot-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 767px) {
@@ -251,6 +218,4 @@ p { margin: 0 0 1em; }
     .sk-section { padding: 56px 0; }
     .cc-trust-in, .cc-sol { grid-template-columns: 1fr; }
     .cc-quote { padding: 36px 24px; }
-    .pv-header-cta .pv-phone { display: none; }
-    .pv-foot-grid { grid-template-columns: 1fr; }
 }

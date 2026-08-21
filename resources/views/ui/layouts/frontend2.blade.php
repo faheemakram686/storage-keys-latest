@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}">
     <!-- plugins css -->
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/plugins.css') }}">
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/booking.css') }}">
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/style.css') }}">
     <!-- Responsive css -->

@@ -416,65 +416,73 @@
         </div>
     </section>
 
-    <!-- ============ LOCATIONS (TABS) ============ -->
-    <section class="sk-section" style="background:#fff;">
+    <!-- ============ LOCATIONS ============ -->
+    <section class="sk-section sk-locs" id="locations">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Our Facilities</span>
-                <h2>Storage Facilities Across the UAE</h2>
-                <p>Storage Keys operates facilities in Dubai, Abu Dhabi and Sharjah — chosen for convenience without compromising on security. Each location follows the same standards for cleanliness, access control and customer support.</p>
+                <h2>Visit Us in Dubai &amp; Sharjah</h2>
+                <p>Two secure StorageKeys facilities — find us on the map, get directions, or call before you arrive.</p>
             </div>
-            <div class="sk-loctabs" id="skLocTabs">
-                <button type="button" class="sk-loctab active" data-loc="dubai">Dubai</button>
-                <button type="button" class="sk-loctab" data-loc="abudhabi">Abu Dhabi</button>
-                <button type="button" class="sk-loctab" data-loc="sharjah">Sharjah</button>
-            </div>
-            <div class="sk-reveal">
-                <div class="sk-locpanel active" data-loc="dubai">
-                    <div class="sk-locgrid">
-                        <div class="sk-loccard">
-                            <span class="h3">Storage Keys — Dubai</span>
-                            <p>Self storage and business inventory space for customers across Dubai.</p>
-                            <div class="sk-locfeat"><span><i class="fas fa-clock"></i> 24/7 access</span><span><i class="fas fa-video"></i> CCTV monitored</span><span><i class="fas fa-temperature-low"></i> Climate controlled</span></div>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Storage+Keys+10+A+Street+Al+Quoz+Industrial+Area+3+Dubai" target="_blank" rel="noopener" class="sk-btn sk-btn-outline">Get Directions <i class="fas fa-arrow-right"></i></a>
+
+            <div class="sk-locs-grid sk-reveal">
+                <article class="sk-loc-tile">
+                    <div class="sk-loc-map">
+                        <iframe
+                            title="Storage Keys Dubai on Google Maps"
+                            src="https://maps.google.com/maps?q=Storage%20Keys%2C%2010A%20Street%20-%20Al%20Qouz%20Ind.third%20-%20Al%20Quoz%20-%20Dubai&z=15&output=embed"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                    <div class="sk-loc-body">
+                        <div class="sk-loc-top">
+                            <span class="sk-loc-badge"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Dubai</span>
+                            <span class="sk-loc-pin">Al Quoz</span>
                         </div>
-                        <div class="sk-locmap" style="background-image:linear-gradient(rgba(14,32,54,.72),rgba(14,32,54,.72)),url('{{ asset('sk-assets/assets/images/frontend/landing/inline-06.jpg') }}');">
-                            <i class="fas fa-map-marked-alt mi"></i>
-                            <div style="font-weight:600;font-size:16px;color:#fff">Dubai Facility</div>
-                            <p>Map preview — Google Maps embed connects on the live site.</p>
+                        <span class="h3">Storage Keys — Dubai</span>
+                        <p class="sk-loc-addr">10A Street, Al Quoz Industrial Area 3<br>Al Quoz, Dubai, United Arab Emirates</p>
+                        <div class="sk-locfeat">
+                            <span><i class="fas fa-clock" aria-hidden="true"></i> 24/7 access</span>
+                            <span><i class="fas fa-video" aria-hidden="true"></i> CCTV</span>
+                            <span><i class="fas fa-temperature-low" aria-hidden="true"></i> Climate controlled</span>
+                        </div>
+                        <div class="sk-loc-actions">
+                            <a href="https://maps.app.goo.gl/cZhb4mLPGVsGcooA9" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
+                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone-alt" aria-hidden="true"></i> Call</a>
                         </div>
                     </div>
-                </div>
-                <div class="sk-locpanel" data-loc="abudhabi">
-                    <div class="sk-locgrid">
-                        <div class="sk-loccard">
-                            <span class="h3">Storage Keys — Abu Dhabi</span>
-                            <p>Personal and commercial storage for households and businesses in Abu Dhabi.</p>
-                            <div class="sk-locfeat"><span><i class="fas fa-clock"></i> 24/7 access</span><span><i class="fas fa-video"></i> CCTV monitored</span><span><i class="fas fa-temperature-low"></i> Climate controlled</span></div>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Storage+Keys+Abu+Dhabi" target="_blank" rel="noopener" class="sk-btn sk-btn-outline">Get Directions <i class="fas fa-arrow-right"></i></a>
+                </article>
+
+                <article class="sk-loc-tile">
+                    <div class="sk-loc-map">
+                        <iframe
+                            title="Storage Keys Sharjah on Google Maps"
+                            src="https://maps.google.com/maps?q=Storage%20Keys%2C%20Plot%20%23%204202%20-%20Sharjah%20-%20United%20Arab%20Emirates&z=15&output=embed"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                    <div class="sk-loc-body">
+                        <div class="sk-loc-top">
+                            <span class="sk-loc-badge"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Sharjah</span>
+                            <span class="sk-loc-pin">Main facility</span>
                         </div>
-                        <div class="sk-locmap" style="background-image:linear-gradient(rgba(14,32,54,.72),rgba(14,32,54,.72)),url('{{ asset('sk-assets/assets/images/frontend/landing/inline-07.jpg') }}');">
-                            <i class="fas fa-map-marked-alt mi"></i>
-                            <div style="font-weight:600;font-size:16px;color:#fff">Abu Dhabi Facility</div>
-                            <p>Map preview — Google Maps embed connects on the live site.</p>
+                        <span class="h3">Storage Keys — Sharjah</span>
+                        <p class="sk-loc-addr">Plot # 4202<br>Sharjah, United Arab Emirates</p>
+                        <div class="sk-locfeat">
+                            <span><i class="fas fa-clock" aria-hidden="true"></i> 24/7 access</span>
+                            <span><i class="fas fa-video" aria-hidden="true"></i> CCTV</span>
+                            <span><i class="fas fa-warehouse" aria-hidden="true"></i> Office &amp; storage</span>
+                        </div>
+                        <div class="sk-loc-actions">
+                            <a href="https://maps.app.goo.gl/vvWVRRKCtBnups2k6" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
+                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone-alt" aria-hidden="true"></i> Call</a>
                         </div>
                     </div>
-                </div>
-                <div class="sk-locpanel" data-loc="sharjah">
-                    <div class="sk-locgrid">
-                        <div class="sk-loccard">
-                            <span class="h3">Storage Keys — Sharjah</span>
-                            <p>Our main facility and office, at Plot&nbsp;#&nbsp;4202, Sharjah.</p>
-                            <div class="sk-locfeat"><span><i class="fas fa-clock"></i> 24/7 access</span><span><i class="fas fa-video"></i> CCTV monitored</span><span><i class="fas fa-temperature-low"></i> Climate controlled</span></div>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Storage+Keys+Plot+4202+Al+Sajaa+Sharjah" target="_blank" rel="noopener" class="sk-btn sk-btn-outline">Get Directions <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                        <div class="sk-locmap">
-                            <i class="fas fa-map-marked-alt mi"></i>
-                            <div style="font-weight:600;font-size:16px;color:#fff">Sharjah — Plot # 4202</div>
-                            <p>Map preview — Google Maps embed connects on the live site.</p>
-                        </div>
-                    </div>
-                </div>
+                </article>
             </div>
         </div>
     </section>
