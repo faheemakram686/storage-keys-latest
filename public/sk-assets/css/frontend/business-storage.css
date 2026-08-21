@@ -40,15 +40,6 @@ h1, h2, h3, h4, .h4 {
 }
 
 p { margin: 0 0 1em; }
-.pv-banner-note {
-    background: #0e2036;
-    color: #ffcf9e;
-    text-align: center;
-    font-size: 13px;
-    padding: 9px 16px;
-    font-family: 'Poppins', system-ui, sans-serif;
-    letter-spacing: .02em;
-}
 .sk-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -101,30 +92,7 @@ p { margin: 0 0 1em; }
 .sk-btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
 .sk-btn-ghost:hover { background: #fff; color: var(--sk-primary); border-color: #fff; }
 
-/* ============================================================
-   Footer
-   (Header styles now live in site-header.css, which is loaded
-   site-wide by ui.includes.head-assets — don't re-declare .pv-header*
-   here or it will override the shared header on this page only.)
-============================================================ */
-.pv-footer { background: var(--sk-dark); color: rgba(255, 255, 255, .72); padding: 64px 0 24px; }
-.pv-foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.4fr; gap: 36px; }
-.pv-footer h4, .pv-footer .h4 { color: #fff; font-size: 20px; margin: 0 0 14px; }
-.pv-footer h5, .pv-footer .h5 { color: #fff; font-size: 15px; margin: 0 0 16px; letter-spacing: .04em; }
-.pv-footer p { font-size: 14px; line-height: 1.7; margin: 0 0 10px; }
-.pv-footer p i { color: var(--sk-accent); margin-right: 8px; }
-.pv-footer a { display: block; color: rgba(255, 255, 255, .72); text-decoration: none; font-size: 14px; margin-bottom: 10px; }
-.pv-footer a:hover { color: var(--sk-accent); }
-.pv-social { display: flex; gap: 10px; margin-top: 16px; }
-.pv-social a {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: rgba(255, 255, 255, .08);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0;
-}
-.pv-social a:hover { background: var(--sk-accent); color: #fff; }
-.pv-copy { border-top: 1px solid rgba(255, 255, 255, .1); margin-top: 40px; padding-top: 20px; text-align: center; font-size: 13px; }
-.pv-copy span { color: var(--sk-accent); }
+/* Header / footer: site-chrome.css (loaded site-wide) */
 
 /* ============================================================
    Hero
@@ -146,7 +114,7 @@ p { margin: 0 0 1em; }
 .svc-hero p.lead { font-size: 17.5px; color: rgba(255, 255, 255, .85); margin-bottom: 28px; max-width: 600px; }
 .svc-hero-cta { display: flex; flex-wrap: wrap; gap: 14px; }
 .svc-hero-card { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .16); border-radius: 18px; padding: 28px; }
-.svc-hero-card h3 { color: #fff !important; font-size: 17px; margin-bottom: 16px; }
+.svc-hero-card h3, .svc-hero-card .h3 { color: #fff !important; font-size: 17px; margin-bottom: 16px; display: block; }
 .svc-hero-card ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 13px; }
 .svc-hero-card li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: #fff; }
 .svc-hero-card li i { color: var(--sk-accent); font-size: 16px; width: 20px; text-align: center; }
@@ -176,8 +144,8 @@ p { margin: 0 0 1em; }
 .svc-vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center; max-width: 960px; margin: 0 auto; }
 .svc-vs-card { background: #fff; border: 1px solid var(--sk-line); border-radius: var(--sk-radius); padding: 32px; }
 .svc-vs-card.good { border-color: var(--sk-accent); box-shadow: var(--sk-shadow); }
-.svc-vs-card h3 { font-size: 19px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-.svc-vs-card h3 .dot { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.svc-vs-card h3, .svc-vs-card .h3 { font-size: 19px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.svc-vs-card h3 .dot, .svc-vs-card .h3 .dot { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
 .svc-vs-card.bad .dot { background: #fdecec; color: #e05555; }
 .svc-vs-card.good .dot { background: #eafaf1; color: #2ec16e; }
 .svc-vs-card ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
@@ -192,7 +160,7 @@ p { margin: 0 0 1em; }
 .svc-card { background: #fff; border: 1px solid var(--sk-line); border-radius: var(--sk-radius); padding: 32px; display: flex; gap: 20px; transition: .3s; }
 .svc-card:hover { box-shadow: var(--sk-shadow); border-color: transparent; transform: translateY(-4px); }
 .svc-card .ic { flex: 0 0 60px; width: 60px; height: 60px; border-radius: 14px; background: var(--sk-soft); color: var(--sk-accent); display: flex; align-items: center; justify-content: center; font-size: 26px; }
-.svc-card h3 { font-size: 19px; margin-bottom: 8px; }
+.svc-card h3, .svc-card .h3 { font-size: 19px; margin-bottom: 8px; display: block; }
 .svc-card p { font-size: 14px; color: var(--sk-muted); margin: 0; line-height: 1.7; }
 
 /* ---------- Tabs (shared: industry / what-fits / growth) ---------- */
@@ -410,7 +378,6 @@ p { margin: 0 0 1em; }
     .svc-ind { text-align: center; }
     .svc-ind .ic { margin: 0 auto; }
     .svc-ind ul { justify-content: center; }
-    .pv-foot-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 767px) {
@@ -450,5 +417,4 @@ p { margin: 0 0 1em; }
     .svc-card { flex-direction: column; gap: 14px; }
     .svc-frow { grid-template-columns: 1fr; }
     .svc-quote { padding: 32px 22px; }
-    .pv-foot-grid { grid-template-columns: 1fr; }
 }

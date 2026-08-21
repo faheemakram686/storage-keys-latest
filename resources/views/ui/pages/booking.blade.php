@@ -3,6 +3,11 @@
 @section('metaTitle', 'Book a Storage Unit | Storage Keys')
 @section('metaDescription', 'Search available storage units in Sharjah and Dubai. Filter by location, unit level, storage type and size, then enquire to reserve your unit.')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/booking.css') }}">
+<link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/booking-layout.css') }}">
+@endsection
+
 @section('content')
 <div class="sk-home">
 

@@ -17,9 +17,9 @@
         <span class="h4">StorageKeys</span>
         <p>StorageKeys provides secure, flexible self storage solutions for individuals and businesses across Dubai, Sharjah and the UAE. From personal belongings and luggage to business inventory and warehouse space, we offer convenient storage units tailored to your needs.</p>
         <div class="pv-social">
-          <a href="https://www.facebook.com/storagekeysllc" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://www.linkedin.com/company/storage-keys-uae" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.facebook.com/storagekeysllc" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/company/storage-keys-uae" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+          <a href="https://wa.me/971565018785" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
         </div>
       </div>
       <div>
