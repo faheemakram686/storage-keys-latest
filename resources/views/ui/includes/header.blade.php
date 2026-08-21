@@ -68,9 +68,12 @@
       <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ url('/about-us') }}" class="{{ request()->is('about-us') ? 'active' : '' }}">About Us</a>
       <div class="pv-has-sub">
-        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage', 'moving-services', 'luggage-storage', 'car-storage') ? 'active' : '' }}">Storage Options</a>
+        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'furniture-storage', 'box-storage', 'appliance-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage', 'moving-services', 'luggage-storage', 'car-storage') ? 'active' : '' }}">Storage Options</a>
         <div class="pv-sub">
           <a href="{{ url('/personal-storage') }}" class="{{ request()->is('personal-storage') ? 'active' : '' }}">Personal Storage</a>
+          <a href="{{ url('/furniture-storage') }}" class="{{ request()->is('furniture-storage') ? 'active' : '' }}">Furniture Storage</a>
+          <a href="{{ url('/box-storage') }}" class="{{ request()->is('box-storage') ? 'active' : '' }}">Box Storage</a>
+          <a href="{{ url('/appliance-storage') }}" class="{{ request()->is('appliance-storage') ? 'active' : '' }}">Appliance Storage</a>
           <a href="{{ url('/business-storage') }}" class="{{ request()->is('business-storage') ? 'active' : '' }}">Business Storage</a>
           <a href="{{ url('/warehouse-storage') }}" class="{{ request()->is('warehouse-storage') ? 'active' : '' }}">Warehouse Storage</a>
           <a href="{{ url('/climate-controlled-storage') }}" class="{{ request()->is('climate-controlled-storage') ? 'active' : '' }}">Climate Controlled Storage</a>

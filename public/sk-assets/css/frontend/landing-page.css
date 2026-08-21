@@ -55,6 +55,7 @@
 .sk-home h1,
 .sk-home h2,
 .sk-home h3,
+.sk-home .h3,
 .sk-home h4,
 .sk-home .h4,
 .sk-home h5,
@@ -63,6 +64,10 @@
     font-weight: 700;
     line-height: 1.2;
     margin: 0 0 .5em;
+}
+
+.sk-home .h3 {
+    display: block;
 }
 
 .sk-home p {
@@ -257,7 +262,8 @@
     z-index: 5;
 }
 
-.sk-quote h3 {
+.sk-quote h3,
+.sk-quote .h3 {
     font-size: 20px;
     margin: 0 0 4px;
 }
@@ -522,7 +528,8 @@
     border: 4px solid #fff;
 }
 
-.sk-card-body h3 {
+.sk-card-body h3,
+.sk-card-body .h3 {
     font-size: 19px;
     margin-bottom: 8px;
 }
@@ -583,7 +590,8 @@
     font-size: 30px;
 }
 
-.sk-size h3 {
+.sk-size h3,
+.sk-size .h3 {
     font-size: 20px;
     margin-bottom: 6px;
 }
@@ -664,7 +672,8 @@
     border-radius: 50px;
 }
 
-.sk-price h3 {
+.sk-price h3,
+.sk-price .h3 {
     font-size: 20px;
     margin-bottom: 2px;
 }
@@ -790,7 +799,8 @@
     border: 2px dashed var(--sk-primary-2);
 }
 
-.sk-step h3 {
+.sk-step h3,
+.sk-step .h3 {
     font-size: 18px;
     margin-bottom: 8px;
 }
@@ -1313,7 +1323,8 @@
     letter-spacing: .05em;
 }
 
-.sk-blogcard h3 {
+.sk-blogcard h3,
+.sk-blogcard .h3 {
     font-size: 18px;
     margin-bottom: 10px;
     line-height: 1.35;
@@ -1428,7 +1439,8 @@
     transition: width .35s ease;
 }
 
-.sf-panel h3 {
+.sf-panel h3,
+.sf-panel .h3 {
     font-size: 22px;
     margin-bottom: 20px;
     text-align: center;
@@ -1497,7 +1509,8 @@
     margin-bottom: 6px;
 }
 
-.sf-result h3 {
+.sf-result h3,
+.sf-result .h3 {
     font-size: 26px;
     margin-bottom: 8px;
 }
@@ -1609,7 +1622,8 @@
     height: 100%;
 }
 
-.sk-loccard h3 {
+.sk-loccard h3,
+.sk-loccard .h3 {
     font-size: 22px;
     margin-bottom: 8px;
 }
@@ -1734,7 +1748,8 @@
     padding: 22px;
 }
 
-.sk-supply h3 {
+.sk-supply h3,
+.sk-supply .h3 {
     font-size: 17px;
     margin-bottom: 8px;
 }
