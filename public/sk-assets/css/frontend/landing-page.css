@@ -189,14 +189,6 @@
 .sk-hero {
     position: relative;
     background: linear-gradient(120deg, rgba(14, 32, 54, .92) 0%, rgba(28, 90, 153, .80) 100%), var(--pv-hero) center/cover no-repeat;
-    background-image: linear-gradient(120deg, rgba(14, 32, 54, .92) 0%, rgba(28, 90, 153, .80) 100%),
-        image-set(
-            url("../../assets/images/frontend/landing-hero.webp") type("image/webp"),
-            url("../../assets/images/frontend/landing-hero.jpg") type("image/jpeg")
-        );
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     color: #fff;
     padding: 120px 0 96px;
     overflow: visible;

@@ -55,42 +55,36 @@
 </footer>  
   
     <!-- All JS Plugins -->
-    <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}" defer></script>
+    <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}"></script>
     <!-- Main JS -->
-    <script src="{{ asset('sk-assets/js/frontend/main.js') }}" defer></script>
-    <script src="{{ asset('sk-assets/js/common.js') }}" defer></script>
-    <script src="{{ asset('sk-assets/js/toastr.min.js') }}" defer></script>
+    <script src="{{ asset('sk-assets/js/frontend/main.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/business-storage.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/warehouse-storage.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/furniture-storage.js') }}"></script>
 
-    @if(request()->is('business-storage', 'personal-storage', 'furniture-storage', 'box-storage', 'appliance-storage', 'climate-controlled-storage', 'storage-options'))
-    <script src="{{ asset('sk-assets/js/frontend/business-storage.js') }}" defer></script>
-    @endif
-    @if(request()->is('warehouse-storage'))
-    <script src="{{ asset('sk-assets/js/frontend/warehouse-storage.js') }}" defer></script>
-    @endif
-    @if(request()->is('furniture-storage'))
-    <script src="{{ asset('sk-assets/js/frontend/furniture-storage.js') }}" defer></script>
-    @endif
+    <script src="{{ asset('sk-assets/js/common.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>
 
-    <!-- WhatsApp widget — load after idle to avoid blocking LCP -->
+    <!--Start of Tawk.to Script-->
+{{--    <script type="text/javascript">--}}
+{{--        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();--}}
+{{--        (function(){--}}
+{{--            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];--}}
+{{--            s1.async=true;--}}
+{{--            s1.src='https://embed.tawk.to/688a194a76f67519325e5aa5/1j1dn5je4';--}}
+{{--            s1.charset='UTF-8';--}}
+{{--            s1.setAttribute('crossorigin','*');--}}
+{{--            s0.parentNode.insertBefore(s1,s0);--}}
+{{--        })();--}}
+{{--    </script>--}}
+    <!--End of Tawk.to Script-->
+
+    <script async src='https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js'></script>
     <script>
-        (function () {
-            function loadWa() {
-                var s = document.createElement('script');
-                s.src = 'https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js';
-                s.async = true;
-                s.onload = function () {
-                    if (typeof _waEmbed === 'function') {
-                        _waEmbed({"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"right","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"});
-                    }
-                };
-                document.body.appendChild(s);
-            }
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(loadWa, { timeout: 4000 });
-            } else {
-                window.addEventListener('load', function () { setTimeout(loadWa, 2000); });
-            }
-        })();
+        var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"right","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
+        window.onload = () => {
+            _waEmbed(wa_btnSetting);
+        };
     </script>
 
 

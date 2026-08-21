@@ -13,18 +13,6 @@
 
     <!-- Place favicon.png in the root directory -->
     <link rel="shortcut icon" href="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}" type="image/x-icon" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap"></noscript>
-
-    @if(request()->is('/'))
-    <link rel="preload" as="image" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" type="image/webp">
-    <link rel="preload" as="image" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.jpg') }}" type="image/jpeg">
-    @endif
-
     @include('ui.includes.header')
     @yield('css')
     {{-- <style>
