@@ -72,6 +72,7 @@ font-family: 'Poppins', sans-serif;
 @import url("landing-page.css");
 @import url("warehouse-storage.css");
 @import url("personal-storage.css");
+@import url("furniture-storage.css");
 @import url("climate-controlled-storage.css");
 @import url("about-us.css");
 @import url("contact-us.css");

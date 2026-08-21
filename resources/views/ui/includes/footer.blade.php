@@ -60,6 +60,7 @@
     <script src="{{ asset('sk-assets/js/frontend/main.js') }}"></script>
     <script src="{{ asset('sk-assets/js/frontend/business-storage.js') }}"></script>
     <script src="{{ asset('sk-assets/js/frontend/warehouse-storage.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/furniture-storage.js') }}"></script>
 
     <script src="{{ asset('sk-assets/js/common.js') }}"></script>
     <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>
