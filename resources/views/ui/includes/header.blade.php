@@ -1,3 +1,4 @@
+@include('ui.includes.fonts')
 <!-- Font Icons css -->
 <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}">
 <!-- plugins css -->

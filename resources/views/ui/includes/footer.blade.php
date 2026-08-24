@@ -58,9 +58,7 @@
     <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}"></script>
     <!-- Main JS -->
     <script src="{{ asset('sk-assets/js/frontend/main.js') }}"></script>
-    <script src="{{ asset('sk-assets/js/frontend/business-storage.js') }}"></script>
-    <script src="{{ asset('sk-assets/js/frontend/warehouse-storage.js') }}"></script>
-    <script src="{{ asset('sk-assets/js/frontend/furniture-storage.js') }}"></script>
+    @include('ui.includes.page-js')
 
     <script src="{{ asset('sk-assets/js/common.js') }}"></script>
     <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>
@@ -79,12 +77,33 @@
 {{--    </script>--}}
     <!--End of Tawk.to Script-->
 
-    <script async src='https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js'></script>
     <script>
         var wa_btnSetting = {"btnColor":"#16BE45","ctaText":"","cornerRadius":40,"marginBottom":20,"marginLeft":20,"marginRight":20,"btnPosition":"right","whatsAppNumber":"971565018785","welcomeMessage":"Hi there!\nHow can I help you?","zIndex":999999,"btnColorScheme":"light"};
-        window.onload = () => {
-            _waEmbed(wa_btnSetting);
-        };
+
+        function loadWhatsAppWidget() {
+            if (window._waEmbed) {
+                _waEmbed(wa_btnSetting);
+                return;
+            }
+
+            var s = document.createElement('script');
+            s.src = 'https://d2mpatx37cqexb.cloudfront.net/delightchat-whatsapp-widget/embeds/embed.min.js';
+            s.async = true;
+            s.onload = function () {
+                if (window._waEmbed) {
+                    _waEmbed(wa_btnSetting);
+                }
+            };
+            document.body.appendChild(s);
+        }
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadWhatsAppWidget, { timeout: 3000 });
+        } else {
+            window.addEventListener('load', function () {
+                setTimeout(loadWhatsAppWidget, 1500);
+            });
+        }
     </script>
 
 
