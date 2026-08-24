@@ -3,7 +3,10 @@
 @section('metaTitle', 'Self Storage in UAE | Secure Storage Units | Storagekeys')
 @section('metaDescription', 'Secure, climate-controlled self storage across the UAE. Flexible plans, 24/7 access, no hidden costs. Get a free quote today.')
 
-
+@section('css')
+{{-- LCP: discover hero image in <head> before CSS background would --}}
+<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" fetchpriority="high">
+@endsection
 
 @section('content')
 
@@ -11,6 +14,17 @@
 
     <!-- ============ HERO ============ -->
     <section class="sk-hero">
+        <picture class="sk-hero-media">
+            <source srcset="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" type="image/webp">
+            <img
+                src="{{ asset('sk-assets/assets/images/frontend/landing-hero.jpg') }}"
+                alt=""
+                width="1600"
+                height="750"
+                decoding="async"
+                fetchpriority="high"
+            >
+        </picture>
         <div class="sk-container">
             <div class="sk-hero-grid">
                 <div class="sk-hero-copy">

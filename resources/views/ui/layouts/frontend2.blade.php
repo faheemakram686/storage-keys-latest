@@ -12,6 +12,7 @@
     <!-- Place favicon.png in the root directory -->
     <link rel="shortcut icon" href="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}" type="image/x-icon" />
 
+    @include('ui.includes.fonts')
     <!-- Font Icons css -->
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}">
     <!-- plugins css -->

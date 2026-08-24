@@ -261,6 +261,7 @@
                 </div>
                 @include('ui.partials.inquiry-form', [
                     'variant' => 'simple',
+                    'compact' => true,
                     'formClass' => 'sk-quote',
                     'fieldClass' => 'sk-field',
                     'title' => 'Request a Free Quote',
