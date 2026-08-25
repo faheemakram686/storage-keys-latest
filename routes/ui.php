@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\SitemapController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Frontend\LeadController;
 use App\Http\Controllers\Backend\CityController;
@@ -26,6 +27,7 @@ Route::middleware(['set.guard'])->group(function () {
 
 // Frontend Routes
     Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
     Route::get('/notify', [HomeController::class, 'notify'])->name('notify');
     Route::get('/storage-options', [HomeController::class, 'storageOption'])->name('storageOption');
     Route::get('/shop', [HomeController::class, 'shop'])->name('shop');

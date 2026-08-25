@@ -1,2 +1,36 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Private / app areas
+Disallow: /admin
+Disallow: /admin/
+Disallow: /customer
+Disallow: /customer/
+Disallow: /users
+Disallow: /app
+Disallow: /cart
+Disallow: /checkout
+Disallow: /thank-you
+Disallow: /notify
+Disallow: /reservation/
+Disallow: /estimatetocustomer/
+Disallow: /contract-to-customer/
+Disallow: /estimate-upload-document/
+Disallow: /contact-setpassword/
+Disallow: /redirectPaymentRef
+
+# Internal search parameters (block crawl of search/filter query URLs)
+Disallow: /*?*q=
+Disallow: /*?*s=
+Disallow: /*?*search=
+Disallow: /*?*query=
+Disallow: /*?*keyword=
+Disallow: /*?*keywords=
+Disallow: /*&q=
+Disallow: /*&s=
+Disallow: /*&search=
+Disallow: /*&query=
+Disallow: /*&keyword=
+Disallow: /*&keywords=
+
+Sitemap: https://storagekeys.com/sitemap.xml
