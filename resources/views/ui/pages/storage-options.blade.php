@@ -57,6 +57,12 @@
                     <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="ps-whyc">
+                    <div class="ic"><i class="fas fa-building"></i></div>
+                    <span class="h4">Residential Storage</span>
+                    <p>Flexible residential storage for furniture, appliances, boxes and household belongings — practical space for moves, renovations, relocations, downsizing, and homes that need additional room.</p>
+                    <a class="ab-svc-link" href="{{ url('/residential-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="ps-whyc">
                     <div class="ic"><i class="fas fa-couch"></i></div>
                     <span class="h4">Furniture Storage</span>
                     <p>Store sofas, beds, dining sets, wardrobes and office furniture securely during moves, renovations or decluttering. Flexible furniture storage units keep large pieces protected without overcrowding your home or workplace.</p>

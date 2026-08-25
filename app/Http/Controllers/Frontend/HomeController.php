@@ -179,6 +179,10 @@ class HomeController extends Controller
     public function applianceStorage(){
         return view('ui.pages.appliance-storage');
     }
+
+    public function residentialStorage(){
+        return view('ui.pages.residential-storage');
+    }
     public function climateControlledStorage(){
         return view('ui.pages.climate-controlled-storage');
     }

@@ -16,6 +16,8 @@
         $scripts[] = 'warehouse-storage.js';
     } elseif ($path === 'furniture-storage') {
         $scripts[] = 'furniture-storage.js';
+    } elseif ($path === 'residential-storage') {
+        $scripts[] = 'residential-storage.js';
     }
 
     $scripts = array_values(array_unique($scripts));
