@@ -5,7 +5,12 @@
 
     RewriteEngine On
 
-    # www → non-www (canonical)
+    # Force HTTPS + non-www on live domain (canonical)
+    RewriteCond %{HTTP_HOST} ^(www\.)?storagekeys\.com$ [NC]
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^(.*)$ https://storagekeys.com/$1 [L,R=301]
+
     RewriteCond %{HTTP_HOST} ^www\.storagekeys\.com$ [NC]
     RewriteRule ^(.*)$ https://storagekeys.com/$1 [L,R=301]
 
