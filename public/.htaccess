@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # www → non-www (canonical)
+    RewriteCond %{HTTP_HOST} ^www\.storagekeys\.com$ [NC]
+    RewriteRule ^(.*)$ https://storagekeys.com/$1 [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

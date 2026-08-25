@@ -1,6 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
+
+    # www → non-www (canonical)
+    RewriteCond %{HTTP_HOST} ^www\.storagekeys\.com$ [NC]
+    RewriteRule ^(.*)$ https://storagekeys.com/$1 [L,R=301]
+
     RewriteRule ^$ public/index.php [L]
     RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
     <IfModule mod_substitute.c>

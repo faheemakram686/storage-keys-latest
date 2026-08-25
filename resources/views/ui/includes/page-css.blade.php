@@ -18,6 +18,8 @@
     } elseif ($path === 'furniture-storage') {
         $css[] = 'personal-storage.css';
         $css[] = 'furniture-storage.css';
+    } elseif ($path === 'residential-storage') {
+        $css[] = 'residential-storage.css';
     } elseif ($path === 'climate-controlled-storage') {
         $css[] = 'climate-controlled-storage.css';
     } elseif (in_array($path, ['moving-services', 'luggage-storage', 'car-storage'], true)) {
