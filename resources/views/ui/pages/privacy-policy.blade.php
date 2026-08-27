@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Privacy Policy')
 @section('metaTitle', 'Privacy Policy | Storage Keys')
 @section('metaDescription', 'Read how StorageKeys collects, uses and protects personal information when you request a quote, book storage or contact our team in the UAE.')
@@ -122,8 +122,8 @@
                         <p>If you have questions about this Privacy Policy or how we handle personal information, please contact StorageKeys:</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-map-marker-alt"></i> Storage Keys, Plot # 4202, Sharjah, United Arab Emirates</li>
-                            <li><i class="fas fa-phone-alt"></i> <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                             <li><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
                             <li><i class="fas fa-globe"></i> <a href="{{ url('/contact-us') }}">Contact Us page</a></li>
                         </ul>
@@ -135,7 +135,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

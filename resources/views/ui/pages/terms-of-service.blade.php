@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Terms of Service')
 @section('metaTitle', 'Terms of Service | Storage Keys')
 @section('metaDescription', 'Terms of Service for StorageKeys covering storage services, customer responsibilities, payments, limitations, and governing law in the UAE.')
@@ -191,8 +191,8 @@
                         <p>If you have questions about these Terms of Service, your storage arrangement, or any StorageKeys service, please contact us:</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-envelope"></i> Email: <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                         </ul>
                         <p>These Terms of Service should be read together with the applicable storage agreement and StorageKeys' other published policies.</p>
                     </section>
@@ -203,7 +203,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

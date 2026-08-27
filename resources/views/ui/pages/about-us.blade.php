@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| About-Us')
 @section('metaTitle', 'About Us | Storage Keys')
 @section('metaDescription', 'We began operations as an LLC in the UAE in 2016. Premium moving and storage services in Sharjah at reduced cost.')
@@ -175,8 +175,8 @@
                         <li><i class="fas fa-check"></i> Automatic insurance coverage included</li>
                     </ul>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -199,7 +199,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ab-quote"><i class="fas fa-box-open"></i> Quote</a>
     </div>

@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend2')
+﻿@extends('ui.layouts.frontend2')
 @section('title', '| Account')
 @section('content')
 
@@ -182,7 +182,7 @@
                                                             @if($contract->is_signed == 'Signed')
                                                                 <td><a href="{{url('customer/contract-pdf').'/'.hashid_encode($contract->id)}}">Download</a></td>
                                                             @else
-                                                                <td><a href="{{url('customer/contract-to-customer').'/'.hashid_encode($contract->id)}}"><i class="far fa-arrow-to-bottom mr-1"></i>Sign Contract</a></td>
+                                                                <td><a href="{{url('customer/contract-to-customer').'/'.hashid_encode($contract->id)}}"><i class="far fa-download mr-1"></i>Sign Contract</a></td>
                                                             @endif
                                                         </tr>
                                                         @endforeach

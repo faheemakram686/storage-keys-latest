@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Cart')
 @section('metaTitle', 'Shopping Cart | Storage Keys')
 @section('metaDescription', 'Review packing supplies in your StorageKeys cart, update quantities and proceed to checkout.')
@@ -159,7 +159,7 @@
     </section>
 
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/shop') }}"><i class="fas fa-box-open"></i> Shop</a>
     </div>

@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', 'Appliance Storage in Dubai & Sharjah | Storage Keys')
 @section('metaTitle', 'Secure Appliance Storage for Homes & Businesses | StorageKeys')
 @section('metaDescription', 'Store refrigerators, washers, ovens and commercial appliances with flexible appliance storage in Dubai and Sharjah. Short- or long-term. Get a free quote.')
@@ -16,7 +16,7 @@
             <p class="lead">Appliances can take up significant space when you are moving, renovating, downsizing, replacing equipment, or managing excess inventory. StorageKeys provides flexible appliance storage outside your current premises.</p>
             <div class="ps-hero-cta">
                 <a href="#ps-quote" class="sk-btn sk-btn-primary"><i class="fas fa-blender"></i> Store Your Appliances</a>
-                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-list-check"></i> What Can Be Stored?</a>
+                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-tasks"></i> What Can Be Stored?</a>
             </div>
             <div class="ps-hero-badges">
                 <span class="ps-hbadge"><i class="fas fa-home"></i> Household Appliances</span>
@@ -169,7 +169,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Pay special attention to refrigerators, freezers, washers and dishwashers.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Protect finishes and reduce damage risk during handling and movement.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-circle-check"></i> Nicely done — your appliances are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your appliances are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
             <p class="fs-facilities-note sk-reveal" style="margin-top:28px;">Refrigerators, freezers, washing machines, and dishwashers may require particular preparation because of their internal components and water connections.</p>
         </div>
@@ -255,8 +255,8 @@
                     <h2>Need Space for Your Appliances?</h2>
                     <p>Contact StorageKeys today to discuss your storage requirements and get a suitable storage option for your household or commercial appliances.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -279,7 +279,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ps-quote"><i class="fas fa-blender"></i> Quote</a>
     </div>

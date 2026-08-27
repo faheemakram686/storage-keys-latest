@@ -1,9 +1,9 @@
-    <!-- FOOTER AREA START -->
+﻿    <!-- FOOTER AREA START -->
     
     <!-- BRAND LOGO AREA START -->
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="wh-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}#ct-quote"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
     </div>
@@ -45,8 +45,8 @@
       <div class="pv-foot-contact">
         <span class="h5">Get in Touch</span>
         <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
-        <p><i class="fas fa-phone-alt"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
-        <p><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
+        <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
+        <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
       </div>
     </div>

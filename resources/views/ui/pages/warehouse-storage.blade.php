@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Warehouse Storage')
 @section('metaTitle', 'Reliable Warehouse Storage in UAE | StorageKeys')
 @section('metaDescription', 'Scalable warehouse storage for bulk inventory and equipment across the UAE. Secure, climate-controlled storage units. Get a free quote today!')
@@ -178,7 +178,7 @@
                 <div class="wh-indc"><div class="ic"><i class="fas fa-store"></i></div><span class="h4">Retail &amp; E-Commerce</span><p>Manage growing inventory and prepare for seasonal demand without overcrowding stores.</p></div>
                 <div class="wh-indc"><div class="ic"><i class="fas fa-ship"></i></div><span class="h4">Importers &amp; Distributors</span><p>Hold incoming shipments in organised facilities before delivery to customers or retail outlets.</p></div>
                 <div class="wh-indc"><div class="ic"><i class="fas fa-industry"></i></div><span class="h4">Manufacturers</span><p>Extra space for raw materials, finished products and equipment as production scales.</p></div>
-                <div class="wh-indc"><div class="ic"><i class="fas fa-hard-hat"></i></div><span class="h4">Contractors</span><p>Keep tools, machinery and project materials secure between jobs.</p></div>
+                <div class="wh-indc"><div class="ic"><i class="fas fa-industry"></i></div><span class="h4">Contractors</span><p>Keep tools, machinery and project materials secure between jobs.</p></div>
                 <div class="wh-indc"><div class="ic"><i class="fas fa-boxes"></i></div><span class="h4">Wholesalers</span><p>Substantial capacity for bulk inventory, ready to distribute when orders come in.</p></div>
                 <div class="wh-indc"><div class="ic"><i class="fas fa-warehouse"></i></div><span class="h4">Growing Businesses</span><p>Flexible capacity that scales with company growth — pay only for what you use.</p></div>
             </div>
@@ -290,8 +290,8 @@
                     <h2>Get Your Storage Quote Today</h2>
                     <p>Looking for secure, flexible warehouse storage in Dubai or Sharjah? Whether you need a single unit or a larger custom arrangement, tell us what you need to store and our team will recommend the right solution for your business.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>

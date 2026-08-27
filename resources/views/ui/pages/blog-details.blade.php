@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| ' . $blog->title)
 @section('metaTitle', $blog->title . ' | Storage Keys')
 @section('metaDescription', $blog->excerpt(160))
@@ -55,8 +55,8 @@
                     <div class="bl-widget bl-help">
                         <span class="h4">Need storage help?</span>
                         <p>Tell us what you need to store and our team will recommend a practical option.</p>
-                        <a href="tel:+971565018785" class="sk-btn sk-btn-primary"><i class="fas fa-phone-alt"></i> Call Us</a>
-                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785" class="sk-btn sk-btn-primary"><i class="fas fa-phone"></i> Call Us</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="{{ url('/contact-us') }}" class="ab-svc-link">Contact Us <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </aside>
@@ -66,7 +66,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

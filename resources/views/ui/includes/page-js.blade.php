@@ -8,6 +8,8 @@
 
     if ($path === '/') {
         $scripts[] = 'business-storage.js';
+        $scripts[] = 'landing-gallery.js';
+        $scripts[] = 'landing-reviews.js';
     } elseif ($path === 'business-storage') {
         $scripts[] = 'business-storage.js';
     } elseif (in_array($path, ['personal-storage', 'box-storage', 'appliance-storage', 'climate-controlled-storage'], true)) {
@@ -18,6 +20,8 @@
         $scripts[] = 'furniture-storage.js';
     } elseif ($path === 'residential-storage') {
         $scripts[] = 'residential-storage.js';
+    } elseif (in_array($path, ['customer-login', 'customer/register', 'customer/forgot-password', 'admin/users/login'], true) || str_starts_with($path, 'customer/reset-password')) {
+        $scripts[] = 'password-toggle.js';
     }
 
     $scripts = array_values(array_unique($scripts));

@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Shop')
 @section('metaTitle', 'Packing Supplies Shop | Storage Keys')
 @section('metaDescription', 'Buy packing supplies and storage accessories from StorageKeys. Boxes, tape, wrap and more for your move or storage in the UAE.')
@@ -108,7 +108,7 @@
     </section>
 
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/cart') }}"><i class="fas fa-shopping-cart"></i> Cart</a>
     </div>

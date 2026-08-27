@@ -60,6 +60,9 @@
     } elseif ($path === 'booking' || strpos($path, 'reservation/') === 0) {
         // booking.css + booking-layout.css come from @section('css') on the page
         $css[] = 'personal-storage.css';
+    } elseif (in_array($path, ['customer-login', 'customer/register', 'customer/forgot-password', 'admin/users/login'], true) || str_starts_with($path, 'customer/reset-password')) {
+        $css[] = 'personal-storage.css';
+        $css[] = 'customer-auth.css';
     } else {
         // Safe fallback for any other frontend page using the shared service layout
         $css[] = 'personal-storage.css';
