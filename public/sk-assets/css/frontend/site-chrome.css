@@ -11,15 +11,16 @@
   --sk-dark: #0e2036;
   --sk-line: #e6ecf2;
   --sk-soft: #f4f8fc;
-  --sk-chrome-max: 1240px;
-  --sk-chrome-pad: 40px;
+  --sk-chrome-max: 1200px;
+  --sk-chrome-pad: 20px;
 }
 
-/* Shared page container */
+/* Shared page container — single source for header, banner, footer & page content */
 .sk-container {
   max-width: var(--sk-chrome-max);
   margin: 0 auto;
-  padding: 0 var(--sk-chrome-pad) !important;
+  padding-left: var(--sk-chrome-pad) !important;
+  padding-right: var(--sk-chrome-pad) !important;
   box-sizing: border-box;
   width: 100%;
 }
@@ -30,17 +31,10 @@
   color: #ffcf9e;
   text-align: center;
   font-size: 13px;
-  /* Side gutter on the bar itself — always inset from viewport */
-  padding: 10px var(--sk-chrome-pad);
+  padding: 10px 0;
   font-family: 'Poppins', system-ui, sans-serif;
   letter-spacing: .02em;
   box-sizing: border-box;
-  width: 100%;
-}
-.pv-banner-note > .sk-container {
-  max-width: var(--sk-chrome-max);
-  margin: 0 auto;
-  padding: 0 !important;
   width: 100%;
 }
 .pv-banner-row {
@@ -100,18 +94,15 @@
   z-index: 50;
   background: #fff;
   box-shadow: 0 6px 20px rgba(18, 58, 99, .08);
-  /* Side gutter on the bar itself — always inset from viewport */
-  padding: 0 var(--sk-chrome-pad);
   box-sizing: border-box;
   width: 100%;
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 400;
 }
 .pv-header > .sk-container.pv-header-in,
 .pv-header .pv-header-in.sk-container {
-  max-width: var(--sk-chrome-max);
-  margin: 0 auto;
-  padding: 14px 0 !important;
-  width: 100%;
-  box-sizing: border-box;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
 }
 .pv-header-in {
   display: flex;
@@ -135,16 +126,19 @@
   margin-left: 8px;
   flex: 1 1 auto;
   min-width: 0;
+  font-family: inherit;
 }
 .pv-nav > a,
 .pv-nav > .pv-has-sub > a {
   color: var(--sk-dark);
   text-decoration: none;
-  font-size: 13.5px;
-  font-weight: 500;
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
   line-height: 1.2;
   padding: 6px 0;
+  letter-spacing: 0;
 }
 .pv-nav a.active,
 .pv-nav a:hover {
@@ -157,17 +151,9 @@
   flex: 0 0 auto;
   margin-left: auto;
 }
-/* Reference: horizontal phones, orange icon + dark blue text */
-.pv-phones {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 18px 28px;
-}
-.pv-phone {
+.pv-customer-login {
   color: var(--sk-primary);
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
   font-weight: 600;
   font-size: 13.5px;
   text-decoration: none;
@@ -177,10 +163,13 @@
   align-items: center;
   gap: 8px;
 }
-.pv-phone i {
+.pv-customer-login i {
   color: var(--sk-accent);
   margin-right: 0;
   font-size: 14px;
+}
+.pv-customer-login:hover {
+  color: var(--sk-accent-2);
 }
 .pv-book {
   background: var(--sk-accent);
@@ -188,6 +177,7 @@
   text-decoration: none;
   padding: 11px 20px;
   border-radius: 50px;
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
   font-weight: 600;
   font-size: 14px;
   white-space: nowrap;
@@ -303,11 +293,12 @@
 .pv-nav .pv-sub a {
   padding: 9px 12px;
   border-radius: 8px;
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
   font-size: 14px;
   white-space: nowrap;
   color: var(--sk-dark);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 .pv-nav .pv-sub a:hover,
 .pv-nav .pv-sub a.active {
@@ -319,14 +310,8 @@
 .pv-footer {
   background: var(--sk-dark);
   color: rgba(255, 255, 255, .72);
-  padding: 64px var(--sk-chrome-pad) 24px;
+  padding: 64px 0 24px;
   box-sizing: border-box;
-  width: 100%;
-}
-.pv-footer > .sk-container {
-  max-width: var(--sk-chrome-max);
-  margin: 0 auto;
-  padding: 0 !important;
   width: 100%;
 }
 .pv-foot-grid {
@@ -433,12 +418,9 @@
 /* Below chrome max: keep side padding all the way to mobile */
 @media (max-width: 1240px) {
   :root {
-    --sk-chrome-pad: 36px;
+    --sk-chrome-pad: 20px;
   }
-  .pv-phones {
-    gap: 16px 22px;
-  }
-  .pv-phone {
+  .pv-customer-login {
     font-size: 13px;
   }
   .pv-nav {
@@ -448,21 +430,14 @@
 
 @media (max-width: 1100px) {
   :root {
-    --sk-chrome-pad: 28px;
-  }
-  /* Phones still in top bar; free space for nav + book + cart */
-  .pv-header-cta .pv-phones {
-    display: none;
+    --sk-chrome-pad: 20px;
   }
 }
 
 /* ---------- Mobile nav ---------- */
 @media (max-width: 991px) {
   :root {
-    --sk-chrome-pad: 24px;
-  }
-  .pv-header-cta .pv-phones {
-    display: none;
+    --sk-chrome-pad: 16px;
   }
   .pv-nav {
     display: none;
@@ -561,8 +536,8 @@
   :root {
     --sk-chrome-pad: 16px;
   }
-  .pv-header-cta .pv-phone {
-    display: none;
+  .pv-customer-login {
+    font-size: 12px;
   }
   .pv-foot-grid {
     grid-template-columns: 1fr;

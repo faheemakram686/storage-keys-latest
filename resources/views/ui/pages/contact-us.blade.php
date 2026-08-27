@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Contact-Us')
 @section('metaTitle', 'Contact Us | Storage Keys')
 @section('metaDescription', 'Contact StorageKeys in Sharjah for personal, business, warehouse, luggage and car storage across Dubai and the UAE. Call, email or request a free quote.')
@@ -15,11 +15,11 @@
             <p class="lead">Need extra space, a moving quote or help choosing the right storage option? Our team in Sharjah is ready to help households and businesses across Dubai and the UAE.</p>
             <div class="ps-hero-cta">
                 <a href="#ct-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get A Quote</a>
-                <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
             </div>
             <div class="ps-hero-badges">
-                <span class="ps-hbadge"><i class="fas fa-phone-alt"></i> Call or WhatsApp</span>
+                <span class="ps-hbadge"><i class="fas fa-phone"></i> Call or WhatsApp</span>
                 <span class="ps-hbadge"><i class="fas fa-envelope"></i> Email our team</span>
                 <span class="ps-hbadge"><i class="fas fa-map-marker-alt"></i> Sharjah facility</span>
                 <span class="ps-hbadge"><i class="fas fa-clock"></i> 24/7 access</span>
@@ -31,8 +31,8 @@
     <div class="ps-trust ct-trust">
         <div class="sk-container">
             <div class="ps-trust-in">
-                <div class="ps-trust-i"><i class="fas fa-phone-alt"></i> +971 56 501 8785</div>
-                <div class="ps-trust-i"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</div>
+                <div class="ps-trust-i"><i class="fas fa-phone"></i> +971 56 501 8785</div>
+                <div class="ps-trust-i"><i class="fas fa-phone"></i> Toll Free: 800 5397</div>
                 <div class="ps-trust-i"><i class="fas fa-envelope"></i> info@storagekeys.com</div>
                 <div class="ps-trust-i"><i class="fab fa-whatsapp"></i> WhatsApp support</div>
                 <div class="ps-trust-i"><i class="fas fa-map-marker-alt"></i> Sharjah, UAE</div>
@@ -56,7 +56,7 @@
                     <span class="ab-svc-link">Send an email <i class="fas fa-arrow-right"></i></span>
                 </a>
                 <div class="ps-whyc ct-card">
-                    <div class="ic"><i class="fas fa-phone-alt"></i></div>
+                    <div class="ic"><i class="fas fa-phone"></i></div>
                     <span class="h4">Phone Number</span>
                     <p><a href="tel:+971565018785">+971 56 501 8785</a></p>
                     <p>Toll Free: <a href="tel:8005397">800 5397</a></p>
@@ -88,8 +88,8 @@
                         <li><i class="fas fa-check"></i> Moving and packing support</li>
                     </ul>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:info@storagekeys.com"><i class="fas fa-envelope"></i> info@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -130,7 +130,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ct-quote"><i class="fas fa-envelope"></i> Quote</a>
     </div>

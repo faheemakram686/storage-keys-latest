@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Luggage Storage')
 @section('metaTitle', 'Luggage Storage in Dubai & Abu Dhabi, UAE | Storagekeys')
 @section('metaDescription', 'Store your luggage safely between flights, hotel stays, moves or travel plans with flexible luggage storage solutions in Dubai and Abu Dhabi.')
@@ -15,8 +15,8 @@
                     <p class="lead">Store your luggage safely between flights, hotel stays, moves or travel plans with flexible luggage storage solutions in Dubai and Abu Dhabi. Keep your bags secure without carrying them around all day.</p>
                     <div class="svc-hero-cta">
                         <a href="#luggage-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get a Free Quote</a>
-                        <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                     </div>
                 </div>
                 <div class="svc-hero-card">
@@ -37,7 +37,7 @@
         <div class="sk-container">
             <div class="svc-trust-in">
                 <div class="svc-trust-i"><i class="fas fa-suitcase-rolling"></i> Suitcases & travel bags</div>
-                <div class="svc-trust-i"><i class="fas fa-backpack"></i> Backpacks & duffel bags</div>
+                <div class="svc-trust-i"><i class="fas fa-suitcase"></i> Backpacks & duffel bags</div>
                 <div class="svc-trust-i"><i class="fas fa-box-open"></i> Boxes & packed belongings</div>
                 <div class="svc-trust-i"><i class="fas fa-shield-alt"></i> Secure arrangements</div>
                 <div class="svc-trust-i"><i class="fas fa-clock"></i> Flexible periods</div>
@@ -99,7 +99,7 @@
             </div>
             <div class="svc-cards sk-reveal">
                 <div class="svc-card"><div class="ic"><i class="fas fa-suitcase-rolling"></i></div><div><h3>Suitcases and travel bags</h3></div></div>
-                <div class="svc-card"><div class="ic"><i class="fas fa-backpack"></i></div><div><h3>Backpacks and duffel bags</h3></div></div>
+                <div class="svc-card"><div class="ic"><i class="fas fa-suitcase"></i></div><div><h3>Backpacks and duffel bags</h3></div></div>
                 <div class="svc-card"><div class="ic"><i class="fas fa-box-open"></i></div><div><h3>Boxes and packed belongings</h3></div></div>
                 <div class="svc-card"><div class="ic"><i class="fas fa-tshirt"></i></div><div><h3>Clothing and personal effects</h3></div></div>
                 <div class="svc-card"><div class="ic"><i class="fas fa-hiking"></i></div><div><h3>Travel equipment</h3></div></div>
@@ -168,8 +168,8 @@
                     <h2>Store Your Luggage Without the Hassle</h2>
                     <p>Need a place for your bags while you travel, move or wait between plans? StorageKeys offers flexible luggage storage solutions across the UAE.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -199,7 +199,7 @@
     </section>
 
     <div class="svc-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#luggage-quote"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
     </div>

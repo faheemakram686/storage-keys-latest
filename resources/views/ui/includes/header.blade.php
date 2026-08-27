@@ -1,4 +1,4 @@
-@include('ui.includes.fonts')
+﻿@include('ui.includes.fonts')
 <!-- Font Icons css -->
 <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}">
 <!-- plugins css -->
@@ -33,7 +33,7 @@
                                                                     class="fa fa-user"></i> Dashboard</a></li>
                                                     <li><a href="#"
                                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                                           title="Logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                                                           title="Logout"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
                                                     <form id="logout-form" action="{{ route('all.logout') }}"
                                                           method="POST" class="d-none">@csrf</form>
                                                 @endif
@@ -41,8 +41,6 @@
                                             @guest
                                                 <li><a href="{{url('admin')}}" title="Admin Area"><i
                                                                 class="fa fa-lock"></i> Admin area</a></li>
-                                                <li><a href="{{ route('customer.login') }}" title="Login"><i
-                                                                class="fa fa-lock"></i> Customer Login</a></li>
                                                 <li><a href="{{route('customer.register')}}" title="Register"><i
                                                                 class="fa fa-user"></i> Register</a></li>
                                             @endguest
@@ -80,10 +78,13 @@
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>
     </nav>
     <div class="pv-header-cta">
-      <div class="pv-phones">
-        <a href="tel:+971565018785" class="pv-phone"><i class="fas fa-phone-alt" aria-hidden="true"></i> +971 56 501 8785</a>
-        <a href="tel:8005397" class="pv-phone"><i class="fas fa-phone-alt" aria-hidden="true"></i> Toll Free: 800 5397</a>
-      </div>
+      @if (\Auth::user() && Auth::getDefaultDriver() == 'contact')
+        <a href="{{ route('customer.dashboard') }}" class="pv-customer-login"><i class="fas fa-user" aria-hidden="true"></i> Dashboard</a>
+      @else
+        @guest
+          <a href="{{ route('customer.login') }}" class="pv-customer-login"><i class="fas fa-lock" aria-hidden="true"></i> Customer Login</a>
+        @endguest
+      @endif
       <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
       @php
         $cartQty = 0;

@@ -1,45 +1,43 @@
-@extends('ui.layouts.frontend2')
-@section('title', '| Register')
+@extends('ui.layouts.frontend')
+@section('title', '| Customer Register')
+@section('metaTitle', 'Create Account | StorageKeys')
+@section('metaDescription', 'Create a free StorageKeys customer account to book storage, shop online and manage your details.')
+
 @section('content')
+<div class="sk-home">
 
-
-    <div class="ltn__utilize-overlay"></div>
-
-    <!-- BREADCRUMB AREA START -->
-    <div class="ltn__breadcrumb-area text-left bg-overlay-white-30 bg-image "  data-bg="{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_3.jpg') }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ltn__breadcrumb-inner">
-                        <h1 class="page-title">Account</h1>
-                        <div class="ltn__breadcrumb-list">
-                            <ul>
-                                <li><a href="{{ url('/') }}"><span class="ltn__secondary-color"><i class="fas fa-home"></i></span> Home</a></li>
-                                <li>Register</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+    <!-- ============ HERO ============ -->
+    <section class="ps-hero">
+        <div class="sk-container">
+            <div class="ps-crumb">
+                <a href="{{ url('/') }}">Home</a>
+                <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                <span>Create Account</span>
             </div>
+            <span class="sk-eyebrow" style="color:#ffcf9e;">Customer Account</span>
+            <h1>Create your <span>StorageKeys</span> account</h1>
+            <p class="lead">Register once to book storage, shop packing supplies and manage your details in one place.</p>
         </div>
-    </div>
-    <!-- BREADCRUMB AREA END -->
+    </section>
 
-    <!-- LOGIN AREA START (Register) -->
-    <div class="ltn__login-area pb-110">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title-area text-center">
-                        <span class="h1 section-title">Register <br>Your Account</span>
-{{--                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. <br>--}}
-{{--                            Sit aliquid,  Non distinctio vel iste.</p>--}}
-                    </div>
-                    {{-- ✅ Validation Errors --}}
+    <!-- ============ REGISTER ============ -->
+    <section class="sk-section" style="background:var(--sk-soft);">
+        <div class="sk-container">
+            <div class="ca-auth-grid ca-auth-grid-register sk-reveal in">
+                <div class="ca-auth-card">
+                    <h2>Create account</h2>
+                    <p>Fill in your details below. It only takes a minute.</p>
+
+                    @if (session('success'))
+                        <div class="ca-alert ca-alert-success">{{ session('success') }}</div>
+                    @endif
+                    @if (session('error'))
+                        <div class="ca-alert ca-alert-error">{{ session('error') }}</div>
+                    @endif
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <strong>Whoops! Something went wrong:</strong>
-                            <ul class="mb-0 mt-2">
+                        <div class="ca-alert ca-alert-error">
+                            <strong>Please check the following:</strong>
+                            <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -47,153 +45,162 @@
                         </div>
                     @endif
 
-                    {{-- ✅ General Error (Exception or DB) --}}
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            <strong>Error:</strong> {{ session('error') }}
-                        </div>
-                    @endif
+                    <form method="POST" action="{{ route('customer.register') }}" class="ca-auth-form" id="customerRegisterForm">
+                        @csrf
 
-                    {{-- ✅ Success Message --}}
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            <strong>Success:</strong> {{ session('success') }}
+                        <div class="ca-type-toggle" role="radiogroup" aria-label="Account type">
+                            <div class="ca-type-option">
+                                <input type="radio" name="customer_type" id="type_individual" value="individual" {{ old('customer_type', 'individual') === 'individual' ? 'checked' : '' }}>
+                                <label for="type_individual">Individual</label>
+                            </div>
+                            <div class="ca-type-option">
+                                <input type="radio" name="customer_type" id="type_company" value="company" {{ old('customer_type') === 'company' ? 'checked' : '' }}>
+                                <label for="type_company">Company</label>
+                            </div>
                         </div>
-                    @endif
+
+                        <div class="ca-field" id="company_name_field" hidden>
+                            <label for="company_name">Company name</label>
+                            <input
+                                id="company_name"
+                                type="text"
+                                name="company_name"
+                                value="{{ old('company_name') }}"
+                                placeholder="Your company name"
+                                autocomplete="organization"
+                            >
+                        </div>
+
+                        <div class="ca-field-row">
+                            <div class="ca-field">
+                                <label for="first_name">First name</label>
+                                <input
+                                    id="first_name"
+                                    type="text"
+                                    name="first_name"
+                                    value="{{ old('first_name') }}"
+                                    placeholder="First name"
+                                    required
+                                    autocomplete="given-name"
+                                >
+                            </div>
+                            <div class="ca-field">
+                                <label for="last_name">Last name</label>
+                                <input
+                                    id="last_name"
+                                    type="text"
+                                    name="last_name"
+                                    value="{{ old('last_name') }}"
+                                    placeholder="Last name"
+                                    required
+                                    autocomplete="family-name"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="ca-field">
+                            <label for="register-email">Email address</label>
+                            <input
+                                id="register-email"
+                                type="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                placeholder="you@example.com"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+
+                        <div class="ca-field">
+                            <label for="register-password">Password</label>
+                            <div class="password-field-wrap">
+                                <input
+                                    id="register-password"
+                                    type="password"
+                                    name="password"
+                                    placeholder="At least 8 characters"
+                                    required
+                                    autocomplete="new-password"
+                                >
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ca-field">
+                            <label for="register-password-confirm">Confirm password</label>
+                            <div class="password-field-wrap">
+                                <input
+                                    id="register-password-confirm"
+                                    type="password"
+                                    name="password_confirmation"
+                                    placeholder="Re-enter password"
+                                    required
+                                    autocomplete="new-password"
+                                >
+                                <button type="button" class="password-toggle" aria-label="Show password">
+                                    <i class="far fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="sk-btn sk-btn-primary">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i> Create Account
+                        </button>
+
+                        <p class="ca-agree">
+                            By creating an account, you agree to our
+                            <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
+                            and
+                            <a href="{{ url('/terms-of-service') }}">Terms of Service</a>.
+                        </p>
+                    </form>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="account-login-inner">
-                        <form action="{{route('customer.register')}}" method="post" class="ltn__form-box contact-form-box">
-                            @csrf
-                            <style>
-                                .customer-type-selection {
-                                    display: flex;
-                                    gap: 20px;
-                                    margin-bottom: 25px;
-                                    background: #f8f9fa;
-                                    padding: 15px;
-                                    border-radius: 8px;
-                                    border: 1px solid #e9ecef;
-                                }
-                                .type-option {
-                                    flex: 1;
-                                    position: relative;
-                                }
-                                .type-option input[type="radio"] {
-                                    position: absolute;
-                                    opacity: 0;
-                                    width: 0;
-                                    height: 0;
-                                }
-                                .type-option label {
-                                    display: block;
-                                    padding: 12px 15px;
-                                    text-align: center;
-                                    background: #fff;
-                                    border: 2px solid #e9ecef;
-                                    border-radius: 6px;
-                                    cursor: pointer;
-                                    font-weight: 600;
-                                    color: #495057;
-                                    transition: all 0.3s ease;
-                                    margin-bottom: 0;
-                                }
-                                .type-option input[type="radio"]:checked + label {
-                                    border-color: #f7941d; /* Using an orange/yellow tone common in many themes */
-                                    background: #fff9f2;
-                                    color: #f7941d;
-                                }
-                                .type-option label:hover {
-                                    background: #fdfdfd;
-                                    border-color: #ced4da;
-                                }
-                                .type-option input[type="radio"]:checked + label:after {
-                                    content: '\f058'; /* FontAwesome check-circle icon */
-                                    font-family: 'Font Awesome 5 Free';
-                                    font-weight: 900;
-                                    position: absolute;
-                                    top: -10px;
-                                    right: -5px;
-                                    background: #fff;
-                                    border-radius: 50%;
-                                    font-size: 18px;
-                                    line-height: 1;
-                                }
-                            </style>
 
-                            <div class="customer-type-selection">
-                                <div class="type-option">
-                                    <input type="radio" name="customer_type" value="individual" checked id="type_individual">
-                                    <label for="type_individual">Individual</label>
-                                </div>
-                                <div class="type-option">
-                                    <input type="radio" name="customer_type" value="company" id="type_company">
-                                    <label for="type_company">Company</label>
-                                </div>
-                            </div>
-                            
-                            <div id="company_name_div" style="display: none;">
-                                <input type="text" name="company_name" id="company_name" placeholder="Company Name">
-                            </div>
-                            <input type="text" name="first_name" placeholder="First Name" required>
-                            <input type="text" name="last_name" placeholder="Last Name" required>
-                            <input type="text" name="email" placeholder="Email*" required>
-                            <div class="password-field-wrap">
-                                <input type="password" name="password" placeholder="Password*" required>
-                                <button type="button" class="password-toggle" aria-label="Show password">
-                                    <i class="far fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="password-field-wrap">
-                                <input type="password" name="password_confirmation" placeholder="Confirm Password*" required>
-                                <button type="button" class="password-toggle" aria-label="Show password">
-                                    <i class="far fa-eye"></i>
-                                </button>
-                            </div>
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const typeIndividual = document.getElementById('type_individual');
-                                    const typeCompany = document.getElementById('type_company');
-                                    const companyDiv = document.getElementById('company_name_div');
-                                    const companyInput = document.getElementById('company_name');
-
-                                    function toggleCompany() {
-                                        if (typeCompany.checked) {
-                                            companyDiv.style.display = 'block';
-                                            companyInput.setAttribute('required', 'required');
-                                        } else {
-                                            companyDiv.style.display = 'none';
-                                            companyInput.removeAttribute('required');
-                                            companyInput.value = '';
-                                        }
-                                    }
-
-                                    typeIndividual.addEventListener('change', toggleCompany);
-                                    typeCompany.addEventListener('change', toggleCompany);
-                                    
-                                    // Initial check
-                                    toggleCompany();
-                                });
-                            </script>
-
-                            <div class="btn-wrapper">
-                                <button class="theme-btn-1 btn reverse-color btn-block" type="submit">CREATE ACCOUNT</button>
-                            </div>
-                        </form>
-                        <div class="by-agree text-center">
-                            <p>By creating an account, you agree to our:</p>
-                            <p><a href="{{ url('/privacy-policy') }}">PRIVACY POLICY</a></p>
-                            <div class="go-to-btn mt-50">
-                                <a href="{{ route('customer.login') }}">ALREADY HAVE AN ACCOUNT ?</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ca-auth-card ca-auth-aside">
+                    <div class="ic"><i class="fas fa-sign-in-alt" aria-hidden="true"></i></div>
+                    <h2>Already have an account?</h2>
+                    <p>Sign in to access your dashboard, bookings and orders.</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Faster checkout and booking</li>
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Track orders and reservations</li>
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Manage your account details</li>
+                    </ul>
+                    <a href="{{ route('customer.login') }}" class="sk-btn sk-btn-outline">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Sign In
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
+</div>
+@endsection
+
+@section('javascriptWork')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var typeIndividual = document.getElementById('type_individual');
+    var typeCompany = document.getElementById('type_company');
+    var companyField = document.getElementById('company_name_field');
+    var companyInput = document.getElementById('company_name');
+    if (!typeIndividual || !typeCompany || !companyField || !companyInput) return;
+
+    function toggleCompany() {
+        var isCompany = typeCompany.checked;
+        companyField.hidden = !isCompany;
+        if (isCompany) {
+            companyInput.setAttribute('required', 'required');
+        } else {
+            companyInput.removeAttribute('required');
+            companyInput.value = '';
+        }
+    }
+
+    typeIndividual.addEventListener('change', toggleCompany);
+    typeCompany.addEventListener('change', toggleCompany);
+    toggleCompany();
+});
+</script>
 @endsection

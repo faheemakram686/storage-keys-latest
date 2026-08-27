@@ -111,7 +111,7 @@
     <section class="sk-section sk-about">
         <div class="sk-container">
             <div class="sk-about-grid">
-                <div class="sk-about-img">
+                <div class="sk-about-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}'); background-size:cover; background-position:center;">
                     <div class="sk-about-badge">
                         <div class="n">Dubai · Abu Dhabi · Sharjah</div>
                         <div class="l">Storage facilities across the UAE</div>
@@ -146,7 +146,7 @@
                     <div class="l">Sq Ft of Storage</div>
                 </div>
                 <div class="sk-stat">
-                    <div class="n"><span class="sk-count" data-target="3">0</span></div>
+                    <div class="n"><span class="sk-count" data-target="7">0</span></div>
                     <div class="l">Emirates Covered</div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
     </section>
 
     <!-- ============ PRICING ============ -->
-    <section class="sk-section" style="background:var(--sk-soft);">
+    <!-- <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Pricing</span>
@@ -308,7 +308,7 @@
                 <i class="fas fa-info-circle"></i> Prices vary by unit size, rental duration and location. Contact our team for an exact, no-obligation quote tailored to what you're storing.
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- ============ PROMO BANNER ============ -->
     <section style="padding:0 0 84px;">
@@ -321,8 +321,8 @@
                 </div>
                 <div class="pc" style="display:flex; gap:14px; flex-wrap:wrap;">
                     <a href="/booking/" class="sk-btn sk-btn-primary"><i class="fas fa-tag"></i> Claim This Offer</a>
-                    <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Call Us</a>
-                    <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                    <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Call Us</a>
+                    <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                 </div>
             </div>
         </div>
@@ -338,7 +338,7 @@
             </div>
             <div class="sk-cards">
                 <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-01.jpg') }}');"></div>
+                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-home"></i></div>
                         <span class="h3">Personal Storage</span>
@@ -347,7 +347,7 @@
                     </div>
                 </div>
                 <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-02.jpg') }}');"></div>
+                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-briefcase"></i></div>
                         <span class="h3">Business Storage</span>
@@ -356,21 +356,21 @@
                     </div>
                 </div>
                 <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-03.jpg') }}');"></div>
+                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-warehouse"></i></div>
                         <span class="h3">Warehouse Storage</span>
-                        <p>Flexible warehouse space for bulk inventory, equipment and commercial stock, supported by scalable rental terms.</p>
+                        <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
                         <a href="{{ url('/warehouse-storage') }}">Explore warehouse storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-04.jpg') }}');"></div>
+                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-truck"></i></div>
                         <span class="h3">Moving Storage</span>
                         <p>A convenient moving and temporary storage solution that helps simplify relocations for both households and businesses.</p>
-                        <a href="{{ url('/moving-services') }}">Explore moving &amp; storage services <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                        <a href="{{ url('/moving-services') }}">Explore moving &amp; storage<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -381,7 +381,7 @@
     <section class="sk-section" style="background:#fff;">
         <div class="sk-container">
             <div class="sk-secure-grid sk-reveal">
-                <div class="sk-secure-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-05.jpg') }}');"></div>
+                <div class="sk-secure-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Peace of Mind</span>
                     <h2>Your Belongings, Fully Protected</h2>
@@ -418,7 +418,7 @@
                 <p>Self storage is no longer used only during house moves. Today, it serves a wide range of personal and commercial needs across the UAE.</p>
             </div>
             <div class="sk-benefits">
-                <div class="sk-benefit"><i class="fas fa-house-user"></i><span>Homeowners looking to declutter their living spaces.</span></div>
+                <div class="sk-benefit"><i class="fas fa-home"></i><span>Homeowners looking to declutter their living spaces.</span></div>
                 <div class="sk-benefit"><i class="fas fa-building"></i><span>Apartment residents needing additional room for belongings.</span></div>
                 <div class="sk-benefit"><i class="fas fa-people-carry"></i><span>Families renovating or relocating their homes.</span></div>
                 <div class="sk-benefit"><i class="fas fa-user-graduate"></i><span>Students requiring temporary space during semester breaks.</span></div>
@@ -456,6 +456,7 @@
                             <span class="sk-loc-pin">Al Quoz</span>
                         </div>
                         <span class="h3">Storage Keys — Dubai</span>
+                        <p class="sk-loc-rating"><i class="fas fa-star" aria-hidden="true"></i> 4.9 / 5 — from real reviews shared publicly on <i class="fab fa-google" aria-hidden="true"></i> Google</p>
                         <p class="sk-loc-addr">10A Street, Al Quoz Industrial Area 3<br>Al Quoz, Dubai, United Arab Emirates</p>
                         <div class="sk-locfeat">
                             <span><i class="fas fa-clock" aria-hidden="true"></i> 24/7 access</span>
@@ -464,7 +465,7 @@
                         </div>
                         <div class="sk-loc-actions">
                             <a href="https://maps.app.goo.gl/cZhb4mLPGVsGcooA9" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
-                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone-alt" aria-hidden="true"></i> Call</a>
+                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
                         </div>
                     </div>
                 </article>
@@ -485,6 +486,7 @@
                             <span class="sk-loc-pin">Main facility</span>
                         </div>
                         <span class="h3">Storage Keys — Sharjah</span>
+                        <p class="sk-loc-rating"><i class="fas fa-star" aria-hidden="true"></i> 4.9 / 5 — from real reviews shared publicly on <i class="fab fa-google" aria-hidden="true"></i> Google</p>
                         <p class="sk-loc-addr">Plot # 4202<br>Sharjah, United Arab Emirates</p>
                         <div class="sk-locfeat">
                             <span><i class="fas fa-clock" aria-hidden="true"></i> 24/7 access</span>
@@ -493,7 +495,7 @@
                         </div>
                         <div class="sk-loc-actions">
                             <a href="https://maps.app.goo.gl/vvWVRRKCtBnups2k6" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
-                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone-alt" aria-hidden="true"></i> Call</a>
+                            <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
                         </div>
                     </div>
                 </article>
@@ -509,11 +511,37 @@
                 <h2>A Closer Look</h2>
                 <p>Clean, secure and well-organised spaces, built to keep your belongings in great condition.</p>
             </div>
-            <div class="sk-gallery sk-reveal">
-                <div class="g" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-08.jpg') }}');"></div>
-                <div class="g" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-09.jpg') }}');"></div>
-                <div class="g" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-10.jpg') }}');"></div>
-                <div class="g" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-11.jpg') }}');"></div>
+            @php
+                $facilityGallery = [
+                    ['file' => 'inline.jpg', 'alt' => 'StorageKeys facility corridor'],
+                    ['file' => 'inline-2.jpg', 'alt' => 'StorageKeys storage units'],
+                    ['file' => 'inline-3.jpg', 'alt' => 'StorageKeys facility interior'],
+                    ['file' => 'inline-4.jpg', 'alt' => 'StorageKeys warehouse aisle'],
+                    ['file' => 'inline-5.jpg', 'alt' => 'StorageKeys climate-controlled units'],
+                    ['file' => 'inline-6.jpg', 'alt' => 'StorageKeys secure storage hallway'],
+                    ['file' => 'inline-7.jpg', 'alt' => 'StorageKeys facility walkway'],
+                    ['file' => 'inline-8.jpg', 'alt' => 'StorageKeys storage unit doors'],
+                    ['file' => 'inline-9.jpg', 'alt' => 'StorageKeys organised storage space'],
+                ];
+                $galleryBase = 'sk-assets/assets/images/frontend/landing-page/';
+            @endphp
+            <div class="sk-gallery-carousel sk-reveal" id="skGalleryCarousel" aria-roledescription="carousel" aria-label="Facility photos">
+                <button type="button" class="sk-gal-btn sk-gal-prev" aria-label="Previous photos">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div class="sk-gal-viewport">
+                    <div class="sk-gal-track">
+                        @foreach ($facilityGallery as $i => $shot)
+                            <div class="sk-gal-slide" role="group" aria-roledescription="slide" aria-label="Photo {{ $i + 1 }} of {{ count($facilityGallery) }}">
+                                <div class="g" style="background-image:url('{{ asset($galleryBase . $shot['file']) }}');" role="img" aria-label="{{ $shot['alt'] }}"></div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <button type="button" class="sk-gal-btn sk-gal-next" aria-label="Next photos">
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                </button>
+                <div class="sk-gal-dots" role="tablist" aria-label="Gallery slides"></div>
             </div>
         </div>
     </section>
@@ -605,34 +633,125 @@
                 <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                 <div class="score"><b>4.9 / 5</b> — from real reviews shared publicly on <i class="fab fa-google"></i> Google</div>
             </div>
-            <div class="sk-reviews sk-reveal">
-                <div class="sk-review">
-                    <i class="fas fa-quote-right qi"></i>
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>Best place to store your commercial and household items. Climate controlled environment, CCTV camera and above all you can access your storage space 24/7 with nice and welcoming staff.</p>
-                    <div class="who">
-                        <div class="av">NB</div>
-                        <div><span class="h4">Nadeem Baig</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
+            @php
+                // Reviews from Google Maps — Storage Keys Sharjah
+                // https://www.google.com/maps/place/Storage+Keys+Sharjah/...
+                $googleReviews = [
+                    [
+                        'name' => 'Danish Siddiqui',
+                        'initials' => 'D',
+                        'avatar_color' => '#4285f4',
+                        'meta' => 'Local Guide · 33 reviews · 5 photos',
+                        'when' => '5 years ago',
+                        'stars' => 5,
+                        'text' => 'This Company is by far the best Movers Company I have come across both with respect to the quality of the service and amazing PRICE. My experience started from the first time I called them and their Manager Mr. Saad gave a very good idea of how my stuff would be handled and the cost associated with that. Rest of the team was equally professional and made my relocation smooth.',
+                        'owner' => 'Mr. Danish thanks for your positive feedback.',
+                        'owner_when' => '5 years ago',
+                    ],
+                    [
+                        'name' => 'Mohammad Ghassan',
+                        'initials' => 'M',
+                        'avatar_color' => '#ea4335',
+                        'meta' => 'Local Guide · 79 reviews · 3 photos',
+                        'when' => '3 years ago',
+                        'stars' => 5,
+                        'text' => 'The most well rounded facility after searching 20+ locations. The storage facility is clean, well rounded with flexibility. I can access it at any time and the staff were helpful throughout.',
+                        'owner' => null,
+                        'owner_when' => null,
+                    ],
+                    [
+                        'name' => 'Nadeem Baig',
+                        'initials' => 'N',
+                        'avatar_color' => '#fbbc04',
+                        'meta' => 'Local Guide',
+                        'when' => 'Google review',
+                        'stars' => 5,
+                        'text' => 'Best place to store your commercial and household items. Climate controlled environment, CCTV camera and above of all you can access your storage space 24/7 with nice and welcoming staff.',
+                        'owner' => null,
+                        'owner_when' => null,
+                    ],
+                    [
+                        'name' => 'Ashik S',
+                        'initials' => 'A',
+                        'avatar_color' => '#34a853',
+                        'meta' => 'Local Guide',
+                        'when' => 'Google review',
+                        'stars' => 5,
+                        'text' => 'I have been storing my business goods with them for over 6 months now. The staff at the location as well as the admin staffs are very friendly. The facility is well maintained and the location is great.',
+                        'owner' => null,
+                        'owner_when' => null,
+                    ],
+                    [
+                        'name' => 'Muhammed Alshebli',
+                        'initials' => 'M',
+                        'avatar_color' => '#ea4335',
+                        'meta' => 'Local Guide',
+                        'when' => 'Google review',
+                        'stars' => 5,
+                        'text' => 'The arrangement of the storage rooms is wonderful and clean, and the place is equipped with public safety means, in addition to observing the implementation of sterilization and spraying of pesticides as a proactive protection against insects.',
+                        'owner' => null,
+                        'owner_when' => null,
+                    ],
+                    [
+                        'name' => 'pooja nayal',
+                        'initials' => 'P',
+                        'avatar_color' => '#4285f4',
+                        'meta' => 'Local Guide',
+                        'when' => 'Google review',
+                        'stars' => 5,
+                        'text' => 'We took the warehouse for a long time and their services are very good, fast and very friendly yet professional staff. Thank you',
+                        'owner' => null,
+                        'owner_when' => null,
+                    ],
+                ];
+                $googleReviewsUrl = 'https://www.google.com/maps/place/Storage+Keys+Sharjah/@25.353524,55.6316793,15z/data=!4m8!3m7!1s0x3ef5f31916a85fc9:0x2db4222312dfc94f!8m2!3d25.353524!4d55.6316793!9m1!1b1!16s%2Fg%2F11fkr38ldv?hl=en-US';
+            @endphp
+            <div class="sk-reviews-carousel sk-reveal" id="skReviewsCarousel" aria-roledescription="carousel" aria-label="Google customer reviews">
+                <button type="button" class="sk-rev-btn sk-rev-prev" aria-label="Previous reviews">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <div class="sk-rev-viewport">
+                    <div class="sk-rev-track">
+                        @foreach ($googleReviews as $i => $review)
+                            <div class="sk-rev-slide" role="group" aria-roledescription="slide" aria-label="Review {{ $i + 1 }} of {{ count($googleReviews) }}">
+                                <article class="sk-grev">
+                                    <div class="sk-grev-head">
+                                        <div class="sk-grev-av" style="background:{{ $review['avatar_color'] }};">{{ $review['initials'] }}</div>
+                                        <div class="sk-grev-who">
+                                            <div class="sk-grev-name">{{ $review['name'] }}</div>
+                                            <div class="sk-grev-meta">{{ $review['meta'] }}</div>
+                                        </div>
+                                        <i class="fab fa-google sk-grev-g" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="sk-grev-rating">
+                                        <span class="sk-grev-stars" aria-label="{{ $review['stars'] }} out of 5 stars">
+                                            @for ($s = 0; $s < $review['stars']; $s++)
+                                                <i class="fas fa-star" aria-hidden="true"></i>
+                                            @endfor
+                                        </span>
+                                        <span class="sk-grev-when">{{ $review['when'] }}</span>
+                                    </div>
+                                    <p class="sk-grev-text" data-full="{{ e($review['text']) }}">{{ $review['text'] }}</p>
+                                    @if (!empty($review['owner']))
+                                        <div class="sk-grev-owner">
+                                            <div class="sk-grev-owner-title">Response from the owner <span>{{ $review['owner_when'] }}</span></div>
+                                            <p>{{ $review['owner'] }}</p>
+                                        </div>
+                                    @endif
+                                </article>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-                <div class="sk-review">
-                    <i class="fas fa-quote-right qi"></i>
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>I have been storing my business goods with them for over 6 months now. The staff at the location as well as the admin staff are very friendly. The facility is well maintained and the location is great.</p>
-                    <div class="who">
-                        <div class="av">AS</div>
-                        <div><span class="h4">Ashik S</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
-                    </div>
-                </div>
-                <div class="sk-review">
-                    <i class="fas fa-quote-right qi"></i>
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>The arrangement of the storage rooms is wonderful and clean, and the place is equipped with public safety means, in addition to proactive protection against insects.</p>
-                    <div class="who">
-                        <div class="av">MA</div>
-                        <div><span class="h4">Muhammed Alshebli</span><span class="badge"><i class="fab fa-google"></i>Local Guide</span></div>
-                    </div>
-                </div>
+                <button type="button" class="sk-rev-btn sk-rev-next" aria-label="Next reviews">
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                </button>
+                <div class="sk-rev-dots" role="tablist" aria-label="Review slides"></div>
+            </div>
+            <div class="sk-reviews-more">
+                <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="sk-btn sk-btn-outline">
+                    <i class="fab fa-google" aria-hidden="true"></i> See all reviews on Google
+                </a>
             </div>
 
             <div class="sk-logos sk-reveal">
@@ -775,7 +894,7 @@
 
     <!-- ============ STICKY MOBILE ACTION BAR ============ -->
     <div class="sk-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/booking') }}"><i class="fas fa-boxes"></i> Book</a>
     </div>

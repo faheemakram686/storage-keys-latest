@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Cookie Policy')
 @section('metaTitle', 'Cookie Policy | Storage Keys')
 @section('metaDescription', 'Cookie Policy of StorageKeys explaining cookies, usage purposes, third-party services, and visitor choices on our website.')
@@ -175,8 +175,8 @@
                         <p>If you have questions about this Cookie Policy, cookies used on the StorageKeys website, or our privacy practices, please contact us:</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-envelope"></i> Email: <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                         </ul>
                         <p>StorageKeys is committed to maintaining transparency regarding the technologies used on our website and providing visitors with appropriate information about how cookies and similar technologies are used.</p>
                     </section>
@@ -187,7 +187,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

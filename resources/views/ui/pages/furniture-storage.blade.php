@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', 'Furniture Storage in Dubai & Abu Dhabi | Storage Keys')
 @section('metaTitle', 'Secure Furniture Storage in Dubai & Abu Dhabi | StorageKeys')
 @section('metaDescription', 'Store sofas, beds, tables and household furniture securely with flexible furniture storage units across the UAE. Climate options, 24/7 access. Get a free quote.')
@@ -21,7 +21,7 @@
             <div class="ps-hero-badges">
                 <span class="ps-hbadge"><i class="fas fa-home"></i> Homes &amp; Businesses</span>
                 <span class="ps-hbadge"><i class="fas fa-calendar-check"></i> Short &amp; Long-Term</span>
-                <span class="ps-hbadge"><i class="fas fa-tools"></i> Dismantling Support</span>
+                <span class="ps-hbadge"><i class="fas fa-wrench"></i> Dismantling Support</span>
             </div>
         </div>
     </section>
@@ -321,8 +321,8 @@
                     <h2>Get a Free Furniture Storage Quote Today</h2>
                     <p>Tell us what you need to store and we'll recommend the right unit size — with dismantling and moving support available if you need it.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -345,7 +345,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ps-quote"><i class="fas fa-couch"></i> Quote</a>
     </div>

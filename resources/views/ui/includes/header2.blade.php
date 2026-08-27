@@ -1,4 +1,4 @@
-<header class="ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-transparent--- gradient-color-4---">
+﻿<header class="ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-transparent--- gradient-color-4---">
     <!-- ltn__header-top-area start -->
     <div class="ltn__header-top-area section-bg-6 top-area-color-white---">
         <div class="container">
@@ -29,7 +29,7 @@
                                                                     class="fa fa-user"></i> Dashboard</a></li>
                                                     <li><a href="#"
                                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                                           title="Logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                                                           title="Logout"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
                                                     <form id="logout-form" action="{{ route('all.logout') }}"
                                                           method="POST" class="d-none">@csrf</form>
                                                 @endif

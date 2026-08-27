@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', 'Climate-Controlled Storage in Dubai & Sharjah, UAE | Storage Keys')
 @section('metaTitle', 'Climate-Controlled Storage Solutions in UAE | StorageKeys')
 @section('metaDescription', 'Protect documents, electronics and furniture from heat and humidity with climate-controlled storage across the UAE. Book your storage unit now!')
@@ -73,14 +73,14 @@
                     <button type="button" class="cc-it" data-k="elec"><i class="fas fa-laptop"></i> Electronics</button>
                     <button type="button" class="cc-it" data-k="docs"><i class="fas fa-folder-open"></i> Documents &amp; Archives</button>
                     <button type="button" class="cc-it" data-k="art"><i class="fas fa-palette"></i> Artwork &amp; Photos</button>
-                    <button type="button" class="cc-it" data-k="music"><i class="fas fa-guitar"></i> Instruments</button>
+                    <button type="button" class="cc-it" data-k="music"><i class="fas fa-music"></i> Instruments</button>
                     <button type="button" class="cc-it" data-k="stock"><i class="fas fa-boxes"></i> Business Inventory</button>
                 </div>
                 <div class="cc-detail sk-reveal" id="ccDetail">
                     <div class="ic" id="ccIc"><i class="fas fa-couch"></i></div>
                     <div>
                         <h3 id="ccTitle">Wooden Furniture, Antiques &amp; Home Décor</h3>
-                        <div class="cc-line risk"><i class="fas fa-triangle-exclamation"></i><span><b>The risk:</b> <span id="ccRisk">Wood can expand, contract or warp when exposed to excessive heat and moisture.</span></span></div>
+                        <div class="cc-line risk"><i class="fas fa-exclamation-triangle"></i><span><b>The risk:</b> <span id="ccRisk">Wood can expand, contract or warp when exposed to excessive heat and moisture.</span></span></div>
                         <div class="cc-line prot"><i class="fas fa-shield-alt"></i><span><b>How we protect it:</b> <span id="ccProt">Stable temperature and humidity keep timber and joints from cracking or warping.</span></span></div>
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                         <h3><span class="ic"><i class="fas fa-box"></i></span> Standard Unit</h3>
                         <div class="cc-meter"><label>Temperature <b class="cc-t">32°C</b></label><div class="track"><i class="cc-tb cc-bar-warn" style="width:64%"></i></div></div>
                         <div class="cc-meter"><label>Humidity <b class="cc-h">60%</b></label><div class="track"><i class="cc-hb cc-bar-warn" style="width:60%"></i></div></div>
-                        <div class="cc-status warn" id="ccStdStatus"><i class="fas fa-triangle-exclamation"></i> Warm &amp; humid — long-term risk to sensitive items</div>
+                        <div class="cc-status warn" id="ccStdStatus"><i class="fas fa-exclamation-triangle"></i> Warm &amp; humid — long-term risk to sensitive items</div>
                     </div>
                     <div class="cc-unit controlled">
                         <h3><span class="ic"><i class="fas fa-snowflake"></i></span> Climate-Controlled Unit</h3>

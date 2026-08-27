@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Frequently Asked Questions')
 @section('metaTitle', 'Frequently Asked Questions | Storage Keys')
 @section('metaDescription', 'Frequently Asked Questions about StorageKeys services, storage options, access, pricing, bookings, and support across Dubai and Sharjah, UAE.')
@@ -154,8 +154,8 @@
                         <p>If you cannot find the answer you are looking for, our team is happy to help with storage options, space requirements, pricing, bookings, and other questions.</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-envelope"></i> Email: <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                             <li><i class="fas fa-map-marker-alt"></i> Locations: Dubai &amp; Sharjah, UAE</li>
                         </ul>
                         <p>Contact StorageKeys today to discuss your storage requirements or request a personalised quote.</p>
@@ -167,7 +167,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

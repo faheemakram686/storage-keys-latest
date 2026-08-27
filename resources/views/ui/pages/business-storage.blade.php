@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Business Storage')
 @section('metaTitle', 'Business Storage Solutions in the UAE | Storagekeys')
 @section('metaDescription', 'Organised, secure business storage for retailers, distributors and e-commerce across the UAE. Flexible plans. Book your storage unit today!')
@@ -20,8 +20,8 @@
                     <p class="lead">Secure, climate-controlled business storage units for inventory, documents and equipment. Flexible, quote-based terms with moving support included — built for companies across Dubai, Sharjah and the wider UAE.</p>
                     <div class="svc-hero-cta">
                         <a href="#business-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get a Free Quote</a>
-                        <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                     </div>
                 </div>
                 <div class="svc-hero-card">
@@ -182,7 +182,7 @@
                     </div>
                     <div class="svc-tabpanel" data-panel="contractor">
                         <div class="svc-ind">
-                            <div class="ic"><i class="fas fa-hard-hat"></i></div>
+                            <div class="ic"><i class="fas fa-industry"></i></div>
                             <div>
                                 <h3>Contractors</h3>
                                 <p>A secure base for tools, machinery and materials between projects — so kit stays protected and organised without cluttering your yard or office.</p>
@@ -469,8 +469,8 @@
                     <h2>Get a Free Business Storage Quote Today</h2>
                     <p>Stop paying office rent for storage space. Tell us what your company needs to store, and we'll recommend the right unit at a fair, quote-based price — collection included when you need it.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -500,7 +500,7 @@
 
     <!-- ============ STICKY MOBILE ACTION BAR ============ -->
     <div class="svc-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#business-quote"><i class="fas fa-file-invoice-dollar"></i> Quote</a>
     </div>

@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Support Policy')
 @section('metaTitle', 'Support Policy | Storage Keys')
 @section('metaDescription', 'Support Policy of StorageKeys explaining customer support channels, response approach and responsibilities across UAE storage services.')
@@ -59,8 +59,8 @@
                         <p>Customers can contact StorageKeys through the following channels:</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-envelope"></i> Email: <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                         </ul>
                         <p>Customers should provide relevant information when contacting us, such as their name, contact details, storage location, and a brief description of their request. Providing accurate information helps our team understand the issue and respond more efficiently.</p>
                     </section>
@@ -147,8 +147,8 @@
                         <p>For questions, support requests, or assistance relating to StorageKeys services, please contact:</p>
                         <ul class="lp-contact">
                             <li><i class="fas fa-envelope"></i> Email: <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
-                            <li><i class="fas fa-phone-alt"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
+                            <li><i class="fas fa-phone"></i> Phone / WhatsApp: <a href="tel:+971565018785">+971 56 501 8785</a></li>
+                            <li><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></li>
                         </ul>
                     </section>
 
@@ -163,7 +163,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="{{ url('/contact-us') }}"><i class="fas fa-envelope"></i> Quote</a>
     </div>

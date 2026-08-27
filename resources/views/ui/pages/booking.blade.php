@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', '| Booking')
 @section('metaTitle', 'Book a Storage Unit | Storage Keys')
 @section('metaDescription', 'Search available storage units in Sharjah and Dubai. Filter by location, unit level, storage type and size, then enquire to reserve your unit.')
@@ -150,7 +150,7 @@
     </section>
 
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#bk-search"><i class="fas fa-search"></i> Search</a>
     </div>

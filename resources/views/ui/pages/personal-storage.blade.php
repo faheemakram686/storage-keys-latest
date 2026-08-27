@@ -1,4 +1,4 @@
-
+﻿
 @extends('ui.layouts.frontend')
 @section('title', 'Personal Storage Solutions in Dubai & Abu Dhabi | Storage Keys')
 @section('metaTitle', 'Affordable Personal Storage Solutions in Dubai | StorageKeys')
@@ -17,7 +17,7 @@
             <p class="lead">Create more space at home with flexible personal storage in Dubai and Abu Dhabi. Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible.</p>
             <div class="ps-hero-cta">
                 <a href="#ps-quote" class="sk-btn sk-btn-primary"><i class="fas fa-box-open"></i> Get a Free Quote</a>
-                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-list-check"></i> Build Your Storage List</a>
+                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-tasks"></i> Build Your Storage List</a>
             </div>
             <div class="ps-hero-badges">
                 <span class="ps-hbadge"><i class="fas fa-truck"></i> Moving</span>
@@ -74,7 +74,7 @@
                 <span class="ps-sit"><i class="fas fa-paint-roller"></i> Renovating</span>
                 <span class="ps-sit"><i class="fas fa-plane"></i> Travelling</span>
                 <span class="ps-sit"><i class="fas fa-couch"></i> Decluttering</span>
-                <span class="ps-sit"><i class="fas fa-compress-arrows-alt"></i> Downsizing</span>
+                <span class="ps-sit"><i class="fas fa-compress"></i> Downsizing</span>
             </div>
             <div class="ps-term sk-reveal in">
                 <div class="ps-termc">
@@ -137,7 +137,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Avoid overloading boxes to make lifting safer and prevent damage.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Keep a simple inventory of stored belongings for easier organisation.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-circle-check"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
         </div>
     </section>
@@ -298,7 +298,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ps-quote"><i class="fas fa-box-open"></i> Quote</a>
     </div>

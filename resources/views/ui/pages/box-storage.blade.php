@@ -1,4 +1,4 @@
-@extends('ui.layouts.frontend')
+﻿@extends('ui.layouts.frontend')
 @section('title', 'Box Storage in Dubai & Sharjah | Storage Keys')
 @section('metaTitle', 'Secure Box Storage for Homes & Businesses | StorageKeys')
 @section('metaDescription', 'Store packed belongings, household items, documents and business stock with flexible box storage in Dubai and Sharjah. Short- or long-term. Get a free quote.')
@@ -16,7 +16,7 @@
             <p class="lead">When you need a practical place to keep packed belongings, box storage provides a simple and flexible solution — without filling your home, office, or business premises with boxes.</p>
             <div class="ps-hero-cta">
                 <a href="#ps-quote" class="sk-btn sk-btn-primary"><i class="fas fa-box"></i> Get Box Storage Space</a>
-                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-list-check"></i> What Can You Store?</a>
+                <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-tasks"></i> What Can You Store?</a>
             </div>
             <div class="ps-hero-badges">
                 <span class="ps-hbadge"><i class="fas fa-home"></i> Household Boxes</span>
@@ -99,7 +99,7 @@
                 <button type="button" class="ps-item" data-item="Office supplies"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-paperclip"></i></div><span class="h4">Office Supplies</span></button>
                 <button type="button" class="ps-item" data-item="Business inventory and stock"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-boxes"></i></div><span class="h4">Business Inventory</span></button>
                 <button type="button" class="ps-item" data-item="Packaging materials &amp; retail products"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-box-open"></i></div><span class="h4">Packaging &amp; Retail</span></button>
-                <button type="button" class="ps-item" data-item="Small equipment and relocation items"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-tools"></i></div><span class="h4">Equipment &amp; Moves</span></button>
+                <button type="button" class="ps-item" data-item="Small equipment and relocation items"><span class="chk"><i class="fas fa-check"></i></span><div class="ic"><i class="fas fa-wrench"></i></div><span class="h4">Equipment &amp; Moves</span></button>
             </div>
             <div class="ps-cart sk-reveal">
                 <div class="txt"><b><span id="psCount">0</span> item type(s)</b> selected<small id="psList">Tap the items above to build your list.</small></div>
@@ -130,7 +130,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Group similar items together for easier retrieval later.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Keep a simple inventory of stored boxes and contents.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-circle-check"></i> Nicely done — your boxes are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your boxes are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
         </div>
     </section>
@@ -253,8 +253,8 @@
                     <h2>Ready to Move Your Boxes Out?</h2>
                     <p>Ready to move your boxes out of your home or workplace? Contact StorageKeys to discuss your requirements and find a suitable storage solution for your belongings.</p>
                     <div class="contacts">
-                        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> +971 56 501 8785</a>
-                        <a href="tel:8005397"><i class="fas fa-phone-alt"></i> Toll Free: 800 5397</a>
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
                         <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
@@ -277,7 +277,7 @@
 
     <!-- ============ STICKY MOBILE BAR ============ -->
     <div class="ps-mobilebar">
-        <a href="tel:+971565018785"><i class="fas fa-phone-alt"></i> Call</a>
+        <a href="tel:+971565018785"><i class="fas fa-phone"></i> Call</a>
         <a href="https://wa.me/971565018785" class="wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         <a href="#ps-quote"><i class="fas fa-box"></i> Quote</a>
     </div>
