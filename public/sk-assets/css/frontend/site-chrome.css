@@ -121,6 +121,7 @@ html, body {
 .pv-logo img {
   height: 40px;
   width: auto;
+  aspect-ratio: 223 / 64;
   display: block;
 }
 .pv-nav {
@@ -334,6 +335,7 @@ html, body {
   height: 42px;
   width: auto;
   max-width: 220px;
+  aspect-ratio: 223 / 64;
 }
 .pv-foot-brand > p {
   margin: 0 0 18px;

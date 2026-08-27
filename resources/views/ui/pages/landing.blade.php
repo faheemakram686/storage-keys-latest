@@ -28,8 +28,8 @@
         <div class="sk-container">
             <div class="sk-hero-grid">
                 <div class="sk-hero-copy">
-                    <span class="sk-eyebrow" style="color:#ffcf9e;">Self Storage · Dubai · Abu Dhabi · Sharjah</span>
-                    <h1>Self Storage Solutions Across <span>Dubai, Abu Dhabi &amp; the UAE</span></h1>
+                    <span class="sk-eyebrow" style="color:#ffcf9e;">Self Storage · Dubai · Sharjah · UAE</span>
+                    <h1>Self Storage Solutions Across <span>Dubai, Sharjah &amp; the UAE</span></h1>
                     <p class="lead">Secure storage and flexible self storage units for homes and businesses across Dubai, Abu Dhabi and Sharjah — with flexible plans and 24/7 access.</p>
                     <div class="sk-hero-badges">
                         <span><i class="fas fa-shield-alt"></i> Secure &amp; CCTV Monitored</span>
@@ -42,7 +42,7 @@
                         <a href="https://wa.me/971565018785" class="sk-btn sk-btn-ghost"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
                     </div>
                     <div class="sk-hero-chips">
-                        <div class="sk-chip"><i class="fas fa-map-marker-alt"></i><div><div class="v">3 Emirates</div><div class="k">Covered</div></div></div>
+                        <div class="sk-chip"><i class="fas fa-map-marker-alt"></i><div><div class="v">7 Emirates</div><div class="k">Covered</div></div></div>
                         <div class="sk-chip"><i class="fas fa-clock"></i><div><div class="v">24/7</div><div class="k">Unit access</div></div></div>
                         <div class="sk-chip"><i class="fas fa-temperature-low"></i><div><div class="v">Climate</div><div class="k">Controlled</div></div></div>
                         <div class="sk-chip"><i class="fas fa-tags"></i><div><div class="v">0</div><div class="k">Hidden costs</div></div></div>
@@ -757,11 +757,11 @@
             <div class="sk-logos sk-reveal">
                 <div class="cap">Trusted by businesses across the UAE</div>
                 <div class="sk-logos-row">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-12.png') }}" alt="Partner" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-13.png') }}" alt="Partner" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-14.png') }}" alt="Partner" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-15.png') }}" alt="Partner" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-16.png') }}" alt="Partner" loading="lazy" decoding="async">
+                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-12.png') }}" alt="Partner" width="225" height="51" loading="lazy" decoding="async">
+                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-13.png') }}" alt="Partner" width="225" height="56" loading="lazy" decoding="async">
+                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-14.png') }}" alt="Partner" width="225" height="55" loading="lazy" decoding="async">
+                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-15.png') }}" alt="Partner" width="225" height="59" loading="lazy" decoding="async">
+                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-16.png') }}" alt="Partner" width="225" height="49" loading="lazy" decoding="async">
                 </div>
             </div>
         </div>
@@ -800,7 +800,7 @@
     </section>
 
     <!-- ============ STORAGE TIPS / BLOG ============ -->
-    <section class="sk-section" style="background:var(--sk-soft);">
+    <!-- <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Storage Tips &amp; Guides</span>
@@ -837,7 +837,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- ============ FAQ ============ -->
     <section class="sk-section" style="background:#fff;">
