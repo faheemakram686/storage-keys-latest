@@ -3,6 +3,11 @@
    Banner, header, nav dropdown, footer.
    Loaded LAST so header/footer stay identical on every page.
 ============================================================ */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --sk-primary: #123a63;
   --sk-primary-2: #1c5a99;
@@ -316,8 +321,23 @@
 }
 .pv-foot-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.4fr;
-  gap: 36px;
+  grid-template-columns: 1.6fr 1fr 1fr 1.35fr;
+  gap: 48px 40px;
+  align-items: start;
+}
+.pv-foot-brand .pv-foot-logo {
+  display: inline-block;
+  margin: 0 0 16px;
+}
+.pv-foot-brand .pv-foot-logo img {
+  display: block;
+  height: 42px;
+  width: auto;
+  max-width: 220px;
+}
+.pv-foot-brand > p {
+  margin: 0 0 18px;
+  max-width: 34ch;
 }
 .pv-footer h4,
 .pv-footer .h4 {
@@ -327,15 +347,17 @@
 }
 .pv-footer h5,
 .pv-footer .h5 {
+  display: block;
   color: #fff;
   font-size: 15px;
-  margin: 0 0 16px;
+  margin: 0;
+  padding: 0 0 22px;
   letter-spacing: .04em;
 }
 .pv-footer p {
   font-size: 14px;
   line-height: 1.7;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   color: rgba(255, 255, 255, .78);
 }
 .pv-footer p i {
@@ -347,15 +369,24 @@
   color: rgba(255, 255, 255, .72);
   text-decoration: none;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 .pv-footer a:hover {
   color: var(--sk-accent);
 }
+.pv-foot-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pv-foot-links a {
+  margin: 0;
+  line-height: 1.45;
+}
 .pv-social {
   display: flex;
   gap: 10px;
-  margin-top: 16px;
+  margin-top: 4px;
 }
 .pv-social a {
   width: 38px;
@@ -373,7 +404,7 @@
 }
 .pv-copy {
   border-top: 1px solid rgba(255, 255, 255, .1);
-  margin-top: 40px;
+  margin-top: 44px;
   padding-top: 20px;
   text-align: center;
   font-size: 13px;
@@ -390,8 +421,13 @@
 .pv-foot-contact p {
   display: flex;
   align-items: flex-start;
+  gap: 2px;
   color: rgba(255, 255, 255, .88);
   line-height: 1.5;
+  margin: 0 0 14px;
+}
+.pv-foot-contact p:last-child {
+  margin-bottom: 0;
 }
 .pv-foot-contact p i {
   flex: none;
@@ -406,13 +442,6 @@
 }
 .pv-foot-contact p a:hover {
   color: var(--sk-accent);
-}
-.pv-foot-support .pv-foot-links {
-  display: block;
-}
-.pv-foot-support .pv-foot-links a {
-  margin: 0 0 10px;
-  line-height: 1.7;
 }
 
 /* Below chrome max: keep side padding all the way to mobile */
@@ -541,9 +570,7 @@
   }
   .pv-foot-grid {
     grid-template-columns: 1fr;
-  }
-  .pv-foot-support .pv-foot-links {
-    display: block;
+    gap: 32px;
   }
   .pv-banner-note {
     padding: 8px 0;

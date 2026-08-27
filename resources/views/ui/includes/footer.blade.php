@@ -1,4 +1,4 @@
-﻿    <!-- FOOTER AREA START -->
+    <!-- FOOTER AREA START -->
     
     <!-- BRAND LOGO AREA START -->
     <!-- ============ STICKY MOBILE BAR ============ -->
@@ -13,8 +13,10 @@
 <footer class="pv-footer">
   <div class="sk-container">
     <div class="pv-foot-grid">
-      <div>
-        <span class="h4">StorageKeys</span>
+      <div class="pv-foot-brand">
+        <a href="{{ url('/') }}" class="pv-foot-logo">
+          <img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys">
+        </a>
         <p>StorageKeys provides secure, flexible self storage solutions for individuals and businesses across Dubai, Sharjah and the UAE. From personal belongings and luggage to business inventory and warehouse space, we offer convenient storage units tailored to your needs.</p>
         <div class="pv-social">
           <a href="https://www.facebook.com/storagekeysllc" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
@@ -22,16 +24,18 @@
           <a href="https://wa.me/971565018785" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
         </div>
       </div>
-      <div>
+      <div class="pv-foot-col">
         <span class="h5">Company</span>
-        <a href="{{ url('/about-us') }}">About Us</a>
-        <a href="{{ url('/storage-options') }}">Storage Options</a>
-        <a href="{{ url('/booking') }}">Booking</a>
-        <a href="{{ url('/shop') }}">Shop</a>
-        <a href="{{ url('/contact-us') }}">Contact Us</a>
-        <a href="{{ url('/blogs') }}">Blogs</a>
+        <div class="pv-foot-links">
+          <a href="{{ url('/about-us') }}">About Us</a>
+          <a href="{{ url('/storage-options') }}">Storage Options</a>
+          <a href="{{ url('/booking') }}">Booking</a>
+          <a href="{{ url('/shop') }}">Shop</a>
+          <a href="{{ url('/contact-us') }}">Contact Us</a>
+          <a href="{{ url('/blogs') }}">Blogs</a>
+        </div>
       </div>
-      <div class="pv-foot-support">
+      <div class="pv-foot-col pv-foot-support">
         <span class="h5">Support</span>
         <div class="pv-foot-links">
           <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
@@ -42,7 +46,7 @@
           <a href="{{ url('/frequently-asked-questions') }}">FAQs</a>
         </div>
       </div>
-      <div class="pv-foot-contact">
+      <div class="pv-foot-col pv-foot-contact">
         <span class="h5">Get in Touch</span>
         <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
         <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
