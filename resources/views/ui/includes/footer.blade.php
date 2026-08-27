@@ -15,7 +15,7 @@
     <div class="pv-foot-grid">
       <div class="pv-foot-brand">
         <a href="{{ url('/') }}" class="pv-foot-logo">
-          <img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys">
+          <img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys" width="223" height="64" decoding="async">
         </a>
         <p>StorageKeys provides secure, flexible self storage solutions for individuals and businesses across Dubai, Sharjah and the UAE. From personal belongings and luggage to business inventory and warehouse space, we offer convenient storage units tailored to your needs.</p>
         <div class="pv-social">
