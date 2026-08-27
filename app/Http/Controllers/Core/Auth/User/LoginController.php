@@ -20,9 +20,7 @@ class LoginController extends Controller
     public function show()
     {
         $demoCredentials = env('IS_DEMO', false) ? config('demo.loginCredentials') : [];
-        return env('APP_INSTALLED')
-            ? view('ui.pages.admin.login')->with('demo', $demoCredentials)
-            : redirect('install');
+        return env('APP_INSTALLED') ? view('auth.login')->with('demo', $demoCredentials) : redirect('install');
     }
 
     /**

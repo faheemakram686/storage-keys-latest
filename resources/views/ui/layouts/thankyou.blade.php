@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @include('ui.includes.canonical')
     <link rel="shortcut icon" href="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}" type="image/x-icon" />
-    @include('ui.includes.header')
+    @include('ui.includes.header-assets')
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/thank-you.css') }}">
 </head>
 <body class="sk-thanks-body">

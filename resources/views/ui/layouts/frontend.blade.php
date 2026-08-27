@@ -16,22 +16,16 @@
 
     <!-- Place favicon.png in the root directory -->
     <link rel="shortcut icon" href="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}" type="image/x-icon" />
-    @include('ui.includes.header')
+    @include('ui.includes.header-assets')
     @include('ui.includes.page-css')
     @yield('css')
     {{-- Site chrome last so header/footer match on every page --}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
-    {{-- <style>
-        .bdy-bg {
-            background-image: url('sk-assets/assets/images/frontend/Logo Background.png');
-        }
-    </style> --}}
 </head>
 <body>
-    {{-- <div class="bdy-bg"> --}}
-        @yield('content')
-        @include('ui.includes.footer')
-    {{-- </div> --}}
+    @include('ui.includes.header')
+    @yield('content')
+    @include('ui.includes.footer')
 @yield('footerInsert')
 
 @yield('javascriptWork')
