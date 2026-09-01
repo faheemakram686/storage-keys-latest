@@ -4,13 +4,17 @@
         $path = '/';
     }
 
-    $scripts = ['reveal.js'];
+    $scripts = [];
 
     if ($path === '/') {
-        $scripts[] = 'business-storage.js';
+        $scripts[] = 'landing-home.js';
         $scripts[] = 'landing-gallery.js';
         $scripts[] = 'landing-reviews.js';
-    } elseif ($path === 'business-storage') {
+    } else {
+        $scripts[] = 'reveal.js';
+    }
+
+    if ($path === 'business-storage') {
         $scripts[] = 'business-storage.js';
     } elseif (in_array($path, ['personal-storage', 'box-storage', 'appliance-storage', 'climate-controlled-storage'], true)) {
         $scripts[] = 'business-storage.js';

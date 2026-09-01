@@ -58,14 +58,22 @@
   </div>
 </footer>  
   
+@php
+    $isHome = trim(request()->path(), '/') === '';
+@endphp
+
+@if(!$isHome)
     <!-- All JS Plugins -->
-    <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/plugins.js') }}" defer></script>
     <!-- Main JS -->
-    <script src="{{ asset('sk-assets/js/frontend/main.js') }}"></script>
+    <script src="{{ asset('sk-assets/js/frontend/main.js') }}" defer></script>
+@endif
     @include('ui.includes.page-js')
 
-    <script src="{{ asset('sk-assets/js/common.js') }}"></script>
-    <script src="{{ asset('sk-assets/js/toastr.min.js') }}"></script>
+@if(!$isHome)
+    <script src="{{ asset('sk-assets/js/common.js') }}" defer></script>
+    <script src="{{ asset('sk-assets/js/toastr.min.js') }}" defer></script>
+@endif
 
     <!--Start of Tawk.to Script-->
 {{--    <script type="text/javascript">--}}
@@ -102,10 +110,10 @@
         }
 
         if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadWhatsAppWidget, { timeout: 3000 });
+            requestIdleCallback(loadWhatsAppWidget, { timeout: 8000 });
         } else {
             window.addEventListener('load', function () {
-                setTimeout(loadWhatsAppWidget, 1500);
+                setTimeout(loadWhatsAppWidget, 4000);
             });
         }
     </script>

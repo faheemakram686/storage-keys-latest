@@ -355,6 +355,10 @@
     margin: 8px 0 0;
 }
 
+.sk-hero .sk-quote-note {
+    margin-top: 18px;
+}
+
 .sk-quote-note a {
     color: var(--sk-primary-2);
     font-weight: 600;
@@ -1243,6 +1247,7 @@
 
 .sk-rev-viewport {
     overflow: hidden;
+    min-height: 280px;
 }
 
 .sk-rev-track {
@@ -1365,6 +1370,11 @@
     font-family: inherit;
     margin: -6px 0 10px;
     align-self: flex-start;
+    min-height: 20px;
+}
+
+.sk-grev-more[hidden] {
+    display: none;
 }
 
 .sk-grev-more:hover {
@@ -1435,6 +1445,7 @@
     justify-content: center;
     gap: 8px;
     margin-top: 22px;
+    min-height: 9px;
 }
 
 .sk-rev-dots button {
@@ -1449,7 +1460,7 @@
 }
 
 .sk-rev-dots button.is-active,
-.sk-rev-dots button[aria-selected="true"] {
+.sk-rev-dots button[aria-pressed="true"] {
     background: #ff6a00;
     transform: scale(1.15);
 }
@@ -2028,6 +2039,7 @@
 .sk-gal-viewport {
     overflow: hidden;
     border-radius: 14px;
+    min-height: 200px;
 }
 
 .sk-gal-track {
@@ -2107,6 +2119,7 @@
     justify-content: center;
     gap: 8px;
     margin-top: 22px;
+    min-height: 9px;
 }
 
 .sk-gal-dots button {
@@ -2120,7 +2133,7 @@
     transition: .2s;
 }
 
-.sk-gal-dots button[aria-selected="true"],
+.sk-gal-dots button[aria-pressed="true"],
 .sk-gal-dots button.is-active {
     background: var(--sk-accent);
     transform: scale(1.15);
@@ -2382,6 +2395,10 @@
     .sk-hero {
         padding: 90px 0 56px;
         min-height: 640px;
+    }
+
+    .sk-hero .sk-quote {
+        padding: 28px 16px 16px;
     }
 }
 

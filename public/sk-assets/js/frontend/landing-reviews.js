@@ -35,7 +35,7 @@
             var b = document.createElement('button');
             b.type = 'button';
             b.setAttribute('aria-label', 'Go to review group ' + (i + 1));
-            b.setAttribute('aria-selected', i === index ? 'true' : 'false');
+            b.setAttribute('aria-pressed', i === index ? 'true' : 'false');
             if (i === index) b.classList.add('is-active');
             (function (page) {
                 b.addEventListener('click', function () {
@@ -52,7 +52,7 @@
         [].slice.call(dotsWrap.querySelectorAll('button')).forEach(function (b, i) {
             var on = i === index;
             b.classList.toggle('is-active', on);
-            b.setAttribute('aria-selected', on ? 'true' : 'false');
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
     }
 
@@ -124,21 +124,31 @@
         }, 120);
     });
 
-    buildDots();
-    goTo(0);
-    start();
-
-    /* Google-style "More" expand for long reviews */
-    [].slice.call(root.querySelectorAll('.sk-grev-text')).forEach(function (p) {
-        if (p.scrollHeight <= p.clientHeight + 2) return;
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'sk-grev-more';
-        btn.textContent = 'More';
-        p.insertAdjacentElement('afterend', btn);
-        btn.addEventListener('click', function () {
-            var open = p.classList.toggle('is-open');
-            btn.textContent = open ? 'Less' : 'More';
+    function initMoreButtons() {
+        [].slice.call(root.querySelectorAll('.sk-grev-text')).forEach(function (p) {
+            var btn = p.nextElementSibling;
+            if (!btn || !btn.classList.contains('sk-grev-more')) return;
+            if (p.scrollHeight <= p.clientHeight + 2) return;
+            btn.hidden = false;
+            btn.addEventListener('click', function () {
+                var open = p.classList.toggle('is-open');
+                btn.textContent = open ? 'Less' : 'More';
+            });
         });
-    });
+    }
+
+    function init() {
+        buildDots();
+        goTo(0);
+        start();
+        initMoreButtons();
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+            requestAnimationFrame(init);
+        });
+    } else {
+        requestAnimationFrame(init);
+    }
 })();
