@@ -25,8 +25,8 @@
                                                 @endif
                                             @endif
                                             @guest
-                                                <li><a href="{{url('admin')}}" title="Admin Area"><i
-                                                                class="fa fa-lock"></i> Admin area</a></li>
+                                                <li><a href="{{ route('customer.login') }}" title="Customer Login"><i
+                                                                class="fa fa-lock"></i> Customer Login</a></li>
                                                 <li><a href="{{route('customer.register')}}" title="Register"><i
                                                                 class="fa fa-user"></i> Register</a></li>
                                             @endguest
@@ -65,10 +65,10 @@
     </nav>
     <div class="pv-header-cta">
       @if (\Auth::user() && Auth::getDefaultDriver() == 'contact')
-        <a href="{{ route('customer.dashboard') }}" class="pv-customer-login"><i class="fas fa-user" aria-hidden="true"></i> Dashboard</a>
+        <a href="{{ route('customer.dashboard') }}" class="pv-customer-login" aria-label="Dashboard" title="Dashboard"><i class="fas fa-user" aria-hidden="true"></i></a>
       @else
         @guest
-          <a href="{{ route('customer.login') }}" class="pv-customer-login"><i class="fas fa-lock" aria-hidden="true"></i> Customer Login</a>
+          <a href="{{ route('customer.login') }}" class="pv-customer-login" aria-label="Customer Login" title="Customer Login"><i class="fas fa-lock" aria-hidden="true"></i></a>
         @endguest
       @endif
       <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
