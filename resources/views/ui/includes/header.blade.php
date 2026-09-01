@@ -64,13 +64,6 @@
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>
     </nav>
     <div class="pv-header-cta">
-      @if (\Auth::user() && Auth::getDefaultDriver() == 'contact')
-        <a href="{{ route('customer.dashboard') }}" class="pv-customer-login" aria-label="Dashboard" title="Dashboard"><i class="fas fa-user" aria-hidden="true"></i></a>
-      @else
-        @guest
-          <a href="{{ route('customer.login') }}" class="pv-customer-login" aria-label="Customer Login" title="Customer Login"><i class="fas fa-lock" aria-hidden="true"></i></a>
-        @endguest
-      @endif
       <a href="{{ url('/booking') }}" class="pv-book">Book Now</a>
       @php
         $cartQty = 0;
