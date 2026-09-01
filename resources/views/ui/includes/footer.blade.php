@@ -110,10 +110,10 @@
         }
 
         if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadWhatsAppWidget, { timeout: 8000 });
+            requestIdleCallback(loadWhatsAppWidget, { timeout: 12000 });
         } else {
             window.addEventListener('load', function () {
-                setTimeout(loadWhatsAppWidget, 4000);
+                setTimeout(loadWhatsAppWidget, 6000);
             });
         }
     </script>
