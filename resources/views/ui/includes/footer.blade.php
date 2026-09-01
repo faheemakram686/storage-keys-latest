@@ -25,25 +25,31 @@
         </div>
       </div>
       <div class="pv-foot-col">
-        <span class="h5">Company</span>
+        <span class="h5">Quick Links</span>
         <div class="pv-foot-links">
+          <a href="{{ url('/') }}">Home</a>
           <a href="{{ url('/about-us') }}">About Us</a>
           <a href="{{ url('/storage-options') }}">Storage Options</a>
           <a href="{{ url('/booking') }}">Booking</a>
           <a href="{{ url('/shop') }}">Shop</a>
-          <a href="{{ url('/contact-us') }}">Contact Us</a>
           <a href="{{ url('/blogs') }}">Blogs</a>
+          <a href="{{ url('/contact-us') }}">Contact Us</a>
         </div>
       </div>
-      <div class="pv-foot-col pv-foot-support">
-        <span class="h5">Support</span>
+      <div class="pv-foot-col">
+        <span class="h5">Our Services</span>
         <div class="pv-foot-links">
-          <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
-          <a href="{{ url('/security-policy') }}">Security Policy</a>
-          <a href="{{ url('/support-policy') }}">Support Policy</a>
-          <a href="{{ url('/cookie-policy') }}">Cookie Policy</a>
-          <a href="{{ url('/terms-of-service') }}">Terms of Service</a>
-          <a href="{{ url('/frequently-asked-questions') }}">FAQs</a>
+          <a href="{{ url('/personal-storage') }}">Personal Storage</a>
+          <a href="{{ url('/residential-storage') }}">Residential Storage</a>
+          <a href="{{ url('/furniture-storage') }}">Furniture Storage</a>
+          <a href="{{ url('/box-storage') }}">Box Storage</a>
+          <a href="{{ url('/appliance-storage') }}">Appliance Storage</a>
+          <a href="{{ url('/business-storage') }}">Business Storage</a>
+          <a href="{{ url('/warehouse-storage') }}">Warehouse Storage</a>
+          <a href="{{ url('/climate-controlled-storage') }}">Climate Controlled Storage</a>
+          <a href="{{ url('/moving-services') }}">Moving Services</a>
+          <a href="{{ url('/luggage-storage') }}">Luggage Storage</a>
+          <a href="{{ url('/car-storage') }}">Car Storage</a>
         </div>
       </div>
       <div class="pv-foot-col pv-foot-contact">
@@ -52,6 +58,14 @@
         <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
         <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
+        <div class="pv-foot-links pv-foot-legal">
+          <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
+          <a href="{{ url('/security-policy') }}">Security Policy</a>
+          <a href="{{ url('/support-policy') }}">Support Policy</a>
+          <a href="{{ url('/cookie-policy') }}">Cookie Policy</a>
+          <a href="{{ url('/terms-of-service') }}">Terms of Service</a>
+          <a href="{{ url('/frequently-asked-questions') }}">FAQs</a>
+        </div>
       </div>
     </div>
     <div class="pv-copy">© StorageKeys 2026 — All rights reserved.</div>
