@@ -5,7 +5,10 @@
 
 @section('css')
 {{-- LCP: discover hero image in <head> before CSS background would --}}
-<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" fetchpriority="high" imagesizes="100vw">
+<link rel="dns-prefetch" href="https://d2mpatx37cqexb.cloudfront.net">
+<link rel="preload" as="style" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
+<link rel="preload" as="style" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
 @endsection
 
 @section('content')
@@ -541,7 +544,7 @@
                 <button type="button" class="sk-gal-btn sk-gal-next" aria-label="Next photos">
                     <i class="fas fa-chevron-right" aria-hidden="true"></i>
                 </button>
-                <div class="sk-gal-dots" role="tablist" aria-label="Gallery slides"></div>
+                <div class="sk-gal-dots" role="group" aria-label="Gallery slides"></div>
             </div>
         </div>
     </section>
@@ -724,7 +727,7 @@
                                         <i class="fab fa-google sk-grev-g" aria-hidden="true"></i>
                                     </div>
                                     <div class="sk-grev-rating">
-                                        <span class="sk-grev-stars" aria-label="{{ $review['stars'] }} out of 5 stars">
+                                        <span class="sk-grev-stars" role="img" aria-label="{{ $review['stars'] }} out of 5 stars">
                                             @for ($s = 0; $s < $review['stars']; $s++)
                                                 <i class="fas fa-star" aria-hidden="true"></i>
                                             @endfor
@@ -732,6 +735,7 @@
                                         <span class="sk-grev-when">{{ $review['when'] }}</span>
                                     </div>
                                     <p class="sk-grev-text" data-full="{{ e($review['text']) }}">{{ $review['text'] }}</p>
+                                    <button type="button" class="sk-grev-more" hidden>More</button>
                                     @if (!empty($review['owner']))
                                         <div class="sk-grev-owner">
                                             <div class="sk-grev-owner-title">Response from the owner <span>{{ $review['owner_when'] }}</span></div>
@@ -746,7 +750,7 @@
                 <button type="button" class="sk-rev-btn sk-rev-next" aria-label="Next reviews">
                     <i class="fas fa-chevron-right" aria-hidden="true"></i>
                 </button>
-                <div class="sk-rev-dots" role="tablist" aria-label="Review slides"></div>
+                <div class="sk-rev-dots" role="group" aria-label="Review slides"></div>
             </div>
             <div class="sk-reviews-more">
                 <a href="{{ $googleReviewsUrl }}" target="_blank" rel="noopener noreferrer" class="sk-btn sk-btn-outline">

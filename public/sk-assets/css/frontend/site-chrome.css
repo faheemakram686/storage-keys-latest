@@ -8,6 +8,18 @@ html, body {
   padding: 0;
 }
 
+.d-none {
+  display: none !important;
+}
+
+/* Reserve icon width before font-icons.css loads (home async) */
+.fas, .fab, .far, .fa {
+  display: inline-block;
+  min-width: 1.125em;
+  text-align: center;
+  font-style: normal;
+}
+
 :root {
   --sk-primary: #123a63;
   --sk-primary-2: #1c5a99;

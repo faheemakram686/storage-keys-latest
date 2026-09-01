@@ -35,7 +35,7 @@
             var b = document.createElement('button');
             b.type = 'button';
             b.setAttribute('aria-label', 'Go to slide group ' + (i + 1));
-            b.setAttribute('aria-selected', i === index ? 'true' : 'false');
+            b.setAttribute('aria-pressed', i === index ? 'true' : 'false');
             if (i === index) b.classList.add('is-active');
             (function (page) {
                 b.addEventListener('click', function () {
@@ -52,7 +52,7 @@
         [].slice.call(dotsWrap.querySelectorAll('button')).forEach(function (b, i) {
             var on = i === index;
             b.classList.toggle('is-active', on);
-            b.setAttribute('aria-selected', on ? 'true' : 'false');
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
     }
 
@@ -124,7 +124,17 @@
         }, 120);
     });
 
-    buildDots();
-    goTo(0);
-    start();
+    function init() {
+        buildDots();
+        goTo(0);
+        start();
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+            requestAnimationFrame(init);
+        });
+    } else {
+        requestAnimationFrame(init);
+    }
 })();
