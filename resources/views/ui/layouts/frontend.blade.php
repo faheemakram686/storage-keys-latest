@@ -23,10 +23,8 @@
     {{-- Site chrome last so header/footer match on every page --}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     @if($isHome)
-    {{-- Home skips ~400KB legacy theme CSS; icons load async after layout paint --}}
-    <link rel="preload" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" as="style">
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}"></noscript>
+    {{-- Home: icons blocking so top bar renders correctly on first paint --}}
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}">
     @endif
 </head>
 <body>
