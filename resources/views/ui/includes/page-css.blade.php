@@ -8,7 +8,7 @@
     $css = [];
 
     if ($path === '/') {
-        $css[] = 'landing-page.css';
+        // landing-page.css loaded async from frontend layout (home only)
     } elseif ($path === 'business-storage') {
         $css[] = 'business-storage.css';
     } elseif ($path === 'warehouse-storage') {

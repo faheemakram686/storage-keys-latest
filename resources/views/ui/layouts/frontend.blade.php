@@ -20,13 +20,22 @@
     @include('ui.includes.header-assets')
     @yield('css')
     @include('ui.includes.page-css')
-    {{-- Site chrome last so header/footer match on every page --}}
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     @if($isHome)
-    {{-- Home: icons after layout CSS so FCP/LCP are not blocked; icon boxes already reserved --}}
+    {{-- Home: small critical CSS inline path, full sheets load async (FCP/LCP) --}}
+    <link rel="preload" href="{{ asset('sk-assets/css/frontend/home-critical.css') }}" as="style" fetchpriority="high">
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/home-critical.css') }}">
+    <link rel="preload" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}" as="style">
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}"></noscript>
+    <link rel="preload" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}" as="style">
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}"></noscript>
     <link rel="preload" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" as="style">
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}"></noscript>
+    @else
+    {{-- Site chrome last so header/footer match on every page --}}
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     @endif
 </head>
 <body>

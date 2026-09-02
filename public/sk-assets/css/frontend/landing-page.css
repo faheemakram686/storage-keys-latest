@@ -1535,41 +1535,130 @@
 /* ---------- Trusted-by logos ---------- */
 .sk-logos {
     border-top: 1px solid var(--sk-line);
-    margin-top: 60px;
-    padding-top: 44px;
+    margin-top: 48px;
+    padding-top: 36px;
+    padding-bottom: 6px;
 }
 
 .sk-logos .cap {
     text-align: center;
-    font-size: 12.5px;
-    letter-spacing: .12em;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .16em;
     text-transform: uppercase;
-    color: var(--sk-muted);
-    margin-bottom: 26px;
+    color: #64748b;
+    margin-bottom: 34px;
 }
 
-.sk-logos-row {
+.sk-logos-grid {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 44px;
+    gap: 36px 52px;
+    width: 100%;
+    margin: 0 auto;
 }
 
-.sk-logos-row img {
-    height: 46px;
+.sk-logo-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 1 auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+}
+
+.sk-logo-item img {
+    display: block;
     width: auto;
-    max-width: 180px;
-    aspect-ratio: 225 / 55;
+    height: auto;
+    max-height: 88px;
+    max-width: min(220px, 42vw);
     object-fit: contain;
-    filter: grayscale(1);
-    opacity: .55;
-    transition: .25s;
+    object-position: center;
+    opacity: .92;
+    transition: opacity .25s ease, transform .25s ease;
 }
 
-.sk-logos-row img:hover {
-    filter: none;
+.sk-logo-item:hover img {
     opacity: 1;
+    transform: scale(1.04);
+}
+
+.sk-logo-item--stack img {
+    max-height: 76px;
+    max-width: min(150px, 34vw);
+}
+
+@media (min-width: 1200px) {
+    .sk-logos-grid {
+        justify-content: space-between;
+        gap: 28px 32px;
+    }
+
+    .sk-logo-item img {
+        max-height: 82px;
+        max-width: 175px;
+    }
+
+    .sk-logo-item--stack img {
+        max-height: 70px;
+        max-width: 118px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .sk-logos-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        justify-items: center;
+        gap: 32px 40px;
+        max-width: 900px;
+    }
+
+    .sk-logo-item img {
+        max-height: 84px;
+        max-width: 100%;
+    }
+
+    .sk-logo-item--stack img {
+        max-height: 72px;
+    }
+}
+
+@media (max-width: 767px) {
+    .sk-logos-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 24px;
+        max-width: 480px;
+    }
+
+    .sk-logo-item img {
+        max-height: 64px;
+        max-width: 100%;
+    }
+
+    .sk-logo-item--stack img {
+        max-height: 56px;
+    }
+}
+
+@media (max-width: 399px) {
+    .sk-logos-grid {
+        gap: 24px 18px;
+    }
+
+    .sk-logo-item img {
+        max-height: 56px;
+    }
+
+    .sk-logo-item--stack img {
+        max-height: 50px;
+    }
 }
 
 /* ---------- Blog / tips ---------- */
