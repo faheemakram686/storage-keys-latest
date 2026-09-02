@@ -61,7 +61,7 @@
     } elseif ($path === 'booking' || strpos($path, 'reservation/') === 0) {
         // booking.css + booking-layout.css come from @section('css') on the page
         $css[] = 'personal-storage.css';
-    } elseif (in_array($path, ['customer-login', 'customer/register', 'customer/forgot-password'], true) || str_starts_with($path, 'customer/reset-password')) {
+    } elseif ($path === 'customer/dashboard' || in_array($path, ['customer-login', 'customer/register', 'customer/forgot-password'], true) || str_starts_with($path, 'customer/reset-password')) {
         $css[] = 'personal-storage.css';
         $css[] = 'customer-auth.css';
     } else {

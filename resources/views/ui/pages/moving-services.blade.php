@@ -1,6 +1,6 @@
-﻿@extends('ui.layouts.frontend')
-@section('title', 'Moving & Storage Services in Dubai | Storage Keys')
-@section('metaTitle', 'Moving & Storage Services in the UAE | Storagekeys')
+@extends('ui.layouts.frontend')
+@section('title', 'Moving & Storage Services')
+@section('metaTitle', 'Moving & Storage Services in the UAE - Storagekeys')
 @section('metaDescription', 'Reliable moving and storage services across the UAE, from packing and transport to secure short or long-term storage. Get a free quote today!')
 
 @section('content')

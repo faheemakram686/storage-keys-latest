@@ -1,7 +1,7 @@
-﻿@extends('ui.layouts.frontend')
+@extends('ui.layouts.frontend')
 @section('title', '| Luggage Storage')
-@section('metaTitle', 'Luggage Storage in Dubai & Abu Dhabi, UAE | Storagekeys')
-@section('metaDescription', 'Store your luggage safely between flights, hotel stays, moves or travel plans with flexible luggage storage solutions in Dubai and Abu Dhabi.')
+@section('metaTitle', 'Secure Luggage Storage in UAE for Travel & Moving - StorageKeys')
+@section('metaDescription', 'Choose secure luggage storage in the UAE while travelling, moving or between stays. Convenient space for bags of all sizes. Get a quote today!')
 
 @section('content')
 <div class="sk-home">
