@@ -9,8 +9,6 @@
 <link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/landing-hero.webp') }}" media="(min-width: 768px)" fetchpriority="high">
 <link rel="preconnect" href="https://d2mpatx37cqexb.cloudfront.net" crossorigin>
 <link rel="dns-prefetch" href="https://d2mpatx37cqexb.cloudfront.net">
-<link rel="preload" as="style" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
-<link rel="preload" as="style" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
 @endsection
 
 @section('content')
@@ -772,12 +770,25 @@
 
             <div class="sk-logos sk-reveal">
                 <div class="cap">Trusted by businesses across the UAE</div>
-                <div class="sk-logos-row">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-12.png') }}" alt="Partner" width="225" height="51" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-13.png') }}" alt="Partner" width="225" height="56" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-14.png') }}" alt="Partner" width="225" height="55" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-15.png') }}" alt="Partner" width="225" height="59" loading="lazy" decoding="async">
-                    <img src="{{ asset('sk-assets/assets/images/frontend/landing/inline-16.png') }}" alt="Partner" width="225" height="49" loading="lazy" decoding="async">
+                <div class="sk-logos-grid">
+                    <div class="sk-logo-item">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-1.png') }}" alt="Day Exchange" width="280" height="96" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sk-logo-item">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-2.png') }}" alt="RAKBANK" width="280" height="96" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sk-logo-item">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-3.png') }}" alt="NAS Neuron Health Services" width="280" height="96" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sk-logo-item sk-logo-item--stack">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-4.png') }}" alt="Imperial Gas" width="200" height="96" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sk-logo-item">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-5.png') }}" alt="Dar Exchange" width="280" height="96" loading="lazy" decoding="async">
+                    </div>
+                    <div class="sk-logo-item sk-logo-item--stack">
+                        <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-6.png') }}" alt="Khan El Kaser" width="200" height="96" loading="lazy" decoding="async">
+                    </div>
                 </div>
             </div>
         </div>
