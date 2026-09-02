@@ -2262,6 +2262,12 @@
     gap: 22px;
 }
 
+.sk-supplies-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 720px;
+    margin-inline: auto;
+}
+
 .sk-supply {
     background: #fff;
     border: 1px solid var(--sk-line);

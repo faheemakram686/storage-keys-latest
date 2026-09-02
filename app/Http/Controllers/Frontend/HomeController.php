@@ -67,7 +67,9 @@ class HomeController extends Controller
 //
 //        dd('done');
 //        return Auth::user();
-        return view('ui.pages.landing');
+        return view('ui.pages.landing', [
+            'shopProducts' => $this->product->getLandingProducts(),
+        ]);
     }
     public function notify()
     {

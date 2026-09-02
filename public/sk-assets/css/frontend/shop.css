@@ -21,6 +21,12 @@
     gap: 24px;
 }
 
+.sh-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 720px;
+    margin-inline: auto;
+}
+
 .sh-card {
     background: #fff;
     border: 1px solid var(--sk-line);
@@ -175,6 +181,10 @@
     .sh-grid,
     .sh-modal-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .sh-grid-2 {
+        max-width: none;
     }
 }
 
