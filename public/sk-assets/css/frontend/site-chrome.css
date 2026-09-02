@@ -655,8 +655,23 @@ html, body {
     align-items: center;
     gap: 8px;
   }
+  .pv-banner-left,
+  .pv-banner-right {
+    width: 100%;
+  }
+  .pv-banner-note .ltn__top-bar-menu > ul {
+    justify-content: center;
+    width: 100%;
+  }
+  /* Toll Free sits alone on the next row and stays centered */
+  .pv-banner-note .ltn__top-bar-menu > ul > li:nth-child(3) {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+  }
   .pv-banner-note .ltn__social-media > ul {
     justify-content: center;
+    width: 100%;
   }
 }
 

@@ -1,7 +1,7 @@
-﻿@extends('ui.layouts.frontend')
-@section('title', 'Furniture Storage in Dubai & Abu Dhabi | Storage Keys')
-@section('metaTitle', 'Secure Furniture Storage in Dubai & Abu Dhabi | StorageKeys')
-@section('metaDescription', 'Store sofas, beds, tables and household furniture securely with flexible furniture storage units across the UAE. Climate options, 24/7 access. Get a free quote.')
+@extends('ui.layouts.frontend')
+@section('title', 'Furniture Storage')
+@section('metaTitle', 'Furniture Storage in UAE for Homes & Businesses - StorageKeys')
+@section('metaDescription', 'Make room with furniture storage in the UAE for sofas, beds, tables and more. Keep your belongings protected during moves or renovations. Get a quote!')
 @section('content')
 
 

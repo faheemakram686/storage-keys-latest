@@ -1,7 +1,7 @@
-﻿@extends('ui.layouts.frontend')
+@extends('ui.layouts.frontend')
 @section('title', '| Car Storage')
-@section('metaTitle', 'Car Storage in Dubai & UAE | Storagekeys')
-@section('metaDescription', 'Store your vehicle in a secure, professionally managed facility with flexible short-term and long-term car storage in Dubai and across the UAE.')
+@section('metaTitle', 'Car Storage in UAE for Short & Long-Term Needs - StorageKeys')
+@section('metaDescription', 'Get reliable car storage in the UAE for travel, relocation or long-term needs. Keep your vehicle protected and out of the way. Reserve your space!')
 
 @section('content')
 <div class="sk-home">

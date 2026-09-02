@@ -1,7 +1,7 @@
 ﻿
 @extends('ui.layouts.frontend')
-@section('title', 'Personal Storage Solutions in Dubai & Abu Dhabi | Storage Keys')
-@section('metaTitle', 'Affordable Personal Storage Solutions in Dubai | StorageKeys')
+@section('title', 'Personal Storage')
+@section('metaTitle', 'Affordable Personal Storage Solutions in Dubai - StorageKeys')
 @section('metaDescription', 'Store furniture, boxes and seasonal items with secure personal storage units across the UAE. Flexible terms, 24/7 access. Get a free quote.')
 @section('content')
 

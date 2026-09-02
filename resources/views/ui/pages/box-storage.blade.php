@@ -1,7 +1,7 @@
-﻿@extends('ui.layouts.frontend')
-@section('title', 'Box Storage in Dubai & Sharjah | Storage Keys')
-@section('metaTitle', 'Secure Box Storage for Homes & Businesses | StorageKeys')
-@section('metaDescription', 'Store packed belongings, household items, documents and business stock with flexible box storage in Dubai and Sharjah. Short- or long-term. Get a free quote.')
+@extends('ui.layouts.frontend')
+@section('title', 'Box Storage')
+@section('metaTitle', 'Box Storage in UAE for Home & Business Belongings - StorageKeys')
+@section('metaDescription', 'Keep packed belongings organised with box storage in the UAE. Ideal for household items, stock and documents when you need extra space. Get a quote!')
 @section('content')
 
 
