@@ -63,6 +63,27 @@ class ProductClass implements ProductInterface {
         $qry=$qry->paginate(8);
         return $qry;
     }
+
+    public function getLandingProducts()
+    {
+        $named = Product::query()
+            ->where('status', 1)
+            ->where('is_deleted', 0)
+            ->whereIn('p_name', ['Box', 'Tape'])
+            ->orderByRaw("FIELD(p_name, 'Box', 'Tape')")
+            ->get();
+
+        if ($named->isNotEmpty()) {
+            return $named;
+        }
+
+        return Product::query()
+            ->where('status', 1)
+            ->where('is_deleted', 0)
+            ->orderBy('id', 'DESC')
+            ->limit(2)
+            ->get();
+    }
     public function deleteProduct($id)
     {
         // TODO: Implement deleteProduct() method.

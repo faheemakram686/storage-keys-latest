@@ -52,13 +52,9 @@
           <a href="{{ url('/car-storage') }}">Car Storage</a>
         </div>
       </div>
-      <div class="pv-foot-col pv-foot-contact">
-        <span class="h5">Get in Touch</span>
-        <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
-        <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
-        <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
-        <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
-        <div class="pv-foot-links pv-foot-legal">
+      <div class="pv-foot-col pv-foot-policies">
+        <span class="h5">Policies</span>
+        <div class="pv-foot-links">
           <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
           <a href="{{ url('/security-policy') }}">Security Policy</a>
           <a href="{{ url('/support-policy') }}">Support Policy</a>
@@ -67,6 +63,14 @@
           <a href="{{ url('/frequently-asked-questions') }}">FAQs</a>
         </div>
       </div>
+      <div class="pv-foot-col pv-foot-contact">
+        <span class="h5">Get in Touch</span>
+        <p><i class="fas fa-map-marker-alt"></i> Sharjah &amp; Dubai, United Arab Emirates</p>
+        <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
+        <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
+      </div>
+      
     </div>
     <div class="pv-copy">© StorageKeys 2026 — All rights reserved.</div>
   </div>

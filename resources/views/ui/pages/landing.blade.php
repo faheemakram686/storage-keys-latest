@@ -1,6 +1,6 @@
 @extends('ui.layouts.frontend')
 @section('title', '| Home')
-@section('metaTitle', 'Self Storage in UAE | Secure Storage Units | Storagekeys')
+@section('metaTitle', 'Self Storage in UAE | Secure Storage Units - Storagekeys')
 @section('metaDescription', 'Secure, climate-controlled self storage across the UAE. Flexible plans, 24/7 access, no hidden costs. Get a free quote today.')
 
 @section('css')
@@ -794,34 +794,67 @@
         </div>
     </section>
 
-    <!-- ============ PACKING SUPPLIES ============ -->
-    <section class="sk-section" style="background:#fff;">
+    <!-- ============ PACKING SUPPLIES / SHOP ============ -->
+    <section class="sk-section" style="background:#fff;" id="sh-products">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Packing Supplies</span>
-                <h2>Pack It Properly Before It Goes In</h2>
-                <p>Boxes, wrap and tape available from our facilities and online, so your belongings are protected before they reach the unit.</p>
+                <h2>Storage &amp; Packing Products</h2>
+                <p>Choose the supplies you need, add them to your cart, and we will help you get ready for storage or moving.</p>
             </div>
-            <div class="sk-supplies sk-reveal">
+            @if(isset($shopProducts) && $shopProducts->count())
+            <div class="sh-grid sh-grid-2 sk-reveal">
+                @foreach($shopProducts as $product)
+                    @php
+                        $img = $product->image
+                            ? asset('storage/uploads/product-images/'.$product->image)
+                            : asset('sk-assets/assets/images/frontend/product/1.png');
+                        $sale = $product->sell_price - (($product->sell_price * $product->disc_amount) / 100);
+                        $hasDisc = (float) $product->disc_amount > 0;
+                    @endphp
+                    <article class="sh-card">
+                        <div class="sh-card-img" style="background-image:url('{{ $img }}');">
+                            @if($hasDisc)
+                                <span class="sh-badge">Sale</span>
+                            @endif
+                        </div>
+                        <div class="sh-card-body">
+                            <h3>{{ $product->p_name }}</h3>
+                            <div class="sh-price">
+                                <span>AED {{ number_format($sale, 2) }}</span>
+                                @if($hasDisc)
+                                    <del>AED {{ number_format($product->sell_price, 2) }}</del>
+                                @endif
+                            </div>
+                            <form action="{{ route('cart.store') }}" method="POST" id="add_cart_{{ $product->id }}">
+                                @csrf
+                                <input type="hidden" value="{{ $product->id }}" name="id">
+                                <input type="hidden" value="{{ $product->p_name }}" name="name">
+                                <input type="hidden" value="{{ $sale }}" name="price">
+                                <input type="hidden" value="{{ $product->image }}" name="image">
+                                <input type="hidden" value="1" name="quantity">
+                            </form>
+                            <button type="submit" form="add_cart_{{ $product->id }}" class="sk-btn sk-btn-primary sh-add">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+            @else
+            <div class="sk-supplies sk-supplies-2 sk-reveal">
                 <div class="sk-supply">
                     <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-17.jpg') }}');"></div>
-                    <div class="b"><span class="h3">Storage Boxes</span><p>Double-walled boxes in a few sizes, for everything from books to kitchenware.</p><a href="/shop">Shop now <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-                <div class="sk-supply">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-18.jpg') }}');"></div>
-                    <div class="b"><span class="h3">Bubble Wrap</span><p>Protects glassware, screens and anything with a fragile edge.</p><a href="/shop">Shop now <i class="fas fa-arrow-right"></i></a></div>
+                    <div class="b"><span class="h3">Box</span><p>Sturdy storage boxes for packing belongings before they go into your unit.</p><a href="{{ url('/shop') }}">Shop now <i class="fas fa-arrow-right"></i></a></div>
                 </div>
                 <div class="sk-supply">
                     <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-19.jpg') }}');"></div>
-                    <div class="b"><span class="h3">Packing Tape</span><p>Heavy-duty tape so the boxes you seal stay sealed.</p><a href="/shop">Shop now <i class="fas fa-arrow-right"></i></a></div>
-                </div>
-                <div class="sk-supply">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-20.jpg') }}');"></div>
-                    <div class="b"><span class="h3">Protective Wrapping</span><p>Covers for sofas, mattresses and furniture going into long-term storage.</p><a href="/shop">Shop now <i class="fas fa-arrow-right"></i></a></div>
+                    <div class="b"><span class="h3">Tape</span><p>Heavy-duty packing tape to keep your boxes sealed and secure.</p><a href="{{ url('/shop') }}">Shop now <i class="fas fa-arrow-right"></i></a></div>
                 </div>
             </div>
+            @endif
             <div style="text-align:center; margin-top:34px;">
-                <a href="/shop" class="sk-btn sk-btn-outline">Browse All Supplies <i class="fas fa-arrow-right"></i></a>
+                <a href="{{ url('/shop') }}" class="sk-btn sk-btn-outline">Browse All Supplies <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </section>
