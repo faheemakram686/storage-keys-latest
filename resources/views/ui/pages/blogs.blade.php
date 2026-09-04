@@ -17,29 +17,11 @@
                 <a href="#bl-list" class="sk-btn sk-btn-primary"><i class="fas fa-newspaper"></i> Read Articles</a>
                 <a href="{{ url('/contact-us') }}" class="sk-btn sk-btn-ghost"><i class="fas fa-file-invoice-dollar"></i> Get A Quote</a>
             </div>
-            <div class="ps-hero-badges">
-                <span class="ps-hbadge"><i class="fas fa-box-open"></i> Packing tips</span>
-                <span class="ps-hbadge"><i class="fas fa-ruler-combined"></i> Choosing a unit</span>
-                <span class="ps-hbadge"><i class="fas fa-briefcase"></i> Business storage</span>
-                <span class="ps-hbadge"><i class="fas fa-home"></i> Home storage</span>
-            </div>
         </div>
     </section>
 
-    <!-- ============ TRUST ============ -->
-    <div class="ps-trust ct-trust">
-        <div class="sk-container">
-            <div class="ps-trust-in">
-                <div class="ps-trust-i"><i class="fas fa-lightbulb"></i> Practical guides</div>
-                <div class="ps-trust-i"><i class="fas fa-boxes"></i> Packing advice</div>
-                <div class="ps-trust-i"><i class="fas fa-warehouse"></i> Unit size help</div>
-                <div class="ps-trust-i"><i class="fas fa-map-marker-alt"></i> UAE storage tips</div>
-            </div>
-        </div>
-    </div>
-
     <!-- ============ LIST ============ -->
-    <section class="sk-section" id="bl-list">
+    <section class="sk-section bl-list-section" id="bl-list">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Our Blog</span>
@@ -48,19 +30,77 @@
             </div>
 
             @if($blogs->count())
-                <div class="sk-blog sk-reveal">
-                    @foreach($blogs as $blog)
-                        <article class="sk-blogcard">
-                            <a href="{{ route('blogDetails', $blog->slug) }}" class="img" style="background-image:url('{{ $blog->image_url }}');" aria-label="{{ $blog->title }}"></a>
-                            <div class="b">
-                                <div class="meta"><i class="far fa-calendar-alt"></i> {{ optional($blog->created_at)->format('F j, Y') }}</div>
-                                <h3><a href="{{ route('blogDetails', $blog->slug) }}">{{ $blog->title }}</a></h3>
-                                <p>{{ $blog->excerpt() }}</p>
-                                <a href="{{ route('blogDetails', $blog->slug) }}">Read more about {{ $blog->title }} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                @php
+                    $showFeatured = $blogs->onFirstPage() && $blogs->count() > 1;
+                    $featured = $showFeatured ? $blogs->first() : null;
+                @endphp
+
+                @if($featured)
+                    <article class="bl-featured sk-reveal">
+                        <a href="{{ route('blogDetails', $featured->slug) }}" class="bl-featured-media" aria-label="{{ $featured->title }}">
+                            <img
+                                src="{{ $featured->image_url }}"
+                                alt="{{ $featured->title }}"
+                                width="800"
+                                height="520"
+                                loading="eager"
+                                decoding="async"
+                            >
+                        </a>
+                        <div class="bl-featured-body">
+                            <div class="bl-card-meta">
+                                <time datetime="{{ optional($featured->created_at)->toDateString() }}">
+                                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                    {{ optional($featured->created_at)->format('F j, Y') }}
+                                </time>
+                                <span class="bl-card-tag">Featured</span>
+                            </div>
+                            <h3 class="bl-featured-title">
+                                <a href="{{ route('blogDetails', $featured->slug) }}">{{ $featured->title }}</a>
+                            </h3>
+                            <p class="bl-featured-excerpt">{{ $featured->excerpt(220) }}</p>
+                            <a href="{{ route('blogDetails', $featured->slug) }}" class="bl-card-more">
+                                Read article <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
+                @endif
+
+                <div class="bl-grid sk-reveal">
+                    @foreach($blogs as $index => $blog)
+                        @if($featured && $index === 0)
+                            @continue
+                        @endif
+                        <article class="bl-card">
+                            <a href="{{ route('blogDetails', $blog->slug) }}" class="bl-card-media" aria-label="{{ $blog->title }}">
+                                <img
+                                    src="{{ $blog->image_url }}"
+                                    alt="{{ $blog->title }}"
+                                    width="640"
+                                    height="400"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            </a>
+                            <div class="bl-card-body">
+                                <div class="bl-card-meta">
+                                    <time datetime="{{ optional($blog->created_at)->toDateString() }}">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                        {{ optional($blog->created_at)->format('M j, Y') }}
+                                    </time>
+                                </div>
+                                <h3 class="bl-card-title">
+                                    <a href="{{ route('blogDetails', $blog->slug) }}">{{ $blog->title }}</a>
+                                </h3>
+                                <p class="bl-card-excerpt">{{ $blog->excerpt(125) }}</p>
+                                <a href="{{ route('blogDetails', $blog->slug) }}" class="bl-card-more">
+                                    Read more <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                                </a>
                             </div>
                         </article>
                     @endforeach
                 </div>
+
                 @if($blogs->hasPages())
                     <div class="bl-pagination">
                         {{ $blogs->links('pagination::bootstrap-4') }}
