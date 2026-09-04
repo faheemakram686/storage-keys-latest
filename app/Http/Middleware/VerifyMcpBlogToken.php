@@ -18,9 +18,14 @@ class VerifyMcpBlogToken
             ], 503);
         }
 
+        // Claude.ai custom connectors may use the token in the URL path
+        // when request-header auth is not available on the account.
+        $routeToken = $request->route('mcpToken');
+
         $provided = $request->bearerToken()
             ?: $request->header('X-MCP-Token')
-            ?: $request->header('X-MCP-TOKEN');
+            ?: $request->header('X-MCP-TOKEN')
+            ?: (is_string($routeToken) ? $routeToken : null);
 
         if (!is_string($provided) || !hash_equals($configured, $provided)) {
             return response()->json([

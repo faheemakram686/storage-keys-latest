@@ -18,6 +18,7 @@ use App\Http\Controllers\Tenant\Employee\EmployeeLeaveAllowanceController;
 use App\Http\Controllers\Tenant\Employee\DocumentController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\Api\McpBlogController;
+use App\Http\Controllers\Api\McpStreamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +40,16 @@ Route::post('/webhook/receive-service', [WebhookController::class, 'handleServic
 Route::post('/webhook/receive-invoice', [WebhookController::class, 'handleInvoiceResponse']);
 Route::post('/webhook/receive-payment', [WebhookController::class, 'handlePaymentResponse']);
 
-// MCP blog tools (token auth) — used by Cursor/Claude MCP server
-Route::middleware(['mcp.blog', 'throttle:30,1'])->prefix('mcp')->group(function () {
-    Route::get('/blogs', [McpBlogController::class, 'index']);
-    Route::post('/blogs', [McpBlogController::class, 'store']);
+// MCP blog tools (token auth) — Cursor stdio MCP + Claude.ai remote connector
+Route::middleware(['mcp.blog', 'throttle:60,1'])->group(function () {
+    // Streamable HTTP MCP for Claude.ai → URL: /api/mcp  or  /api/mcp/claude/{token}
+    Route::match(['GET', 'POST', 'DELETE'], '/mcp', [McpStreamController::class, 'handle']);
+    Route::match(['GET', 'POST', 'DELETE'], '/mcp/claude/{mcpToken}', [McpStreamController::class, 'handle']);
+
+    Route::prefix('mcp')->group(function () {
+        Route::get('/blogs', [McpBlogController::class, 'index']);
+        Route::post('/blogs', [McpBlogController::class, 'store']);
+    });
 });
 
 
