@@ -9,12 +9,12 @@ class VerifyMcpBlogToken
 {
     public function handle(Request $request, Closure $next)
     {
-        $configured = (string) config('services.mcp_blog.token', '');
+        $configured = $this->configuredToken();
 
         if ($configured === '') {
             return response()->json([
                 'success' => false,
-                'message' => 'MCP blog API token is not configured.',
+                'message' => 'MCP blog API token is not configured. Set MCP_BLOG_TOKEN in the live .env (project root), then run: php artisan config:clear',
             ], 503);
         }
 
@@ -35,5 +35,26 @@ class VerifyMcpBlogToken
         }
 
         return $next($request);
+    }
+
+    private function configuredToken(): string
+    {
+        $candidates = [
+            config('services.mcp_blog.token'),
+            $_ENV['MCP_BLOG_TOKEN'] ?? null,
+            $_SERVER['MCP_BLOG_TOKEN'] ?? null,
+            getenv('MCP_BLOG_TOKEN') ?: null,
+        ];
+
+        foreach ($candidates as $value) {
+            if (is_string($value)) {
+                $value = trim($value);
+                if ($value !== '') {
+                    return $value;
+                }
+            }
+        }
+
+        return '';
     }
 }
