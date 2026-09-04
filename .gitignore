@@ -25,3 +25,6 @@ Homestead.json
 .phpunit.result.cache
 
 /.env
+.env
+.mcp.json
+mcp-blog-server/.env

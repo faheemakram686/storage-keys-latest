@@ -103,4 +103,8 @@ return [
         'scopes' => [],
         'with' => [],
     ],
+
+    'mcp_blog' => [
+        'token' => env('MCP_BLOG_TOKEN'),
+    ],
 ];

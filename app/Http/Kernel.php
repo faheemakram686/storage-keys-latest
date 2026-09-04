@@ -94,6 +94,7 @@ class Kernel extends HttpKernel
         'switch.guard' => \App\Http\Middleware\SwitchGuard::class,
         'set.guard' =>   \App\Http\Middleware\SetGuard::class,
         'hashid' => \App\Http\Middleware\DecodeHashid::class,
+        'mcp.blog' => \App\Http\Middleware\VerifyMcpBlogToken::class,
 
 
     ];

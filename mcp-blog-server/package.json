@@ -1,0 +1,22 @@
+{
+  "name": "storagekeys-mcp-blog-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server that creates/lists StorageKeys blogs via Laravel API",
+  "bin": {
+    "storagekeys-mcp-blog": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test:api": "node scripts/test-api.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  }
+}

@@ -17,6 +17,7 @@ use App\Http\Controllers\Tenant\Attendance\AttendanceStatusController;
 use App\Http\Controllers\Tenant\Employee\EmployeeLeaveAllowanceController;
 use App\Http\Controllers\Tenant\Employee\DocumentController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Api\McpBlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,12 @@ Route::post('/webhook/receive-product', [WebhookController::class, 'handleProduc
 Route::post('/webhook/receive-service', [WebhookController::class, 'handleServiceResponse']);
 Route::post('/webhook/receive-invoice', [WebhookController::class, 'handleInvoiceResponse']);
 Route::post('/webhook/receive-payment', [WebhookController::class, 'handlePaymentResponse']);
+
+// MCP blog tools (token auth) — used by Cursor/Claude MCP server
+Route::middleware(['mcp.blog', 'throttle:30,1'])->prefix('mcp')->group(function () {
+    Route::get('/blogs', [McpBlogController::class, 'index']);
+    Route::post('/blogs', [McpBlogController::class, 'store']);
+});
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');
