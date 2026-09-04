@@ -6,8 +6,8 @@
         "d:/xampp/htdocs/storage-keys-latest/mcp-blog-server/src/index.js"
       ],
       "env": {
-        "BLOG_API_BASE_URL": "http://127.0.0.1:8080/storage-keys-latest/public/api/mcp",
-        "MCP_BLOG_TOKEN": "change-me-to-match-laravel-MCP_BLOG_TOKEN"
+        "BLOG_API_BASE_URL": "https://storagekeys.com/api/mcp",
+        "MCP_BLOG_TOKEN": "change-me-to-match-live-MCP_BLOG_TOKEN"
       }
     }
   }
