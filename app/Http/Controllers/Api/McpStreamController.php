@@ -205,12 +205,15 @@ class McpStreamController extends Controller
      */
     private function callTool(string $name, array $arguments, Request $request): array
     {
+        // Some clients nest fields under arguments; others put them on params root.
+        $arguments = $this->normalizeToolArguments($arguments);
+
         $blogController = app(McpBlogController::class);
 
         if ($name === 'list_blogs') {
             $limit = isset($arguments['limit']) ? (int) $arguments['limit'] : 10;
             $sub = Request::create('/api/mcp/blogs', 'GET', ['limit' => $limit]);
-            $sub->headers->replace($request->headers->all());
+            $sub->headers->set('Accept', 'application/json');
             $response = $blogController->index($sub);
             $data = $response->getData(true);
 
@@ -225,23 +228,41 @@ class McpStreamController extends Controller
         }
 
         if ($name === 'create_blog') {
+            $title = trim((string) ($arguments['title'] ?? $arguments['name'] ?? ''));
+            $description = $arguments['description'] ?? $arguments['content'] ?? $arguments['body'] ?? '';
+            if (is_array($description)) {
+                $description = json_encode($description, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            $description = trim((string) $description);
+
             $payload = [
-                'title' => $arguments['title'] ?? '',
-                'description' => $arguments['description'] ?? '',
+                'title' => $title,
+                'description' => $description,
             ];
             if (array_key_exists('status', $arguments) && ($arguments['status'] === 0 || $arguments['status'] === 1 || $arguments['status'] === '0' || $arguments['status'] === '1')) {
                 $payload['status'] = (int) $arguments['status'];
             }
-            if (!empty($arguments['image_url'])) {
+            if (!empty($arguments['image_url']) && is_string($arguments['image_url'])) {
                 $payload['image_url'] = $arguments['image_url'];
             }
-            if (!empty($arguments['slug'])) {
+            if (!empty($arguments['slug']) && is_string($arguments['slug'])) {
                 $payload['slug'] = $arguments['slug'];
             }
 
-            $sub = Request::create('/api/mcp/blogs', 'POST', $payload);
-            $sub->headers->replace($request->headers->all());
-            $sub->headers->set('Accept', 'application/json');
+            // Build a fresh JSON request. Do NOT copy the parent MCP Content-Type/body —
+            // that made Laravel see an empty JSON body and fail "title/description required".
+            $sub = Request::create(
+                '/api/mcp/blogs',
+                'POST',
+                [],
+                [],
+                [],
+                [
+                    'CONTENT_TYPE' => 'application/json',
+                    'HTTP_ACCEPT' => 'application/json',
+                ],
+                json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            );
             $response = $blogController->store($sub);
             $data = $response->getData(true);
             $status = $response->getStatusCode();
@@ -277,6 +298,30 @@ class McpStreamController extends Controller
             ],
             'isError' => true,
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $arguments
+     * @return array<string, mixed>
+     */
+    private function normalizeToolArguments(array $arguments): array
+    {
+        if (isset($arguments['arguments']) && is_array($arguments['arguments'])) {
+            $arguments = array_merge($arguments, $arguments['arguments']);
+        }
+
+        // If Claude sent the whole args object as a JSON string
+        if (isset($arguments['description']) && is_string($arguments['description'])) {
+            $trimmed = trim($arguments['description']);
+            if ($trimmed !== '' && ($trimmed[0] === '{' || $trimmed[0] === '[')) {
+                $decoded = json_decode($trimmed, true);
+                if (is_array($decoded) && isset($decoded['title'], $decoded['description'])) {
+                    return $decoded;
+                }
+            }
+        }
+
+        return $arguments;
     }
 
     /**
