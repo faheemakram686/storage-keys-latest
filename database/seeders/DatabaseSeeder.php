@@ -68,6 +68,10 @@ class DatabaseSeeder extends Seeder
             $this->call(TenantSettingSeeder::class);
             $this->call(UserJobDeskSeeder::class);
 
+            // Optional PDF customers import — run separately on live:
+            // php artisan db:seed --class=Database\\Seeders\\SkCustomersSeeder
+            // $this->call(SkCustomersSeeder::class);
+
             $this->enableForeignKeys();
         });
         Model::reguard();
