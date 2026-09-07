@@ -1,4 +1,4 @@
-﻿@extends('ui.layouts.frontend')
+@extends('ui.layouts.frontend')
 @section('title', 'Appliance Storage')
 @section('metaTitle', 'Appliance Storage in UAE for Safe, Reliable Storage - StorageKeys')
 @section('metaDescription', 'Appliance storage in the UAE for refrigerators, washers and more. Keep equipment safe and free up space. Get a quote today!')
