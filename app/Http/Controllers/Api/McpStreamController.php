@@ -94,9 +94,9 @@ class McpStreamController extends Controller
                         ],
                         'serverInfo' => [
                             'name' => 'storagekeys-blog',
-                            'version' => '1.1.0',
+                            'version' => '1.2.0',
                         ],
-                        'instructions' => 'StorageKeys blog MCP. Prefer drafts (status=0). Existing tools create_blog/list_blogs still work. Use get_blog/update_blog/delete_blog (confirm=true) for edits. Use get_site_info/get_pages/get_sitemap/search_content/list_media/upload_media/bulk_update_posts as needed. Only publish (status=1) when the user explicitly asks.',
+                        'instructions' => 'StorageKeys blog MCP v1.2. Prefer drafts (status=0). Phase 1: CRUD + site/media. Phase 2: get_seo_meta/update_seo_meta and get_schema/update_schema (nullable SEO fields; empty falls back to title/excerpt on the site). Only publish when asked.',
                     ]);
 
                 case 'notifications/initialized':
@@ -281,6 +281,61 @@ class McpStreamController extends Controller
                     'required' => ['image_url'],
                 ],
             ],
+            [
+                'name' => 'get_seo_meta',
+                'description' => 'Get SEO meta for a blog (stored + resolved fallbacks).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'update_seo_meta',
+                'description' => 'Update SEO meta fields (meta_title, meta_description, canonical_url, robots). Empty string clears.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'meta_title' => ['type' => 'string'],
+                        'meta_description' => ['type' => 'string'],
+                        'canonical_url' => ['type' => 'string', 'format' => 'uri'],
+                        'robots' => ['type' => 'string', 'description' => 'e.g. index,follow or noindex'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_schema',
+                'description' => 'Get JSON-LD schema stored for a blog (null if none).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'update_schema',
+                'description' => 'Set JSON-LD schema object for a blog. Pass schema=null to clear.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'schema' => [
+                            'description' => 'JSON-LD object/array, or null to clear',
+                        ],
+                        'schema_json' => [
+                            'type' => 'string',
+                            'description' => 'Alternative: raw JSON string',
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -371,6 +426,51 @@ class McpStreamController extends Controller
                 return $this->fromResponse($site->uploadMedia($this->jsonRequest('POST', '/api/mcp/media', [
                     'image_url' => $arguments['image_url'] ?? '',
                 ])));
+
+            case 'get_seo_meta':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse($blogs->seoMeta($this->jsonRequest('GET', '/api/mcp/blogs/' . $key . '/seo'), $key));
+
+            case 'update_seo_meta':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+                $payload = [];
+                foreach (['meta_title', 'meta_description', 'canonical_url', 'robots'] as $field) {
+                    if (array_key_exists($field, $arguments)) {
+                        $payload[$field] = $arguments[$field];
+                    }
+                }
+
+                return $this->fromResponse($blogs->updateSeoMeta($this->jsonRequest('PATCH', '/api/mcp/blogs/' . $key . '/seo', $payload), $key));
+
+            case 'get_schema':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse($blogs->schema($this->jsonRequest('GET', '/api/mcp/blogs/' . $key . '/schema'), $key));
+
+            case 'update_schema':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+                $payload = [];
+                if (array_key_exists('schema', $arguments)) {
+                    $payload['schema'] = $arguments['schema'];
+                }
+                if (array_key_exists('schema_json', $arguments)) {
+                    $payload['schema_json'] = $arguments['schema_json'];
+                }
+
+                return $this->fromResponse($blogs->updateSchema($this->jsonRequest('PATCH', '/api/mcp/blogs/' . $key . '/schema', $payload), $key));
 
             default:
                 return $this->toolError('Unknown tool: ' . $name);

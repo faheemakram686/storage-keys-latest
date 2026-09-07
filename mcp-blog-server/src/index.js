@@ -60,7 +60,7 @@ function blogPath(id, slug) {
 
 const server = new McpServer({
   name: "storagekeys-blog",
-  version: "1.1.0",
+  version: "1.2.0",
 });
 
 server.tool(
@@ -214,6 +214,74 @@ server.tool(
         body: JSON.stringify({ image_url }),
       })
     )
+);
+
+server.tool(
+  "get_seo_meta",
+  "Get SEO meta for a blog (stored + resolved fallbacks).",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+  },
+  async ({ id, slug }) => ok(await apiRequest(`${blogPath(id, slug)}/seo`, { method: "GET" }))
+);
+
+server.tool(
+  "update_seo_meta",
+  "Update SEO meta fields. Empty string clears a field.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+    meta_title: z.string().optional(),
+    meta_description: z.string().optional(),
+    canonical_url: z.string().url().optional(),
+    robots: z.string().optional(),
+  },
+  async ({ id, slug, meta_title, meta_description, canonical_url, robots }) => {
+    const payload = {};
+    if (meta_title !== undefined) payload.meta_title = meta_title;
+    if (meta_description !== undefined) payload.meta_description = meta_description;
+    if (canonical_url !== undefined) payload.canonical_url = canonical_url;
+    if (robots !== undefined) payload.robots = robots;
+    return ok(
+      await apiRequest(`${blogPath(id, slug)}/seo`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      })
+    );
+  }
+);
+
+server.tool(
+  "get_schema",
+  "Get JSON-LD schema for a blog.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+  },
+  async ({ id, slug }) => ok(await apiRequest(`${blogPath(id, slug)}/schema`, { method: "GET" }))
+);
+
+server.tool(
+  "update_schema",
+  "Set JSON-LD schema object (or schema_json string). Pass schema null to clear.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+    schema: z.any().optional(),
+    schema_json: z.string().optional(),
+  },
+  async ({ id, slug, schema, schema_json }) => {
+    const payload = {};
+    if (schema !== undefined) payload.schema = schema;
+    if (schema_json !== undefined) payload.schema_json = schema_json;
+    return ok(
+      await apiRequest(`${blogPath(id, slug)}/schema`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      })
+    );
+  }
 );
 
 const transport = new StdioServerTransport();

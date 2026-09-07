@@ -59,6 +59,10 @@ class McpBlogController extends Controller
             'status' => 'nullable|in:0,1',
             'image_url' => 'nullable|url|max:2048',
             'slug' => 'nullable|string|max:255',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:512',
+            'canonical_url' => 'nullable|url|max:2048',
+            'robots' => 'nullable|string|max:64',
         ]);
 
         if ($validator->fails()) {
@@ -92,6 +96,7 @@ class McpBlogController extends Controller
         $blog->image = $imageName;
         $blog->status = $status;
         $blog->is_deleted = 0;
+        $this->applySeoFields($blog, $request);
         $blog->save();
 
         return response()->json([
@@ -118,6 +123,10 @@ class McpBlogController extends Controller
             'status' => 'nullable|in:0,1',
             'image_url' => 'nullable|url|max:2048',
             'slug' => 'nullable|string|max:255',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:512',
+            'canonical_url' => 'nullable|url|max:2048',
+            'robots' => 'nullable|string|max:64',
         ]);
 
         if ($validator->fails()) {
@@ -156,6 +165,7 @@ class McpBlogController extends Controller
             }
         }
 
+        $this->applySeoFields($blog, $request);
         $blog->save();
 
         return response()->json([
@@ -303,6 +313,19 @@ class McpBlogController extends Controller
         return $query->where('slug', (string) $idOrSlug)->first();
     }
 
+    private function applySeoFields(Blog $blog, Request $request): void
+    {
+        foreach (['meta_title', 'meta_description', 'canonical_url', 'robots'] as $field) {
+            if ($request->exists($field)) {
+                $value = $request->input($field);
+                $blog->{$field} = is_string($value) ? trim($value) : $value;
+                if ($blog->{$field} === '') {
+                    $blog->{$field} = null;
+                }
+            }
+        }
+    }
+
     private function uniqueSlug(string $base, ?int $ignoreId = null): string
     {
         $slug = $base;
@@ -380,6 +403,8 @@ class McpBlogController extends Controller
             'url' => url('/blogs/' . $blog->slug),
             'created_at' => optional($blog->created_at)->toDateTimeString(),
             'updated_at' => optional($blog->updated_at)->toDateTimeString(),
+            'seo' => $this->formatSeo($blog),
+            'schema' => $blog->schemaArray(),
         ];
 
         if ($includeDescription) {
@@ -387,5 +412,156 @@ class McpBlogController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function formatSeo(Blog $blog): array
+    {
+        return [
+            'meta_title' => $blog->meta_title,
+            'meta_description' => $blog->meta_description,
+            'canonical_url' => $blog->canonical_url,
+            'robots' => $blog->robots,
+            'resolved_title' => $blog->seoTitle(),
+            'resolved_description' => $blog->seoDescription(160),
+        ];
+    }
+
+    public function seoMeta(Request $request, $idOrSlug)
+    {
+        $blog = $this->findActiveBlog($idOrSlug);
+        if (!$blog) {
+            return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'id' => $blog->id,
+            'slug' => $blog->slug,
+            'seo' => $this->formatSeo($blog),
+        ]);
+    }
+
+    public function updateSeoMeta(Request $request, $idOrSlug)
+    {
+        $blog = $this->findActiveBlog($idOrSlug);
+        if (!$blog) {
+            return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:512',
+            'canonical_url' => 'nullable|url|max:2048',
+            'robots' => 'nullable|string|max:64',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        foreach (['meta_title', 'meta_description', 'canonical_url', 'robots'] as $field) {
+            if ($request->exists($field)) {
+                $value = $request->input($field);
+                $blog->{$field} = is_string($value) ? trim($value) : $value;
+                if ($blog->{$field} === '') {
+                    $blog->{$field} = null;
+                }
+            }
+        }
+
+        $blog->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'SEO meta updated',
+            'id' => $blog->id,
+            'slug' => $blog->slug,
+            'seo' => $this->formatSeo($blog->fresh()),
+        ]);
+    }
+
+    public function schema(Request $request, $idOrSlug)
+    {
+        $blog = $this->findActiveBlog($idOrSlug);
+        if (!$blog) {
+            return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'id' => $blog->id,
+            'slug' => $blog->slug,
+            'schema_json' => $blog->schema_json,
+            'schema' => $blog->schemaArray(),
+        ]);
+    }
+
+    public function updateSchema(Request $request, $idOrSlug)
+    {
+        $blog = $this->findActiveBlog($idOrSlug);
+        if (!$blog) {
+            return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
+        }
+
+        // Accept either schema object or schema_json string; null clears.
+        if (!$request->exists('schema') && !$request->exists('schema_json')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Provide schema (object) or schema_json (string). Pass null to clear.',
+            ], 422);
+        }
+
+        if ($request->exists('schema')) {
+            $schema = $request->input('schema');
+            if ($schema === null || $schema === '') {
+                $blog->schema_json = null;
+            } elseif (is_array($schema) || is_object($schema)) {
+                $blog->schema_json = json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'schema must be a JSON object/array or null.',
+                ], 422);
+            }
+        } else {
+            $raw = $request->input('schema_json');
+            if ($raw === null || $raw === '') {
+                $blog->schema_json = null;
+            } elseif (is_array($raw) || is_object($raw)) {
+                $blog->schema_json = json_encode($raw, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } elseif (is_string($raw)) {
+                $decoded = json_decode($raw, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'schema_json is not valid JSON.',
+                    ], 422);
+                }
+                $blog->schema_json = json_encode($decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid schema_json value.',
+                ], 422);
+            }
+        }
+
+        $blog->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Schema updated',
+            'id' => $blog->id,
+            'slug' => $blog->slug,
+            'schema_json' => $blog->schema_json,
+            'schema' => $blog->fresh()->schemaArray(),
+        ]);
     }
 }

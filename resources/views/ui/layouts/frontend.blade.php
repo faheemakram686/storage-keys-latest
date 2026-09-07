@@ -37,6 +37,7 @@
     {{-- Site chrome last so header/footer match on every page --}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     @endif
+    @yield('headExtra')
 </head>
 <body>
     @include('ui.includes.header')

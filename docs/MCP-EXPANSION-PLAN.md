@@ -137,14 +137,12 @@ Phase 1 — DONE (additive; create_blog / list_blogs unchanged)
   search_content, upload_media, list_media
   bulk_update_posts (confirm=true)
 
-Next (Phase 2)  ← unlocks real SEO workflow for the partner
-  DB: seo meta + schema + categories/tags + redirects
-  Frontend: render meta + JSON-LD from DB
-  MCP: get/update_seo_meta, get/update_schema
-       get/create_category, get/create_tag
-       get/create_redirect
+Phase 2 — DONE (nullable SEO; frontend fallback)
+  blogs columns: meta_title, meta_description, canonical_url, robots, schema_json
+  get_seo_meta / update_seo_meta / get_schema / update_schema
+  Blog detail uses stored meta/schema when set; else old title+excerpt behavior
 
-Then (Phase 3)
+Next (Phase 3)
   get_internal_links, audit/report tools, refresh flags
 
 Later (Phase 4)

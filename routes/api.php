@@ -52,6 +52,10 @@ Route::middleware(['mcp.blog', 'throttle:60,1'])->group(function () {
         Route::post('/blogs', [McpBlogController::class, 'store']);
         Route::get('/blogs/search', [McpBlogController::class, 'search']);
         Route::post('/blogs/bulk-update', [McpBlogController::class, 'bulkUpdate']);
+        Route::get('/blogs/{idOrSlug}/seo', [McpBlogController::class, 'seoMeta']);
+        Route::match(['PUT', 'PATCH'], '/blogs/{idOrSlug}/seo', [McpBlogController::class, 'updateSeoMeta']);
+        Route::get('/blogs/{idOrSlug}/schema', [McpBlogController::class, 'schema']);
+        Route::match(['PUT', 'PATCH'], '/blogs/{idOrSlug}/schema', [McpBlogController::class, 'updateSchema']);
         Route::get('/blogs/{idOrSlug}', [McpBlogController::class, 'show']);
         Route::match(['PUT', 'PATCH'], '/blogs/{idOrSlug}', [McpBlogController::class, 'update']);
         Route::delete('/blogs/{idOrSlug}', [McpBlogController::class, 'destroy']);

@@ -1,7 +1,20 @@
 ﻿@extends('ui.layouts.frontend')
 @section('title', '| ' . $blog->title)
-@section('metaTitle', $blog->title . ' | Storage Keys')
-@section('metaDescription', $blog->excerpt(160))
+@section('metaTitle', $blog->seoTitle())
+@section('metaDescription', $blog->seoDescription(160))
+@if(!empty($blog->robots))
+@section('robots', $blog->robots)
+@endif
+@if(!empty($blog->canonical_url))
+@section('canonical', $blog->canonical_url)
+@endif
+
+@section('headExtra')
+@php $schema = $blog->schemaArray(); @endphp
+@if($schema)
+<script type="application/ld+json">{!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endif
+@endsection
 
 @section('content')
 <div class="sk-home">
