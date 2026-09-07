@@ -142,11 +142,15 @@ Phase 2 — DONE (nullable SEO; frontend fallback)
   get_seo_meta / update_seo_meta / get_schema / update_schema
   Blog detail uses stored meta/schema when set; else old title+excerpt behavior
 
-Next (Phase 3)
-  get_internal_links, audit/report tools, refresh flags
+Phase 2b + 3 + 4 — DONE (additive)
+  Taxonomy: get/create_category, get/create_tag, set_blog_taxonomies
+  Redirects: get/create/delete_redirect + web middleware ApplyUrlRedirects
+  Audits: get_internal_links, check_broken_links, audit_content,
+          validate_sitemap_robots, list_stale_posts, mark_blog_reviewed
+  Analytics stubs: get_analytics_summary, get_top_pages, get_search_queries
+          (503 until GA4/GSC credentials — safe to deploy)
 
-Later (Phase 4)
-  GSC + GA tools (needs Google API access)
+Later (optional): wire real GA4/GSC clients when Google credentials exist
 ```
 
 Do **not** promise full WordPress-level SEO MCP until Phase 2 schema + frontend rendering ship.

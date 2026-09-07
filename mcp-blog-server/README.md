@@ -18,8 +18,17 @@ After live deploy, Claude connector exposes:
 | `list_media` / `upload_media` | blog-images folder |
 | `get_seo_meta` / `update_seo_meta` | Phase 2 SEO fields |
 | `get_schema` / `update_schema` | Phase 2 JSON-LD |
+| Categories / tags / redirects | Phase 2b |
+| Internal links / audits / stale | Phase 3 |
+| Analytics summary/top/GSC | Phase 4 stubs (503 until Google setup) |
 
-**Live deploy note:** run `php artisan migrate` so SEO columns exist.
+**Live deploy note:**
+
+```bash
+php artisan migrate
+php artisan config:clear
+php artisan route:clear
+```
 
 Full plan: `docs/MCP-EXPANSION-PLAN.md`  
 Cloud connect: `docs/MCP-CLOUD-CONNECT.md`

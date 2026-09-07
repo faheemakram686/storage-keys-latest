@@ -21,7 +21,22 @@ class Blog extends Model
         'canonical_url',
         'robots',
         'schema_json',
+        'last_reviewed_at',
     ];
+
+    protected $casts = [
+        'last_reviewed_at' => 'datetime',
+    ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(BlogCategory::class, 'blog_category_blog', 'blog_id', 'blog_category_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(BlogTag::class, 'blog_tag_blog', 'blog_id', 'blog_tag_id');
+    }
 
     public function setStatusAttribute($value)
     {

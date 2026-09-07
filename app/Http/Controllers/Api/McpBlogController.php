@@ -391,6 +391,7 @@ class McpBlogController extends Controller
     public function formatBlog(Blog $blog, bool $includeDescription): array
     {
         $rawStatus = (int) $blog->getRawOriginal('status');
+        $blog->loadMissing(['categories:id,name,slug', 'tags:id,name,slug']);
 
         $data = [
             'id' => $blog->id,
@@ -403,8 +404,11 @@ class McpBlogController extends Controller
             'url' => url('/blogs/' . $blog->slug),
             'created_at' => optional($blog->created_at)->toDateTimeString(),
             'updated_at' => optional($blog->updated_at)->toDateTimeString(),
+            'last_reviewed_at' => optional($blog->last_reviewed_at)->toDateTimeString(),
             'seo' => $this->formatSeo($blog),
             'schema' => $blog->schemaArray(),
+            'categories' => $blog->categories->map->only(['id', 'name', 'slug'])->values(),
+            'tags' => $blog->tags->map->only(['id', 'name', 'slug'])->values(),
         ];
 
         if ($includeDescription) {

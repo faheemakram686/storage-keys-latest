@@ -20,6 +20,10 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\Api\McpBlogController;
 use App\Http\Controllers\Api\McpStreamController;
 use App\Http\Controllers\Api\McpSiteController;
+use App\Http\Controllers\Api\McpTaxonomyController;
+use App\Http\Controllers\Api\McpRedirectController;
+use App\Http\Controllers\Api\McpAuditController;
+use App\Http\Controllers\Api\McpAnalyticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +69,27 @@ Route::middleware(['mcp.blog', 'throttle:60,1'])->group(function () {
         Route::get('/sitemap', [McpSiteController::class, 'sitemap']);
         Route::get('/media', [McpSiteController::class, 'listMedia']);
         Route::post('/media', [McpSiteController::class, 'uploadMedia']);
+
+        Route::get('/categories', [McpTaxonomyController::class, 'categories']);
+        Route::post('/categories', [McpTaxonomyController::class, 'createCategory']);
+        Route::get('/tags', [McpTaxonomyController::class, 'tags']);
+        Route::post('/tags', [McpTaxonomyController::class, 'createTag']);
+        Route::post('/blogs/{idOrSlug}/taxonomies', [McpTaxonomyController::class, 'setBlogTaxonomies']);
+
+        Route::get('/redirects', [McpRedirectController::class, 'index']);
+        Route::post('/redirects', [McpRedirectController::class, 'store']);
+        Route::delete('/redirects/{id}', [McpRedirectController::class, 'destroy']);
+
+        Route::get('/internal-links', [McpAuditController::class, 'internalLinks']);
+        Route::post('/broken-links', [McpAuditController::class, 'checkBrokenLinks']);
+        Route::get('/content-audit', [McpAuditController::class, 'auditContent']);
+        Route::get('/validate-sitemap-robots', [McpAuditController::class, 'validateSitemapRobots']);
+        Route::get('/stale-posts', [McpAuditController::class, 'stalePosts']);
+        Route::post('/blogs/{idOrSlug}/mark-reviewed', [McpAuditController::class, 'markReviewed']);
+
+        Route::get('/analytics/summary', [McpAnalyticsController::class, 'summary']);
+        Route::get('/analytics/top-pages', [McpAnalyticsController::class, 'topPages']);
+        Route::get('/analytics/search-queries', [McpAnalyticsController::class, 'searchQueries']);
     });
 });
 

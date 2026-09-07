@@ -94,9 +94,9 @@ class McpStreamController extends Controller
                         ],
                         'serverInfo' => [
                             'name' => 'storagekeys-blog',
-                            'version' => '1.2.0',
+                            'version' => '1.3.0',
                         ],
-                        'instructions' => 'StorageKeys blog MCP v1.2. Prefer drafts (status=0). Phase 1: CRUD + site/media. Phase 2: get_seo_meta/update_seo_meta and get_schema/update_schema (nullable SEO fields; empty falls back to title/excerpt on the site). Only publish when asked.',
+                        'instructions' => 'StorageKeys blog MCP v1.3. Prefer drafts (status=0). Includes CRUD, SEO/schema, categories/tags/redirects, internal-link/orphan audit, content audit, sitemap/robots validation, stale posts, and analytics stubs (503 until Google credentials). Destructive tools need confirm=true. Only publish when asked.',
                     ]);
 
                 case 'notifications/initialized':
@@ -326,13 +326,175 @@ class McpStreamController extends Controller
                     'properties' => [
                         'id' => ['type' => 'integer'],
                         'slug' => ['type' => 'string'],
-                        'schema' => [
-                            'description' => 'JSON-LD object/array, or null to clear',
-                        ],
-                        'schema_json' => [
-                            'type' => 'string',
-                            'description' => 'Alternative: raw JSON string',
-                        ],
+                        'schema' => ['description' => 'JSON-LD object/array, or null to clear'],
+                        'schema_json' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_categories',
+                'description' => 'List blog categories.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'create_category',
+                'description' => 'Create a blog category.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => ['type' => 'string'],
+                        'slug' => ['type' => 'string'],
+                        'description' => ['type' => 'string'],
+                    ],
+                    'required' => ['name'],
+                ],
+            ],
+            [
+                'name' => 'get_tags',
+                'description' => 'List blog tags.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'create_tag',
+                'description' => 'Create a blog tag.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'name' => ['type' => 'string'],
+                        'slug' => ['type' => 'string'],
+                    ],
+                    'required' => ['name'],
+                ],
+            ],
+            [
+                'name' => 'set_blog_taxonomies',
+                'description' => 'Assign categories/tags to a blog (sync).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'category_ids' => ['type' => 'array', 'items' => ['type' => 'integer']],
+                        'tag_ids' => ['type' => 'array', 'items' => ['type' => 'integer']],
+                        'category_slugs' => ['type' => 'array', 'items' => ['type' => 'string']],
+                        'tag_slugs' => ['type' => 'array', 'items' => ['type' => 'string']],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_redirects',
+                'description' => 'List URL redirects.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'create_redirect',
+                'description' => 'Create or update a URL redirect (from_path → to_url).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'from_path' => ['type' => 'string'],
+                        'to_url' => ['type' => 'string'],
+                        'status_code' => ['type' => 'integer', 'enum' => [301, 302, 307, 308]],
+                        'is_active' => ['type' => 'boolean'],
+                    ],
+                    'required' => ['from_path', 'to_url'],
+                ],
+            ],
+            [
+                'name' => 'delete_redirect',
+                'description' => 'Delete a redirect by id. Requires confirm=true.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'confirm' => ['type' => 'boolean'],
+                    ],
+                    'required' => ['id', 'confirm'],
+                ],
+            ],
+            [
+                'name' => 'get_internal_links',
+                'description' => 'Build internal link edges from blog HTML and list orphan blogs.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'check_broken_links',
+                'description' => 'HTTP-check a limited sample of links found in recent blogs.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 30],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'audit_content',
+                'description' => 'Flag thin content, missing SEO meta, duplicate titles, similar-title cannibalization.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'validate_sitemap_robots',
+                'description' => 'Validate sitemap.xml reachability and robots.txt Sitemap directive.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'list_stale_posts',
+                'description' => 'List blogs not reviewed within N days (default 180).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'days' => ['type' => 'integer', 'minimum' => 30, 'maximum' => 730],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'mark_blog_reviewed',
+                'description' => 'Set last_reviewed_at=now for a blog.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_analytics_summary',
+                'description' => 'GA4 summary (503 until Google credentials configured).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'period' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_top_pages',
+                'description' => 'Top pages from GA4 (503 until configured).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_search_queries',
+                'description' => 'GSC search queries (503 until configured).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer'],
                     ],
                 ],
             ],
@@ -471,6 +633,101 @@ class McpStreamController extends Controller
                 }
 
                 return $this->fromResponse($blogs->updateSchema($this->jsonRequest('PATCH', '/api/mcp/blogs/' . $key . '/schema', $payload), $key));
+
+            case 'get_categories':
+                return $this->fromResponse(app(McpTaxonomyController::class)->categories());
+
+            case 'create_category':
+                return $this->fromResponse(app(McpTaxonomyController::class)->createCategory($this->jsonRequest('POST', '/api/mcp/categories', [
+                    'name' => $arguments['name'] ?? '',
+                    'slug' => $arguments['slug'] ?? null,
+                    'description' => $arguments['description'] ?? null,
+                ])));
+
+            case 'get_tags':
+                return $this->fromResponse(app(McpTaxonomyController::class)->tags());
+
+            case 'create_tag':
+                return $this->fromResponse(app(McpTaxonomyController::class)->createTag($this->jsonRequest('POST', '/api/mcp/tags', [
+                    'name' => $arguments['name'] ?? '',
+                    'slug' => $arguments['slug'] ?? null,
+                ])));
+
+            case 'set_blog_taxonomies':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+                $payload = [];
+                foreach (['category_ids', 'tag_ids', 'category_slugs', 'tag_slugs'] as $field) {
+                    if (array_key_exists($field, $arguments)) {
+                        $payload[$field] = $arguments[$field];
+                    }
+                }
+
+                return $this->fromResponse(app(McpTaxonomyController::class)->setBlogTaxonomies($this->jsonRequest('POST', '/api/mcp/blogs/' . $key . '/taxonomies', $payload), $key));
+
+            case 'get_redirects':
+                return $this->fromResponse(app(McpRedirectController::class)->index($this->jsonRequest('GET', '/api/mcp/redirects', [
+                    'limit' => $arguments['limit'] ?? 50,
+                ])));
+
+            case 'create_redirect':
+                return $this->fromResponse(app(McpRedirectController::class)->store($this->jsonRequest('POST', '/api/mcp/redirects', [
+                    'from_path' => $arguments['from_path'] ?? '',
+                    'to_url' => $arguments['to_url'] ?? '',
+                    'status_code' => $arguments['status_code'] ?? 301,
+                    'is_active' => $arguments['is_active'] ?? true,
+                ])));
+
+            case 'delete_redirect':
+                return $this->fromResponse(app(McpRedirectController::class)->destroy($this->jsonRequest('DELETE', '/api/mcp/redirects/' . ($arguments['id'] ?? 0), [
+                    'confirm' => $arguments['confirm'] ?? false,
+                ]), $arguments['id'] ?? 0));
+
+            case 'get_internal_links':
+                return $this->fromResponse(app(McpAuditController::class)->internalLinks($this->jsonRequest('GET', '/api/mcp/internal-links', [
+                    'limit' => $arguments['limit'] ?? 50,
+                ])));
+
+            case 'check_broken_links':
+                return $this->fromResponse(app(McpAuditController::class)->checkBrokenLinks($this->jsonRequest('POST', '/api/mcp/broken-links', [
+                    'limit' => $arguments['limit'] ?? 15,
+                ])));
+
+            case 'audit_content':
+                return $this->fromResponse(app(McpAuditController::class)->auditContent($this->jsonRequest('GET', '/api/mcp/content-audit')));
+
+            case 'validate_sitemap_robots':
+                return $this->fromResponse(app(McpAuditController::class)->validateSitemapRobots());
+
+            case 'list_stale_posts':
+                return $this->fromResponse(app(McpAuditController::class)->stalePosts($this->jsonRequest('GET', '/api/mcp/stale-posts', [
+                    'days' => $arguments['days'] ?? 180,
+                ])));
+
+            case 'mark_blog_reviewed':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse(app(McpAuditController::class)->markReviewed($this->jsonRequest('POST', '/api/mcp/blogs/' . $key . '/mark-reviewed'), $key));
+
+            case 'get_analytics_summary':
+                return $this->fromResponse(app(McpAnalyticsController::class)->summary($this->jsonRequest('GET', '/api/mcp/analytics/summary', [
+                    'period' => $arguments['period'] ?? '28d',
+                ])));
+
+            case 'get_top_pages':
+                return $this->fromResponse(app(McpAnalyticsController::class)->topPages($this->jsonRequest('GET', '/api/mcp/analytics/top-pages', [
+                    'limit' => $arguments['limit'] ?? 10,
+                ])));
+
+            case 'get_search_queries':
+                return $this->fromResponse(app(McpAnalyticsController::class)->searchQueries($this->jsonRequest('GET', '/api/mcp/analytics/search-queries', [
+                    'limit' => $arguments['limit'] ?? 25,
+                ])));
 
             default:
                 return $this->toolError('Unknown tool: ' . $name);

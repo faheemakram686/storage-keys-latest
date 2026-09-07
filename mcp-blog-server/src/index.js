@@ -39,6 +39,10 @@ async function apiRequest(path, options = {}) {
   }
 
   if (!res.ok) {
+    // Soft-fail tools (e.g. analytics stubs) still return JSON for the model.
+    if ((res.status === 503 || res.status === 501) && data && typeof data === "object") {
+      return data;
+    }
     const message = data?.message || data?.raw || res.statusText;
     throw new Error(`API ${res.status}: ${message}`);
   }
@@ -60,7 +64,7 @@ function blogPath(id, slug) {
 
 const server = new McpServer({
   name: "storagekeys-blog",
-  version: "1.2.0",
+  version: "1.3.0",
 });
 
 server.tool(
@@ -281,6 +285,132 @@ server.tool(
         body: JSON.stringify(payload),
       })
     );
+  }
+);
+
+server.tool("get_categories", "List blog categories.", {}, async () =>
+  ok(await apiRequest("/categories", { method: "GET" }))
+);
+server.tool(
+  "create_category",
+  "Create a blog category.",
+  { name: z.string(), slug: z.string().optional(), description: z.string().optional() },
+  async (args) => ok(await apiRequest("/categories", { method: "POST", body: JSON.stringify(args) }))
+);
+server.tool("get_tags", "List blog tags.", {}, async () => ok(await apiRequest("/tags", { method: "GET" })));
+server.tool(
+  "create_tag",
+  "Create a blog tag.",
+  { name: z.string(), slug: z.string().optional() },
+  async (args) => ok(await apiRequest("/tags", { method: "POST", body: JSON.stringify(args) }))
+);
+server.tool(
+  "set_blog_taxonomies",
+  "Assign categories/tags to a blog.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+    category_ids: z.array(z.number().int()).optional(),
+    tag_ids: z.array(z.number().int()).optional(),
+    category_slugs: z.array(z.string()).optional(),
+    tag_slugs: z.array(z.string()).optional(),
+  },
+  async ({ id, slug, ...rest }) =>
+    ok(await apiRequest(`${blogPath(id, slug)}/taxonomies`, { method: "POST", body: JSON.stringify(rest) }))
+);
+
+server.tool(
+  "get_redirects",
+  "List URL redirects.",
+  { limit: z.number().int().min(1).max(100).optional() },
+  async ({ limit }) => {
+    const qs = limit ? `?limit=${limit}` : "";
+    return ok(await apiRequest(`/redirects${qs}`, { method: "GET" }));
+  }
+);
+server.tool(
+  "create_redirect",
+  "Create/update URL redirect.",
+  {
+    from_path: z.string(),
+    to_url: z.string(),
+    status_code: z.union([z.literal(301), z.literal(302), z.literal(307), z.literal(308)]).optional(),
+    is_active: z.boolean().optional(),
+  },
+  async (args) => ok(await apiRequest("/redirects", { method: "POST", body: JSON.stringify(args) }))
+);
+server.tool(
+  "delete_redirect",
+  "Delete redirect by id. Requires confirm=true.",
+  { id: z.number().int(), confirm: z.boolean() },
+  async ({ id, confirm }) =>
+    ok(await apiRequest(`/redirects/${id}?confirm=${confirm ? "true" : "false"}`, { method: "DELETE" }))
+);
+
+server.tool(
+  "get_internal_links",
+  "Internal link edges + orphan blogs from blog HTML.",
+  { limit: z.number().int().optional() },
+  async ({ limit }) => {
+    const qs = limit ? `?limit=${limit}` : "";
+    return ok(await apiRequest(`/internal-links${qs}`, { method: "GET" }));
+  }
+);
+server.tool(
+  "check_broken_links",
+  "Check a limited sample of outbound/internal links.",
+  { limit: z.number().int().min(1).max(30).optional() },
+  async ({ limit }) =>
+    ok(await apiRequest("/broken-links", { method: "POST", body: JSON.stringify({ limit: limit ?? 15 }) }))
+);
+server.tool("audit_content", "Thin/missing-meta/duplicate/cannibalization audit.", {}, async () =>
+  ok(await apiRequest("/content-audit", { method: "GET" }))
+);
+server.tool("validate_sitemap_robots", "Validate sitemap.xml and robots.txt.", {}, async () =>
+  ok(await apiRequest("/validate-sitemap-robots", { method: "GET" }))
+);
+server.tool(
+  "list_stale_posts",
+  "Blogs not reviewed within N days.",
+  { days: z.number().int().min(30).max(730).optional() },
+  async ({ days }) => {
+    const qs = days ? `?days=${days}` : "";
+    return ok(await apiRequest(`/stale-posts${qs}`, { method: "GET" }));
+  }
+);
+server.tool(
+  "mark_blog_reviewed",
+  "Set last_reviewed_at=now.",
+  { id: z.number().int().optional(), slug: z.string().optional() },
+  async ({ id, slug }) =>
+    ok(await apiRequest(`${blogPath(id, slug)}/mark-reviewed`, { method: "POST", body: "{}" }))
+);
+
+server.tool(
+  "get_analytics_summary",
+  "GA4 summary (503 until configured).",
+  { period: z.string().optional() },
+  async ({ period }) => {
+    const qs = period ? `?period=${encodeURIComponent(period)}` : "";
+    return ok(await apiRequest(`/analytics/summary${qs}`, { method: "GET" }));
+  }
+);
+server.tool(
+  "get_top_pages",
+  "GA4 top pages (503 until configured).",
+  { limit: z.number().int().optional() },
+  async ({ limit }) => {
+    const qs = limit ? `?limit=${limit}` : "";
+    return ok(await apiRequest(`/analytics/top-pages${qs}`, { method: "GET" }));
+  }
+);
+server.tool(
+  "get_search_queries",
+  "GSC queries (503 until configured).",
+  { limit: z.number().int().optional() },
+  async ({ limit }) => {
+    const qs = limit ? `?limit=${limit}` : "";
+    return ok(await apiRequest(`/analytics/search-queries${qs}`, { method: "GET" }));
   }
 );
 
