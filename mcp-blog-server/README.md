@@ -2,6 +2,24 @@
 
 Claude/Cursor tools that create and list blogs in the Laravel `blogs` table.
 
+## Claude.ai tools (Phase 1)
+
+After live deploy, Claude connector exposes:
+
+| Tool | Notes |
+|------|--------|
+| `list_blogs` / `create_blog` | Original tools (unchanged) |
+| `get_blog` | by `id` or `slug` |
+| `update_blog` | partial fields; `new_slug` optional |
+| `delete_blog` | soft-delete; requires `confirm=true` |
+| `bulk_update_posts` | status batch; requires `confirm=true` |
+| `search_content` | `q` search on blogs |
+| `get_site_info` / `get_pages` / `get_sitemap` | site map helpers |
+| `list_media` / `upload_media` | blog-images folder |
+
+Full plan: `docs/MCP-EXPANSION-PLAN.md`  
+Cloud connect: `docs/MCP-CLOUD-CONNECT.md`
+
 ## Claude.ai cloud connect (non-tech friendly)
 
 After the **live site** has this branch deployed and `MCP_BLOG_TOKEN` set in live `.env`:

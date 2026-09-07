@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
  * Streamable HTTP MCP endpoint for Claude.ai custom connectors.
  * Protocol: https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+ *
+ * Phase 1 adds blog CRUD + site/media tools without removing create_blog / list_blogs.
  */
 class McpStreamController extends Controller
 {
@@ -20,7 +23,6 @@ class McpStreamController extends Controller
         }
 
         if ($request->isMethod('GET')) {
-            // Stateless server: no standalone SSE listen stream.
             return response('Method Not Allowed', 405);
         }
 
@@ -33,7 +35,6 @@ class McpStreamController extends Controller
             ], 400);
         }
 
-        // Batch: array of messages
         if (array_is_list($payload)) {
             $hasRequest = false;
             $responses = [];
@@ -42,9 +43,9 @@ class McpStreamController extends Controller
                 if (!is_array($message)) {
                     continue;
                 }
-                $result = $this->dispatchMessage($message, $request);
+                $result = $this->dispatchMessage($message);
                 if ($result === null) {
-                    continue; // notification
+                    continue;
                 }
                 $hasRequest = true;
                 $responses[] = $result;
@@ -57,7 +58,7 @@ class McpStreamController extends Controller
             return response()->json(count($responses) === 1 ? $responses[0] : $responses);
         }
 
-        $result = $this->dispatchMessage($payload, $request);
+        $result = $this->dispatchMessage($payload);
         if ($result === null) {
             return response('', 202);
         }
@@ -66,14 +67,13 @@ class McpStreamController extends Controller
     }
 
     /**
-     * @return array<string, mixed>|null null = notification accepted
+     * @return array<string, mixed>|null
      */
-    private function dispatchMessage(array $message, Request $request): ?array
+    private function dispatchMessage(array $message): ?array
     {
         $id = $message['id'] ?? null;
         $method = $message['method'] ?? null;
 
-        // JSON-RPC response from client — ignore
         if ($method === null && array_key_exists('result', $message)) {
             return null;
         }
@@ -82,7 +82,6 @@ class McpStreamController extends Controller
             return $this->error($id, -32600, 'Invalid Request');
         }
 
-        // Notifications have no id
         $isNotification = !array_key_exists('id', $message);
 
         try {
@@ -95,9 +94,9 @@ class McpStreamController extends Controller
                         ],
                         'serverInfo' => [
                             'name' => 'storagekeys-blog',
-                            'version' => '1.0.0',
+                            'version' => '1.1.0',
                         ],
-                        'instructions' => 'Create StorageKeys blog drafts with create_blog (default status=0). Use list_blogs to verify. Only set status=1 when the user explicitly asks to publish.',
+                        'instructions' => 'StorageKeys blog MCP. Prefer drafts (status=0). Existing tools create_blog/list_blogs still work. Use get_blog/update_blog/delete_blog (confirm=true) for edits. Use get_site_info/get_pages/get_sitemap/search_content/list_media/upload_media/bulk_update_posts as needed. Only publish (status=1) when the user explicitly asks.',
                     ]);
 
                 case 'notifications/initialized':
@@ -117,7 +116,7 @@ class McpStreamController extends Controller
                     $name = $params['name'] ?? '';
                     $arguments = is_array($params['arguments'] ?? null) ? $params['arguments'] : [];
 
-                    return $this->rpcResult($id, $this->callTool((string) $name, $arguments, $request));
+                    return $this->rpcResult($id, $this->callTool((string) $name, $arguments));
 
                 default:
                     if ($isNotification) {
@@ -163,37 +162,123 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_blog',
-                'description' => 'Create a blog post in the StorageKeys database. Defaults to draft (status=0) unless status=1 is passed.',
+                'description' => 'Create a blog post. Defaults to draft (status=0) unless status=1 is passed.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
-                        'title' => [
-                            'type' => 'string',
-                            'minLength' => 3,
-                            'maxLength' => 255,
-                            'description' => 'Blog title',
-                        ],
-                        'description' => [
-                            'type' => 'string',
-                            'minLength' => 20,
-                            'description' => 'Blog HTML or text body',
-                        ],
-                        'status' => [
-                            'type' => 'integer',
-                            'enum' => [0, 1],
-                            'description' => '0 = draft (default), 1 = published/active',
-                        ],
-                        'image_url' => [
-                            'type' => 'string',
-                            'format' => 'uri',
-                            'description' => 'Optional public image URL to download as blog cover',
-                        ],
-                        'slug' => [
-                            'type' => 'string',
-                            'description' => 'Optional custom slug; auto-generated from title if omitted',
-                        ],
+                        'title' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 255],
+                        'description' => ['type' => 'string', 'minLength' => 20, 'description' => 'HTML or text body'],
+                        'status' => ['type' => 'integer', 'enum' => [0, 1]],
+                        'image_url' => ['type' => 'string', 'format' => 'uri'],
+                        'slug' => ['type' => 'string'],
                     ],
                     'required' => ['title', 'description'],
+                ],
+            ],
+            [
+                'name' => 'get_blog',
+                'description' => 'Get one blog by numeric id or slug (includes full description).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer', 'description' => 'Blog id'],
+                        'slug' => ['type' => 'string', 'description' => 'Blog slug'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'update_blog',
+                'description' => 'Update an existing blog by id or slug. Only send fields to change.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'title' => ['type' => 'string'],
+                        'description' => ['type' => 'string'],
+                        'status' => ['type' => 'integer', 'enum' => [0, 1]],
+                        'image_url' => ['type' => 'string', 'format' => 'uri'],
+                        'new_slug' => ['type' => 'string', 'description' => 'Optional new slug'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'delete_blog',
+                'description' => 'Soft-delete a blog (is_deleted=1). Requires confirm=true.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'confirm' => ['type' => 'boolean', 'description' => 'Must be true'],
+                    ],
+                    'required' => ['confirm'],
+                ],
+            ],
+            [
+                'name' => 'bulk_update_posts',
+                'description' => 'Bulk update status for multiple blog ids. Requires confirm=true.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'ids' => [
+                            'type' => 'array',
+                            'items' => ['type' => 'integer'],
+                            'minItems' => 1,
+                            'maxItems' => 50,
+                        ],
+                        'status' => ['type' => 'integer', 'enum' => [0, 1]],
+                        'confirm' => ['type' => 'boolean'],
+                    ],
+                    'required' => ['ids', 'status', 'confirm'],
+                ],
+            ],
+            [
+                'name' => 'search_content',
+                'description' => 'Search blogs by title, slug, or description text.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'q' => ['type' => 'string', 'minLength' => 2],
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 50],
+                    ],
+                    'required' => ['q'],
+                ],
+            ],
+            [
+                'name' => 'get_site_info',
+                'description' => 'Base URL, timezone, blog permalink pattern, sitemap URL.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'get_pages',
+                'description' => 'List known static marketing page URLs.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'get_sitemap',
+                'description' => 'JSON sitemap entries (static pages + blogs) plus sitemap.xml URL.',
+                'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
+            ],
+            [
+                'name' => 'list_media',
+                'description' => 'List recent files in storage/uploads/blog-images.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'upload_media',
+                'description' => 'Download an image from a public URL into blog-images and return the stored URL.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'image_url' => ['type' => 'string', 'format' => 'uri'],
+                    ],
+                    'required' => ['image_url'],
                 ],
             ],
         ];
@@ -203,97 +288,189 @@ class McpStreamController extends Controller
      * @param  array<string, mixed>  $arguments
      * @return array{content: list<array{type: string, text: string}>, isError?: bool}
      */
-    private function callTool(string $name, array $arguments, Request $request): array
+    private function callTool(string $name, array $arguments): array
     {
-        // Some clients nest fields under arguments; others put them on params root.
         $arguments = $this->normalizeToolArguments($arguments);
+        $blogs = app(McpBlogController::class);
+        $site = app(McpSiteController::class);
 
-        $blogController = app(McpBlogController::class);
+        switch ($name) {
+            case 'list_blogs':
+                return $this->fromResponse($blogs->index($this->jsonRequest('GET', '/api/mcp/blogs', [
+                    'limit' => $arguments['limit'] ?? 10,
+                ])));
 
-        if ($name === 'list_blogs') {
-            $limit = isset($arguments['limit']) ? (int) $arguments['limit'] : 10;
-            $sub = Request::create('/api/mcp/blogs', 'GET', ['limit' => $limit]);
-            $sub->headers->set('Accept', 'application/json');
-            $response = $blogController->index($sub);
-            $data = $response->getData(true);
+            case 'create_blog':
+                $payload = $this->createPayload($arguments);
 
-            return [
-                'content' => [
-                    [
-                        'type' => 'text',
-                        'text' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-                    ],
-                ],
-            ];
+                return $this->fromResponse($blogs->store($this->jsonRequest('POST', '/api/mcp/blogs', $payload)));
+
+            case 'get_blog':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse($blogs->show($this->jsonRequest('GET', '/api/mcp/blogs/' . $key), $key));
+
+            case 'update_blog':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+                $payload = [];
+                foreach (['title', 'description', 'status', 'image_url'] as $field) {
+                    if (array_key_exists($field, $arguments)) {
+                        $payload[$field] = $arguments[$field];
+                    }
+                }
+                if (!empty($arguments['new_slug'])) {
+                    $payload['slug'] = $arguments['new_slug'];
+                }
+
+                return $this->fromResponse($blogs->update($this->jsonRequest('PATCH', '/api/mcp/blogs/' . $key, $payload), $key));
+
+            case 'delete_blog':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse($blogs->destroy($this->jsonRequest('DELETE', '/api/mcp/blogs/' . $key, [
+                    'confirm' => $arguments['confirm'] ?? false,
+                ]), $key));
+
+            case 'bulk_update_posts':
+                return $this->fromResponse($blogs->bulkUpdate($this->jsonRequest('POST', '/api/mcp/blogs/bulk-update', [
+                    'ids' => $arguments['ids'] ?? [],
+                    'status' => $arguments['status'] ?? null,
+                    'confirm' => $arguments['confirm'] ?? false,
+                ])));
+
+            case 'search_content':
+                return $this->fromResponse($blogs->search($this->jsonRequest('GET', '/api/mcp/blogs/search', [
+                    'q' => $arguments['q'] ?? '',
+                    'limit' => $arguments['limit'] ?? 10,
+                ])));
+
+            case 'get_site_info':
+                return $this->fromResponse($site->siteInfo());
+
+            case 'get_pages':
+                return $this->fromResponse($site->pages());
+
+            case 'get_sitemap':
+                return $this->fromResponse($site->sitemap());
+
+            case 'list_media':
+                return $this->fromResponse($site->listMedia($this->jsonRequest('GET', '/api/mcp/media', [
+                    'limit' => $arguments['limit'] ?? 30,
+                ])));
+
+            case 'upload_media':
+                return $this->fromResponse($site->uploadMedia($this->jsonRequest('POST', '/api/mcp/media', [
+                    'image_url' => $arguments['image_url'] ?? '',
+                ])));
+
+            default:
+                return $this->toolError('Unknown tool: ' . $name);
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $arguments
+     * @return array{title: string, description: string, status?: int, image_url?: string, slug?: string}
+     */
+    private function createPayload(array $arguments): array
+    {
+        $title = trim((string) ($arguments['title'] ?? $arguments['name'] ?? ''));
+        $description = $arguments['description'] ?? $arguments['content'] ?? $arguments['body'] ?? '';
+        if (is_array($description)) {
+            $description = json_encode($description, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        $description = trim((string) $description);
+
+        $payload = [
+            'title' => $title,
+            'description' => $description,
+        ];
+        if (array_key_exists('status', $arguments) && in_array($arguments['status'], [0, 1, '0', '1'], true)) {
+            $payload['status'] = (int) $arguments['status'];
+        }
+        if (!empty($arguments['image_url']) && is_string($arguments['image_url'])) {
+            $payload['image_url'] = $arguments['image_url'];
+        }
+        if (!empty($arguments['slug']) && is_string($arguments['slug'])) {
+            $payload['slug'] = $arguments['slug'];
         }
 
-        if ($name === 'create_blog') {
-            $title = trim((string) ($arguments['title'] ?? $arguments['name'] ?? ''));
-            $description = $arguments['description'] ?? $arguments['content'] ?? $arguments['body'] ?? '';
-            if (is_array($description)) {
-                $description = json_encode($description, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            }
-            $description = trim((string) $description);
+        return $payload;
+    }
 
-            $payload = [
-                'title' => $title,
-                'description' => $description,
-            ];
-            if (array_key_exists('status', $arguments) && ($arguments['status'] === 0 || $arguments['status'] === 1 || $arguments['status'] === '0' || $arguments['status'] === '1')) {
-                $payload['status'] = (int) $arguments['status'];
-            }
-            if (!empty($arguments['image_url']) && is_string($arguments['image_url'])) {
-                $payload['image_url'] = $arguments['image_url'];
-            }
-            if (!empty($arguments['slug']) && is_string($arguments['slug'])) {
-                $payload['slug'] = $arguments['slug'];
-            }
-
-            // Build a fresh JSON request. Do NOT copy the parent MCP Content-Type/body —
-            // that made Laravel see an empty JSON body and fail "title/description required".
-            $sub = Request::create(
-                '/api/mcp/blogs',
-                'POST',
-                [],
-                [],
-                [],
-                [
-                    'CONTENT_TYPE' => 'application/json',
-                    'HTTP_ACCEPT' => 'application/json',
-                ],
-                json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-            );
-            $response = $blogController->store($sub);
-            $data = $response->getData(true);
-            $status = $response->getStatusCode();
-
-            if ($status >= 400) {
-                return [
-                    'content' => [
-                        [
-                            'type' => 'text',
-                            'text' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-                        ],
-                    ],
-                    'isError' => true,
-                ];
-            }
-
-            return [
-                'content' => [
-                    [
-                        'type' => 'text',
-                        'text' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-                    ],
-                ],
-            ];
+    /**
+     * @param  array<string, mixed>  $arguments
+     */
+    private function blogKey(array $arguments): ?string
+    {
+        if (isset($arguments['id']) && $arguments['id'] !== '' && $arguments['id'] !== null) {
+            return (string) $arguments['id'];
         }
+        if (!empty($arguments['slug']) && is_string($arguments['slug'])) {
+            return $arguments['slug'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $queryOrJson
+     */
+    private function jsonRequest(string $method, string $uri, array $queryOrJson = []): Request
+    {
+        if (strtoupper($method) === 'GET' || strtoupper($method) === 'DELETE') {
+            $request = Request::create($uri, $method, $queryOrJson);
+            $request->headers->set('Accept', 'application/json');
+
+            return $request;
+        }
+
+        return Request::create(
+            $uri,
+            $method,
+            [],
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+            ],
+            json_encode($queryOrJson, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
+    }
+
+    private function fromResponse(JsonResponse $response): array
+    {
+        $data = $response->getData(true);
+        $status = $response->getStatusCode();
 
         return [
             'content' => [
                 [
                     'type' => 'text',
-                    'text' => 'Unknown tool: ' . $name,
+                    'text' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+                ],
+            ],
+            'isError' => $status >= 400,
+        ];
+    }
+
+    private function toolError(string $message): array
+    {
+        return [
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => $message,
                 ],
             ],
             'isError' => true,
@@ -310,7 +487,6 @@ class McpStreamController extends Controller
             $arguments = array_merge($arguments, $arguments['arguments']);
         }
 
-        // If Claude sent the whole args object as a JSON string
         if (isset($arguments['description']) && is_string($arguments['description'])) {
             $trimmed = trim($arguments['description']);
             if ($trimmed !== '' && ($trimmed[0] === '{' || $trimmed[0] === '[')) {

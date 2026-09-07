@@ -19,6 +19,7 @@ use App\Http\Controllers\Tenant\Employee\DocumentController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\Api\McpBlogController;
 use App\Http\Controllers\Api\McpStreamController;
+use App\Http\Controllers\Api\McpSiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,17 @@ Route::middleware(['mcp.blog', 'throttle:60,1'])->group(function () {
     Route::prefix('mcp')->group(function () {
         Route::get('/blogs', [McpBlogController::class, 'index']);
         Route::post('/blogs', [McpBlogController::class, 'store']);
+        Route::get('/blogs/search', [McpBlogController::class, 'search']);
+        Route::post('/blogs/bulk-update', [McpBlogController::class, 'bulkUpdate']);
+        Route::get('/blogs/{idOrSlug}', [McpBlogController::class, 'show']);
+        Route::match(['PUT', 'PATCH'], '/blogs/{idOrSlug}', [McpBlogController::class, 'update']);
+        Route::delete('/blogs/{idOrSlug}', [McpBlogController::class, 'destroy']);
+
+        Route::get('/site-info', [McpSiteController::class, 'siteInfo']);
+        Route::get('/pages', [McpSiteController::class, 'pages']);
+        Route::get('/sitemap', [McpSiteController::class, 'sitemap']);
+        Route::get('/media', [McpSiteController::class, 'listMedia']);
+        Route::post('/media', [McpSiteController::class, 'uploadMedia']);
     });
 });
 
