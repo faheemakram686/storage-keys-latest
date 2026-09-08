@@ -52,11 +52,11 @@ export default {
     },
     logoSrc: {
       type: String,
-      default: AppFunction.getAppUrl('images/core.png'),
+      default: AppFunction.getAppUrl('sk-assets/assets/images/frontend/front-logo.png'),
     },
     logoIconSrc: {
       type: String,
-      default: AppFunction.getAppUrl('images/core.png'),
+      default: AppFunction.getAppUrl('sk-assets/assets/images/frontend/favicon.png'),
     },
     logoUrl: {
       type: String,

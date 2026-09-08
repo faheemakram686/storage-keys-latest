@@ -27,8 +27,15 @@ class DocumentRequest extends BaseRequest
         return [
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'expiry_date' => 'nullable',
+            'expiry_date' => 'nullable|date',
             'file' => $file
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('expiry_date') && ($this->expiry_date === '' || $this->expiry_date === 'null' || $this->expiry_date === 'Invalid date')) {
+            $this->merge(['expiry_date' => null]);
+        }
     }
 }

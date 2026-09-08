@@ -178,7 +178,11 @@ export default {
         triggerActions(row, action, active) {
             if (action.actionName === 'view') {
                 this.selectedPayslip = row
-                this.payslipViewModal = true;
+                if (window.__openClassicPayslip) {
+                    window.__openClassicPayslip(row.id);
+                } else {
+                    this.payslipViewModal = true;
+                }
             } else if (action.actionName === 'edit') {
                 this.selectedPayslip = row
                 this.payslipEditModal = true;

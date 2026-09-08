@@ -19,7 +19,7 @@
               v-model="formData.expiry_date"
               type="date"
               :placeholder="$placeholder('expiry date', '')"
-              :required="true"
+              :required="false"
               :error-message="$errorMessage(errors, 'expiry_date')"
           />
 
@@ -67,8 +67,12 @@ export default {
         submitData() {
             let formData = formDataAssigner(new FormData, this.formData);
             formData.append('user_id', this.userId);
-          let expdate = formatDateForServer(formData.get('expiry_date'));
-          formData.append('expiry_date', expdate);
+            const rawExpiry = formData.get('expiry_date');
+            if (rawExpiry) {
+                formData.append('expiry_date', formatDateForServer(rawExpiry));
+            } else {
+                formData.set('expiry_date', '');
+            }
             if (this.selectedUrl) {
                 // for file update need to send by post.
                 formData.append('_method', 'PATCH');

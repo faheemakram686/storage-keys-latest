@@ -47,3 +47,8 @@ html {
 .currency-symbol{
   font-family: DejaVu Sans, sans-serif !important;
 }
+
+/* Classic bordered payslip (PDF styles are inlined in the blade template) */
+.payslip-sheet {
+  border: 1.5px solid #000;
+}

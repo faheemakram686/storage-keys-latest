@@ -41,7 +41,7 @@ export default {
         profileData: {},
         logoIconSrc: {
             type: String,
-            default: '/images/logo.png'
+            default: '/sk-assets/assets/images/frontend/front-logo.png'
         },
         hasWorkShift:{
             type: Boolean

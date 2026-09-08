@@ -42,3 +42,7 @@
         window.user = {!! auth()->user()->load('profilePicture', 'roles:id,name') !!}
     </script>
 @endpush
+
+@push('after-scripts')
+    <script src="{{ asset('js/classic-payslip-modal.js') }}"></script>
+@endpush

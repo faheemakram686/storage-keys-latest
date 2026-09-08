@@ -32,9 +32,9 @@ abstract class Tag
             '{app_name}' => settings('tenant_name', 'app_name'),
             '{tenant_name}' => settings('tenant_name', 'app_name'),
             '{company_name}' => settings('tenant_name', 'app_name'),
-            '{app_logo}' => asset(empty($app_logo) ? '/images/logo.png' : $app_logo),
-            '{tenant_logo}' => asset(empty($tenant_logo) ? '/images/logo.png' : $tenant_logo),
-            '{company_logo}' => asset(empty($tenant_logo) ? '/images/logo.png' : $tenant_logo)
+            '{app_logo}' => asset(empty($app_logo) ? '/sk-assets/assets/images/frontend/front-logo.png' : $app_logo),
+            '{tenant_logo}' => asset(empty($tenant_logo) ? '/sk-assets/assets/images/frontend/front-logo.png' : $tenant_logo),
+            '{company_logo}' => asset(empty($tenant_logo) ? '/sk-assets/assets/images/frontend/front-logo.png' : $tenant_logo)
         ];
     }
 }

@@ -225,10 +225,24 @@ class EmployeeService extends TenantService
     public function assignToUpcomingWorkingShift()
     {
         $this->when($this->getAttr('work_shift_id'), function () {
-            resolve(WorkingShiftService::class)
-                ->setWorkShiftId((int) $this->getAttr('work_shift_id'))
-                ->departmentMoveChangeUpcomingWorkingShift([$this->model->id]);
-            //->assignToUsers($this->model->id);
+            $workShiftId = (int) $this->getAttr('work_shift_id');
+            $workShift = WorkingShift::query()->findOrFail($workShiftId);
+
+            $service = resolve(WorkingShiftService::class)
+                ->setModel($workShift)
+                ->setWorkShiftId($workShiftId);
+
+            $shiftStart = $workShift->start_date
+                ? \Carbon\Carbon::parse($workShift->start_date)->startOfDay()
+                : todayFromApp()->startOfDay();
+
+            // Future-dated work shifts stay upcoming; otherwise apply immediately
+            // so Job History / employee profile update right away.
+            if ($shiftStart->gt(todayFromApp()->startOfDay())) {
+                $service->assignToUserAsUpcoming([$this->model->id]);
+            } else {
+                $service->assignToUsers([$this->model->id]);
+            }
         });
     }
 

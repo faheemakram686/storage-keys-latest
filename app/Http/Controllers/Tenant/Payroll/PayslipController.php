@@ -115,9 +115,25 @@ class PayslipController extends Controller
 
     public function showPdf(Payslip $payslip)
     {
+        $data = $this->payslipViewData($payslip);
+        $pdf = PDF::loadView('tenant.payroll.pdf.payslip', $data);
+        $fileName = 'Payslip for ' . $payslip->user->full_name . ' (' . ($payslip->user->profile ? $payslip->user->profile->employee_id : 'uid') . ').pdf';
+        if (request()->get('download') == true) {
+            return $pdf->download($fileName);
+        }
+        return $pdf->stream($fileName);
+    }
+
+    public function showHtml(Payslip $payslip)
+    {
+        return view('tenant.payroll.pdf.payslip', $this->payslipViewData($payslip));
+    }
+
+    protected function payslipViewData(Payslip $payslip): array
+    {
         $payslip->load($this->service->getRelations());
 
-        if (auth()->id() != $payslip->user->id && auth()->user()->roles()->whereIn('alias',['admin', 'manager'])->doesntExist()){
+        if (auth()->id() != $payslip->user->id && auth()->user()->roles()->whereIn('alias', ['admin', 'manager'])->doesntExist()) {
             throw new GeneralException(__t('action_not_allowed'));
         }
 
@@ -127,35 +143,20 @@ class PayslipController extends Controller
         $totalDeduction = $this->service->getTotalBeneficiary($beneficiaries, $salaryAmount, 'deduction');
         $payslipFor = $this->getDateDifferenceString($payslip->start_date, $payslip->end_date);
         [$setting_able_id, $setting_able_type] = $this->tenantAble();
-        $settings = (object)resolve(SettingRepository::class)
+        $settings = (object) resolve(SettingRepository::class)
             ->getFormattedSettings('tenant', $setting_able_type, $setting_able_id);
         $payslip_settings = json_decode($payslip->payrun->data);
-        //if payslip pdf style not found
-//        PDF::setOption(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
-//            ->setHttpContext(stream_context_create([
-//                'ssl' => [
-//                    'verify_peer' => false,
-//                    'verify_peer_name' => false,
-//                    'allow_self_signed' => true,
-//                ]
-//            ]))->loadView();
-        $pdf = PDF::loadView('tenant.payroll.pdf.payslip',
-            compact(
-                'payslip',
-                'beneficiaries',
-                'totalAllowance',
-                'totalDeduction',
-                'settings',
-                'salaryAmount',
-                'payslipFor',
-                'payslip_settings'
-            )
+
+        return compact(
+            'payslip',
+            'beneficiaries',
+            'totalAllowance',
+            'totalDeduction',
+            'settings',
+            'salaryAmount',
+            'payslipFor',
+            'payslip_settings'
         );
-        $fileName = 'Payslip for ' . $payslip->user->full_name . ' (' . ($payslip->user->profile ? $payslip->user->profile->employee_id : 'uid') . ').pdf';
-        if (request()->get('download') == true) {
-            return $pdf->download($fileName);
-        }
-        return $pdf->stream($fileName);
     }
 
     public function update(Payslip $payslip)

@@ -129,7 +129,7 @@ export default {
         },
         logoUrl: {
             type: String,
-            default: AppFunction.getAppUrl('images/core.png'),
+            default: AppFunction.getAppUrl('sk-assets/assets/images/frontend/front-logo.png'),
         },
         allNotificationUrl: {
             type: String,

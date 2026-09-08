@@ -26,7 +26,7 @@ class EmployeeProfileController extends Controller
         $this->service
             ->validateIsNotDemoVersion()
             ->setModel($employee)
-            ->validate();
+            ->validate((int) $employee->id);
 
         $employee->update($request->only('first_name', 'last_name', 'email'));
 
@@ -34,7 +34,7 @@ class EmployeeProfileController extends Controller
             ['user_id' => $employee->id],
             array_merge(
                 ['user_id' => $employee->id],
-                $request->only('employee_id', 'gender', 'date_of_birth', 'about_me', 'phone_number','res_visa_loc','emirate_id','notice_period')
+                $request->only('employee_id', 'gender', 'date_of_birth', 'about_me', 'phone_number', 'res_visa_loc', 'emirate_id', 'notice_period')
             )
         );
 

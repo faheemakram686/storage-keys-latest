@@ -30,7 +30,10 @@ class TenantSettingSeeder extends Seeder
                 'name' => 'tenant_name', 'value' => config('app.name'), 'context' => 'tenant', 'autoload' => 0, 'public' => 1,
             ],
             [
-                'name' => 'tenant_icon', 'value' => '/images/icon.png', 'context' => 'tenant', 'autoload' => 0, 'public' => 1,
+                'name' => 'tenant_icon', 'value' => '/sk-assets/assets/images/frontend/favicon.png', 'context' => 'tenant', 'autoload' => 0, 'public' => 1,
+            ],
+            [
+                'name' => 'tenant_logo', 'value' => '/sk-assets/assets/images/frontend/front-logo.png', 'context' => 'tenant', 'autoload' => 0, 'public' => 1,
             ],
             [
                 'name' => 'punch_in_time_tolerance', 'value' => 15, 'context' => 'attendance', 'autoload' => 0, 'public' => 1,

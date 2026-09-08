@@ -86,9 +86,15 @@ class DocumentController extends Controller
                 'documents'
             );
         }
+
+        $expiry = $request->expiry_date;
+        if ($expiry === '' || $expiry === 'null' || $expiry === 'Invalid date') {
+            $expiry = null;
+        }
+
         $document->update([
             'name' => $request->name,
-            'expiry_date' => $request->expiry_date,
+            'expiry_date' => $expiry,
             'path' => $file_path
         ]);
 

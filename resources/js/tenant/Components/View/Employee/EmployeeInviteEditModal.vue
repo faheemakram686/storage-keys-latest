@@ -208,6 +208,7 @@ export default {
         afterSuccessFromGetEditData({data}) {
             this.preloader = false;
             this.formData = data;
+            this.formData.id = data.id;
             this.formData.employee_id = data.profile?.employee_id;
             this.formData.roles = this.collection(data.roles).pluck();
             this.formData.designation_id = data.designation?.id;
@@ -215,7 +216,7 @@ export default {
             this.formData.employment_status_id = data.employment_status?.id;
             this.formData.dont_show_in_employee = parseInt(this.formData.is_in_employee) ? 0 : 1;
             this.formData.joining_date = data.profile?.joining_date ? new Date(data.profile?.joining_date) : null;
-            this.formData.gender = data.profile?.gender;
+            this.formData.gender = data.profile?.gender ? String(data.profile.gender).toLowerCase() : '';
         },
         checkMailSettings() {
             this.preloader = true;

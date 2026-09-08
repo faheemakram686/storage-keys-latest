@@ -36,6 +36,9 @@ Route::group(['prefix' => 'app', ], function (Router $router) {
     $router->get('payslip/{payslip}/pdf', [PayslipController::class, 'showPdf'])
         ->name('payslip-pdf.index');
 
+    $router->get('payslip/{payslip}/html', [PayslipController::class, 'showHtml'])
+        ->name('payslip-html.index');
+
     $router->patch('payslip/{payslip}/update', [PayslipController::class, 'update'])
         ->name('payslip.update');
 

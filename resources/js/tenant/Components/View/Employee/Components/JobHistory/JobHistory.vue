@@ -97,7 +97,7 @@ export default {
             this.preloading = true;
             axiosGet(`${this.apiUrl.EMPLOYEES}/${this.props.id}/job-history`).then(({data}) => {
                 this.employee = data;
-                let formatUpcomingWorkingShift = this.employee.upcoming_working_shift.map(item => {
+                let formatUpcomingWorkingShift = (this.employee.upcoming_working_shift || []).map(item => {
                     return {...item.working_shift, ...{
                         'upcoming': true,
                         'pivot': {
@@ -107,7 +107,7 @@ export default {
 
                     }}
                 })
-                this.employee.working_shifts_with_upcoming = formatUpcomingWorkingShift.concat(this.employee.working_shifts)
+                this.employee.working_shifts_with_upcoming = formatUpcomingWorkingShift.concat(this.employee.working_shifts || [])
                 this.$store.dispatch("getEmployeeDetails", this.props.id);
             }).finally(() => {
                 this.preloading = false;

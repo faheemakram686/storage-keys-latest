@@ -123,7 +123,9 @@ export default {
             this.loading = true;
             const formData = {...this.formData};
             formData.date_of_birth = formatDateForServer(formData.date_of_birth);
-            this.submitFromFixin(`patch`, `${EMPLOYEES}/${this.formData.id}/profile-update`, formData);
+            // Always use the loaded employee user id (not nested profile id).
+            const employeeId = this.employeeDetails?.id || this.formData.id;
+            this.submitFromFixin(`patch`, `${EMPLOYEES}/${employeeId}/profile-update`, formData);
         },
         afterSuccess(response) {
             this.loading = false;

@@ -225,20 +225,27 @@ class UserService extends BaseService
         return $this;
     }
 
-    public function validate()
+    public function validate(?int $ignoreUserId = null)
     {
-        validator(request()->all(),[
+        $ignoreUserId = $ignoreUserId ?: optional($this->model)->getKey();
+
+        validator(request()->all(), [
             'first_name' => 'required',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore(optional($this->model)->id)
+                Rule::unique('users', 'email')->ignore($ignoreUserId),
             ],
-            'employee_id' => 'required|min:2|unique:profiles,employee_id,'.optional($this->model)->id.',user_id',
-            'gender' => 'required'
+            'employee_id' => [
+                'required',
+                'min:2',
+                Rule::unique('profiles', 'employee_id')->ignore($ignoreUserId, 'user_id'),
+            ],
+            'gender' => 'nullable|in:male,female,other',
+            'phone_number' => 'nullable|string|max:255',
         ])->validate();
 
         return $this;
-     }
+    }
 
 }
