@@ -116,6 +116,12 @@
                     <p>Secure vehicle storage with flexible short- and long-term options for personal, classic or luxury cars. A professionally managed facility for vehicles that need a suitable place between uses.</p>
                     <a class="ab-svc-link" href="{{ url('/car-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
+                <div class="ps-whyc">
+                    <div class="ic"><i class="fas fa-stopwatch"></i></div>
+                    <span class="h4">Short Term Storage</span>
+                    <p>Flexible temporary storage for weeks or months — between moves, renovations, travel or business overflow. Practical space in Dubai and Sharjah without a permanent commitment.</p>
+                    <a class="ab-svc-link" href="{{ url('/short-term-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </section>

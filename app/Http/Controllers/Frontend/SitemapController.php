@@ -29,6 +29,7 @@ class SitemapController extends Controller
             '/moving-services',
             '/luggage-storage',
             '/car-storage',
+            '/short-term-storage',
             '/shop',
             '/booking',
             '/blogs',

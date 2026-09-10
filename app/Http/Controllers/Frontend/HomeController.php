@@ -203,6 +203,11 @@ class HomeController extends Controller
     {
         return view('ui.pages.car-storage');
     }
+
+    public function shortTermStorage()
+    {
+        return view('ui.pages.short-term-storage');
+    }
     public function bookingReservation($id)
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();
