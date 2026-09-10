@@ -156,8 +156,8 @@
                                                     <label  for="status">Status</label>
                                                     <select class="form-control form-select " id="status" name="status" required>
                                                         <option value="">Select Status:</option>
-                                                        <option value="0">Active</option>
-                                                        <option value="1">In-Active</option>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">In-Active</option>
                                                     </select>
                                                 </div>
                                             </div>

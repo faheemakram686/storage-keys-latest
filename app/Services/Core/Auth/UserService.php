@@ -17,6 +17,7 @@ use App\Services\Core\Auth\Traits\HasUserActions;
 use App\Services\Core\BaseService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -229,7 +230,17 @@ class UserService extends BaseService
     {
         $ignoreUserId = $ignoreUserId ?: optional($this->model)->getKey();
 
-        validator(request()->all(), [
+        $payload = request()->all();
+        if (!empty($payload['gender']) && is_string($payload['gender'])) {
+            $payload['gender'] = strtolower(trim($payload['gender']));
+            request()->merge(['gender' => $payload['gender']]);
+        }
+        if (!empty($payload['employee_id']) && is_string($payload['employee_id'])) {
+            $payload['employee_id'] = trim($payload['employee_id']);
+            request()->merge(['employee_id' => $payload['employee_id']]);
+        }
+
+        validator($payload, [
             'first_name' => 'required',
             'email' => [
                 'required',
@@ -239,7 +250,15 @@ class UserService extends BaseService
             'employee_id' => [
                 'required',
                 'min:2',
-                Rule::unique('profiles', 'employee_id')->ignore($ignoreUserId, 'user_id'),
+                function ($attribute, $value, $fail) use ($ignoreUserId) {
+                    $query = DB::table('profiles')->where('employee_id', $value);
+                    if (!empty($ignoreUserId)) {
+                        $query->where('user_id', '!=', $ignoreUserId);
+                    }
+                    if ($query->exists()) {
+                        $fail(__('validation.unique', ['attribute' => 'employee id']));
+                    }
+                },
             ],
             'gender' => 'nullable|in:male,female,other',
             'phone_number' => 'nullable|string|max:255',

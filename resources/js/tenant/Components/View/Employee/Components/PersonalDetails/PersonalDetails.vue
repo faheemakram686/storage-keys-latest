@@ -121,10 +121,22 @@ export default {
     methods: {
         submitData() {
             this.loading = true;
-            const formData = {...this.formData};
-            formData.date_of_birth = formatDateForServer(formData.date_of_birth);
             // Always use the loaded employee user id (not nested profile id).
             const employeeId = this.employeeDetails?.id || this.formData.id;
+            const formData = {
+                id: employeeId,
+                first_name: this.formData.first_name,
+                last_name: this.formData.last_name,
+                email: this.formData.email,
+                employee_id: this.formData.employee_id,
+                res_visa_loc: this.formData.res_visa_loc,
+                emirate_id: this.formData.emirate_id,
+                notice_period: this.formData.notice_period,
+                phone_number: this.formData.phone_number,
+                gender: this.formData.gender ? String(this.formData.gender).toLowerCase() : '',
+                date_of_birth: formatDateForServer(this.formData.date_of_birth),
+                about_me: this.formData.about_me,
+            };
             this.submitFromFixin(`patch`, `${EMPLOYEES}/${employeeId}/profile-update`, formData);
         },
         afterSuccess(response) {
@@ -149,9 +161,12 @@ export default {
                     this.preloader = false
                 }
                 this.formData = {
-                    ...employee,
-                     employee_id: employee.profile ? employee.profile.employee_id : '',
-                    gender: employee.profile ? employee.profile.gender : '',
+                    id: employee.id,
+                    first_name: employee.first_name,
+                    last_name: employee.last_name,
+                    email: employee.email,
+                    employee_id: employee.profile ? employee.profile.employee_id : '',
+                    gender: employee.profile?.gender ? String(employee.profile.gender).toLowerCase() : '',
                     about_me: employee.profile ? employee.profile.about_me : '',
                     phone_number: employee.profile ? employee.profile.phone_number : '',
                     res_visa_loc: employee.profile ? employee.profile.res_visa_loc : '',

@@ -37,8 +37,29 @@ class SkCustomersSeeder extends Seeder
         $skippedExisting = 0;
         $skippedInvalid = 0;
         $errors = 0;
+        $statusSynced = 0;
 
         $this->command?->info('Importing ' . count($rows) . ' customer rows from PDF seeder data...');
+
+        // Ensure previously imported PDF emails are In-Active (fast bulk).
+        $emails = [];
+        foreach ($rows as $row) {
+            $email = strtolower(trim((string) ($row['email'] ?? '')));
+            if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $emails[$email] = true;
+            }
+        }
+        $emailList = array_keys($emails);
+        foreach (array_chunk($emailList, 500) as $chunk) {
+            $statusSynced += Customer::query()
+                ->where('is_deleted', 0)
+                ->whereIn('email', $chunk)
+                ->update(['status' => 0]);
+            Contact::query()
+                ->where('is_deleted', 0)
+                ->whereIn('email', $chunk)
+                ->update(['status' => 0]);
+        }
 
         foreach ($rows as $row) {
             $email = strtolower(trim((string) ($row['email'] ?? '')));
@@ -89,7 +110,7 @@ class SkCustomersSeeder extends Seeder
                     $customer->city = $row['city'] ?? null;
                     $customer->state = $row['state'] ?? null;
                     $customer->country = $row['country'] ?? 'United Arab Emirates';
-                    $customer->status = 1;
+                    $customer->status = 0; // In-Active
                     $customer->is_deleted = 0;
                     $customer->save();
 
@@ -101,7 +122,7 @@ class SkCustomersSeeder extends Seeder
                     $contact->email = $email;
                     $contact->phone = $row['phone'] ?? null;
                     $contact->contact_type = 'primary';
-                    $contact->status = 1;
+                    $contact->status = 0; // In-Active
                     $contact->is_deleted = 0;
                     $contact->save();
 
@@ -116,6 +137,7 @@ class SkCustomersSeeder extends Seeder
             'source_rows' => count($rows),
             'created' => $created,
             'skipped_existing' => $skippedExisting,
+            'status_synced_inactive' => $statusSynced,
             'skipped_invalid' => $skippedInvalid,
             'errors' => $errors,
         ]));

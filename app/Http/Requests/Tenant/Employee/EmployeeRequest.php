@@ -3,16 +3,25 @@
 namespace App\Http\Requests\Tenant\Employee;
 
 use App\Http\Requests\BaseRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class EmployeeRequest extends BaseRequest
 {
     protected function prepareForValidation()
     {
+        $merge = [];
+
         if ($this->filled('gender') && is_string($this->gender)) {
-            $this->merge([
-                'gender' => strtolower(trim($this->gender)),
-            ]);
+            $merge['gender'] = strtolower(trim($this->gender));
+        }
+
+        if ($this->filled('employee_id') && is_string($this->employee_id)) {
+            $merge['employee_id'] = trim($this->employee_id);
+        }
+
+        if ($merge) {
+            $this->merge($merge);
         }
     }
 
@@ -21,11 +30,9 @@ class EmployeeRequest extends BaseRequest
         $ignoreUserId = $this->employeeIdToIgnore();
 
         $emailRule = Rule::unique('users', 'email')->whereNull('deleted_at');
-        $employeeIdRule = Rule::unique('profiles', 'employee_id');
 
         if (!empty($ignoreUserId)) {
             $emailRule->ignore($ignoreUserId);
-            $employeeIdRule->ignore($ignoreUserId, 'user_id');
         }
 
         return [
@@ -37,7 +44,7 @@ class EmployeeRequest extends BaseRequest
             'employee_id' => [
                 'required',
                 'min:2',
-                $employeeIdRule,
+                $this->uniqueEmployeeIdRule($ignoreUserId),
             ],
             'department_id' => 'required|integer',
             'designation_id' => 'required|integer',
@@ -45,6 +52,25 @@ class EmployeeRequest extends BaseRequest
             'work_shift_id' => 'nullable|integer',
             'gender' => 'nullable|in:male,female,other',
         ];
+    }
+
+    /**
+     * Unique against other users only. Prefer profile PK ignore; fall back to
+     * an explicit user_id exclusion so own ID is never treated as a duplicate.
+     */
+    protected function uniqueEmployeeIdRule(?int $ignoreUserId)
+    {
+        return function ($attribute, $value, $fail) use ($ignoreUserId) {
+            $query = DB::table('profiles')->where('employee_id', $value);
+
+            if (!empty($ignoreUserId)) {
+                $query->where('user_id', '!=', $ignoreUserId);
+            }
+
+            if ($query->exists()) {
+                $fail(__('validation.unique', ['attribute' => str_replace('_', ' ', $attribute)]));
+            }
+        };
     }
 
     /**

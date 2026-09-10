@@ -69,12 +69,6 @@ class Customer extends Model
 
     public function getStatusAttribute($value)
     {
-        if($value==1){
-            $getVal='Active';
-        }
-        if($value==0){
-            $getVal='In-Active';
-        }
-        return $getVal;
+        return ((int) $value === 1) ? 'Active' : 'In-Active';
     }
 }

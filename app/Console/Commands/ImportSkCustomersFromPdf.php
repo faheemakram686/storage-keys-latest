@@ -58,6 +58,16 @@ class ImportSkCustomersFromPdf extends Command
             }
 
             if ($exists) {
+                if (!$dry) {
+                    Customer::query()
+                        ->where('is_deleted', 0)
+                        ->whereRaw('LOWER(email) = ?', [$email])
+                        ->update(['status' => 0]);
+                    Contact::query()
+                        ->where('is_deleted', 0)
+                        ->whereRaw('LOWER(email) = ?', [$email])
+                        ->update(['status' => 0]);
+                }
                 $skippedExisting++;
                 continue;
             }
@@ -92,7 +102,7 @@ class ImportSkCustomersFromPdf extends Command
                     $customer->city = $row['city'] ?? null;
                     $customer->state = $row['state'] ?? null;
                     $customer->country = $row['country'] ?? 'United Arab Emirates';
-                    $customer->status = 1; // Active
+                    $customer->status = 0; // In-Active
                     $customer->is_deleted = 0;
                     $customer->save();
 
@@ -104,7 +114,7 @@ class ImportSkCustomersFromPdf extends Command
                     $contact->email = $email;
                     $contact->phone = $row['phone'] ?? null;
                     $contact->contact_type = 'primary';
-                    $contact->status = 1;
+                    $contact->status = 0;
                     $contact->is_deleted = 0;
                     $contact->save();
 

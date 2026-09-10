@@ -26,5 +26,6 @@ copy storage\app\sk_customers_import.json database\seeders\data\sk_customers.jso
 ## Notes
 
 - Unique emails from PDF ≈ **2617** (PDF had ~2729 email rows; duplicate emails collapsed so contacts.email unique constraint is respected).
-- Each row creates `customers` + primary `contacts` (Active, `is_deleted=0`).
+- Each row creates `customers` + primary `contacts` (**In-Active** `status=0`, `is_deleted=0`).
+- Re-running the seeder also sets matching existing emails to In-Active.
 - Not called from `DatabaseSeeder` automatically (avoids running on every fresh install).
