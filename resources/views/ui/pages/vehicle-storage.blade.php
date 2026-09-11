@@ -13,7 +13,7 @@
                 <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i>
                 <span>Vehicle Storage</span>
             </div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">Vehicle Storage</span>
+            <span class="sk-eyebrow sk-eyebrow--light">Vehicle Storage</span>
             <h1>Vehicle Storage in <span>Dubai, Sharjah &amp; the UAE</span></h1>
             <p class="lead">Store cars, motorcycles, vans and other vehicles in a practical, secure space. Choose suitable vehicle storage options in Dubai, Sharjah or anywhere across the UAE — based on your vehicle and your requirements.</p>
             <div class="vh-hero-cta">
@@ -292,7 +292,7 @@
         <div class="sk-container">
             <div class="svc-quote sk-reveal">
                 <div>
-                    <span class="sk-eyebrow" style="color:#ffcf9e;">Free Quote</span>
+                    <span class="sk-eyebrow sk-eyebrow--light">Free Quote</span>
                     <h2>Find the Right Space for Your Vehicle</h2>
                     <p>Tell us your vehicle type, preferred environment and how long you need it — and we'll match you with a straightforward vehicle storage arrangement that fits your actual requirements.</p>
                     <div class="contacts">

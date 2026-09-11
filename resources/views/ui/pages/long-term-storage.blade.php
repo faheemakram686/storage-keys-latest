@@ -1,4 +1,8 @@
 @extends('ui.layouts.frontend')
+@section('title', '| Long Term Storage')
+@section('metaTitle', 'Long Term Storage in Dubai & Sharjah | StorageKeys')
+@section('metaDescription', 'Long term storage in Dubai and Sharjah for furniture, seasonal items, documents and business stock. Right-sized units for months or years. Get a free quote.')
+
 @section('content')
 
 <div class="sk-home">
@@ -6,7 +10,7 @@
     <section class="lt-hero">
         <div class="sk-container">
             <div class="lt-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Long Term Storage</span></div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">Long Term Storage</span>
+            <span class="sk-eyebrow sk-eyebrow--light">Long Term Storage</span>
             <h1>Long Term Storage in <span>Sharjah &amp; Dubai for Your Needs</span></h1>
             <p class="lead">Keep belongings you don't need every day in dedicated long term storage across Dubai and Sharjah. StorageKeys provides practical space for households, furniture, business stock and other suitable items — for extended periods.</p>
             <div class="lt-hero-cta">
@@ -52,7 +56,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">When It Makes Sense</span>
+                <span class="sk-eyebrow sk-eyebrow--center">When It Makes Sense</span>
                 <h2>When Does Long Term Storage Make Sense?</h2>
                 <p>Often less about a single event and more about how you use your space. If certain belongings are rarely used but still have value, keeping them separately makes everyday areas easier to manage.</p>
             </div>
@@ -68,7 +72,7 @@
     <section class="sk-section" id="lt-sorter">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Right-Size It</span>
+                <span class="sk-eyebrow sk-eyebrow--center">Right-Size It</span>
                 <h2>Long Term Storage Units for Different Needs</h2>
                 <p>There's no single amount of space that works for everyone. Tap the belongings you'd move into long-term storage — it helps you (and us) picture the unit you actually need, rather than sizing by your home or office.</p>
             </div>
@@ -122,14 +126,14 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">For Business</span>
+                <span class="sk-eyebrow sk-eyebrow--center">For Business</span>
                 <h2>Long Term Storage for Business Inventory</h2>
                 <p>You don't always need all your stock or equipment on the shop floor or inside the main workplace. Long-term business storage adds capacity without every item staying in the primary operating location — separating storage from the space your team needs for normal activity.</p>
             </div>
             <div class="lt-use sk-reveal">
                 <div class="lt-usec"><div class="ic"><i class="fas fa-store"></i></div><h4>Retail &amp; E-Commerce</h4><p>Keep suitable stock outside the main workplace until it's needed, so the floor stays clear for selling.</p></div>
                 <div class="lt-usec"><div class="ic"><i class="fas fa-building"></i></div><h4>Offices</h4><p>Store records, furniture or equipment that must be retained but isn't part of daily operations.</p></div>
-                <div class="lt-usec"><div class="ic"><i class="fas fa-hard-hat"></i></div><h4>Contractors &amp; Projects</h4><p>Space for project-related materials and equipment that are part of ongoing work but not needed every day.</p></div>
+                <div class="lt-usec"><div class="ic"><i class="fas fa-hammer"></i></div><h4>Contractors &amp; Projects</h4><p>Space for project-related materials and equipment that are part of ongoing work but not needed every day.</p></div>
             </div>
         </div>
     </section>
@@ -151,7 +155,7 @@
     <section class="sk-section lt-feat">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;color:#ffcf9e;">Value Over Time</span>
+                <span class="sk-eyebrow sk-eyebrow--center sk-eyebrow--light">Value Over Time</span>
                 <h2>Finding Cost-Effective Long Term Storage</h2>
                 <p style="color:rgba(255,255,255,.8);">When belongings stay stored for months or years, the cheapest option isn't always the most suitable if it gives you far more space than you need. Compare the overall arrangement — not just the advertised rate.</p>
             </div>
@@ -167,7 +171,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Where We Serve</span>
+                <span class="sk-eyebrow sk-eyebrow--center">Where We Serve</span>
                 <h2>Long Term Storage in Dubai, Sharjah &amp; Across the UAE</h2>
                 <p>The right facility means enough space for your belongings without paying for more than you need — with options suited to both household and business requirements.</p>
             </div>
@@ -182,7 +186,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">FAQs</span>
+                <span class="sk-eyebrow sk-eyebrow--center">FAQs</span>
                 <h2>FAQs About Long Term Storage</h2>
             </div>
             <div class="lt-faq">
@@ -210,9 +214,20 @@
         </div>
     </section>
 
-    <section class="sk-section" id="lt-quote">
-        <div class="sk-container lt-quote-wrap">
+    <section class="sk-section lt-quote-wrap" id="lt-quote">
+        <div class="sk-container">
             <div class="svc-quote sk-reveal">
+                <div>
+                    <span class="sk-eyebrow sk-eyebrow--light">Free Quote</span>
+                    <h2>Keep What Matters With Long Term Storage</h2>
+                    <p>Tell us what you need to keep for months or longer — furniture, seasonal items, documents or business stock — and we'll recommend a right-sized long-term arrangement.</p>
+                    <div class="contacts">
+                        <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
+                        <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
+                        <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
+                        <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
+                    </div>
+                </div>
                 @include('ui.partials.inquiry-form', [
                     'source' => 'long-term-storage',
                     'defaultStorage' => 'Long Term Storage',
@@ -220,19 +235,22 @@
                     'formClass' => 'svc-form',
                     'fieldClass' => 'svc-field',
                     'rowClass' => 'svc-frow',
+                    'title' => 'Request your quote',
                     'submitLabel' => 'Request Free Quote',
+                    'submitClass' => 'sk-btn sk-btn-primary svc-form-submit',
+                    'showStorageSelect' => false,
                     'storingOptions' => [
-                        'Furniture',
-                        'Seasonal possessions',
-                        'Family belongings',
-                        'Business equipment',
-                        'Excess inventory',
-                        'Documents & archives',
-                        'Office furniture',
-                        'Appliances',
-                        'Household boxes',
-                        'Mixed personal & commercial',
-                        'Other',
+                        'Furniture' => 'Furniture',
+                        'Seasonal possessions' => 'Seasonal possessions',
+                        'Family belongings' => 'Family belongings',
+                        'Business equipment' => 'Business equipment',
+                        'Excess inventory' => 'Excess inventory',
+                        'Documents & archives' => 'Documents & archives',
+                        'Office furniture' => 'Office furniture',
+                        'Appliances' => 'Appliances',
+                        'Household boxes' => 'Household boxes',
+                        'Mixed personal & commercial' => 'Mixed personal & commercial',
+                        'Other' => 'Other',
                     ],
                 ])
             </div>

@@ -13,7 +13,7 @@
                 <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i>
                 <span>Short Term Storage</span>
             </div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">Short Term Storage</span>
+            <span class="sk-eyebrow sk-eyebrow--light">Short Term Storage</span>
             <h1>Short Term Storage in <span>Dubai &amp; Sharjah</span></h1>
             <p class="lead">Need storage for a limited period? StorageKeys provides short term storage in Dubai and Sharjah for belongings that need a temporary place between moves, renovations, travel plans, property changes or business requirements — with services available across the UAE.</p>
             <div class="st-hero-cta">
@@ -32,7 +32,7 @@
     <div class="st-trust">
         <div class="sk-container">
             <div class="st-trust-in">
-                <div class="st-trust-i"><i class="fas fa-calendar-week"></i> Weeks or Months</div>
+                <div class="st-trust-i"><i class="fas fa-calendar-alt"></i> Weeks or Months</div>
                 <div class="st-trust-i"><i class="fas fa-bolt"></i> On-Demand &amp; Flexible</div>
                 <div class="st-trust-i"><i class="fas fa-boxes"></i> Boxes to Full Homes</div>
                 <div class="st-trust-i"><i class="fas fa-map-marker-alt"></i> Dubai · Sharjah · UAE</div>
@@ -181,7 +181,7 @@
     <section class="sk-section st-feat">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow sk-eyebrow--center" style="color:#ffcf9e;">Simple Process</span>
+                <span class="sk-eyebrow sk-eyebrow--center sk-eyebrow--light">Simple Process</span>
                 <h2>How Short-Term Storage Works</h2>
                 <p style="color:rgba(255,255,255,.8);">Rather than assuming everyone needs the same thing, we match the arrangement to your belongings and your period. Follow the steps:</p>
             </div>
@@ -296,7 +296,7 @@
         <div class="sk-container">
             <div class="svc-quote sk-reveal">
                 <div>
-                    <span class="sk-eyebrow" style="color:#ffcf9e;">Free Quote</span>
+                    <span class="sk-eyebrow sk-eyebrow--light">Free Quote</span>
                     <h2>Store on Your Timeline With StorageKeys</h2>
                     <p>Whether it's a few weeks between moves or a few months through a renovation, tell us what you need to store and roughly how long — and we'll recommend a short-term arrangement suited to you.</p>
                     <div class="contacts">

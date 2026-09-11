@@ -78,7 +78,7 @@
     border-radius: var(--sk-radius);
     overflow: hidden;
     box-shadow: var(--sk-shadow);
-    min-height: 420px;
+    min-height: 400px;
     background-size: cover;
     background-position: center;
 }
@@ -99,16 +99,16 @@
     transform: translateY(-4px);
 }
 .st-wc .ic {
-    flex: 0 0 58px;
-    width: 58px;
-    height: 58px;
+    flex: 0 0 60px;
+    width: 60px;
+    height: 60px;
     border-radius: 14px;
     background: var(--sk-soft);
     color: var(--sk-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 26px;
 }
 .st-wc h3 { font-size: 18.5px; margin-bottom: 8px; }
 .st-wc p { font-size: 14px; color: var(--sk-muted); margin: 0; line-height: 1.7; }
@@ -118,9 +118,9 @@
     margin: 0 auto;
     background: #fff;
     border: 1px solid var(--sk-line);
-    border-radius: 22px;
+    border-radius: var(--sk-radius);
     box-shadow: var(--sk-shadow);
-    padding: 38px;
+    padding: 32px;
 }
 .st-plan .q {
     font-size: 14px;
@@ -244,7 +244,7 @@
     background: #fff;
     border: 1px solid var(--sk-line);
     border-radius: var(--sk-radius);
-    padding: 34px;
+    padding: 32px;
     transition: .3s;
 }
 .st-blc:hover {
@@ -316,7 +316,7 @@
     height: 54px;
     margin: 0 auto 12px;
     border-radius: 50%;
-    background: #1b3f68;
+    background: var(--sk-primary-2);
     border: 3px solid rgba(255, 255, 255, .2);
     color: #fff;
     display: flex;
@@ -347,16 +347,16 @@
     align-items: center;
 }
 .st-panel .ic {
-    flex: 0 0 66px;
-    width: 66px;
-    height: 66px;
-    border-radius: 16px;
+    flex: 0 0 60px;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
     background: var(--sk-soft);
     color: var(--sk-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
 }
 .st-panel h3 { font-size: 20px; margin-bottom: 6px; }
 .st-panel p {
@@ -391,14 +391,14 @@
 .st-cover {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
+    gap: 24px;
     margin-bottom: 26px;
 }
 .st-covc {
     background: #fff;
     border: 1px solid var(--sk-line);
     border-radius: var(--sk-radius);
-    padding: 28px;
+    padding: 32px;
     transition: .3s;
 }
 .st-covc:hover {
@@ -407,15 +407,15 @@
     transform: translateY(-4px);
 }
 .st-covc .ic {
-    width: 54px;
-    height: 54px;
+    width: 60px;
+    height: 60px;
     border-radius: 14px;
-    background: var(--sk-primary);
-    color: #fff;
+    background: var(--sk-soft);
+    color: var(--sk-accent);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 26px;
     margin-bottom: 14px;
 }
 .st-covc h4 { font-size: 18px; margin-bottom: 6px; }
@@ -441,24 +441,27 @@
 .st-pc { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .st-pcc {
     border-radius: var(--sk-radius);
-    padding: 36px;
+    padding: 32px;
     border: 1px solid var(--sk-line);
 }
 .st-pcc.p { background: #fff; }
 .st-pcc.c { background: var(--sk-soft); }
 .st-pcc .ic {
-    width: 56px;
-    height: 56px;
+    width: 60px;
+    height: 60px;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 26px;
     margin-bottom: 16px;
-    background: var(--sk-primary);
-    color: #fff;
+    background: var(--sk-soft);
+    color: var(--sk-accent);
 }
-.st-pcc.c .ic { background: var(--sk-accent); }
+.st-pcc.c .ic {
+    background: #fff;
+    color: var(--sk-accent);
+}
 .st-pcc h3 { font-size: 20px; margin-bottom: 10px; }
 .st-pcc p {
     font-size: 14.5px;
@@ -487,7 +490,7 @@
     list-style: none;
     cursor: pointer;
     padding: 20px 0;
-    font-size: 15.5px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--sk-dark);
     display: flex;
@@ -509,10 +512,6 @@
     font-size: 14.5px;
     color: var(--sk-muted);
     line-height: 1.75;
-}
-
-.st-quote-wrap .svc-quote {
-    background: linear-gradient(120deg, var(--sk-accent), var(--sk-accent-2));
 }
 
 .st-mobilebar {
