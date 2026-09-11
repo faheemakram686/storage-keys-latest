@@ -116,6 +116,18 @@
                     <p>Secure vehicle storage with flexible short- and long-term options for personal, classic or luxury cars. A professionally managed facility for vehicles that need a suitable place between uses.</p>
                     <a class="ab-svc-link" href="{{ url('/car-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
                 </div>
+                <div class="ps-whyc">
+                    <div class="ic"><i class="fas fa-car-side"></i></div>
+                    <span class="h4">Vehicle Storage</span>
+                    <p>Cars, motorcycles, vans and fleet vehicles — indoor or outdoor space sized to your vehicle and storage period across Dubai, Sharjah and the UAE.</p>
+                    <a class="ab-svc-link" href="{{ url('/vehicle-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="ps-whyc">
+                    <div class="ic"><i class="fas fa-calendar-alt"></i></div>
+                    <span class="h4">Long Term Storage</span>
+                    <p>Extended storage for furniture, seasonal items, documents and business stock — right-sized units for months or years across Dubai, Sharjah and the UAE.</p>
+                    <a class="ab-svc-link" href="{{ url('/long-term-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </section>

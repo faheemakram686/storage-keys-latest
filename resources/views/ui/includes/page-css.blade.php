@@ -25,6 +25,12 @@
         $css[] = 'climate-controlled-storage.css';
     } elseif (in_array($path, ['moving-services', 'luggage-storage', 'car-storage'], true)) {
         $css[] = 'business-storage.css';
+    } elseif ($path === 'vehicle-storage') {
+        $css[] = 'business-storage.css';
+        $css[] = 'vehicle-storage.css';
+    } elseif ($path === 'long-term-storage') {
+        $css[] = 'business-storage.css';
+        $css[] = 'long-term-storage.css';
     } elseif ($path === 'about-us') {
         $css[] = 'personal-storage.css';
         $css[] = 'business-storage.css';

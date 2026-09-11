@@ -43,7 +43,7 @@
       <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ url('/about-us') }}" class="{{ request()->is('about-us') ? 'active' : '' }}">About Us</a>
       <div class="pv-has-sub">
-        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'furniture-storage', 'box-storage', 'appliance-storage', 'residential-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage', 'moving-services', 'luggage-storage', 'car-storage') ? 'active' : '' }}">Storage Options</a>
+        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'furniture-storage', 'box-storage', 'appliance-storage', 'residential-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage', 'moving-services', 'luggage-storage', 'car-storage', 'vehicle-storage', 'long-term-storage') ? 'active' : '' }}">Storage Options</a>
         <div class="pv-sub">
           <a href="{{ url('/personal-storage') }}" class="{{ request()->is('personal-storage') ? 'active' : '' }}">Personal Storage</a>
           <a href="{{ url('/residential-storage') }}" class="{{ request()->is('residential-storage') ? 'active' : '' }}">Residential Storage</a>
@@ -56,6 +56,8 @@
           <a href="{{ url('/moving-services') }}" class="{{ request()->is('moving-services') ? 'active' : '' }}">Moving Services</a>
           <a href="{{ url('/luggage-storage') }}" class="{{ request()->is('luggage-storage') ? 'active' : '' }}">Luggage Storage</a>
           <a href="{{ url('/car-storage') }}" class="{{ request()->is('car-storage') ? 'active' : '' }}">Car Storage</a>
+          <a href="{{ url('/vehicle-storage') }}" class="{{ request()->is('vehicle-storage') ? 'active' : '' }}">Vehicle Storage</a>
+          <a href="{{ url('/long-term-storage') }}" class="{{ request()->is('long-term-storage') ? 'active' : '' }}">Long Term Storage</a>
         </div>
       </div>
       <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>

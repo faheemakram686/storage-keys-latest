@@ -24,6 +24,10 @@
         $scripts[] = 'furniture-storage.js';
     } elseif ($path === 'residential-storage') {
         $scripts[] = 'residential-storage.js';
+    } elseif ($path === 'vehicle-storage') {
+        $scripts[] = 'vehicle-storage.js';
+    } elseif ($path === 'long-term-storage') {
+        $scripts[] = 'long-term-storage.js';
     } elseif ($path === 'customer/dashboard' || in_array($path, ['customer-login', 'customer/register', 'customer/forgot-password'], true) || str_starts_with($path, 'customer/reset-password')) {
         $scripts[] = 'password-toggle.js';
     }

@@ -23,6 +23,8 @@ $staticPages = [
     '/moving-services',
     '/luggage-storage',
     '/car-storage',
+    '/vehicle-storage',
+    '/long-term-storage',
     '/shop',
     '/booking',
     '/blogs',

@@ -50,6 +50,8 @@
           <a href="{{ url('/moving-services') }}">Moving Services</a>
           <a href="{{ url('/luggage-storage') }}">Luggage Storage</a>
           <a href="{{ url('/car-storage') }}">Car Storage</a>
+          <a href="{{ url('/vehicle-storage') }}">Vehicle Storage</a>
+          <a href="{{ url('/long-term-storage') }}">Long Term Storage</a>
         </div>
       </div>
       <div class="pv-foot-col pv-foot-policies">
