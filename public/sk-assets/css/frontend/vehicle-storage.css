@@ -260,11 +260,12 @@
     max-width: 900px;
     margin: 0 auto;
     height: 330px;
-    border-radius: 20px;
+    border-radius: var(--sk-radius);
     overflow: hidden;
     box-shadow: var(--sk-shadow);
     border: 1px solid var(--sk-line);
     user-select: none;
+    background: #fff;
 }
 .vh-cmp-panel {
     position: absolute;
@@ -277,12 +278,17 @@
     padding: 30px;
 }
 .vh-cmp-panel .pic { font-size: 44px; margin-bottom: 14px; }
-.vh-cmp-panel h3 { font-size: 22px; margin-bottom: 8px; }
+.vh-cmp-panel h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: var(--sk-dark);
+}
 .vh-cmp-panel p {
-    font-size: 14px;
+    font-size: 14.5px;
     max-width: 380px;
-    margin: 0 auto 12px;
-    line-height: 1.6;
+    margin: 0 auto 16px;
+    line-height: 1.7;
+    color: var(--sk-body);
 }
 .vh-cmp-panel .tags {
     display: flex;
@@ -294,28 +300,31 @@
     font-size: 12px;
     font-weight: 600;
     border-radius: 50px;
-    padding: 6px 13px;
+    padding: 7px 14px;
+    background: #fff;
+    color: var(--sk-primary);
+    border: 1px solid var(--sk-line);
 }
 .vh-out {
-    background: linear-gradient(135deg, #eaf1f8, #d9e6f4);
+    background: linear-gradient(145deg, #f7fafc 0%, var(--sk-soft) 55%, #e8f0f8 100%);
     color: var(--sk-dark);
 }
 .vh-out .pic { color: var(--sk-primary-2); }
-.vh-out .tags span { background: #fff; color: var(--sk-primary); }
 .vh-in-wrap {
     position: absolute;
     inset: 0;
     clip-path: inset(0 50% 0 0);
 }
 .vh-in {
-    background: linear-gradient(135deg, var(--sk-primary), var(--sk-primary-2));
-    color: #fff;
+    background: linear-gradient(145deg, #fffaf5 0%, #fff3e8 50%, #ffe8d4 100%);
+    color: var(--sk-dark);
 }
 .vh-in .pic { color: var(--sk-accent); }
-.vh-in h3 { color: #fff; }
+.vh-in h3 { color: var(--sk-dark); }
 .vh-in .tags span {
-    background: rgba(255, 255, 255, .15);
-    color: #fff;
+    background: #fff;
+    color: var(--sk-accent-2);
+    border-color: rgba(255, 138, 30, .28);
 }
 .vh-handle {
     position: absolute;
@@ -323,10 +332,10 @@
     bottom: 0;
     left: 50%;
     width: 3px;
-    background: #fff;
+    background: var(--sk-accent);
     z-index: 3;
     pointer-events: none;
-    box-shadow: 0 0 8px rgba(0, 0, 0, .25);
+    box-shadow: 0 0 10px rgba(255, 138, 30, .35);
 }
 .vh-handle .grip {
     position: absolute;
@@ -337,7 +346,8 @@
     height: 44px;
     border-radius: 50%;
     background: #fff;
-    color: var(--sk-primary);
+    color: var(--sk-accent);
+    border: 2px solid var(--sk-accent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -358,10 +368,19 @@
     display: flex;
     justify-content: space-between;
     max-width: 900px;
-    margin: 16px auto 0;
-    font-size: 13px;
+    margin: 18px auto 0;
+    font-size: 13.5px;
     font-weight: 600;
-    color: var(--sk-muted);
+    color: var(--sk-dark);
+}
+.vh-cmp-labels i { color: var(--sk-accent); margin: 0 6px; }
+.vh-cmp-note {
+    text-align: center;
+    max-width: 720px;
+    margin: 22px auto 0;
+    color: var(--sk-body);
+    font-size: 14.5px;
+    line-height: 1.7;
 }
 
 .vh-cards {

@@ -129,7 +129,7 @@
                 <input type="range" min="0" max="100" value="50" id="vhCmpRange" aria-label="Compare indoor and outdoor storage">
             </div>
             <div class="vh-cmp-labels"><span><i class="fas fa-warehouse"></i> Indoor</span><span>Outdoor <i class="fas fa-cloud-sun"></i></span></div>
-            <p style="text-align:center;max-width:720px;margin:26px auto 0;color:var(--sk-muted);font-size:14px;">When comparing vehicle storage facilities, weigh the environment alongside available space, location, storage period and overall suitability.</p>
+            <p class="vh-cmp-note">When comparing vehicle storage facilities, weigh the environment alongside available space, location, storage period and overall suitability.</p>
         </div>
     </section>
 
