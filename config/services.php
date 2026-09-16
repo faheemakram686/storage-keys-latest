@@ -107,4 +107,8 @@ return [
     'mcp_blog' => [
         'token' => env('MCP_BLOG_TOKEN'),
     ],
+
+    'google_sheets' => [
+        'webhook_url' => env('GOOGLE_SHEETS_WEBHOOK_URL'),
+    ],
 ];

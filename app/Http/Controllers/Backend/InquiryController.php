@@ -7,6 +7,7 @@ use App\Mail\InquiryMail;
 use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class InquiryController extends Controller
@@ -57,6 +58,8 @@ class InquiryController extends Controller
                 \Log::error('Inquiry email failed: '.$mailEx->getMessage());
             }
 
+            $this->pushInquiryToGoogleSheet($inquiry, $request);
+
             return redirect()->route('inquiry.thankyou')->with('inquiry', [
                 'name' => $inquiry->name,
                 'email' => $inquiry->email,
@@ -72,6 +75,45 @@ class InquiryController extends Controller
             \Log::error('Inquiry submission failed: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Something went wrong while submitting your inquiry. Please try again later.');
+        }
+    }
+
+    /**
+     * Append a lead row to the configured Google Apps Script webhook.
+     * Failures are logged only — they must never block the inquiry flow.
+     */
+    private function pushInquiryToGoogleSheet(Inquiry $inquiry, Request $request): void
+    {
+        $url = config('services.google_sheets.webhook_url');
+        if (empty($url)) {
+            return;
+        }
+
+        try {
+            $payload = [
+                'timestamp' => now()->toIso8601String(),
+                'name' => (string) $inquiry->name,
+                'email' => (string) $inquiry->email,
+                'phone' => (string) $inquiry->phone,
+                'storage_type' => (string) $inquiry->storage_type,
+                'message' => (string) ($inquiry->message ?? ''),
+                'source' => (string) $request->input('source', 'website'),
+                'page' => (string) ($request->headers->get('referer') ?: $request->fullUrl()),
+            ];
+
+            $response = Http::timeout(8)
+                ->withOptions(['allow_redirects' => true])
+                ->asJson()
+                ->post($url, $payload);
+
+            if (!$response->successful()) {
+                \Log::warning('Google Sheets webhook non-success', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            \Log::error('Google Sheets webhook failed: '.$e->getMessage());
         }
     }
 
