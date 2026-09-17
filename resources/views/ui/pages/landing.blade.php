@@ -43,7 +43,7 @@
                 <div class="sk-hero-copy">
                     <span class="sk-eyebrow" style="color:#ffcf9e;">Self Storage · Dubai · Sharjah · UAE</span>
                     <h1>Self Storage Solutions Across <span>Dubai, Sharjah &amp; the UAE</span></h1>
-                    <p class="lead">Secure storage and flexible self storage units for homes and businesses across Dubai, Abu Dhabi and Sharjah — with flexible plans and 24/7 access.</p>
+                    <p class="lead">Secure storage and flexible self storage units for homes and businesses across Dubai and Sharjah — with flexible plans and 24/7 access.</p>
                     <div class="sk-hero-badges">
                         <span><i class="fas fa-shield-alt"></i> Secure &amp; CCTV Monitored</span>
                         <span><i class="fas fa-temperature-low"></i> Climate Controlled</span>
@@ -126,7 +126,7 @@
             <div class="sk-about-grid">
                 <div class="sk-about-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}'); background-size:cover; background-position:center;">
                     <div class="sk-about-badge">
-                        <div class="n">Dubai · Abu Dhabi · Sharjah</div>
+                        <div class="n">Dubai · Sharjah</div>
                         <div class="l">Storage facilities across the UAE</div>
                     </div>
                 </div>
@@ -243,7 +243,6 @@
                     <span class="h3">Which emirate?</span>
                     <div class="sf-opts">
                         <button type="button" class="sf-opt" data-key="loc" data-val="Dubai"><span class="t">Dubai</span><span class="d">Self storage &amp; business inventory</span></button>
-                        <button type="button" class="sf-opt" data-key="loc" data-val="Abu Dhabi"><span class="t">Abu Dhabi</span><span class="d">Personal &amp; commercial storage</span></button>
                         <button type="button" class="sf-opt" data-key="loc" data-val="Sharjah"><span class="t">Sharjah</span><span class="d">Main facility — Plot # 4202</span></button>
                     </div>
                 </div>
@@ -596,7 +595,7 @@
                 <div class="sk-value">
                     <div class="ic"><i class="fas fa-award"></i></div>
                     <span class="h4">Trusted Across the UAE</span>
-                    <p>Relied on by households and businesses throughout Dubai, Abu Dhabi and Sharjah.</p>
+                    <p>Relied on by households and businesses throughout Dubai and Sharjah.</p>
                 </div>
             </div>
         </div>
