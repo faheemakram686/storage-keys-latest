@@ -25,9 +25,12 @@ use App\Http\Controllers\Frontend\OrderController;
 |
 */
 //auth api
-Route::post('/customer/register', [AuthController::class, 'registerCustomer']);
-Route::post('/customer/login', [AuthController::class, 'loginCustomer']);
-Route::post('/customer/forgot-password', [AuthController::class, 'forgotPasswordCustomer']);
+Route::post('/customer/register', [AuthController::class, 'registerCustomer'])
+    ->middleware('throttle:5,1');
+Route::post('/customer/login', [AuthController::class, 'loginCustomer'])
+    ->middleware('throttle:10,1');
+Route::post('/customer/forgot-password', [AuthController::class, 'forgotPasswordCustomer'])
+    ->middleware('throttle:5,1');
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');

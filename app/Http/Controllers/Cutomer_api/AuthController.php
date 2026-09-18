@@ -119,12 +119,20 @@ class AuthController extends Controller
      public function registerCustomer(Request $request)
     {
         try {
+            // Honeypot: bots often fill hidden "website" fields.
+            if (filled($request->input('website'))) {
+                return response()->json([
+                    'status' => true,
+                    'message' => ' Your Account Registered Successfully',
+                ], 200);
+            }
 
             $validated = Validator::make($request->all(),
             [
-                'first_name'    => 'required',
-                'last_name'     => 'required',
-                'company_name'  => 'required',
+                'first_name'    => 'required|string|max:100',
+                'last_name'     => 'required|string|max:100',
+                'company_name'  => 'nullable|string|max:150',
+                'customer_type' => 'nullable|in:individual,company',
                 'email'         => 'required|email|unique:contacts,email',
                 'password'      => 'required|confirmed|min:8',
             ]);
@@ -136,21 +144,40 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            $data = $validated->validated();
+            $customerType = $data['customer_type'] ?? (!empty($data['company_name']) ? 'company' : 'individual');
+            $firstName = trim($data['first_name']);
+            $lastName = trim($data['last_name']);
+            $companyName = $customerType === 'company' ? trim((string) ($data['company_name'] ?? '')) : null;
 
-            DB::transaction(function () use ($request, $validated) {
+            // Reject obvious random bot names (e.g. mMh4wNZqyD) with no vowels / spaces.
+            foreach ([$firstName, $lastName, (string) $companyName] as $label) {
+                if ($label !== '' && $this->looksLikeBotName($label)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'validation error',
+                        'errors' => ['first_name' => ['Please enter a valid name.']],
+                    ], 401);
+                }
+            }
+
+            DB::transaction(function () use ($data, $customerType, $firstName, $lastName, $companyName) {
                 $customer = Customer::create([
-                    'company_name' => $request->company_name,
-                    'status'       => 1,
+                    'customer_type' => $customerType,
+                    'customer_name' => trim($firstName . ' ' . $lastName),
+                    'company_name' => $companyName,
+                    // Self-registrations start In-Active so spam does not flood the Active list.
+                    'status'       => 0,
                 ]);
-
 
                 Contact::create([
                     'customer_id' => $customer->id,
-                    'first_name'  => $request->first_name,
-                    'last_name'   =>$request->last_name,
-                    'email'       => $request->email,
-                    'password'    => Hash::make($request->password),
-                    'status'      => 1,
+                    'first_name'  => $firstName,
+                    'last_name'   => $lastName,
+                    'email'       => $data['email'],
+                    'password'    => Hash::make($data['password']),
+                    'status'      => 0,
+                    'contact_type' => 'primary',
                 ]);
             });
 
@@ -165,6 +192,36 @@ class AuthController extends Controller
             ], 500);
         }
 
+    }
+
+    /**
+     * Heuristic for gibberish auto-generated names (random alphanumeric strings).
+     */
+    private function looksLikeBotName(string $value): bool
+    {
+        $value = trim($value);
+        if (strlen($value) < 6) {
+            return false;
+        }
+
+        // No spaces and no vowels = likely random ID.
+        if (!preg_match('/\s/u', $value) && !preg_match('/[aeiouAEIOU]/u', $value)) {
+            return true;
+        }
+
+        // Mixed-case alphanumeric blob with digits and no space (e.g. mMh4wNZqyD).
+        if (
+            strlen($value) >= 8
+            && !preg_match('/\s/u', $value)
+            && preg_match('/^[A-Za-z0-9]+$/u', $value)
+            && preg_match('/[A-Z]/u', $value)
+            && preg_match('/[a-z]/u', $value)
+            && preg_match('/[0-9]/u', $value)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
 

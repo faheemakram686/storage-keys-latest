@@ -139,7 +139,22 @@ class UserClass implements UserInterface {
             'e_file'       => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'password'     => 'nullable|string|min:8|confirmed',
             'e_gender'     => 'required|in:male,female,other',
-            'e_employee_id' => 'required|string|min:2|unique:profiles,employee_id,' . $request->id . ',user_id',
+            'e_employee_id' => [
+                'required',
+                'string',
+                'min:2',
+                function ($attribute, $value, $fail) use ($request) {
+                    $value = trim((string) $value);
+                    $ignoreUserId = (int) $request->id;
+                    $exists = DB::table('profiles')
+                        ->whereRaw('LOWER(TRIM(employee_id)) = ?', [mb_strtolower($value)])
+                        ->where('user_id', '!=', $ignoreUserId)
+                        ->exists();
+                    if ($exists) {
+                        $fail(__('validation.unique', ['attribute' => 'employee id']));
+                    }
+                },
+            ],
             'e_department_id' => 'required|integer|exists:departments,id',
             'e_designation_id' => 'required|integer|exists:designations,id',
             'e_employment_status_id' => 'required|integer|exists:employment_statuses,id',

@@ -251,10 +251,18 @@ class UserService extends BaseService
                 'required',
                 'min:2',
                 function ($attribute, $value, $fail) use ($ignoreUserId) {
-                    $query = DB::table('profiles')->where('employee_id', $value);
-                    if (!empty($ignoreUserId)) {
-                        $query->where('user_id', '!=', $ignoreUserId);
+                    $value = trim((string) $value);
+                    if ($value === '') {
+                        return;
                     }
+
+                    $query = DB::table('profiles')
+                        ->whereRaw('LOWER(TRIM(employee_id)) = ?', [mb_strtolower($value)]);
+
+                    if (!empty($ignoreUserId)) {
+                        $query->where('user_id', '!=', (int) $ignoreUserId);
+                    }
+
                     if ($query->exists()) {
                         $fail(__('validation.unique', ['attribute' => 'employee id']));
                     }

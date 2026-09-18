@@ -55,20 +55,26 @@ class EmployeeRequest extends BaseRequest
     }
 
     /**
-     * Unique against other users only. Prefer profile PK ignore; fall back to
-     * an explicit user_id exclusion so own ID is never treated as a duplicate.
+     * Unique against other users only — never treat the current user's own
+     * employee_id as a duplicate when editing.
      */
     protected function uniqueEmployeeIdRule(?int $ignoreUserId)
     {
         return function ($attribute, $value, $fail) use ($ignoreUserId) {
-            $query = DB::table('profiles')->where('employee_id', $value);
+            $value = trim((string) $value);
+            if ($value === '') {
+                return;
+            }
+
+            $query = DB::table('profiles')
+                ->whereRaw('LOWER(TRIM(employee_id)) = ?', [mb_strtolower($value)]);
 
             if (!empty($ignoreUserId)) {
-                $query->where('user_id', '!=', $ignoreUserId);
+                $query->where('user_id', '!=', (int) $ignoreUserId);
             }
 
             if ($query->exists()) {
-                $fail(__('validation.unique', ['attribute' => str_replace('_', ' ', $attribute)]));
+                $fail(__('validation.unique', ['attribute' => 'employee id']));
             }
         };
     }
@@ -79,8 +85,11 @@ class EmployeeRequest extends BaseRequest
      */
     protected function employeeIdToIgnore()
     {
-        // Create / invite must not ignore anyone.
-        if ($this->isMethod('post')) {
+        $method = strtolower($this->method());
+        $spoof = strtolower((string) $this->input('_method', ''));
+
+        // Pure create (POST, not method-spoofed update).
+        if ($method === 'post' && !in_array($spoof, ['put', 'patch'], true)) {
             return null;
         }
 
@@ -94,9 +103,12 @@ class EmployeeRequest extends BaseRequest
             return (int) $employee;
         }
 
-        // Fallback when route model is missing but payload has user id (edit form).
         if ($this->filled('id') && is_numeric($this->input('id'))) {
             return (int) $this->input('id');
+        }
+
+        if ($this->filled('user_id') && is_numeric($this->input('user_id'))) {
+            return (int) $this->input('user_id');
         }
 
         return null;

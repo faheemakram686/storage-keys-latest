@@ -31,12 +31,16 @@ class CustomerRegisterController extends Controller
     public function register(Request $request)
     {
         try {
+            // Honeypot field — leave empty for real users.
+            if (filled($request->input('website'))) {
+                return redirect()->back()->with('success', 'Successfully Registered Your Account');
+            }
 
             $validated = $request->validate([
                 'customer_type' => 'required|in:individual,company',
-                'first_name'    => 'required',
-                'last_name'     => 'required',
-                'company_name'  => 'required_if:customer_type,company',
+                'first_name'    => 'required|string|max:100',
+                'last_name'     => 'required|string|max:100',
+                'company_name'  => 'required_if:customer_type,company|nullable|string|max:150',
                 'email'         => 'required|email|unique:contacts,email',
                 'password'      => 'required|confirmed|min:8',
             ]);
@@ -46,7 +50,8 @@ class CustomerRegisterController extends Controller
                     'customer_type' => $validated['customer_type'],
                     'customer_name' => $validated['first_name'] . ' ' . $validated['last_name'],
                     'company_name'  => $validated['customer_type'] == 'company' ? $validated['company_name'] : null,
-                    'status'        => 1,
+                    // Web self-signup starts In-Active; admin can activate after review.
+                    'status'        => 0,
                 ]);
 
 
@@ -56,12 +61,12 @@ class CustomerRegisterController extends Controller
                     'last_name'   => $validated['last_name'],
                     'email'       => $validated['email'],
                     'password'    => Hash::make($validated['password']),
-                    'status'      => 1,
+                    'status'      => 0,
                     'contact_type' => 'primary',
                 ]);
             });
 
-            return redirect()->back()->with('success', 'Successfully Registered Your Account');
+            return redirect()->back()->with('success', 'Successfully Registered Your Account. Our team will activate it shortly.');
 
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();

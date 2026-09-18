@@ -47,6 +47,11 @@
 
                     <form method="POST" action="{{ route('customer.register') }}" class="ca-auth-form" id="customerRegisterForm">
                         @csrf
+                        {{-- Honeypot for bots — keep hidden and empty --}}
+                        <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                        </div>
 
                         <div class="ca-type-toggle" role="radiogroup" aria-label="Account type">
                             <div class="ca-type-option">

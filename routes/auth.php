@@ -19,6 +19,7 @@ Route::middleware('guest:contact')->group(function () {
         ->name('customer.register');
 
     Route::post('customer/register', [CustomerRegisterController::class, 'register'])
+        ->middleware('throttle:5,1')
         ->name('customer.register');
 
     Route::get('customer-login', [CustomerLoginController::class, 'customerLoginForm'])

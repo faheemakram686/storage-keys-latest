@@ -224,11 +224,9 @@
                 e.preventDefault();
                 var formData=$('#updateCountryForm').serialize()
                 $.ajax({
-                    type: "get",
+                    type: "POST",
                     url: '{{ url('admin/update-customer') }}',
                     data: formData,
-                    contentType: false,
-                    processData: false,
                     beforeSend: function() {
                         $('.btn-update').text('loading...');
                         $(".btn-update").prop("disabled", true);
@@ -242,7 +240,11 @@
                             window.location.href = "{{ route('customer.index')}}";
                         }
                         if (data.errors) {
-                            toastr.error(data.errors);
+                            var msg = data.errors;
+                            if (typeof data.errors === 'object') {
+                                msg = Object.values(data.errors).flat().join(' ');
+                            }
+                            toastr.error(msg);
                             $('.btn-update').text('Save Changes');
                             $(".btn-update").prop("disabled", false);
                         }
