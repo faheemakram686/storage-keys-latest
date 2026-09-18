@@ -55,8 +55,8 @@ class EmployeeRequest extends BaseRequest
     }
 
     /**
-     * Unique against other users only — never treat the current user's own
-     * employee_id as a duplicate when editing.
+     * Unique against other non-deleted users only — never treat the current
+     * user's own employee_id as a duplicate when editing.
      */
     protected function uniqueEmployeeIdRule(?int $ignoreUserId)
     {
@@ -67,10 +67,12 @@ class EmployeeRequest extends BaseRequest
             }
 
             $query = DB::table('profiles')
-                ->whereRaw('LOWER(TRIM(employee_id)) = ?', [mb_strtolower($value)]);
+                ->join('users', 'users.id', '=', 'profiles.user_id')
+                ->whereNull('users.deleted_at')
+                ->whereRaw('LOWER(TRIM(profiles.employee_id)) = ?', [mb_strtolower($value)]);
 
             if (!empty($ignoreUserId)) {
-                $query->where('user_id', '!=', (int) $ignoreUserId);
+                $query->where('profiles.user_id', '!=', (int) $ignoreUserId);
             }
 
             if ($query->exists()) {

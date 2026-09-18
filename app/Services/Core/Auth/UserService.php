@@ -228,16 +228,31 @@ class UserService extends BaseService
 
     public function validate(?int $ignoreUserId = null)
     {
-        $ignoreUserId = $ignoreUserId ?: optional($this->model)->getKey();
+        $routeEmployee = request()->route('employee');
+        $routeId = is_object($routeEmployee) ? (int) $routeEmployee->id : (is_numeric($routeEmployee) ? (int) $routeEmployee : null);
+
+        $ignoreUserId = $ignoreUserId
+            ?: optional($this->model)->getKey()
+            ?: $routeId
+            ?: (request()->filled('id') && is_numeric(request('id')) ? (int) request('id') : null);
 
         $payload = request()->all();
         if (!empty($payload['gender']) && is_string($payload['gender'])) {
             $payload['gender'] = strtolower(trim($payload['gender']));
             request()->merge(['gender' => $payload['gender']]);
         }
+        if (!empty($payload['email']) && is_string($payload['email'])) {
+            $payload['email'] = strtolower(trim($payload['email']));
+            request()->merge(['email' => $payload['email']]);
+        }
         if (!empty($payload['employee_id']) && is_string($payload['employee_id'])) {
             $payload['employee_id'] = trim($payload['employee_id']);
             request()->merge(['employee_id' => $payload['employee_id']]);
+        }
+
+        $emailRule = Rule::unique('users', 'email')->whereNull('deleted_at');
+        if (!empty($ignoreUserId)) {
+            $emailRule->ignore((int) $ignoreUserId);
         }
 
         validator($payload, [
@@ -245,7 +260,7 @@ class UserService extends BaseService
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($ignoreUserId),
+                $emailRule,
             ],
             'employee_id' => [
                 'required',
@@ -256,11 +271,14 @@ class UserService extends BaseService
                         return;
                     }
 
+                    // Only conflict with OTHER non-deleted users.
                     $query = DB::table('profiles')
-                        ->whereRaw('LOWER(TRIM(employee_id)) = ?', [mb_strtolower($value)]);
+                        ->join('users', 'users.id', '=', 'profiles.user_id')
+                        ->whereNull('users.deleted_at')
+                        ->whereRaw('LOWER(TRIM(profiles.employee_id)) = ?', [mb_strtolower($value)]);
 
                     if (!empty($ignoreUserId)) {
-                        $query->where('user_id', '!=', (int) $ignoreUserId);
+                        $query->where('profiles.user_id', '!=', (int) $ignoreUserId);
                     }
 
                     if ($query->exists()) {

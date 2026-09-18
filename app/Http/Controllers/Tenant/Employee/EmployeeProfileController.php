@@ -23,17 +23,20 @@ class EmployeeProfileController extends Controller
 
     public function update(User $employee, Request $request)
     {
+        // Always validate against the route-bound user (never a nested profile id).
+        $userId = (int) $employee->id;
+
         $this->service
             ->validateIsNotDemoVersion()
             ->setModel($employee)
-            ->validate((int) $employee->id);
+            ->validate($userId);
 
         $employee->update($request->only('first_name', 'last_name', 'email'));
 
         $employee->profile()->updateOrCreate(
-            ['user_id' => $employee->id],
+            ['user_id' => $userId],
             array_merge(
-                ['user_id' => $employee->id],
+                ['user_id' => $userId],
                 $request->only('employee_id', 'gender', 'date_of_birth', 'about_me', 'phone_number', 'res_visa_loc', 'emirate_id', 'notice_period')
             )
         );

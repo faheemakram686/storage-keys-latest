@@ -121,8 +121,11 @@ export default {
     methods: {
         submitData() {
             this.loading = true;
-            // Always use the loaded employee user id (not nested profile id).
-            const employeeId = this.employeeDetails?.id || this.formData.id;
+            // Prefer URL employee id so we never submit against a nested profile.id.
+            const routeEmployee = this.$route?.params?.employee;
+            const employeeId = routeEmployee
+                || this.employeeDetails?.id
+                || this.formData.id;
             const formData = {
                 id: employeeId,
                 first_name: this.formData.first_name,
