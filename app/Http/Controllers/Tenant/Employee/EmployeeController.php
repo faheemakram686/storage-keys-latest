@@ -101,9 +101,16 @@ class EmployeeController extends Controller
             $workShift = WorkingShift::getDefault(['id', 'name', 'is_default']);
             $employee->setRelation('workingShift', $workShift);
         }
-//        return $employee;
+
+            $data = $employee->toArray();
+            // Flutter JobDesk model expects String? created_by, not int.
+            $data['created_by'] = $employee->created_by === null
+                ? null
+                : (string) $employee->created_by;
+            // Keep data.status as the status object (do not stringify — unlike login).
+
             return response()->json([
-                'data' => $employee,
+                'data' => $data,
                 'status' => true,
                 'message' =>'success'
             ]);
