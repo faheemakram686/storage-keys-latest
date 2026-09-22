@@ -57,20 +57,49 @@ class DocumentController extends Controller
     public function getDocumentsAPI()
     {
         try {
-                $documents = Document::query()
-                    ->where('user_id', auth()->id())
-                    ->with('createdBy:id,first_name,last_name')
-                    ->latest()
-                    ->get();
+            $documents = Document::query()
+                ->where('user_id', auth()->id())
+                ->with('createdBy:id,first_name,last_name')
+                ->latest()
+                ->get()
+                ->map(function (Document $document) {
+                    $creator = $document->createdBy;
+
+                    return [
+                        'id' => (int) $document->id,
+                        'name' => (string) ($document->name ?? ''),
+                        'path' => (string) ($document->path ?? ''),
+                        // Flutter DocumentListModel expects String user_id.
+                        'user_id' => (string) $document->user_id,
+                        'expiry_date' => $document->expiry_date
+                            ? (string) $document->expiry_date
+                            : null,
+                        'created_at' => optional($document->created_at)->toJSON(),
+                        'updated_at' => optional($document->updated_at)->toJSON(),
+                        // Flutter expects created_by as a user object, never an int id.
+                        'created_by' => [
+                            'id' => (int) ($creator->id ?? 0),
+                            'first_name' => (string) ($creator->first_name ?? ''),
+                            'last_name' => (string) ($creator->last_name ?? ''),
+                            'full_name' => (string) (
+                                $creator->full_name
+                                ?? trim(($creator->first_name ?? '') . ' ' . ($creator->last_name ?? ''))
+                            ),
+                        ],
+                    ];
+                })
+                ->values();
+
             return response()->json([
                 'status' => true,
+                'messege' => 'Success',
                 'data' => $documents,
-                'messege' =>'',
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
+                'messege' => $th->getMessage(),
+                'data' => [],
             ], 500);
         }
     }
