@@ -123,12 +123,11 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $employment = $user->employmentStatus;
-            $employmentAlias = null;
-            if (is_object($employment)) {
-                $employmentAlias = $employment->alias
-                    ?? (method_exists($employment, 'first') ? optional($employment->first())->alias : null);
-            }
+            // Use relation query (not $user->employmentStatus) so we do not attach
+            // nested objects that break the Flutter User model.
+            $employmentAlias = optional(
+                $user->employmentStatus()->first()
+            )->alias;
             if ($employmentAlias === 'terminated') {
                 Log::warning('api.auth.login.terminated', [
                     'email' => $email,
@@ -160,6 +159,17 @@ class AuthController extends Controller
 
             $token = $user->createToken('API TOKEN')->plainTextToken;
 
+            // Flutter User.fromJson expects status as String?, not a status object.
+            $user->loadMissing('status');
+            $statusLabel = optional($user->status)->translated_name
+                ?? optional($user->status)->name
+                ?? 'Active';
+            $user->unsetRelation('status');
+            $user->unsetRelation('employmentStatus');
+
+            $userPayload = $user->toArray();
+            $userPayload['status'] = $statusLabel;
+
             Log::info('api.auth.login.success', [
                 'email' => $email,
                 'user_id' => $user->id,
@@ -169,7 +179,7 @@ class AuthController extends Controller
             ]);
 
             return response()->json([
-                'user' => $user,
+                'user' => $userPayload,
                 'status' => true,
                 'success' => true,
                 'message' => 'User Logged In Successfully',
