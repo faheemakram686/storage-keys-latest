@@ -47,8 +47,9 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\ToBeLoggedOut::class,
         ],
 
+        // Stateless token API for mobile/apps. Do NOT use EnsureFrontendRequestsAreStateful
+        // here — it applies CSRF when Origin/Referer matches the site and breaks app login (419).
         'api' => [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],

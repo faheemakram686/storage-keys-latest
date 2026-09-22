@@ -93,7 +93,12 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $employmentAlias = optional($user->employmentStatus->first())->alias;
+            $employment = $user->employmentStatus;
+            $employmentAlias = null;
+            if (is_object($employment)) {
+                $employmentAlias = $employment->alias
+                    ?? (method_exists($employment, 'first') ? optional($employment->first())->alias : null);
+            }
             if ($employmentAlias === 'terminated') {
                 return response()->json([
                     'status' => false,

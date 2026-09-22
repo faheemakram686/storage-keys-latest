@@ -14,6 +14,13 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array
      */
-    protected $except = [];
+    protected $except = [
+        // Mobile/app Sanctum token auth (no CSRF cookie available)
+        'api/auth/login',
+        'api/auth/register',
+        'customer-api/customer/login',
+        'customer-api/customer/register',
+        'customer-api/customer/forgot-password',
+    ];
 
 }
