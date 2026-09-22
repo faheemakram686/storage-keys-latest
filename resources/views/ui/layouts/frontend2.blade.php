@@ -26,7 +26,7 @@
     <!-- HEADER AREA START (header-5) -->
     <link rel="stylesheet" href="{{ asset('sk-assets/css/toastr.css') }}"/>
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
-    
+    @include('ui.includes.google-analytics')
 </head>
 <body>
     @include('ui.includes.header2')

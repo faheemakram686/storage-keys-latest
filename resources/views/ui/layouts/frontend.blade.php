@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     @endif
     @yield('headExtra')
+    @include('ui.includes.google-analytics')
 </head>
 <body>
     @include('ui.includes.header')
