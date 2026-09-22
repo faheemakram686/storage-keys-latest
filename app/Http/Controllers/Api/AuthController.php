@@ -153,10 +153,19 @@ class AuthController extends Controller
                 ], 403);
             }
 
-            // Drop previous app tokens for this device-name to avoid token pile-up.
-            $user->tokens()->where('name', 'API TOKEN')->delete();
-
-            $token = $user->createToken('API TOKEN')->plainTextToken;
+            // Keep the latest few tokens valid so the app does not get 401 if it
+            // briefly still uses a previous Bearer after a re-login / race.
+            $newAccessToken = $user->createToken('API TOKEN');
+            $token = $newAccessToken->plainTextToken;
+            $keepIds = $user->tokens()
+                ->where('name', 'API TOKEN')
+                ->latest('id')
+                ->take(5)
+                ->pluck('id');
+            $user->tokens()
+                ->where('name', 'API TOKEN')
+                ->whereNotIn('id', $keepIds)
+                ->delete();
 
             // Flutter User.fromJson expects flat String?/int? fields only.
             // Nested roles/profile/status objects cause Map→String? parse crashes.
