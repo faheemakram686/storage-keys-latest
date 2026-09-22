@@ -104,7 +104,6 @@ class AuthController extends Controller
                 ->whereHas('status', function ($builder) {
                     $builder->whereNotIn('name', ['status_inactive', 'status_invited']);
                 })
-                ->with(['roles', 'profile'])
                 ->first();
 
             if (!$user || !Hash::check((string) $request->password, (string) $user->password)) {
@@ -159,16 +158,30 @@ class AuthController extends Controller
 
             $token = $user->createToken('API TOKEN')->plainTextToken;
 
-            // Flutter User.fromJson expects status as String?, not a status object.
+            // Flutter User.fromJson expects flat String?/int? fields only.
+            // Nested roles/profile/status objects cause Map→String? parse crashes.
             $user->loadMissing('status');
             $statusLabel = optional($user->status)->translated_name
                 ?? optional($user->status)->name
                 ?? 'Active';
-            $user->unsetRelation('status');
-            $user->unsetRelation('employmentStatus');
 
-            $userPayload = $user->toArray();
-            $userPayload['status'] = $statusLabel;
+            $userPayload = [
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'firstName' => $user->first_name,
+                'lastName' => $user->last_name,
+                'email' => $user->email,
+                'avatar' => $user->avatar,
+                'phone' => $user->phone,
+                'address' => $user->address,
+                'user_type' => $user->user_type,
+                'userType' => $user->user_type,
+                'status' => $statusLabel,
+                'is_in_employee' => $user->is_in_employee,
+                'full_name' => $user->full_name,
+                'fullName' => $user->full_name,
+            ];
 
             Log::info('api.auth.login.success', [
                 'email' => $email,
