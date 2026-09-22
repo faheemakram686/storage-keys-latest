@@ -103,16 +103,33 @@ class EmployeeController extends Controller
         }
 
             $data = $employee->toArray();
-            // Flutter JobDesk model expects String? created_by, not int.
-            $data['created_by'] = $employee->created_by === null
+
+            // Flutter JobDeskModel Data.fromJson expects String? created_by.
+            // Always take the raw DB attribute (int|null) and cast — never leave an int in JSON.
+            $rawCreatedBy = $employee->getAttributes()['created_by'] ?? null;
+            $data['created_by'] = $rawCreatedBy === null || $rawCreatedBy === ''
                 ? null
-                : (string) $employee->created_by;
-            // Keep data.status as the status object (do not stringify — unlike login).
+                : (string) $rawCreatedBy;
+
+            // Keep data.status as the loaded status object (job desk needs the object).
+            if (isset($data['status']) && !is_array($data['status'])) {
+                $status = $employee->status;
+                $data['status'] = $status ? [
+                    'id' => (int) $status->id,
+                    'name' => (string) $status->name,
+                    'class' => (string) ($status->class ?? ''),
+                    'type' => (string) ($status->type ?? 'user'),
+                    'translated_name' => (string) ($status->translated_name ?? $status->name),
+                ] : null;
+            }
 
             return response()->json([
                 'data' => $data,
                 'status' => true,
-                'message' =>'success'
+                'message' => 'success',
+            ], 200, [
+                // Lets us confirm this build is live after deploy.
+                'X-Api-Jobdesk' => 'created_by-string-v2',
             ]);
 
         } catch (\Throwable $th) {
