@@ -178,7 +178,19 @@ class AuthController extends Controller
                 'user_type' => $user->user_type,
                 'userType' => $user->user_type,
                 'status' => $statusLabel,
-                'is_in_employee' => $user->is_in_employee,
+                'is_deleted' => (int) ($user->is_deleted ?? 0),
+                'last_login_at' => optional($user->last_login_at)->toJSON(),
+                // Flutter expects String? createdBy — never send int.
+                'created_by' => $user->created_by === null ? null : (string) $user->created_by,
+                'createdBy' => $user->created_by === null ? null : (string) $user->created_by,
+                'status_id' => (int) $user->status_id,
+                'invitation_token' => $user->invitation_token === null || $user->invitation_token === ''
+                    ? null
+                    : (string) $user->invitation_token,
+                'created_at' => optional($user->created_at)->toJSON(),
+                'updated_at' => optional($user->updated_at)->toJSON(),
+                'deleted_at' => optional($user->deleted_at)->toJSON(),
+                'is_in_employee' => (int) ($user->is_in_employee ?? 0),
                 'full_name' => $user->full_name,
                 'fullName' => $user->full_name,
             ];
