@@ -16,11 +16,11 @@ class DocumentRequest extends BaseRequest
         $file = '';
         switch($this->method()) {
             case 'POST':
-                $file = 'required|file|mimes:csv,txt,jpg,jpeg,png,pdf,docx,doc,zip|max:5120';
+                $file = 'required|file|mimes:csv,txt,jpg,jpeg,png,pdf,docx,doc,zip|max:10240';
                 break;
             case 'PUT':
             case 'PATCH':
-                $file = 'nullable|file|mimes:csv,txt,jpg,jpeg,png,pdf,docx,doc,zip|max:5120';
+                $file = 'nullable|file|mimes:csv,txt,jpg,jpeg,png,pdf,docx,doc,zip|max:10240';
                 break;
             default:break;
         }

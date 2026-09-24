@@ -30,6 +30,20 @@
 
 </IfModule>
 
+# Allow employee document uploads up to 10MB (Laravel max:10240)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>
+<IfModule mod_php7.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>
+
 <Files ".env">
   Require all denied
 </Files>
