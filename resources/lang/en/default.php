@@ -1577,7 +1577,7 @@ return array_merge([
     'leave_bulk_action_message' => 'Leave bulk action will not applicable to your own request and will follow the leave policy and settings.',
 
     'document' => 'Document',
-    'document_recommendation' => 'Document size allowed: 10MB. Document type allowed: png, jpg, jpeg, txt, pdf, doc, docx, csv. Please check file and file format before upload.',
+    'document_recommendation' => 'Document size allowed: 30MB. Document type allowed: png, jpg, jpeg, txt, pdf, doc, docx, csv. Please check file and file format before upload.',
     'add_new' => 'Add New',
     'add_document' => 'Add Document',
     'edit_document' => 'Edit Document',

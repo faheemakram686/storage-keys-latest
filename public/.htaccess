@@ -30,18 +30,18 @@
 
 </IfModule>
 
-# Allow employee document uploads up to 10MB (Laravel max:10240)
+# Allow employee document uploads up to 30MB (Laravel max:30720)
 <IfModule mod_php.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 12M
+    php_value upload_max_filesize 30M
+    php_value post_max_size 32M
 </IfModule>
 <IfModule mod_php7.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 12M
+    php_value upload_max_filesize 30M
+    php_value post_max_size 32M
 </IfModule>
 <IfModule mod_php8.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 12M
+    php_value upload_max_filesize 30M
+    php_value post_max_size 32M
 </IfModule>
 
 <Files ".env">
