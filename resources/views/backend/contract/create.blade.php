@@ -20,10 +20,24 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Customer<span class="text-danger">*</span></label>
-                                    <select name="customer_id" id="customer_id" class="form-control " data-live-search="true" required>
+                                    <select name="customer_id" id="customer_id" class="form-control form-select js-select2" data-search="on" data-placeholder="Search customer..." required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->customer_type =='individual' ?$customer->customer_name:$customer->company_name}}</option>
+                                            @php
+                                                $label = $customer->customer_type == 'individual'
+                                                    ? ($customer->customer_name ?? trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? '')))
+                                                    : ($customer->company_name ?? $customer->customer_name);
+                                                if (empty($label)) {
+                                                    $label = 'Customer #' . $customer->id;
+                                                }
+                                                if (!empty($customer->email)) {
+                                                    $label .= ' — ' . $customer->email;
+                                                }
+                                                if (!empty($customer->phone)) {
+                                                    $label .= ' — ' . $customer->phone;
+                                                }
+                                            @endphp
+                                            <option value="{{$customer->id}}">{{ $label }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -172,6 +186,17 @@
 
             });
 
+
+            // Searchable customer dropdown
+            if ($.fn.select2) {
+                $('#customer_id').select2({
+                    placeholder: 'Search customer...',
+                    allowClear: true,
+                    width: '100%'
+                });
+            } else if (window.NioApp && typeof NioApp.Select2 === 'function') {
+                NioApp.Select2('#customer_id');
+            }
 
             $("#customer_id").on('change', function() {
                 var customer_id = $(this).val();

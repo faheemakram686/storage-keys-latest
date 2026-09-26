@@ -21,10 +21,18 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>Customer<span class="text-danger">*</span></label>
-                                    <select name="customer_id" id="customer_id" class="form-control select2" data-live-search="true" required>
+                                    <select name="customer_id" id="customer_id" class="form-control form-select js-select2" data-search="on" data-placeholder="Search customer..." required>
                                         <option value="">Choose One</option>
                                         @foreach( $data['customers'] as $customer)
-                                        <option value="{{$customer->id}}" {{ ($customer->id == $data['contract'][0]->customer_id) ? "selected" : "" }}>{{$customer->customer_name}}</option>
+                                            @php
+                                                $label = $customer->customer_name
+                                                    ?? $customer->company_name
+                                                    ?? ('Customer #' . $customer->id);
+                                                if (!empty($customer->email)) {
+                                                    $label .= ' — ' . $customer->email;
+                                                }
+                                            @endphp
+                                            <option value="{{$customer->id}}" {{ ($customer->id == $data['contract'][0]->customer_id) ? "selected" : "" }}>{{ $label }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -177,6 +185,16 @@
 
 
             });
+            // Searchable customer dropdown
+            if ($.fn.select2) {
+                $('#customer_id').select2({
+                    placeholder: 'Search customer...',
+                    allowClear: true,
+                    width: '100%'
+                });
+            } else if (window.NioApp && typeof NioApp.Select2 === 'function') {
+                NioApp.Select2('#customer_id');
+            }
             var customer_id=$('select[name=customer_id]').val();
             getEstimates(customer_id);
             $("#customer_id").on('change', function() {
