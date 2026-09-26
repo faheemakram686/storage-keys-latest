@@ -671,6 +671,19 @@
 
 
             getCountries();
+            function renderLeadRows(html) {
+                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
+                if (wasInitialized) {
+                    $('#datatable').DataTable().destroy();
+                }
+                $('#countryTable').html(html);
+                if (window.NioApp && NioApp.DataTable) {
+                    NioApp.DataTable('#datatable', {
+                        responsive: { details: true },
+                        buttons: ['copy', 'excel', 'csv', 'pdf']
+                    });
+                }
+            }
             function getCountries() {
 
                 $.ajax({
@@ -699,19 +712,30 @@
                                 storageUnitName = data[i].storageunit.storage_unit_name;
                             }
 
+                            var customerName = (data[i].company_name == null || data[i].company_name === '')
+                                ? ((data[i].f_name || '') + ' ' + (data[i].l_name || '')).trim() || 'N/A'
+                                : data[i].company_name;
+                            var leadStatusTitle = (data[i].lead_status && data[i].lead_status.title)
+                                ? data[i].lead_status.title
+                                : 'N/A';
+                            var ownerName = data[i].userresponsible
+                                ? ((data[i].userresponsible.first_name || '') + ' ' + (data[i].userresponsible.last_name || '')).trim()
+                                : 'N/A';
+                            var phone = data[i].phone || 'N/A';
+                            var email = data[i].email || 'N/A';
+                            var createdAt = data[i].created_at || 'N/A';
+
                             html += ' <tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                             ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+storageUnitName+'/'+termLengthTitle+'</a></td>'+
-                            {{--' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/lead/profile')}}/' + data[i].id + '>'+data[i].f_name+' '+data[i].l_name+'</a></td>'+--}}
-                            // ' <td class="nk-tb-col nk-tb-col-tools"><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry">'+data[i].f_name+' '+data[i].l_name+'</a></td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+ ((data[i].company_name == null) ? data[i].f_name+' '+data[i].l_name : data[i].company_name)+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].phone+'</td>'+
-                            ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].email+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+customerName+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+phone+'</td>'+
+                            ' <td class="nk-tb-col nk-tb-col-tools">'+email+'</td>'+
                             '<td class="nk-tb-col nk-tb-col-tools" >'+
-                            ' <span class="badge badge-success">'+data[i].lead_status.title+'</span>'+
+                            ' <span class="badge badge-success">'+leadStatusTitle+'</span>'+
                             ' </td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].userresponsible.first_name+' '+data[i].userresponsible.last_name+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+createdAt+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+ownerName+'</td>'+
                             '  <td class="nk-tb-col nk-tb-col-tools">'+
                             ' <ul class="nk-tb-actions gx-1">'+
                             '  <li>'+
@@ -721,7 +745,6 @@
                             '<ul class="link-list-opt no-bdr">'+
                             '<li><a href="#" class="btn-edit" data='+data[i].id+' data-toggle="modal" data-target="#editCountry"><em class="icon ni ni-edit"></em><span>Convert to customer</span></a></li>'+
                             '<li><a href="#" class="btn-estimate" data='+data[i].id+'><em class="icon ni ni-edit"></em><span>Lead Estimate</span></a></li>'+
-                            {{--'<li><a href={{url('admin/estimate')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>Lead Estimate</span></a></li>'+--}}
                                 '<li><a href={{url('admin/edit-lead')}}/'+data[i].id+' ><em class="icon ni ni-edit"></em><span>Edit</span></a></li>'+
                             '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                             '</ul>'+
@@ -733,7 +756,7 @@
                             '</tr>';
                         }
 
-                        $('#countryTable').html(html);
+                        renderLeadRows(html);
 
                     },
                     error: function() {
