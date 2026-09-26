@@ -97,7 +97,10 @@ class McpSiteController extends Controller
     {
         $limit = min(100, max(1, (int) $request->query('limit', 30)));
         $disk = Storage::disk('public');
-        $dir = 'uploads/blog-images';
+        // Same path admin BlogClass uses (storeAs public/uploads/blog-images).
+        $dir = 'public/uploads/blog-images';
+
+        $this->migrateOrphanedBlogImages($disk);
 
         if (!$disk->exists($dir)) {
             return response()->json([
@@ -124,8 +127,8 @@ class McpSiteController extends Controller
 
             return [
                 'filename' => $name,
-                'path' => $path,
-                'url' => asset('storage/' . $path),
+                'path' => 'uploads/blog-images/' . $name,
+                'url' => asset('storage/uploads/blog-images/' . $name),
                 'size' => $disk->size($path),
                 'last_modified' => Carbon::createFromTimestamp($disk->lastModified($path))->toDateTimeString(),
             ];
@@ -164,17 +167,43 @@ class McpSiteController extends Controller
             ], 422);
         }
 
-        $path = 'uploads/blog-images/' . $saved;
-
         return response()->json([
             'success' => true,
             'message' => 'Media uploaded',
             'media' => [
                 'filename' => $saved,
-                'path' => $path,
-                'url' => asset('storage/' . $path),
+                'path' => 'uploads/blog-images/' . $saved,
+                'url' => asset('storage/uploads/blog-images/' . $saved),
             ],
         ], 201);
+    }
+
+    /**
+     * Move files previously saved to the wrong MCP path
+     * (storage/app/uploads/blog-images) into the admin/web path
+     * (storage/app/public/uploads/blog-images).
+     */
+    private function migrateOrphanedBlogImages($disk): void
+    {
+        $legacy = 'uploads/blog-images';
+        $canonical = 'public/uploads/blog-images';
+
+        if (!$disk->exists($legacy)) {
+            return;
+        }
+
+        if (!$disk->exists($canonical)) {
+            $disk->makeDirectory($canonical);
+        }
+
+        foreach ($disk->files($legacy) as $path) {
+            $target = $canonical . '/' . basename($path);
+            if (!$disk->exists($target)) {
+                $disk->move($path, $target);
+            } else {
+                $disk->delete($path);
+            }
+        }
     }
 
     /**

@@ -380,11 +380,42 @@ class McpBlogController extends Controller
             }
 
             $name = Carbon::now()->format('Ymd') . '_' . uniqid('mcp_', true) . '.' . $ext;
-            Storage::disk('public')->put('uploads/blog-images/' . $name, $response->body());
+            // Must match admin BlogClass::storeAs('public/uploads/blog-images/') so
+            // asset('storage/uploads/blog-images/...') + storage:link can serve the file.
+            $disk = Storage::disk('public');
+            $this->migrateOrphanedBlogImages($disk);
+            $disk->put('public/uploads/blog-images/' . $name, $response->body());
 
             return $name;
         } catch (\Throwable $e) {
             return 'empty';
+        }
+    }
+
+    /**
+     * Move legacy MCP uploads (storage/app/uploads/blog-images) into the
+     * web-served path used by admin (storage/app/public/uploads/blog-images).
+     */
+    private function migrateOrphanedBlogImages($disk): void
+    {
+        $legacy = 'uploads/blog-images';
+        $canonical = 'public/uploads/blog-images';
+
+        if (!$disk->exists($legacy)) {
+            return;
+        }
+
+        if (!$disk->exists($canonical)) {
+            $disk->makeDirectory($canonical);
+        }
+
+        foreach ($disk->files($legacy) as $path) {
+            $target = $canonical . '/' . basename($path);
+            if (!$disk->exists($target)) {
+                $disk->move($path, $target);
+            } else {
+                $disk->delete($path);
+            }
         }
     }
 
