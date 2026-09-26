@@ -382,16 +382,23 @@ class McpBlogController extends Controller
         }
 
         // Already on our public storage — attach filename, do not HTTP-fetch ourselves.
-        if (preg_match('#/storage/uploads/blog-images/([^/?#]+)#i', $url, $m)) {
-            $localName = basename(urldecode($m[1]));
-            if ($this->blogImageExists($disk, $localName)) {
-                return $localName;
-            }
-            // File may exist only on disk after migrate; still prefer basename over empty.
-            if (preg_match('/\.(jpe?g|png|webp|gif)$/i', $localName)) {
-                Log::warning('mcp.blog_image_local_missing', ['filename' => $localName, 'url' => $url]);
+        // Avoid #...# regex delimiters here: character class [^/?#] would terminate early.
+        $marker = '/storage/uploads/blog-images/';
+        $pos = stripos($url, $marker);
+        if ($pos !== false) {
+            $after = substr($url, $pos + strlen($marker));
+            $after = strtok($after, '?#') ?: $after;
+            $localName = basename(rawurldecode($after));
+            if ($localName !== '' && $localName !== '.' && $localName !== '..') {
+                if ($this->blogImageExists($disk, $localName)) {
+                    return $localName;
+                }
+                // File may exist only on disk after migrate; still prefer basename over empty.
+                if (preg_match('/\.(jpe?g|png|webp|gif)$/i', $localName)) {
+                    Log::warning('mcp.blog_image_local_missing', ['filename' => $localName, 'url' => $url]);
 
-                return $localName;
+                    return $localName;
+                }
             }
         }
 
