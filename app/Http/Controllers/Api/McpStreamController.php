@@ -162,14 +162,15 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_blog',
-                'description' => 'Create a blog post. Defaults to draft (status=0) unless status=1 is passed.',
+                'description' => 'Create a blog post. Defaults to draft (status=0). Pass image_url (external) OR image (filename from upload_media). Image is saved for drafts and published posts alike.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
                         'title' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 255],
                         'description' => ['type' => 'string', 'minLength' => 20, 'description' => 'HTML or text body'],
                         'status' => ['type' => 'integer', 'enum' => [0, 1]],
-                        'image_url' => ['type' => 'string', 'format' => 'uri'],
+                        'image_url' => ['type' => 'string', 'format' => 'uri', 'description' => 'External image URL, or local /storage/uploads/blog-images/... URL from upload_media'],
+                        'image' => ['type' => 'string', 'description' => 'Filename returned by upload_media (preferred after upload_media)'],
                         'slug' => ['type' => 'string'],
                     ],
                     'required' => ['title', 'description'],
@@ -188,7 +189,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'update_blog',
-                'description' => 'Update an existing blog by id or slug. Only send fields to change.',
+                'description' => 'Update an existing blog by id or slug. Only send fields to change. Image is independent of status.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -198,6 +199,7 @@ class McpStreamController extends Controller
                         'description' => ['type' => 'string'],
                         'status' => ['type' => 'integer', 'enum' => [0, 1]],
                         'image_url' => ['type' => 'string', 'format' => 'uri'],
+                        'image' => ['type' => 'string', 'description' => 'Filename from upload_media'],
                         'new_slug' => ['type' => 'string', 'description' => 'Optional new slug'],
                     ],
                 ],
@@ -272,7 +274,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'upload_media',
-                'description' => 'Download an image from a public URL into blog-images and return the stored URL.',
+                'description' => 'Download an image from a public URL into blog-images and return filename + url. Then pass image=filename (or image_url=returned url) to create_blog/update_blog.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -536,7 +538,7 @@ class McpStreamController extends Controller
                     return $this->toolError('Provide id or slug.');
                 }
                 $payload = [];
-                foreach (['title', 'description', 'status', 'image_url'] as $field) {
+                foreach (['title', 'description', 'status', 'image_url', 'image'] as $field) {
                     if (array_key_exists($field, $arguments)) {
                         $payload[$field] = $arguments[$field];
                     }
@@ -756,6 +758,9 @@ class McpStreamController extends Controller
         }
         if (!empty($arguments['image_url']) && is_string($arguments['image_url'])) {
             $payload['image_url'] = $arguments['image_url'];
+        }
+        if (!empty($arguments['image']) && is_string($arguments['image'])) {
+            $payload['image'] = $arguments['image'];
         }
         if (!empty($arguments['slug']) && is_string($arguments['slug'])) {
             $payload['slug'] = $arguments['slug'];

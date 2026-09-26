@@ -7,6 +7,7 @@ use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -58,6 +59,7 @@ class McpBlogController extends Controller
             'description' => 'required|string',
             'status' => 'nullable|in:0,1',
             'image_url' => 'nullable|url|max:2048',
+            'image' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:512',
@@ -87,7 +89,11 @@ class McpBlogController extends Controller
         }
 
         $slug = $this->uniqueSlug($slugBase);
-        $imageName = $this->storeImageFromUrl($request->input('image_url'));
+        // Image is independent of status — drafts must keep featured images too.
+        $imageName = $this->resolveBlogImage(
+            $request->input('image_url'),
+            $request->input('image')
+        );
 
         $blog = new Blog();
         $blog->title = $title;
@@ -122,6 +128,7 @@ class McpBlogController extends Controller
             'description' => 'sometimes|required|string',
             'status' => 'nullable|in:0,1',
             'image_url' => 'nullable|url|max:2048',
+            'image' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:512',
@@ -158,8 +165,11 @@ class McpBlogController extends Controller
             $blog->slug = $this->uniqueSlug($slugBase, (int) $blog->id);
         }
 
-        if ($request->filled('image_url')) {
-            $imageName = $this->storeImageFromUrl($request->input('image_url'));
+        if ($request->filled('image_url') || $request->filled('image')) {
+            $imageName = $this->resolveBlogImage(
+                $request->input('image_url'),
+                $request->input('image')
+            );
             if ($imageName !== 'empty') {
                 $blog->image = $imageName;
             }
@@ -347,6 +357,47 @@ class McpBlogController extends Controller
         return $slug;
     }
 
+    /**
+     * Resolve a blog featured image filename.
+     * Accepts either an already-uploaded filename (from upload_media) or a URL.
+     * Local /storage/uploads/blog-images/* URLs are used as-is (no re-download).
+     * Status must never gate this — drafts keep images too.
+     */
+    public function resolveBlogImage(?string $url, ?string $filename = null): string
+    {
+        $disk = Storage::disk('public');
+        $this->migrateOrphanedBlogImages($disk);
+
+        $filename = trim((string) $filename);
+        if ($filename !== '') {
+            $filename = basename($filename);
+            if ($this->blogImageExists($disk, $filename)) {
+                return $filename;
+            }
+        }
+
+        $url = trim((string) $url);
+        if ($url === '') {
+            return 'empty';
+        }
+
+        // Already on our public storage — attach filename, do not HTTP-fetch ourselves.
+        if (preg_match('#/storage/uploads/blog-images/([^/?#]+)#i', $url, $m)) {
+            $localName = basename(urldecode($m[1]));
+            if ($this->blogImageExists($disk, $localName)) {
+                return $localName;
+            }
+            // File may exist only on disk after migrate; still prefer basename over empty.
+            if (preg_match('/\.(jpe?g|png|webp|gif)$/i', $localName)) {
+                Log::warning('mcp.blog_image_local_missing', ['filename' => $localName, 'url' => $url]);
+
+                return $localName;
+            }
+        }
+
+        return $this->storeImageFromUrl($url);
+    }
+
     public function storeImageFromUrl(?string $url): string
     {
         if (!$url) {
@@ -359,6 +410,11 @@ class McpBlogController extends Controller
                 ->get($url);
 
             if (!$response->successful()) {
+                Log::warning('mcp.blog_image_download_failed', [
+                    'url' => $url,
+                    'status' => $response->status(),
+                ]);
+
                 return 'empty';
             }
 
@@ -388,8 +444,19 @@ class McpBlogController extends Controller
 
             return $name;
         } catch (\Throwable $e) {
+            Log::error('mcp.blog_image_download_error', [
+                'url' => $url,
+                'error' => $e->getMessage(),
+            ]);
+
             return 'empty';
         }
+    }
+
+    private function blogImageExists($disk, string $filename): bool
+    {
+        return $disk->exists('public/uploads/blog-images/' . $filename)
+            || $disk->exists('uploads/blog-images/' . $filename);
     }
 
     /**

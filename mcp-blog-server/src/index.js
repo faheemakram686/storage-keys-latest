@@ -81,18 +81,20 @@ server.tool(
 
 server.tool(
   "create_blog",
-  "Create a blog post. Defaults to draft (status=0).",
+  "Create a blog post. Defaults to draft (status=0). After upload_media, pass image=filename OR image_url=returned url. Image saves for drafts too.",
   {
     title: z.string().min(3).max(255),
     description: z.string().min(20),
     status: z.union([z.literal(0), z.literal(1)]).optional(),
     image_url: z.string().url().optional(),
+    image: z.string().min(3).max(255).optional(),
     slug: z.string().optional(),
   },
-  async ({ title, description, status, image_url, slug }) => {
+  async ({ title, description, status, image_url, image, slug }) => {
     const payload = { title, description };
     if (status === 0 || status === 1) payload.status = status;
     if (image_url) payload.image_url = image_url;
+    if (image) payload.image = image;
     if (slug) payload.slug = slug;
     return ok(await apiRequest("/blogs", { method: "POST", body: JSON.stringify(payload) }));
   }
@@ -110,7 +112,7 @@ server.tool(
 
 server.tool(
   "update_blog",
-  "Update a blog by id or slug. Only send fields to change.",
+  "Update a blog by id or slug. Only send fields to change. Image is independent of status.",
   {
     id: z.number().int().optional(),
     slug: z.string().optional(),
@@ -118,14 +120,16 @@ server.tool(
     description: z.string().optional(),
     status: z.union([z.literal(0), z.literal(1)]).optional(),
     image_url: z.string().url().optional(),
+    image: z.string().min(3).max(255).optional(),
     new_slug: z.string().optional(),
   },
-  async ({ id, slug, title, description, status, image_url, new_slug }) => {
+  async ({ id, slug, title, description, status, image_url, image, new_slug }) => {
     const payload = {};
     if (title != null) payload.title = title;
     if (description != null) payload.description = description;
     if (status === 0 || status === 1) payload.status = status;
     if (image_url) payload.image_url = image_url;
+    if (image) payload.image = image;
     if (new_slug) payload.slug = new_slug;
     return ok(
       await apiRequest(blogPath(id, slug), {
