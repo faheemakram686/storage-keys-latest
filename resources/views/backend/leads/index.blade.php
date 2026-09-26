@@ -30,7 +30,7 @@
             </div>
             <div class="card card-preview">
                 <div class="card-inner">
-                    <table class="datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true"  id="datatable" >
+                    <table class="nk-tb-list nk-tb-ulist" data-auto-responsive="true" id="leads-datatable">
                         <thead>
                         <tr class="nk-tb-item nk-tb-head">
                             <th class="nk-tb-col text-left"><span class="sub-text">Sr no.</span></th>
@@ -450,7 +450,7 @@
                             <a href="#" class=" btn btn-primary btn-sm btn-task mb-3" data-toggle="modal" data-dismiss="modal" data-target="#addTask">Add Task</a>
                             <div class="card card-preview">
                                 <div class="card-inner card border border-light">
-                                    <table class=" table table-md datatable-init-export nk-tb-list nk-tb-ulist" data-auto-responsive="true"  id="datatable" >
+                                    <table class="table table-md nk-tb-list nk-tb-ulist" data-auto-responsive="true" id="task-datatable">
                                         <thead>
                                         <tr class="nk-tb-item nk-tb-head">
                                             <th class="nk-tb-col text-left"><span class="sub-text">Sr no#</span></th>
@@ -672,17 +672,35 @@
 
             getCountries();
             function renderLeadRows(html) {
-                var wasInitialized = $.fn.DataTable && $.fn.DataTable.isDataTable('#datatable');
-                if (wasInitialized) {
-                    $('#datatable').DataTable().destroy();
+                var $table = $('#leads-datatable');
+                if ($.fn.DataTable && $.fn.DataTable.isDataTable($table)) {
+                    $table.DataTable().clear().destroy();
                 }
-                $('#countryTable').html(html);
-                if (window.NioApp && NioApp.DataTable) {
-                    NioApp.DataTable('#datatable', {
-                        responsive: { details: true },
-                        buttons: ['copy', 'excel', 'csv', 'pdf']
-                    });
-                }
+                $('#countryTable').html(html || '');
+                // Init only after rows are loaded — do not use datatable-init-export
+                // (NioApp auto-init + manual re-init caused "Cannot reinitialise DataTable").
+                $table.DataTable({
+                    responsive: true,
+                    autoWidth: false,
+                    destroy: true,
+                    dom: '<"row justify-between g-2 with-export"<"col-7 col-sm-4 text-start"f><"col-5 col-sm-8 text-end"<"datatable-filter"<"d-flex justify-content-end g-2"<"dt-export-buttons d-flex align-center"<"dt-export-title d-none d-md-inline-block">B>l>>>><"datatable-wrap my-3"t><"row align-items-center"<"col-7 col-sm-12 col-md-9"p><"col-5 col-sm-12 col-md-3 text-start text-md-end"i>>',
+                    buttons: ['copy', 'excel', 'csv', 'pdf'],
+                    language: {
+                        search: '',
+                        searchPlaceholder: 'Type in to Search',
+                        lengthMenu: "<span class='d-none d-sm-inline-block'>Show</span><div class='form-control-select'> _MENU_ </div>",
+                        info: '_START_ -_END_ of _TOTAL_',
+                        infoEmpty: '0',
+                        infoFiltered: '( Total _MAX_  )',
+                        paginate: {
+                            first: 'First',
+                            last: 'Last',
+                            next: 'Next',
+                            previous: 'Prev'
+                        }
+                    }
+                });
+                $('.dt-export-title').text('Export');
             }
             function getCountries() {
 
