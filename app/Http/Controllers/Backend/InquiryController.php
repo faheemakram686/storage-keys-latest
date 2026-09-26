@@ -39,6 +39,12 @@ class InquiryController extends Controller
                 ]);
             }
 
+            if ($this->recaptchaEnabled() && !$this->verifyRecaptcha($request)) {
+                return redirect()->back()
+                    ->withErrors(['g-recaptcha-response' => 'Please confirm you are not a robot.'])
+                    ->withInput();
+            }
+
             $validated = $request->validate([
                 'name'   => 'required|string|max:255',
                 'email'  => 'required|email',
@@ -91,6 +97,45 @@ class InquiryController extends Controller
             Log::error('Inquiry submission failed: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Something went wrong while submitting your inquiry. Please try again later.');
+        }
+    }
+
+    private function recaptchaEnabled(): bool
+    {
+        return filled(config('services.recaptcha.site_key'))
+            && filled(config('services.recaptcha.secret_key'));
+    }
+
+    private function verifyRecaptcha(Request $request): bool
+    {
+        $token = (string) $request->input('g-recaptcha-response', '');
+        if ($token === '') {
+            return false;
+        }
+
+        try {
+            $response = Http::asForm()
+                ->timeout(8)
+                ->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => config('services.recaptcha.secret_key'),
+                    'response' => $token,
+                    'remoteip' => $request->ip(),
+                ]);
+
+            $ok = (bool) data_get($response->json(), 'success', false);
+            if (!$ok) {
+                Log::info('inquiry.recaptcha_failed', [
+                    'ip' => $request->ip(),
+                    'errors' => data_get($response->json(), 'error-codes'),
+                ]);
+            }
+
+            return $ok;
+        } catch (\Throwable $e) {
+            Log::error('inquiry.recaptcha_error: '.$e->getMessage());
+
+            // Fail closed when keys are configured — do not accept unverified posts.
+            return false;
         }
     }
 

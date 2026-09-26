@@ -192,6 +192,23 @@
         </div>
     @endif
 
+    @php $recaptchaSiteKey = config('services.recaptcha.site_key'); @endphp
+    @if(!empty($recaptchaSiteKey))
+        <div class="sk-recaptcha {{ $fieldClass }}">
+            <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+        </div>
+        @once
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+            <style>
+                .sk-recaptcha { margin: .75rem 0 1rem; }
+                .sk-recaptcha .g-recaptcha { transform-origin: left top; }
+                @media (max-width: 380px) {
+                    .sk-recaptcha .g-recaptcha { transform: scale(.92); }
+                }
+            </style>
+        @endonce
+    @endif
+
     <button type="submit" class="{{ $submitClass }}"><i class="fas fa-paper-plane" aria-hidden="true"></i> {{ $submitLabel }}</button>
     @if($noteHtml)
         <p class="sk-quote-note">{!! $noteHtml !!}</p>

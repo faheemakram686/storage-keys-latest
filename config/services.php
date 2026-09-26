@@ -111,4 +111,9 @@ return [
     'google_sheets' => [
         'webhook_url' => env('GOOGLE_SHEETS_WEBHOOK_URL'),
     ],
+
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY', env('INVISIBLE_RECAPTCHA_SITEKEY')),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY', env('INVISIBLE_RECAPTCHA_SECRETKEY')),
+    ],
 ];
