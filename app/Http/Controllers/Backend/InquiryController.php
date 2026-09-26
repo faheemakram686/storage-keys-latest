@@ -8,21 +8,37 @@ use App\Models\Inquiry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class InquiryController extends Controller
 {
-
-
     public function index()
     {
         return view('backend.inquiry.index');
     }
 
-
     public function store(Request $request)
     {
         try {
+            // Silent fake-success for bots — never write DB / email / Google Sheet.
+            if ($this->isSpamInquiry($request)) {
+                Log::info('inquiry.spam_blocked', [
+                    'ip' => $request->ip(),
+                    'email' => $request->input('email'),
+                    'name' => $request->input('name'),
+                    'ua' => $request->userAgent(),
+                ]);
+
+                return redirect()->route('inquiry.thankyou')->with('inquiry', [
+                    'name' => (string) $request->input('name', ''),
+                    'email' => (string) $request->input('email', ''),
+                    'phone' => (string) $request->input('phone', ''),
+                    'storage_type' => (string) $request->input('storage_type', ''),
+                    'reference' => 'SK-00000',
+                ]);
+            }
+
             $validated = $request->validate([
                 'name'   => 'required|string|max:255',
                 'email'  => 'required|email',
@@ -55,7 +71,7 @@ class InquiryController extends Controller
                     Mail::to($notifyTo)->send(new InquiryMail($inquiry));
                 }
             } catch (\Exception $mailEx) {
-                \Log::error('Inquiry email failed: '.$mailEx->getMessage());
+                Log::error('Inquiry email failed: '.$mailEx->getMessage());
             }
 
             $this->pushInquiryToGoogleSheet($inquiry, $request);
@@ -72,10 +88,92 @@ class InquiryController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Inquiry submission failed: '.$e->getMessage());
+            Log::error('Inquiry submission failed: '.$e->getMessage());
 
             return redirect()->back()->with('error', 'Something went wrong while submitting your inquiry. Please try again later.');
         }
+    }
+
+    /**
+     * Detect common bot / spam inquiry submissions.
+     */
+    private function isSpamInquiry(Request $request): bool
+    {
+        // Honeypot: real users never see/fill this field.
+        if (filled($request->input('website')) || filled($request->input('company_url'))) {
+            return true;
+        }
+
+        // Forms submitted too fast after page load are almost always bots.
+        $startedAt = (int) $request->input('form_started_at', 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return true;
+        }
+
+        $name = trim((string) $request->input('name', ''));
+        $email = strtolower(trim((string) $request->input('email', '')));
+        $phone = preg_replace('/\s+/', '', (string) $request->input('phone', ''));
+        $message = trim((string) $request->input('message', ''));
+
+        if ($name !== '' && $this->looksLikeBotName($name)) {
+            return true;
+        }
+
+        // Random gibberish company names from optional field.
+        $company = trim((string) $request->input('company', ''));
+        if ($company !== '' && $this->looksLikeBotName($company)) {
+            return true;
+        }
+
+        // Disposable / known spam-heavy domains.
+        $domain = substr(strrchr($email, '@') ?: '', 1);
+        $blockedDomains = [
+            'mailinator.com', 'guerrillamail.com', 'tempmail.com', '10minutemail.com',
+            'yopmail.com', 'trashmail.com', 'sharklasers.com', 'getnada.com',
+        ];
+        if ($domain && in_array($domain, $blockedDomains, true)) {
+            return true;
+        }
+
+        // Message packed with URLs is usually spam.
+        if ($message !== '' && preg_match_all('/https?:\/\//i', $message) >= 2) {
+            return true;
+        }
+
+        // Phone with almost no digits.
+        $digits = preg_replace('/\D+/', '', $phone);
+        if ($digits !== null && strlen($digits) > 0 && strlen($digits) < 7) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function looksLikeBotName(string $value): bool
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return false;
+        }
+
+        // No spaces, long, almost no vowels → random keyboard spam.
+        if (!preg_match('/\s/u', $value)
+            && mb_strlen($value) >= 8
+            && !preg_match('/[aeiouAEIOU]/u', $value)
+        ) {
+            return true;
+        }
+
+        // High ratio of consonants / mixed case junk like "MzrodLfcocuym".
+        $letters = preg_replace('/[^a-zA-Z]/', '', $value);
+        if ($letters !== null && strlen($letters) >= 10) {
+            $vowels = preg_match_all('/[aeiouAEIOU]/', $letters);
+            if ($vowels !== false && $vowels / strlen($letters) < 0.15) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -107,40 +205,34 @@ class InquiryController extends Controller
                 ->post($url, $payload);
 
             if (!$response->successful()) {
-                \Log::warning('Google Sheets webhook non-success', [
+                Log::warning('Google Sheets webhook non-success', [
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
             }
         } catch (\Throwable $e) {
-            \Log::error('Google Sheets webhook failed: '.$e->getMessage());
+            Log::error('Google Sheets webhook failed: '.$e->getMessage());
         }
     }
-
 
     public function getInquires(Request $request)
     {
         try {
-            $qry=Inquiry::all();
+            $qry = Inquiry::all();
             return $qry;
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
 
     public function deleteInquiry(Request $request)
     {
-        $qry=Inquiry::find($request->id);
+        $qry = Inquiry::find($request->id);
         $qry->delete();
-        if ($qry)
-        {
+        if ($qry) {
             return response()->json(['success' => 'Record deleted successfully'], 200);
-        }else
-        {
-            return response()->json(['error' => 'Record not deleted, Technical Error'], 200);
         }
 
-
+        return response()->json(['error' => 'Record not deleted, Technical Error'], 200);
     }
-
 }

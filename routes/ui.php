@@ -70,7 +70,9 @@ Route::middleware(['set.guard'])->group(function () {
     Route::post('sign-contract', [ContractController::class, 'signContract'])->name('contract.sign');
     Route::any('contract-pdf/{id}', [ContractController::class, 'contractPdf'])->name('contract-pdf')->middleware('hashid');
 
-    Route::post('/inquiry/store', [InquiryController::class, 'store'])->name('inquiry.store');
+    Route::post('/inquiry/store', [InquiryController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('inquiry.store');
     Route::get('/thank-you', [HomeController::class, 'thankYou'])->name('inquiry.thankyou');
 
 //booking filter routes

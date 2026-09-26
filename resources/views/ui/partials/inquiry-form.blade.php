@@ -35,6 +35,14 @@
 <form class="{{ $formClass }}" action="{{ route('inquiry.store') }}" method="POST">
     @csrf
     <input type="hidden" name="source" value="{{ $source }}">
+    <input type="hidden" name="form_started_at" value="{{ time() }}">
+    {{-- Honeypot: leave empty. Hidden from people, filled by many bots. --}}
+    <div class="sk-hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+        <label for="{{ $idPrefix }}-website">Website</label>
+        <input type="text" id="{{ $idPrefix }}-website" name="website" value="" tabindex="-1" autocomplete="off">
+        <label for="{{ $idPrefix }}-company-url">Company URL</label>
+        <input type="text" id="{{ $idPrefix }}-company-url" name="company_url" value="" tabindex="-1" autocomplete="off">
+    </div>
     @if(!$showStorageSelect)
         <input type="hidden" name="storage_type" value="{{ $defaultStorage }}">
     @endif
