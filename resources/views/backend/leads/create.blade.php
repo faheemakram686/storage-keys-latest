@@ -27,12 +27,30 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12">
                                                         <label class="lbl">Existing Customer (Optional)</label>
-                                                        <select class="selectpicker form-control form-select" name="customer_id" id="customer_id" data-live-search="true">
+                                                        <select class="form-control form-select js-select2"
+                                                                name="customer_id"
+                                                                id="customer_id"
+                                                                data-search="on"
+                                                                data-placeholder="Search existing customer...">
                                                             <option value="">New Customer</option>
                                                             @isset($data['customer'])
                                                                 @foreach ($data['customer'] as $customer)
+                                                                    @php
+                                                                        $customerLabel = $customer->customer_name
+                                                                            ?? $customer->company_name
+                                                                            ?? trim(($customer->first_name ?? '') . ' ' . ($customer->last_name ?? ''));
+                                                                        if ($customerLabel === '') {
+                                                                            $customerLabel = 'Customer #' . $customer->id;
+                                                                        }
+                                                                        if (!empty($customer->email)) {
+                                                                            $customerLabel .= ' — ' . $customer->email;
+                                                                        }
+                                                                        if (!empty($customer->phone)) {
+                                                                            $customerLabel .= ' — ' . $customer->phone;
+                                                                        }
+                                                                    @endphp
                                                                     <option value="{{ $customer->id }}" {{ (isset($id) && (int)$id === (int)$customer->id) ? 'selected' : '' }}>
-                                                                        {{ $customer->customer_name ?? $customer->company_name ?? ('Customer #' . $customer->id) }}
+                                                                        {{ $customerLabel }}
                                                                     </option>
                                                                 @endforeach
                                                             @endisset
@@ -417,6 +435,17 @@
             }
 
             $("#companyfeild").hide();
+
+            // Ensure searchable dropdown (Select2) for long customer lists
+            if ($.fn.select2) {
+                $('#customer_id').select2({
+                    placeholder: 'Search existing customer...',
+                    allowClear: true,
+                    width: '100%'
+                });
+            } else if (window.NioApp && typeof NioApp.Select2 === 'function') {
+                NioApp.Select2('#customer_id');
+            }
 
             $("input[name='type']").click(function() {
                 if ($("#com").is(":checked")) {
