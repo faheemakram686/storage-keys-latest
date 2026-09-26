@@ -205,7 +205,7 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Size Finder</span>
-                <h2>Not Sure What You Need? Find Your Unit Size</h2>
+                <h3>Not Sure What You Need? Find the Right Storage Unit Size</h3>
                 <p>Answer three quick questions and we'll point you to the unit that fits what you're storing.</p>
             </div>
             <div class="sk-finder-intro">
@@ -353,7 +353,7 @@
                     <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-home"></i></div>
-                        <span class="h3">Personal Storage</span>
+                        <h3>Personal Storage</h3>
                         <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
                         <a href="{{ url('/personal-storage') }}">Explore personal storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
@@ -362,7 +362,7 @@
                     <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-briefcase"></i></div>
-                        <span class="h3">Business Storage</span>
+                        <h3>Business Storage</h3>
                         <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory solutions and regular access to their goods.</p>
                         <a href="{{ url('/business-storage') }}">Explore business storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
@@ -371,7 +371,7 @@
                     <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-warehouse"></i></div>
-                        <span class="h3">Warehouse Storage</span>
+                        <h3>Warehouse Storage</h3>
                         <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
                         <a href="{{ url('/warehouse-storage') }}">Explore warehouse storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
@@ -380,7 +380,7 @@
                     <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
                     <div class="sk-card-body">
                         <div class="ic"><i class="fas fa-truck"></i></div>
-                        <span class="h3">Moving Storage</span>
+                        <h3>Moving Storage</h3>
                         <p>A convenient moving and temporary storage solution that helps simplify relocations for both households and businesses.</p>
                         <a href="{{ url('/moving-services') }}">Explore moving &amp; storage<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
@@ -396,7 +396,7 @@
                 <div class="sk-secure-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Peace of Mind</span>
-                    <h2>Your Belongings, Fully Protected</h2>
+                    <h3>Secure Self Storage in the UAE You Can Trust</h3>
                     <p>Security is at the heart of everything we do. Every unit is monitored and maintained to keep your items safe, clean and in the same condition you left them.</p>
                     <div class="sk-secure-list">
                         <div class="row-i">
@@ -520,7 +520,7 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center; color:#ffcf9e;">Inside Our Facilities</span>
-                <h2>A Closer Look</h2>
+                <p class="sk-section-title">A Closer Look</p>
                 <p>Clean, secure and well-organised spaces, built to keep your belongings in great condition.</p>
             </div>
             @php
@@ -606,7 +606,7 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Simple Process</span>
-                <h2>How Booking Works</h2>
+                <p class="sk-section-title">How Booking Works</p>
                 <p>Renting a storage unit with Storage Keys is designed to be simple — whether you need personal storage, business inventory support or warehouse facilities.</p>
             </div>
             <div class="sk-steps">
@@ -639,7 +639,7 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Customer Reviews</span>
-                <h2>What Our Customers Say</h2>
+                <p class="sk-section-title">What Our Customers Say</p>
             </div>
             <div class="sk-rating sk-reveal">
                 <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
@@ -818,7 +818,7 @@
                             @endif
                         </div>
                         <div class="sh-card-body">
-                            <h3>{{ $product->p_name }}</h3>
+                            <p class="sh-product-name">{{ $product->p_name }}</p>
                             <div class="sh-price">
                                 <span>AED {{ number_format($sale, 2) }}</span>
                                 @if($hasDisc)

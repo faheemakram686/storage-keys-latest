@@ -100,11 +100,13 @@
     text-align: center;
 }
 
-.sk-section-head h2 {
+.sk-section-head h2,
+.sk-section-head h3,
+.sk-section-head .sk-section-title {
     font-size: clamp(28px, 4vw, 42px);
 }
 
-.sk-section-head p {
+.sk-section-head p:not(.sk-section-title) {
     font-size: 16px;
     color: var(--sk-muted);
     margin: 0;
@@ -915,11 +917,13 @@
     color: #fff;
 }
 
-.sk-cover .sk-section-head h2 {
+.sk-cover .sk-section-head h2,
+.sk-cover .sk-section-head h3,
+.sk-cover .sk-section-head .sk-section-title {
     color: #fff;
 }
 
-.sk-cover .sk-section-head p {
+.sk-cover .sk-section-head p:not(.sk-section-title) {
     color: rgba(255, 255, 255, .78);
 }
 

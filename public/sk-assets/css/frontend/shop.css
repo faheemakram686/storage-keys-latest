@@ -89,9 +89,12 @@
     flex: 1;
 }
 
-.sh-card-body h3 {
+.sh-card-body h3,
+.sh-card-body .sh-product-name {
     font-size: 17px;
     margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--sk-dark);
 }
 
 .sh-price {
