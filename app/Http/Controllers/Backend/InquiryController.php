@@ -100,13 +100,14 @@ class InquiryController extends Controller
     private function isSpamInquiry(Request $request): bool
     {
         // Honeypot: real users never see/fill this field.
-        if (filled($request->input('website')) || filled($request->input('company_url'))) {
+        // Do not name it "website" — browsers often autofill that and block real people.
+        if (filled($request->input('sk_hp_field'))) {
             return true;
         }
 
-        // Forms submitted too fast after page load are almost always bots.
+        // Only flag instant bot posts (< 1s). Autofill + quick submit is common for real users.
         $startedAt = (int) $request->input('form_started_at', 0);
-        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+        if ($startedAt > 0 && (time() - $startedAt) < 1) {
             return true;
         }
 
@@ -207,6 +208,11 @@ class InquiryController extends Controller
             if (!$response->successful()) {
                 Log::warning('Google Sheets webhook non-success', [
                     'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+            } else {
+                Log::info('Google Sheets webhook ok', [
+                    'inquiry_id' => $inquiry->id,
                     'body' => $response->body(),
                 ]);
             }
