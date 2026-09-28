@@ -280,7 +280,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_page',
-                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Pass hide_banner=true for full custom hero (or auto-detected when content starts with a hero block).',
+                'description' => 'Create a DB CMS page. Defaults to draft (status=0). For full custom hero pages pass hide_banner=true to skip default breadcrumb+H1 and render HTML edge-to-edge (no 820px box).',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -290,14 +290,17 @@ class McpStreamController extends Controller
                         'slug' => ['type' => 'string'],
                         'meta_title' => ['type' => 'string'],
                         'meta_description' => ['type' => 'string'],
-                        'hide_banner' => ['type' => 'boolean', 'description' => 'Hide default breadcrumb+H1 so content can render its own full hero'],
+                        'hide_banner' => [
+                            'type' => 'boolean',
+                            'description' => 'Set true to hide default title banner and allow full-width sections (like static service pages)',
+                        ],
                     ],
                     'required' => ['title', 'content'],
                 ],
             ],
             [
                 'name' => 'update_page',
-                'description' => 'Update a DB CMS page by id or slug. Only send fields to change. Cannot use reserved static slugs.',
+                'description' => 'Update a DB CMS page by id or slug. Pass hide_banner=true to suppress default banner and use full-bleed content wrapper.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -309,7 +312,10 @@ class McpStreamController extends Controller
                         'new_slug' => ['type' => 'string'],
                         'meta_title' => ['type' => 'string'],
                         'meta_description' => ['type' => 'string'],
-                        'hide_banner' => ['type' => 'boolean'],
+                        'hide_banner' => [
+                            'type' => 'boolean',
+                            'description' => 'Set true to hide default title banner and render content full-bleed',
+                        ],
                     ],
                 ],
             ],
@@ -674,7 +680,7 @@ class McpStreamController extends Controller
                     }
                 }
                 if (array_key_exists('hide_banner', $arguments)) {
-                    $payload['hide_banner'] = (bool) $arguments['hide_banner'];
+                    $payload['hide_banner'] = $this->parseToolBool($arguments['hide_banner']);
                 }
 
                 return $this->fromResponse(app(McpPageController::class)->store($this->jsonRequest('POST', '/api/mcp/cms-pages', $payload)));
@@ -685,10 +691,13 @@ class McpStreamController extends Controller
                     return $this->toolError('Provide id or slug.');
                 }
                 $payload = [];
-                foreach (['title', 'content', 'status', 'meta_title', 'meta_description', 'hide_banner'] as $field) {
+                foreach (['title', 'content', 'status', 'meta_title', 'meta_description'] as $field) {
                     if (array_key_exists($field, $arguments)) {
                         $payload[$field] = $arguments[$field];
                     }
+                }
+                if (array_key_exists('hide_banner', $arguments)) {
+                    $payload['hide_banner'] = $this->parseToolBool($arguments['hide_banner']);
                 }
                 if (!empty($arguments['new_slug'])) {
                     $payload['slug'] = $arguments['new_slug'];
@@ -965,6 +974,26 @@ class McpStreamController extends Controller
             ],
             'isError' => true,
         ];
+    }
+
+    /**
+     * @param  mixed  $value
+     */
+    private function parseToolBool($value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+        if (is_int($value) || is_float($value)) {
+            return (int) $value === 1;
+        }
+
+        $parsed = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($parsed !== null) {
+            return $parsed;
+        }
+
+        return in_array(strtolower(trim((string) $value)), ['1', 'true', 'yes', 'on'], true);
     }
 
     /**

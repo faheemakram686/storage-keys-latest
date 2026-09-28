@@ -223,7 +223,7 @@ server.tool(
 
 server.tool(
   "create_page",
-  "Create a DB CMS page. Defaults to draft (status=0). Pass hide_banner=true for a full custom hero (also auto-detected when content starts with skp-hero/ps-hero/svc-hero).",
+  "Create a DB CMS page. Defaults to draft (status=0). For designed pages with their own hero HTML, pass hide_banner=true (required to skip default breadcrumb+H1 and allow full-width sections). Also auto-set when content has skp-hero/ps-hero/svc-hero.",
   {
     title: z.string().min(3).max(255),
     content: z.string().min(20),
@@ -231,7 +231,7 @@ server.tool(
     slug: z.string().optional(),
     meta_title: z.string().optional(),
     meta_description: z.string().optional(),
-    hide_banner: z.boolean().optional(),
+    hide_banner: z.boolean().optional().describe("If true, skip default title banner and render content full-bleed edge-to-edge"),
   },
   async ({ title, content, status, slug, meta_title, meta_description, hide_banner }) => {
     const payload = { title, content };
@@ -239,14 +239,14 @@ server.tool(
     if (slug) payload.slug = slug;
     if (meta_title) payload.meta_title = meta_title;
     if (meta_description) payload.meta_description = meta_description;
-    if (hide_banner != null) payload.hide_banner = hide_banner;
+    if (typeof hide_banner === "boolean") payload.hide_banner = hide_banner;
     return ok(await apiRequest("/cms-pages", { method: "POST", body: JSON.stringify(payload) }));
   }
 );
 
 server.tool(
   "update_page",
-  "Update a DB CMS page by id or slug. Only send fields to change.",
+  "Update a DB CMS page by id or slug. Pass hide_banner=true to suppress default breadcrumb+H1 and use full-bleed content.",
   {
     id: z.number().int().optional(),
     slug: z.string().optional(),
@@ -256,7 +256,7 @@ server.tool(
     new_slug: z.string().optional(),
     meta_title: z.string().optional(),
     meta_description: z.string().optional(),
-    hide_banner: z.boolean().optional(),
+    hide_banner: z.boolean().optional().describe("If true, skip default title banner and render content full-bleed"),
   },
   async ({ id, slug, title, content, status, new_slug, meta_title, meta_description, hide_banner }) => {
     const payload = {};
@@ -266,7 +266,7 @@ server.tool(
     if (new_slug) payload.slug = new_slug;
     if (meta_title != null) payload.meta_title = meta_title;
     if (meta_description != null) payload.meta_description = meta_description;
-    if (hide_banner != null) payload.hide_banner = hide_banner;
+    if (typeof hide_banner === "boolean") payload.hide_banner = hide_banner;
     return ok(
       await apiRequest(cmsPagePath(id, slug), {
         method: "PATCH",

@@ -56,17 +56,20 @@ class Page extends Model
 
     /**
      * Suppress default breadcrumb + auto H1 when flagged or when content
-     * already starts with a full hero block (like static service pages).
+     * already includes a full hero section (like static service pages).
      */
     public function shouldHideBanner(): bool
     {
-        if ((bool) $this->hide_banner) {
+        if ($this->hide_banner === true || $this->hide_banner === 1 || $this->hide_banner === '1') {
             return true;
         }
 
         return $this->contentStartsWithHero();
     }
 
+    /**
+     * Detect a real HTML hero section (not merely a CSS class name in <style>).
+     */
     public function contentStartsWithHero(): bool
     {
         $html = trim((string) $this->content);
@@ -74,33 +77,18 @@ class Page extends Model
             return false;
         }
 
-        // Ignore leading <style>…</style> blocks used by designed CMS pages.
-        $withoutStyles = preg_replace('/^(?:\s*<style\b[^>]*>.*?<\/style>\s*)+/is', '', $html);
-        $probe = trim((string) $withoutStyles);
-
-        // First meaningful chunk (before too much noise).
-        $head = Str::lower(Str::limit($probe, 1200, ''));
-
-        $patterns = [
-            'skp-hero',
-            'ps-hero',
-            'svc-hero',
-            'class="hero',
-            "class='hero",
-            'class="sk-hero',
-            "class='sk-hero",
-        ];
-
-        foreach ($patterns as $needle) {
-            if (Str::contains($head, $needle)) {
-                // Prefer hero near the start of body content.
-                $pos = strpos($head, $needle);
-                if ($pos !== false && $pos < 400) {
-                    return true;
-                }
-            }
+        // Prefer matching an actual tag with a hero class (works even with a large leading <style>).
+        if (preg_match(
+            '/<(?:section|div|header)\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\b(?:skp-hero|ps-hero|svc-hero|sk-hero)\b[^"\']*\1/i',
+            $html
+        )) {
+            return true;
         }
 
-        return (bool) preg_match('/<(section|div|header)\b[^>]*class=("|\')[^"\']*\bhero\b/i', substr($probe, 0, 800));
+        // Generic: first landmark tag class contains "hero".
+        return (bool) preg_match(
+            '/<(?:section|div|header)\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bhero\b[^"\']*\1/i',
+            $html
+        );
     }
 }
