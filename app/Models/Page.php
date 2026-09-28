@@ -18,6 +18,11 @@ class Page extends Model
         'meta_description',
         'status',
         'is_deleted',
+        'hide_banner',
+    ];
+
+    protected $casts = [
+        'hide_banner' => 'boolean',
     ];
 
     public function scopeActive($query)
@@ -47,5 +52,55 @@ class Page extends Model
         $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $this->content)));
 
         return Str::limit($text, $limit);
+    }
+
+    /**
+     * Suppress default breadcrumb + auto H1 when flagged or when content
+     * already starts with a full hero block (like static service pages).
+     */
+    public function shouldHideBanner(): bool
+    {
+        if ((bool) $this->hide_banner) {
+            return true;
+        }
+
+        return $this->contentStartsWithHero();
+    }
+
+    public function contentStartsWithHero(): bool
+    {
+        $html = trim((string) $this->content);
+        if ($html === '') {
+            return false;
+        }
+
+        // Ignore leading <style>…</style> blocks used by designed CMS pages.
+        $withoutStyles = preg_replace('/^(?:\s*<style\b[^>]*>.*?<\/style>\s*)+/is', '', $html);
+        $probe = trim((string) $withoutStyles);
+
+        // First meaningful chunk (before too much noise).
+        $head = Str::lower(Str::limit($probe, 1200, ''));
+
+        $patterns = [
+            'skp-hero',
+            'ps-hero',
+            'svc-hero',
+            'class="hero',
+            "class='hero",
+            'class="sk-hero',
+            "class='sk-hero",
+        ];
+
+        foreach ($patterns as $needle) {
+            if (Str::contains($head, $needle)) {
+                // Prefer hero near the start of body content.
+                $pos = strpos($head, $needle);
+                if ($pos !== false && $pos < 400) {
+                    return true;
+                }
+            }
+        }
+
+        return (bool) preg_match('/<(section|div|header)\b[^>]*class=("|\')[^"\']*\bhero\b/i', substr($probe, 0, 800));
     }
 }

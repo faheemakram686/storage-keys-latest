@@ -223,7 +223,7 @@ server.tool(
 
 server.tool(
   "create_page",
-  "Create a DB CMS page. Defaults to draft (status=0). Slug must not collide with static routes (about-us, personal-storage, etc.).",
+  "Create a DB CMS page. Defaults to draft (status=0). Pass hide_banner=true for a full custom hero (also auto-detected when content starts with skp-hero/ps-hero/svc-hero).",
   {
     title: z.string().min(3).max(255),
     content: z.string().min(20),
@@ -231,13 +231,15 @@ server.tool(
     slug: z.string().optional(),
     meta_title: z.string().optional(),
     meta_description: z.string().optional(),
+    hide_banner: z.boolean().optional(),
   },
-  async ({ title, content, status, slug, meta_title, meta_description }) => {
+  async ({ title, content, status, slug, meta_title, meta_description, hide_banner }) => {
     const payload = { title, content };
     if (status === 0 || status === 1) payload.status = status;
     if (slug) payload.slug = slug;
     if (meta_title) payload.meta_title = meta_title;
     if (meta_description) payload.meta_description = meta_description;
+    if (hide_banner != null) payload.hide_banner = hide_banner;
     return ok(await apiRequest("/cms-pages", { method: "POST", body: JSON.stringify(payload) }));
   }
 );
@@ -254,8 +256,9 @@ server.tool(
     new_slug: z.string().optional(),
     meta_title: z.string().optional(),
     meta_description: z.string().optional(),
+    hide_banner: z.boolean().optional(),
   },
-  async ({ id, slug, title, content, status, new_slug, meta_title, meta_description }) => {
+  async ({ id, slug, title, content, status, new_slug, meta_title, meta_description, hide_banner }) => {
     const payload = {};
     if (title != null) payload.title = title;
     if (content != null) payload.content = content;
@@ -263,6 +266,7 @@ server.tool(
     if (new_slug) payload.slug = new_slug;
     if (meta_title != null) payload.meta_title = meta_title;
     if (meta_description != null) payload.meta_description = meta_description;
+    if (hide_banner != null) payload.hide_banner = hide_banner;
     return ok(
       await apiRequest(cmsPagePath(id, slug), {
         method: "PATCH",

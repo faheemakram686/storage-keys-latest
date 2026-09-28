@@ -280,7 +280,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_page',
-                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Slug must not collide with existing static routes (about-us, personal-storage, etc.).',
+                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Pass hide_banner=true for full custom hero (or auto-detected when content starts with a hero block).',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -290,6 +290,7 @@ class McpStreamController extends Controller
                         'slug' => ['type' => 'string'],
                         'meta_title' => ['type' => 'string'],
                         'meta_description' => ['type' => 'string'],
+                        'hide_banner' => ['type' => 'boolean', 'description' => 'Hide default breadcrumb+H1 so content can render its own full hero'],
                     ],
                     'required' => ['title', 'content'],
                 ],
@@ -308,6 +309,7 @@ class McpStreamController extends Controller
                         'new_slug' => ['type' => 'string'],
                         'meta_title' => ['type' => 'string'],
                         'meta_description' => ['type' => 'string'],
+                        'hide_banner' => ['type' => 'boolean'],
                     ],
                 ],
             ],
@@ -671,6 +673,9 @@ class McpStreamController extends Controller
                         $payload[$field] = $arguments[$field];
                     }
                 }
+                if (array_key_exists('hide_banner', $arguments)) {
+                    $payload['hide_banner'] = (bool) $arguments['hide_banner'];
+                }
 
                 return $this->fromResponse(app(McpPageController::class)->store($this->jsonRequest('POST', '/api/mcp/cms-pages', $payload)));
 
@@ -680,7 +685,7 @@ class McpStreamController extends Controller
                     return $this->toolError('Provide id or slug.');
                 }
                 $payload = [];
-                foreach (['title', 'content', 'status', 'meta_title', 'meta_description'] as $field) {
+                foreach (['title', 'content', 'status', 'meta_title', 'meta_description', 'hide_banner'] as $field) {
                     if (array_key_exists($field, $arguments)) {
                         $payload[$field] = $arguments[$field];
                     }

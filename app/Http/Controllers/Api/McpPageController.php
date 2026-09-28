@@ -57,6 +57,7 @@ class McpPageController extends Controller
             'slug' => 'nullable|string|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:512',
+            'hide_banner' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -95,6 +96,12 @@ class McpPageController extends Controller
         $page->is_deleted = 0;
         $page->meta_title = $request->input('meta_title');
         $page->meta_description = $request->input('meta_description');
+        if ($request->has('hide_banner')) {
+            $page->hide_banner = filter_var($request->input('hide_banner'), FILTER_VALIDATE_BOOLEAN);
+        } else {
+            // Auto-flag when content already ships a full hero (service-page style).
+            $page->hide_banner = (new Page(['content' => $page->content]))->contentStartsWithHero();
+        }
         $page->save();
 
         return response()->json([
@@ -118,6 +125,7 @@ class McpPageController extends Controller
             'slug' => 'nullable|string|max:255',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:512',
+            'hide_banner' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -156,6 +164,14 @@ class McpPageController extends Controller
         }
         if ($request->has('meta_description')) {
             $page->meta_description = $request->input('meta_description') ?: null;
+        }
+        if ($request->has('hide_banner')) {
+            $page->hide_banner = filter_var($request->input('hide_banner'), FILTER_VALIDATE_BOOLEAN);
+        } elseif ($request->has('content') && !$page->hide_banner) {
+            // If still using default banner mode, auto-enable when new content has a hero.
+            if ($page->contentStartsWithHero()) {
+                $page->hide_banner = true;
+            }
         }
 
         $page->save();
@@ -205,6 +221,8 @@ class McpPageController extends Controller
             'url' => url('/' . $page->slug),
             'meta_title' => $page->meta_title,
             'meta_description' => $page->meta_description,
+            'hide_banner' => (bool) $page->hide_banner,
+            'banner_hidden' => $page->shouldHideBanner(),
             'created_at' => optional($page->created_at)->toDateTimeString(),
             'updated_at' => optional($page->updated_at)->toDateTimeString(),
         ];
