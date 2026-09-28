@@ -254,12 +254,79 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'get_pages',
-                'description' => 'List known static marketing page URLs.',
+                'description' => 'List known static marketing page URLs (Blade templates — not editable via MCP).',
                 'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
             ],
             [
+                'name' => 'list_pages',
+                'description' => 'List DB CMS pages (editable). Does not change static Blade pages.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 50],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'get_page',
+                'description' => 'Get one DB CMS page by id or slug (includes content).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'create_page',
+                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Slug must not collide with existing static routes (about-us, personal-storage, etc.).',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'title' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 255],
+                        'content' => ['type' => 'string', 'minLength' => 20, 'description' => 'HTML body'],
+                        'status' => ['type' => 'integer', 'enum' => [0, 1]],
+                        'slug' => ['type' => 'string'],
+                        'meta_title' => ['type' => 'string'],
+                        'meta_description' => ['type' => 'string'],
+                    ],
+                    'required' => ['title', 'content'],
+                ],
+            ],
+            [
+                'name' => 'update_page',
+                'description' => 'Update a DB CMS page by id or slug. Only send fields to change. Cannot use reserved static slugs.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'title' => ['type' => 'string'],
+                        'content' => ['type' => 'string'],
+                        'status' => ['type' => 'integer', 'enum' => [0, 1]],
+                        'new_slug' => ['type' => 'string'],
+                        'meta_title' => ['type' => 'string'],
+                        'meta_description' => ['type' => 'string'],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'delete_page',
+                'description' => 'Soft-delete a DB CMS page (is_deleted=1). Requires confirm=true. Static Blade pages are never deleted.',
+                'inputSchema' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => ['type' => 'integer'],
+                        'slug' => ['type' => 'string'],
+                        'confirm' => ['type' => 'boolean'],
+                    ],
+                    'required' => ['confirm'],
+                ],
+            ],
+            [
                 'name' => 'get_sitemap',
-                'description' => 'JSON sitemap entries (static pages + blogs) plus sitemap.xml URL.',
+                'description' => 'JSON sitemap entries (static pages + blogs + CMS pages) plus sitemap.xml URL.',
                 'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
             ],
             [
@@ -577,6 +644,62 @@ class McpStreamController extends Controller
 
             case 'get_pages':
                 return $this->fromResponse($site->pages());
+
+            case 'list_pages':
+                return $this->fromResponse(app(McpPageController::class)->index($this->jsonRequest('GET', '/api/mcp/cms-pages', [
+                    'limit' => $arguments['limit'] ?? 20,
+                ])));
+
+            case 'get_page':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse(app(McpPageController::class)->show($this->jsonRequest('GET', '/api/mcp/cms-pages/' . $key), $key));
+
+            case 'create_page':
+                $payload = [
+                    'title' => $arguments['title'] ?? '',
+                    'content' => $arguments['content'] ?? '',
+                ];
+                if (array_key_exists('status', $arguments) && in_array($arguments['status'], [0, 1, '0', '1'], true)) {
+                    $payload['status'] = (int) $arguments['status'];
+                }
+                foreach (['slug', 'meta_title', 'meta_description'] as $field) {
+                    if (!empty($arguments[$field]) && is_string($arguments[$field])) {
+                        $payload[$field] = $arguments[$field];
+                    }
+                }
+
+                return $this->fromResponse(app(McpPageController::class)->store($this->jsonRequest('POST', '/api/mcp/cms-pages', $payload)));
+
+            case 'update_page':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+                $payload = [];
+                foreach (['title', 'content', 'status', 'meta_title', 'meta_description'] as $field) {
+                    if (array_key_exists($field, $arguments)) {
+                        $payload[$field] = $arguments[$field];
+                    }
+                }
+                if (!empty($arguments['new_slug'])) {
+                    $payload['slug'] = $arguments['new_slug'];
+                }
+
+                return $this->fromResponse(app(McpPageController::class)->update($this->jsonRequest('PATCH', '/api/mcp/cms-pages/' . $key, $payload), $key));
+
+            case 'delete_page':
+                $key = $this->blogKey($arguments);
+                if ($key === null) {
+                    return $this->toolError('Provide id or slug.');
+                }
+
+                return $this->fromResponse(app(McpPageController::class)->destroy($this->jsonRequest('DELETE', '/api/mcp/cms-pages/' . $key, [
+                    'confirm' => $arguments['confirm'] ?? false,
+                ]), $key));
 
             case 'get_sitemap':
                 return $this->fromResponse($site->sitemap());

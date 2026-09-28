@@ -20,6 +20,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\Api\McpBlogController;
 use App\Http\Controllers\Api\McpStreamController;
 use App\Http\Controllers\Api\McpSiteController;
+use App\Http\Controllers\Api\McpPageController;
 use App\Http\Controllers\Api\McpTaxonomyController;
 use App\Http\Controllers\Api\McpRedirectController;
 use App\Http\Controllers\Api\McpAuditController;
@@ -69,6 +70,13 @@ Route::middleware(['mcp.blog', 'throttle:60,1'])->group(function () {
         Route::get('/sitemap', [McpSiteController::class, 'sitemap']);
         Route::get('/media', [McpSiteController::class, 'listMedia']);
         Route::post('/media', [McpSiteController::class, 'uploadMedia']);
+
+        // DB CMS pages (additive). Keep GET /pages as static get_pages tool.
+        Route::get('/cms-pages', [McpPageController::class, 'index']);
+        Route::post('/cms-pages', [McpPageController::class, 'store']);
+        Route::get('/cms-pages/{idOrSlug}', [McpPageController::class, 'show']);
+        Route::match(['PUT', 'PATCH'], '/cms-pages/{idOrSlug}', [McpPageController::class, 'update']);
+        Route::delete('/cms-pages/{idOrSlug}', [McpPageController::class, 'destroy']);
 
         Route::get('/categories', [McpTaxonomyController::class, 'categories']);
         Route::post('/categories', [McpTaxonomyController::class, 'createCategory']);

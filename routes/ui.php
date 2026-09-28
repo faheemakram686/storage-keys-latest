@@ -116,6 +116,13 @@ Route::get("/test", function(){
     Route::any('contact-savepassword', [ContactController::class, 'savePassword'])
         ->name('password.save');
 
+// CMS DB pages — last so every existing static/app URL keeps priority unchanged.
+Route::middleware(['set.guard'])->group(function () {
+    Route::get('/{slug}', [\App\Http\Controllers\Frontend\CmsPageController::class, 'show'])
+        ->where('slug', '^[a-z0-9]+(?:-[a-z0-9]+)*$')
+        ->name('cms.page');
+});
+
 
 
 

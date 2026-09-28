@@ -64,7 +64,7 @@ function blogPath(id, slug) {
 
 const server = new McpServer({
   name: "storagekeys-blog",
-  version: "1.3.0",
+  version: "1.4.0",
 });
 
 server.tool(
@@ -189,8 +189,104 @@ server.tool("get_site_info", "Base URL, timezone, permalink pattern, sitemap URL
   ok(await apiRequest("/site-info", { method: "GET" }))
 );
 
-server.tool("get_pages", "List known static marketing page URLs.", {}, async () =>
+server.tool("get_pages", "List known static marketing page URLs (Blade — not editable via MCP).", {}, async () =>
   ok(await apiRequest("/pages", { method: "GET" }))
+);
+
+function cmsPagePath(id, slug) {
+  if (id != null) return `/cms-pages/${id}`;
+  if (slug) return `/cms-pages/${encodeURIComponent(slug)}`;
+  throw new Error("Provide id or slug");
+}
+
+server.tool(
+  "list_pages",
+  "List DB CMS pages (editable). Static Blade pages are unchanged.",
+  {
+    limit: z.number().int().min(1).max(50).optional(),
+  },
+  async ({ limit }) => {
+    const qs = limit ? `?limit=${limit}` : "";
+    return ok(await apiRequest(`/cms-pages${qs}`, { method: "GET" }));
+  }
+);
+
+server.tool(
+  "get_page",
+  "Get one DB CMS page by id or slug (full content).",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+  },
+  async ({ id, slug }) => ok(await apiRequest(cmsPagePath(id, slug), { method: "GET" }))
+);
+
+server.tool(
+  "create_page",
+  "Create a DB CMS page. Defaults to draft (status=0). Slug must not collide with static routes (about-us, personal-storage, etc.).",
+  {
+    title: z.string().min(3).max(255),
+    content: z.string().min(20),
+    status: z.union([z.literal(0), z.literal(1)]).optional(),
+    slug: z.string().optional(),
+    meta_title: z.string().optional(),
+    meta_description: z.string().optional(),
+  },
+  async ({ title, content, status, slug, meta_title, meta_description }) => {
+    const payload = { title, content };
+    if (status === 0 || status === 1) payload.status = status;
+    if (slug) payload.slug = slug;
+    if (meta_title) payload.meta_title = meta_title;
+    if (meta_description) payload.meta_description = meta_description;
+    return ok(await apiRequest("/cms-pages", { method: "POST", body: JSON.stringify(payload) }));
+  }
+);
+
+server.tool(
+  "update_page",
+  "Update a DB CMS page by id or slug. Only send fields to change.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+    title: z.string().optional(),
+    content: z.string().optional(),
+    status: z.union([z.literal(0), z.literal(1)]).optional(),
+    new_slug: z.string().optional(),
+    meta_title: z.string().optional(),
+    meta_description: z.string().optional(),
+  },
+  async ({ id, slug, title, content, status, new_slug, meta_title, meta_description }) => {
+    const payload = {};
+    if (title != null) payload.title = title;
+    if (content != null) payload.content = content;
+    if (status === 0 || status === 1) payload.status = status;
+    if (new_slug) payload.slug = new_slug;
+    if (meta_title != null) payload.meta_title = meta_title;
+    if (meta_description != null) payload.meta_description = meta_description;
+    return ok(
+      await apiRequest(cmsPagePath(id, slug), {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      })
+    );
+  }
+);
+
+server.tool(
+  "delete_page",
+  "Soft-delete a DB CMS page. Requires confirm=true. Never deletes static Blade pages.",
+  {
+    id: z.number().int().optional(),
+    slug: z.string().optional(),
+    confirm: z.boolean(),
+  },
+  async ({ id, slug, confirm }) =>
+    ok(
+      await apiRequest(`${cmsPagePath(id, slug)}?confirm=${confirm ? "true" : "false"}`, {
+        method: "DELETE",
+        body: JSON.stringify({ confirm }),
+      })
+    )
 );
 
 server.tool("get_sitemap", "JSON sitemap entries plus sitemap.xml URL.", {}, async () =>

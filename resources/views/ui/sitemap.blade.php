@@ -11,4 +11,10 @@
         <lastmod>{{ optional($blog->updated_at ?? $blog->created_at)->toAtomString() }}</lastmod>
     </url>
 @endforeach
+@foreach (($cmsPages ?? []) as $cmsPage)
+    <url>
+        <loc>{{ $base }}/{{ $cmsPage->slug }}</loc>
+        <lastmod>{{ optional($cmsPage->updated_at ?? $cmsPage->created_at)->toAtomString() }}</lastmod>
+    </url>
+@endforeach
 </urlset>

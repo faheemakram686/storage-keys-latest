@@ -52,8 +52,13 @@ class SitemapController extends Controller
             ->orderByDesc('updated_at')
             ->get(['slug', 'updated_at', 'created_at']);
 
+        $cmsPages = \App\Models\Page::query()
+            ->published()
+            ->orderByDesc('updated_at')
+            ->get(['slug', 'updated_at', 'created_at']);
+
         return response()
-            ->view('ui.sitemap', compact('base', 'staticPages', 'blogs'))
+            ->view('ui.sitemap', compact('base', 'staticPages', 'blogs', 'cmsPages'))
             ->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 }

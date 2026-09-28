@@ -85,6 +85,20 @@ class McpSiteController extends Controller
             ];
         }
 
+        $cmsPages = \App\Models\Page::query()
+            ->published()
+            ->orderByDesc('updated_at')
+            ->get(['slug', 'updated_at', 'created_at']);
+
+        foreach ($cmsPages as $cmsPage) {
+            $entries[] = [
+                'loc' => url('/' . $cmsPage->slug),
+                'type' => 'cms_page',
+                'slug' => $cmsPage->slug,
+                'lastmod' => optional($cmsPage->updated_at ?? $cmsPage->created_at)->toAtomString(),
+            ];
+        }
+
         return response()->json([
             'success' => true,
             'sitemap_xml_url' => url('/sitemap.xml'),
