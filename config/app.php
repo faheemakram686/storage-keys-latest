@@ -89,7 +89,7 @@ return [
     |
     */
 
-    'canonical_url' => env('CANONICAL_URL', 'http://storagekeys.com'),
+    'canonical_url' => env('CANONICAL_URL', 'https://storagekeys.com'),
 
     /*
     |--------------------------------------------------------------------------
