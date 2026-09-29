@@ -161,7 +161,8 @@ class UserUpdateController extends Controller
 
             return response()->json(array_merge([
                 'status' => true,
-                'message' => $payload,
+                'message' => 'Profile updated successfully',
+                'data' => $payload,
             ], $payload), 200);
         } catch (\Throwable $th) {
             return response()->json([
