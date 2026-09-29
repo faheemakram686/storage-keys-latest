@@ -18,9 +18,8 @@
 
     $canonicalPath = trim(request()->getPathInfo(), '/');
     $canonicalUrl = $canonicalBase . ($canonicalPath === '' ? '/' : '/' . $canonicalPath);
-@endphp
-@hasSection('canonical')
-    @php
+
+    if (!empty($__env) && $__env->hasSection('canonical')) {
         $override = trim((string) $__env->yieldContent('canonical'));
         if ($override !== '') {
             if (str_starts_with($override, 'http://')) {
@@ -30,6 +29,6 @@
             }
             $canonicalUrl = $override;
         }
-    @endphp
-@endhasSection
+    }
+@endphp
 <link rel="canonical" href="{{ $canonicalUrl }}">
