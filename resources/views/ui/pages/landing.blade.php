@@ -82,7 +82,7 @@
                             'Moving' => 'Moving / Temporary Storage',
                         ],
                     ])
-                </div>
+                        </div>
             </div>
         </div>
     </section>
@@ -461,7 +461,7 @@
                             referrerpolicy="no-referrer-when-downgrade"
                             allowfullscreen
                         ></iframe>
-                    </div>
+            </div>
                     <div class="sk-loc-body">
                         <div class="sk-loc-top">
                             <span class="sk-loc-badge"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Dubai</span>
@@ -478,8 +478,8 @@
                         <div class="sk-loc-actions">
                             <a href="https://maps.app.goo.gl/cZhb4mLPGVsGcooA9" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
                             <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
-                        </div>
                     </div>
+                </div>
                 </article>
 
                 <article class="sk-loc-tile">
@@ -491,7 +491,7 @@
                             referrerpolicy="no-referrer-when-downgrade"
                             allowfullscreen
                         ></iframe>
-                    </div>
+                        </div>
                     <div class="sk-loc-body">
                         <div class="sk-loc-top">
                             <span class="sk-loc-badge"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Sharjah</span>
@@ -504,12 +504,12 @@
                             <span><i class="fas fa-clock" aria-hidden="true"></i> 24/7 access</span>
                             <span><i class="fas fa-video" aria-hidden="true"></i> CCTV</span>
                             <span><i class="fas fa-warehouse" aria-hidden="true"></i> Office &amp; storage</span>
-                        </div>
+                    </div>
                         <div class="sk-loc-actions">
                             <a href="https://maps.app.goo.gl/vvWVRRKCtBnups2k6" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
                             <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
+                </div>
                         </div>
-                    </div>
                 </article>
             </div>
         </div>
@@ -732,9 +732,9 @@
                                         <div class="sk-grev-who">
                                             <div class="sk-grev-name">{{ $review['name'] }}</div>
                                             <div class="sk-grev-meta">{{ $review['meta'] }}</div>
-                                        </div>
+                    </div>
                                         <i class="fab fa-google sk-grev-g" aria-hidden="true"></i>
-                                    </div>
+                </div>
                                     <div class="sk-grev-rating">
                                         <span class="sk-grev-stars" role="img" aria-label="{{ $review['stars'] }} out of 5 stars">
                                             @for ($s = 0; $s < $review['stars']; $s++)
@@ -742,19 +742,19 @@
                                             @endfor
                                         </span>
                                         <span class="sk-grev-when">{{ $review['when'] }}</span>
-                                    </div>
+                    </div>
                                     <p class="sk-grev-text" data-full="{{ e($review['text']) }}">{{ $review['text'] }}</p>
                                     <button type="button" class="sk-grev-more" hidden>More</button>
                                     @if (!empty($review['owner']))
                                         <div class="sk-grev-owner">
                                             <div class="sk-grev-owner-title">Response from the owner <span>{{ $review['owner_when'] }}</span></div>
                                             <p>{{ $review['owner'] }}</p>
-                                        </div>
+                </div>
                                     @endif
                                 </article>
-                            </div>
-                        @endforeach
                     </div>
+                        @endforeach
+                </div>
                 </div>
                 <button type="button" class="sk-rev-btn sk-rev-next" aria-label="Next reviews">
                     <i class="fas fa-chevron-right" aria-hidden="true"></i>
@@ -772,7 +772,7 @@
                 <div class="sk-logos-grid">
                     <div class="sk-logo-item">
                         <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-1.png') }}" alt="Day Exchange" width="280" height="96" loading="lazy" decoding="async">
-                    </div>
+                </div>
                     <div class="sk-logo-item">
                         <img src="{{ asset('sk-assets/assets/images/frontend/logo/logo-2.png') }}" alt="RAKBANK" width="280" height="96" loading="lazy" decoding="async">
                     </div>
@@ -816,7 +816,7 @@
                             @if($hasDisc)
                                 <span class="sh-badge">Sale</span>
                             @endif
-                        </div>
+                </div>
                         <div class="sh-card-body">
                             <p class="sh-product-name">{{ $product->p_name }}</p>
                             <div class="sh-price">
@@ -824,7 +824,7 @@
                                 @if($hasDisc)
                                     <del>AED {{ number_format($product->sell_price, 2) }}</del>
                                 @endif
-                            </div>
+                </div>
                             <form action="{{ route('cart.store') }}" method="POST" id="add_cart_{{ $product->id }}">
                                 @csrf
                                 <input type="hidden" value="{{ $product->id }}" name="id">

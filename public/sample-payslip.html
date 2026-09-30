@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Payslip</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 12px;
+            font-family: DejaVu Sans, Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            color: #111;
+            line-height: 1.35;
+        }
+        .sheet {
+            border: 1.5px solid #000;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .sheet td { vertical-align: top; }
+        .pad { padding: 10px 12px; }
+        .center { text-align: center; }
+        .right { text-align: right; }
+        .bold { font-weight: bold; }
+        .muted { color: #333; }
+        .header-logo {
+            width: 72px;
+            text-align: left;
+            vertical-align: middle !important;
+        }
+        .header-logo img {
+            max-height: 58px;
+            max-width: 70px;
+        }
+        .company-name {
+            font-size: 15px;
+            font-weight: bold;
+            margin: 0 0 4px;
+        }
+        .company-address {
+            font-size: 10px;
+            margin: 0;
+        }
+        .month-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 10px 0 0;
+        }
+        .divider {
+            border-top: 1px solid #000;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            width: 50%;
+            padding: 8px 12px;
+            vertical-align: top;
+        }
+        .info-table .col-right {
+            border-left: 1px solid #000;
+        }
+        .kv {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .kv td {
+            padding: 3px 0;
+            font-size: 11px;
+        }
+        .kv .label { width: 48%; text-align: left; }
+        .kv .value { width: 52%; text-align: right; font-weight: normal; }
+        .pay-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .pay-table > tbody > tr > td {
+            width: 50%;
+            padding: 8px 10px 12px;
+            vertical-align: top;
+        }
+        .pay-table .col-right {
+            border-left: 1px solid #000;
+        }
+        .inner {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .inner th {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 4px 8px;
+            border-bottom: 1px solid #000;
+        }
+        .inner td {
+            font-size: 11px;
+            padding: 4px;
+            vertical-align: top;
+        }
+        .inner .totals td {
+            font-weight: bold;
+            padding-top: 10px;
+            border-top: 1px solid #000;
+        }
+        .net-wrap {
+            padding: 10px 12px 12px;
+        }
+        .net-label {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .net-amount {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            margin: 0;
+        }
+        .net-words {
+            font-style: italic;
+            font-size: 10px;
+            margin: 6px 0 0;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 10px;
+            color: #222;
+        }
+        .currency-symbol {
+            font-family: DejaVu Sans, sans-serif !important;
+        }
+    </style>
+</head>
+<body>
+<table class="sheet">
+    <tr>
+        <td class="pad">
+            <table style="width:100%; border-collapse:collapse;">
+                <tr>
+                    <td class="header-logo">
+                        <img src="http://localhost/images/logo/default-logo.png" alt="logo">
+                    </td>
+                    <td class="center" style="vertical-align:middle;">
+                        <p class="company-name">Mufateeh Al Makhazan Stores Management LLC</p>
+                                                    <p class="company-address">Plot No 4202, Emirates Industrial City, Near Al Sajja Police Station, Sharjah, United Arab Emirates, 71161.</p>
+                                                <p class="month-title">Payslip for the month of Jun 2026</p>
+                    </td>
+                    <td style="width:72px;"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="divider">
+            <table class="info-table">
+                <tr>
+                    <td>
+                        <table class="kv">
+                            <tr>
+                                <td class="label">Employee Name[Employee No]</td>
+                                <td class="value">
+                                    John Doe [EMP-1]                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">Joining Date</td>
+                                <td class="value">14 Oct 2024</td>
+                            </tr>
+                            <tr>
+                                <td class="label">Designation</td>
+                                <td class="value">Director</td>
+                            </tr>
+                            <tr>
+                                <td class="label">Location</td>
+                                <td class="value">Dubai</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="col-right">
+                        <table class="kv">
+                            <tr>
+                                <td class="label">Bank</td>
+                                <td class="value">Mashreqbank</td>
+                            </tr>
+                            <tr>
+                                <td class="label">IBAN Number</td>
+                                <td class="value">AE740330000019101556692</td>
+                            </tr>
+                            <tr>
+                                <td class="label">No of Working Days</td>
+                                <td class="value">30</td>
+                            </tr>
+                            <tr>
+                                <td class="label">Unpaid Leave Days</td>
+                                <td class="value">0</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="divider">
+            <table class="pay-table">
+                <tr>
+                    <td>
+                        <table class="inner">
+                            <thead>
+                            <tr>
+                                <th style="width:46%; text-align:left;">Earnings</th>
+                                <th style="width:27%; text-align:right;">Master</th>
+                                <th style="width:27%; text-align:right;">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                                                                            <tr>
+                                    <td>BASIC</td>
+                                    <td class="right currency-symbol">1000</td>
+                                    <td class="right currency-symbol">1000</td>
+                                </tr>
+                                                                                            <tr>
+                                    <td>HOUSING ALLOWANCES</td>
+                                    <td class="right currency-symbol">200</td>
+                                    <td class="right currency-symbol">200</td>
+                                </tr>
+                                                                                            <tr>
+                                    <td>TRANSPORT</td>
+                                    <td class="right currency-symbol">500</td>
+                                    <td class="right currency-symbol">500</td>
+                                </tr>
+                                                                                            <tr>
+                                    <td>OTHER ALLOWANCE</td>
+                                    <td class="right currency-symbol">800</td>
+                                    <td class="right currency-symbol">800</td>
+                                </tr>
+                                                        <tr class="totals">
+                                <td>Total Earnings</td>
+                                <td class="right currency-symbol">2500</td>
+                                <td class="right currency-symbol">2500</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="col-right">
+                        <table class="inner">
+                            <thead>
+                            <tr>
+                                <th style="width:65%; text-align:left;">Deductions</th>
+                                <th style="width:35%; text-align:right;">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                                                                            <tr>
+                                    <td>TRAFFIC FINE DEDUCTION</td>
+                                    <td class="right currency-symbol">210</td>
+                                </tr>
+                                                                                            <tr>
+                                    <td></td>
+                                    <td class="right currency-symbol"></td>
+                                </tr>
+                                                                                            <tr>
+                                    <td></td>
+                                    <td class="right currency-symbol"></td>
+                                </tr>
+                                                                                            <tr>
+                                    <td></td>
+                                    <td class="right currency-symbol"></td>
+                                </tr>
+                                                        <tr class="totals">
+                                <td>Total Deductions</td>
+                                <td class="right currency-symbol">210</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="divider net-wrap">
+            <table style="width:100%; border-collapse:collapse;">
+                <tr>
+                    <td style="width:55%;">
+                        <p class="net-label">Net Pay for the Month</p>
+                        <p class="net-words">(AED Two Thousand Two Hundred Ninety Only)</p>
+                    </td>
+                    <td style="width:45%; vertical-align:middle;">
+                        <p class="net-amount currency-symbol">2290</p>
+                    </td>
+                </tr>
+            </table>
+                    </td>
+    </tr>
+</table>
+
+<p class="footer-note">This is a system generated payslip and does not require signature.</p>
+</body>
+</html>

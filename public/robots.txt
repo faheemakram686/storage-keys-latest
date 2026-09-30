@@ -7,7 +7,7 @@ Disallow: /admin/
 Disallow: /customer
 Disallow: /customer/
 Disallow: /users
-Disallow: /app
+Disallow: /app/
 Disallow: /cart
 Disallow: /checkout
 Disallow: /thank-you

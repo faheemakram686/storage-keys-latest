@@ -1,4 +1,4 @@
-﻿@extends('ui.layouts.frontend')
+@extends('ui.layouts.frontend')
 @section('title', '| Storage-Options')
 @section('metaTitle', 'Storage Options | Storage Keys')
 @section('metaDescription', 'Personal, business, warehouse, climate-controlled, luggage and car storage in Sharjah and Dubai, plus professional movers and packers.')
