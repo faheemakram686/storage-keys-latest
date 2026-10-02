@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    @include('ui.includes.google-analytics')
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@hasSection('metaTitle')@yield('metaTitle')@else Thank You | {{ config('app.name') }}@endif</title>
     <meta name="description" content="@yield('metaDescription')">
@@ -11,7 +12,6 @@
     <link rel="shortcut icon" href="{{ asset('sk-assets/assets/images/frontend/favicon.png') }}" type="image/x-icon" />
     @include('ui.includes.header-assets')
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/thank-you.css') }}">
-    @include('ui.includes.google-analytics')
 </head>
 <body class="sk-thanks-body">
     @yield('content')
