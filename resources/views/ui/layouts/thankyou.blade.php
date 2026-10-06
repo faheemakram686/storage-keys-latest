@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    @include('ui.includes.google-tag-manager')
     @include('ui.includes.google-analytics')
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@hasSection('metaTitle')@yield('metaTitle')@else Thank You | {{ config('app.name') }}@endif</title>
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/thank-you.css') }}">
 </head>
 <body class="sk-thanks-body">
+    @include('ui.includes.google-tag-manager-noscript')
     @yield('content')
     <footer class="sk-thanks-foot">
         <div class="sk-thanks-foot-in">

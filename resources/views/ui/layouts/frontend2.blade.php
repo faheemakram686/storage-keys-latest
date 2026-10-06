@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    @include('ui.includes.google-tag-manager')
     @include('ui.includes.google-analytics')
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@hasSection('metaTitle')@yield('metaTitle')@else{{config('app.name')}} @yield('title')@endif</title>
@@ -29,6 +30,7 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
 </head>
 <body>
+    @include('ui.includes.google-tag-manager-noscript')
     @include('ui.includes.header2')
 @yield('content')
 @include('ui.includes.footer')

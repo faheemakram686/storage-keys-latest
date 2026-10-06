@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    @include('ui.includes.google-tag-manager')
     @include('ui.includes.google-analytics')
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
@@ -41,6 +42,7 @@
     @yield('headExtra')
 </head>
 <body>
+    @include('ui.includes.google-tag-manager-noscript')
     @include('ui.includes.header')
     @yield('content')
     @include('ui.includes.footer')
