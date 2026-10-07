@@ -31,7 +31,7 @@
     } elseif ($path === 'vehicle-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'vehicle-storage.css';
-    } elseif ($path === 'long-term-storage') {
+    } elseif ($path === 'long-term-storage' || $path === 'office-storage' || $path === 'art-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'long-term-storage.css';
     } elseif ($path === 'about-us') {

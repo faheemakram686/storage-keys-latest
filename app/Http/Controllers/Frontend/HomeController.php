@@ -218,6 +218,16 @@ class HomeController extends Controller
     {
         return view('ui.pages.long-term-storage');
     }
+
+    public function officeStorage()
+    {
+        return view('ui.pages.office-storage');
+    }
+
+    public function artStorage()
+    {
+        return view('ui.pages.art-storage');
+    }
     public function bookingReservation($id)
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();
