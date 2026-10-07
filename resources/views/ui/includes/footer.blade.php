@@ -36,7 +36,7 @@
           <a href="{{ url('/contact-us') }}">Contact Us</a>
         </div>
       </div>
-      <div class="pv-foot-col">
+      <div class="pv-foot-col pv-foot-services">
         <span class="h5">Our Services</span>
         <div class="pv-foot-links">
           <a href="{{ url('/personal-storage') }}">Personal Storage</a>
