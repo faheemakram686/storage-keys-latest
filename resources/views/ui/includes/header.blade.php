@@ -42,23 +42,60 @@
     <nav class="pv-nav">
       <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ url('/about-us') }}" class="{{ request()->is('about-us') ? 'active' : '' }}">About Us</a>
-      <div class="pv-has-sub">
-        <a href="{{ url('/storage-options') }}" class="{{ request()->is('storage-options', 'personal-storage', 'furniture-storage', 'box-storage', 'appliance-storage', 'residential-storage', 'business-storage', 'warehouse-storage', 'climate-controlled-storage', 'moving-services', 'luggage-storage', 'car-storage', 'short-term-storage', 'vehicle-storage', 'long-term-storage', 'office-storage', 'art-storage') ? 'active' : '' }}">Storage Options</a>
-        <div class="pv-sub">
-          <a href="{{ url('/personal-storage') }}" class="{{ request()->is('personal-storage') ? 'active' : '' }}">Personal Storage</a>
-          <a href="{{ url('/residential-storage') }}" class="{{ request()->is('residential-storage') ? 'active' : '' }}">Residential Storage</a>
-          <a href="{{ url('/furniture-storage') }}" class="{{ request()->is('furniture-storage') ? 'active' : '' }}">Furniture Storage</a>
-          <a href="{{ url('/box-storage') }}" class="{{ request()->is('box-storage') ? 'active' : '' }}">Box Storage</a>
-          <a href="{{ url('/appliance-storage') }}" class="{{ request()->is('appliance-storage') ? 'active' : '' }}">Appliance Storage</a>
-          <a href="{{ url('/business-storage') }}" class="{{ request()->is('business-storage') ? 'active' : '' }}">Business Storage</a>
-          <a href="{{ url('/warehouse-storage') }}" class="{{ request()->is('warehouse-storage') ? 'active' : '' }}">Warehouse Storage</a>
-          <a href="{{ url('/climate-controlled-storage') }}" class="{{ request()->is('climate-controlled-storage') ? 'active' : '' }}">Climate Controlled Storage</a>
-          <a href="{{ url('/moving-services') }}" class="{{ request()->is('moving-services') ? 'active' : '' }}">Moving Services</a>
-          <a href="{{ url('/luggage-storage') }}" class="{{ request()->is('luggage-storage') ? 'active' : '' }}">Luggage Storage</a>
-          <a href="{{ url('/car-storage') }}" class="{{ request()->is('car-storage') ? 'active' : '' }}">Car Storage</a>
-          <a href="{{ url('/short-term-storage') }}" class="{{ request()->is('short-term-storage') ? 'active' : '' }}">Short Term Storage</a>
-          <a href="{{ url('/vehicle-storage') }}" class="{{ request()->is('vehicle-storage') ? 'active' : '' }}">Vehicle Storage</a>
-          <a href="{{ url('/long-term-storage') }}" class="{{ request()->is('long-term-storage') ? 'active' : '' }}">Long Term Storage</a>
+      @php
+        $megaGroups = [
+          ['title' => 'Personal & Home', 'icon' => 'fa-home', 'links' => [
+            ['personal-storage', 'Personal Storage', 'fa-user'],
+            ['residential-storage', 'Residential Storage', 'fa-building'],
+            ['furniture-storage', 'Furniture Storage', 'fa-couch'],
+            ['box-storage', 'Box Storage', 'fa-box'],
+            ['appliance-storage', 'Appliance Storage', 'fa-blender'],
+            ['art-storage', 'Art Storage', 'fa-palette'],
+          ]],
+          ['title' => 'Business & Industry', 'icon' => 'fa-briefcase', 'links' => [
+            ['business-storage', 'Business Storage', 'fa-briefcase'],
+            ['warehouse-storage', 'Warehouse Storage', 'fa-warehouse'],
+            ['office-storage', 'Office Storage', 'fa-chair'],
+            ['equipment-storage', 'Equipment Storage', 'fa-wrench'],
+            ['construction-storage', 'Construction Storage', 'fa-hammer'],
+            ['pharmaceutical-storage', 'Pharmaceutical Storage', 'fa-pills'],
+          ]],
+          ['title' => 'Vehicles & Duration', 'icon' => 'fa-car', 'links' => [
+            ['car-storage', 'Car Storage', 'fa-car'],
+            ['vehicle-storage', 'Vehicle Storage', 'fa-truck-pickup'],
+            ['boat-storage', 'Boat & Yacht Storage', 'fa-ship'],
+            ['short-term-storage', 'Short Term Storage', 'fa-hourglass-half'],
+            ['long-term-storage', 'Long Term Storage', 'fa-calendar-alt'],
+          ]],
+          ['title' => 'Services', 'icon' => 'fa-concierge-bell', 'links' => [
+            ['climate-controlled-storage', 'Climate Controlled Storage', 'fa-snowflake'],
+            ['moving-services', 'Moving Services', 'fa-truck-moving'],
+            ['luggage-storage', 'Luggage Storage', 'fa-suitcase-rolling'],
+          ]],
+        ];
+        $megaSlugs = ['storage-options'];
+        foreach ($megaGroups as $g) { foreach ($g['links'] as $l) { $megaSlugs[] = $l[0]; } }
+      @endphp
+      <div class="pv-has-sub pv-has-mega">
+        <a href="{{ url('/storage-options') }}" class="{{ request()->is(...$megaSlugs) ? 'active' : '' }}">Storage Options</a>
+        <div class="pv-sub pv-mega">
+          <div class="pv-mega-cols">
+            @foreach($megaGroups as $group)
+              <div class="pv-mega-col">
+                <div class="pv-mega-head"><i class="fas {{ $group['icon'] }}" aria-hidden="true"></i> {{ $group['title'] }}</div>
+                @foreach($group['links'] as [$slug, $label, $icon])
+                  <a href="{{ url('/' . $slug) }}" class="{{ request()->is($slug) ? 'active' : '' }}"><i class="fas {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span></a>
+                @endforeach
+              </div>
+            @endforeach
+          </div>
+          <div class="pv-mega-foot">
+            <span class="pv-mega-note"><i class="fas fa-shield-alt" aria-hidden="true"></i> Secure, climate-controlled storage across Dubai &amp; Sharjah</span>
+            <span class="pv-mega-actions">
+              <a href="{{ url('/storage-options') }}" class="pv-mega-all">View all options <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <a href="{{ url('/contact-us') }}" class="pv-mega-cta">Get a Free Quote</a>
+            </span>
+          </div>
         </div>
       </div>
       <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>

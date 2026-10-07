@@ -47,6 +47,10 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/long-term-storage', [HomeController::class, 'longTermStorage'])->name('longTermStorage');
     Route::get('/office-storage', [HomeController::class, 'officeStorage'])->name('officeStorage');
     Route::get('/art-storage', [HomeController::class, 'artStorage'])->name('artStorage');
+    Route::get('/equipment-storage', [HomeController::class, 'equipmentStorage'])->name('equipmentStorage');
+    Route::get('/construction-storage', [HomeController::class, 'constructionStorage'])->name('constructionStorage');
+    Route::get('/boat-storage', [HomeController::class, 'boatStorage'])->name('boatStorage');
+    Route::get('/pharmaceutical-storage', [HomeController::class, 'pharmaceuticalStorage'])->name('pharmaceuticalStorage');
     Route::get('/product-details', [HomeController::class, 'productDetails'])->name('productDetails');
     Route::any('/product-detail', [HomeController::class, 'productDetail'])->name('productDetails');
     Route::get('/booking', [HomeController::class, 'booking'])->name('booking');

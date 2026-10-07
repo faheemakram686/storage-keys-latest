@@ -31,7 +31,7 @@
     } elseif ($path === 'vehicle-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'vehicle-storage.css';
-    } elseif ($path === 'long-term-storage' || $path === 'office-storage' || $path === 'art-storage') {
+    } elseif ($path === 'long-term-storage' || $path === 'office-storage' || $path === 'art-storage' || $path === 'equipment-storage' || $path === 'construction-storage' || $path === 'boat-storage' || $path === 'pharmaceutical-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'long-term-storage.css';
     } elseif ($path === 'about-us') {

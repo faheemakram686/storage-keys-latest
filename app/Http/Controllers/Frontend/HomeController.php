@@ -228,6 +228,26 @@ class HomeController extends Controller
     {
         return view('ui.pages.art-storage');
     }
+
+    public function equipmentStorage()
+    {
+        return view('ui.pages.equipment-storage');
+    }
+
+    public function constructionStorage()
+    {
+        return view('ui.pages.construction-storage');
+    }
+
+    public function boatStorage()
+    {
+        return view('ui.pages.boat-storage');
+    }
+
+    public function pharmaceuticalStorage()
+    {
+        return view('ui.pages.pharmaceutical-storage');
+    }
     public function bookingReservation($id)
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();

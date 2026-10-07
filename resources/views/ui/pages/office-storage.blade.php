@@ -124,7 +124,7 @@
                     <ul class="lt-points">
                         <li class="row-i"><div class="ic"><i class="fas fa-people-carry"></i></div><div><h4>Office Relocation</h4><p>Moving between buildings rarely lines up perfectly. Storage holds furniture and files while the new space is fitted out, so the old lease can end on time.</p></div></li>
                         <li class="row-i"><div class="ic"><i class="fas fa-hammer"></i></div><div><h4>Refits &amp; Renovations</h4><p>A floor refurbishment can take weeks. Clearing the floor into a unit lets contractors work faster and protects furniture from dust and damage.</p></div></li>
-                        <li class="row-i"><div class="ic"><i class="fas fa-compress-arrows-alt"></i></div><div><h4>Downsizing &amp; Hybrid Work</h4><p>Many teams have moved to fewer desks and more meeting space. Storing surplus furniture keeps your options open if headcount grows again, instead of selling it cheaply.</p></div></li>
+                        <li class="row-i"><div class="ic"><i class="fas fa-compress"></i></div><div><h4>Downsizing &amp; Hybrid Work</h4><p>Many teams have moved to fewer desks and more meeting space. Storing surplus furniture keeps your options open if headcount grows again, instead of selling it cheaply.</p></div></li>
                         <li class="row-i"><div class="ic"><i class="fas fa-file-invoice"></i></div><div><h4>Records You Must Keep</h4><p>UAE businesses hold accounting and tax records for years. Off-site storage keeps them organised without filling a room at head office.</p></div></li>
                     </ul>
                 </div>

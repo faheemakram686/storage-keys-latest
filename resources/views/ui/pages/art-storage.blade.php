@@ -175,7 +175,7 @@
             </div>
             <div class="lt-tips sk-reveal">
                 <div class="lt-tip"><i class="fas fa-layer-group"></i><h4>Wrap in layers, not plastic alone</h4><p>Acid-free tissue or glassine against the surface, then bubble wrap with bubbles facing outward, and corner protectors on frames. Never leave wrapped works in a parked car in summer.</p></div>
-                <div class="lt-tip"><i class="fas fa-border-all"></i><h4>Protect glass</h4><p>Tape a cross of low-tack masking tape on glazed frames so that if the glass breaks, it does not scratch the work beneath.</p></div>
+                <div class="lt-tip"><i class="fas fa-square"></i><h4>Protect glass</h4><p>Tape a cross of low-tack masking tape on glazed frames so that if the glass breaks, it does not scratch the work beneath.</p></div>
                 <div class="lt-tip"><i class="fas fa-camera"></i><h4>Label and photograph</h4><p>Note the title, artist, size and condition on each package and keep matching photos.</p></div>
             </div>
             <p class="note sk-reveal">Our guide on <a href="{{ url('/blogs/what-can-and-cant-be-stored-in-a-storage-unit') }}" style="color:#fff;text-decoration:underline;">what needs preparing before it goes into a unit</a> covers related items such as frames with batteries or lighting.</p>
