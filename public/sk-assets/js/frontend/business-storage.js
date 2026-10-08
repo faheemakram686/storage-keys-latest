@@ -20,9 +20,16 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0 });
 
             reveals.forEach(function (el) { observer.observe(el); });
+            reveals.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    el.classList.add('in');
+                    observer.unobserve(el);
+                }
+            });
         } else {
             reveals.forEach(function (el) { el.classList.add('in'); });
         }
@@ -158,8 +165,15 @@
                         ro.unobserve(en.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0 });
             reveals.forEach(function (el) { ro.observe(el); });
+            reveals.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    el.classList.add('in');
+                    ro.unobserve(el);
+                }
+            });
         } else {
             reveals.forEach(function (el) { el.classList.add('in'); });
         }
@@ -325,8 +339,15 @@
                         ro.unobserve(en.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0 });
             reveals.forEach(function (el) { ro.observe(el); });
+            reveals.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    el.classList.add('in');
+                    ro.unobserve(el);
+                }
+            });
         } else {
             reveals.forEach(function (el) { el.classList.add('in'); });
         }
@@ -427,8 +448,15 @@
                         ro.unobserve(en.target);
                     }
                 });
-            }, { threshold: 0.12 });
+            }, { threshold: 0 });
             reveals.forEach(function (el) { ro.observe(el); });
+            reveals.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    el.classList.add('in');
+                    ro.unobserve(el);
+                }
+            });
         } else {
             reveals.forEach(function (el) { el.classList.add('in'); });
         }
