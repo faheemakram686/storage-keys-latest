@@ -155,7 +155,7 @@ class McpSiteController extends Controller
     public function uploadMedia(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'image_url' => 'required|url|max:2048',
+            'image_url' => 'required|string|max:16000000',
             'filename' => 'nullable|string|max:120',
         ]);
 
@@ -174,7 +174,9 @@ class McpSiteController extends Controller
         if ($saved === 'empty') {
             return response()->json([
                 'success' => false,
-                'message' => 'Could not download or store image from image_url.',
+                'message' => $blogs->lastImageError() !== ''
+                    ? $blogs->lastImageError()
+                    : 'Could not download or store image from image_url.',
             ], 422);
         }
 

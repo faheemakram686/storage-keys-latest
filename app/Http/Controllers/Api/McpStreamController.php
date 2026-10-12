@@ -770,6 +770,11 @@ class McpStreamController extends Controller
                 if (array_key_exists('schema_json', $arguments)) {
                     $payload['schema_json'] = $arguments['schema_json'];
                 }
+                if (!isset($payload['schema']) && (isset($arguments['@context']) || isset($arguments['@graph']) || isset($arguments['@type']))) {
+                    $schema = $arguments;
+                    unset($schema['id'], $schema['slug']);
+                    $payload['schema'] = $schema;
+                }
 
                 return $this->fromResponse($blogs->updateSchema($this->jsonRequest('PATCH', '/api/mcp/blogs/' . $key . '/schema', $payload), $key));
 
@@ -1011,9 +1016,58 @@ class McpStreamController extends Controller
             if ($trimmed !== '' && ($trimmed[0] === '{' || $trimmed[0] === '[')) {
                 $decoded = json_decode($trimmed, true);
                 if (is_array($decoded) && isset($decoded['title'], $decoded['description'])) {
-                    return $decoded;
+                    $arguments = $decoded;
                 }
             }
+        }
+
+        if (isset($arguments['seo']) && is_array($arguments['seo'])) {
+            foreach (['meta_title', 'meta_description', 'canonical_url', 'robots', 'seo_title', 'seo_description', 'canonical'] as $key) {
+                if (!array_key_exists($key, $arguments) && array_key_exists($key, $arguments['seo'])) {
+                    $arguments[$key] = $arguments['seo'][$key];
+                }
+            }
+            if (!array_key_exists('meta_description', $arguments) && array_key_exists('description', $arguments['seo'])) {
+                $arguments['meta_description'] = $arguments['seo']['description'];
+            }
+        }
+
+        $aliases = [
+            'seo_title' => 'meta_title',
+            'metaTitle' => 'meta_title',
+            'seoTitle' => 'meta_title',
+            'seo_description' => 'meta_description',
+            'metaDescription' => 'meta_description',
+            'seoDescription' => 'meta_description',
+            'canonical' => 'canonical_url',
+            'canonicalUrl' => 'canonical_url',
+            'imageUrl' => 'image_url',
+            'featured_image' => 'image_url',
+            'featuredImage' => 'image_url',
+            'cover_image' => 'image_url',
+            'json_ld' => 'schema',
+            'jsonLd' => 'schema',
+            'structured_data' => 'schema',
+            'structuredData' => 'schema',
+        ];
+        foreach ($aliases as $from => $to) {
+            if (!array_key_exists($to, $arguments) && array_key_exists($from, $arguments)) {
+                $arguments[$to] = $arguments[$from];
+            }
+        }
+
+        if (isset($arguments['image_url']) && is_array($arguments['image_url'])) {
+            $image = $arguments['image_url'];
+            $arguments['image_url'] = '';
+            foreach (['url', 'src', 'href', 'image_url'] as $key) {
+                if (!empty($image[$key]) && is_string($image[$key])) {
+                    $arguments['image_url'] = $image[$key];
+                    break;
+                }
+            }
+        }
+        if (isset($arguments['robots']) && is_array($arguments['robots'])) {
+            $arguments['robots'] = implode(',', array_map('strval', $arguments['robots']));
         }
 
         return $arguments;

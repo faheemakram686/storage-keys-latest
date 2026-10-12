@@ -86,7 +86,7 @@ server.tool(
     title: z.string().min(3).max(255),
     description: z.string().min(20),
     status: z.union([z.literal(0), z.literal(1)]).optional(),
-    image_url: z.string().url().optional(),
+    image_url: z.union([z.string().min(4).max(16000000), z.record(z.any())]).optional(),
     image: z.string().min(3).max(255).optional(),
     slug: z.string().optional(),
   },
@@ -119,7 +119,7 @@ server.tool(
     title: z.string().optional(),
     description: z.string().optional(),
     status: z.union([z.literal(0), z.literal(1)]).optional(),
-    image_url: z.string().url().optional(),
+    image_url: z.union([z.string().min(4).max(16000000), z.record(z.any())]).optional(),
     image: z.string().min(3).max(255).optional(),
     new_slug: z.string().optional(),
   },
@@ -313,7 +313,7 @@ server.tool(
   "upload_media",
   "Download an image URL into blog-images storage.",
   {
-    image_url: z.string().url(),
+    image_url: z.union([z.string().min(4).max(16000000), z.record(z.any())]),
   },
   async ({ image_url }) =>
     ok(
@@ -342,11 +342,13 @@ server.tool(
     slug: z.string().optional(),
     meta_title: z.string().optional(),
     meta_description: z.string().optional(),
-    canonical_url: z.string().url().optional(),
-    robots: z.string().optional(),
+    canonical_url: z.string().max(2048).optional(),
+    robots: z.union([z.string(), z.array(z.string())]).optional(),
+    seo: z.record(z.any()).optional(),
   },
-  async ({ id, slug, meta_title, meta_description, canonical_url, robots }) => {
+  async ({ id, slug, meta_title, meta_description, canonical_url, robots, seo }) => {
     const payload = {};
+    if (seo && typeof seo === "object") Object.assign(payload, seo);
     if (meta_title !== undefined) payload.meta_title = meta_title;
     if (meta_description !== undefined) payload.meta_description = meta_description;
     if (canonical_url !== undefined) payload.canonical_url = canonical_url;
@@ -377,12 +379,14 @@ server.tool(
     id: z.number().int().optional(),
     slug: z.string().optional(),
     schema: z.any().optional(),
-    schema_json: z.string().optional(),
+    schema_json: z.union([z.string(), z.record(z.any()), z.array(z.any())]).optional(),
+    json_ld: z.any().optional(),
   },
-  async ({ id, slug, schema, schema_json }) => {
+  async ({ id, slug, schema, schema_json, json_ld }) => {
     const payload = {};
     if (schema !== undefined) payload.schema = schema;
     if (schema_json !== undefined) payload.schema_json = schema_json;
+    if (json_ld !== undefined && schema === undefined) payload.schema = json_ld;
     return ok(
       await apiRequest(`${blogPath(id, slug)}/schema`, {
         method: "PATCH",

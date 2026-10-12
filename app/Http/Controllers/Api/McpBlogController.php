@@ -14,6 +14,14 @@ use Illuminate\Support\Str;
 
 class McpBlogController extends Controller
 {
+    /** Why the last image_url did not become a stored file. Empty when it saved. */
+    private string $lastImageError = '';
+
+    public function lastImageError(): string
+    {
+        return $this->lastImageError;
+    }
+
     public function index(Request $request)
     {
         $limit = min(50, max(1, (int) $request->query('limit', 10)));
@@ -54,17 +62,13 @@ class McpBlogController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($this->jsonBody($request), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'status' => 'nullable|in:0,1',
-            'image_url' => 'nullable|url|max:2048',
+            'image_url' => 'nullable|string|max:16000000',
             'image' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:512',
-            'canonical_url' => 'nullable|url|max:2048',
-            'robots' => 'nullable|string|max:64',
         ]);
 
         if ($validator->fails()) {
@@ -75,13 +79,14 @@ class McpBlogController extends Controller
             ], 422);
         }
 
-        $title = trim($request->input('title'));
-        $description = $request->input('description');
+        $input = $this->jsonBody($request);
+        $title = trim((string) ($input['title'] ?? ''));
+        $description = $input['description'] ?? '';
         // Default draft for MCP uploads — review before publishing
-        $status = $request->has('status') ? (int) $request->input('status') : 0;
+        $status = array_key_exists('status', $input) ? (int) $input['status'] : 0;
 
-        $slugBase = $request->filled('slug')
-            ? Str::slug($request->input('slug'), '-')
+        $slugBase = !empty($input['slug'])
+            ? Str::slug((string) $input['slug'], '-')
             : Str::slug($title, '-');
 
         if ($slugBase === '') {
@@ -91,8 +96,8 @@ class McpBlogController extends Controller
         $slug = $this->uniqueSlug($slugBase);
         // Image is independent of status — drafts must keep featured images too.
         $imageName = $this->resolveBlogImage(
-            $request->input('image_url'),
-            $request->input('image')
+            $input['image_url'] ?? null,
+            $input['image'] ?? null
         );
 
         $blog = new Blog();
@@ -105,11 +110,11 @@ class McpBlogController extends Controller
         $this->applySeoFields($blog, $request);
         $blog->save();
 
-        return response()->json([
+        return response()->json($this->withImageError([
             'success' => true,
             'message' => 'Blog created successfully',
             'blog' => $this->formatBlog($blog->fresh(), true),
-        ], 201);
+        ]), 201);
     }
 
     public function update(Request $request, $idOrSlug)
@@ -123,17 +128,13 @@ class McpBlogController extends Controller
             ], 404);
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($this->jsonBody($request), [
             'title' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
             'status' => 'nullable|in:0,1',
-            'image_url' => 'nullable|url|max:2048',
+            'image_url' => 'nullable|string|max:16000000',
             'image' => 'nullable|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:512',
-            'canonical_url' => 'nullable|url|max:2048',
-            'robots' => 'nullable|string|max:64',
         ]);
 
         if ($validator->fails()) {
@@ -144,32 +145,33 @@ class McpBlogController extends Controller
             ], 422);
         }
 
-        if ($request->filled('title')) {
-            $blog->title = trim($request->input('title'));
+        $input = $this->jsonBody($request);
+
+        if (isset($input['title']) && trim((string) $input['title']) !== '') {
+            $blog->title = trim((string) $input['title']);
         }
 
-        if ($request->has('description')) {
-            $blog->description = $request->input('description');
+        if (array_key_exists('description', $input)) {
+            $blog->description = $input['description'];
         }
 
-        if ($request->has('status') && in_array((string) $request->input('status'), ['0', '1'], true)) {
-            $blog->status = (int) $request->input('status');
+        if (array_key_exists('status', $input) && in_array((string) $input['status'], ['0', '1'], true)) {
+            $blog->status = (int) $input['status'];
         }
 
         // Only change slug when explicitly provided (never auto-rewrite on title-only updates).
-        if ($request->filled('slug')) {
-            $slugBase = Str::slug($request->input('slug'), '-');
+        if (!empty($input['slug'])) {
+            $slugBase = Str::slug((string) $input['slug'], '-');
             if ($slugBase === '') {
                 $slugBase = 'blog-' . Carbon::now()->format('YmdHis');
             }
             $blog->slug = $this->uniqueSlug($slugBase, (int) $blog->id);
         }
 
-        if ($request->filled('image_url') || $request->filled('image')) {
-            $imageName = $this->resolveBlogImage(
-                $request->input('image_url'),
-                $request->input('image')
-            );
+        $imageUrl = $this->coerceImageUrl($input['image_url'] ?? null);
+        $imageFile = isset($input['image']) && is_string($input['image']) ? trim($input['image']) : '';
+        if ($imageUrl !== '' || $imageFile !== '') {
+            $imageName = $this->resolveBlogImage($imageUrl, $imageFile);
             if ($imageName !== 'empty') {
                 $blog->image = $imageName;
             }
@@ -178,11 +180,11 @@ class McpBlogController extends Controller
         $this->applySeoFields($blog, $request);
         $blog->save();
 
-        return response()->json([
+        return response()->json($this->withImageError([
             'success' => true,
             'message' => 'Blog updated successfully',
             'blog' => $this->formatBlog($blog->fresh(), true),
-        ]);
+        ]));
     }
 
     public function destroy(Request $request, $idOrSlug)
@@ -338,8 +340,12 @@ class McpBlogController extends Controller
                 continue;
             }
             $value = $this->blankToNull($input[$field], $limit, $warnings, $field);
-            if ($field === 'canonical_url' && $value !== null && filter_var($value, FILTER_VALIDATE_URL) === false) {
-                continue;
+            if ($field === 'canonical_url') {
+                $normalized = $this->normalizeCanonical($value);
+                if ($value !== null && $normalized === null) {
+                    continue;
+                }
+                $value = $normalized;
             }
             $blog->{$field} = $value;
         }
@@ -355,14 +361,126 @@ class McpBlogController extends Controller
         $data = $request->all();
         $raw = $request->getContent();
         if (!is_string($raw) || trim($raw) === '') {
-            return is_array($data) ? $data : [];
+            return $this->expandWriteInput(is_array($data) ? $data : []);
         }
         $decoded = json_decode($raw, true);
         if (!is_array($decoded)) {
-            return is_array($data) ? $data : [];
+            return $this->expandWriteInput(is_array($data) ? $data : []);
         }
 
-        return array_merge($decoded, is_array($data) ? $data : []);
+        return $this->expandWriteInput(array_merge($decoded, is_array($data) ? $data : []));
+    }
+
+    /**
+     * Accept the field names the daily automation actually sends.
+     *
+     * @param  array<string, mixed>  $input
+     * @return array<string, mixed>
+     */
+    private function expandWriteInput(array $input): array
+    {
+        if (isset($input['seo']) && is_array($input['seo'])) {
+            $seo = $input['seo'];
+            $this->liftKey($input, 'meta_title', $seo, ['meta_title', 'seo_title', 'metaTitle', 'title']);
+            $this->liftKey($input, 'meta_description', $seo, ['meta_description', 'seo_description', 'metaDescription', 'description']);
+            $this->liftKey($input, 'canonical_url', $seo, ['canonical_url', 'canonical', 'canonicalUrl']);
+            $this->liftKey($input, 'robots', $seo, ['robots']);
+        }
+
+        $aliases = [
+            'meta_title' => ['seo_title', 'metaTitle', 'seoTitle'],
+            'meta_description' => ['seo_description', 'metaDescription', 'seoDescription'],
+            'canonical_url' => ['canonical', 'canonicalUrl'],
+            'image_url' => ['imageUrl', 'featured_image', 'featuredImage', 'cover_image', 'coverImage'],
+            'schema' => ['json_ld', 'jsonLd', 'structured_data', 'structuredData'],
+        ];
+        foreach ($aliases as $target => $sources) {
+            if (array_key_exists($target, $input)) {
+                continue;
+            }
+            foreach ($sources as $source) {
+                if (array_key_exists($source, $input)) {
+                    $input[$target] = $input[$source];
+                    break;
+                }
+            }
+        }
+
+        if (isset($input['image_url']) && !is_string($input['image_url'])) {
+            $input['image_url'] = $this->coerceImageUrl($input['image_url']);
+        }
+        if (isset($input['robots']) && is_array($input['robots'])) {
+            $input['robots'] = implode(',', array_map('strval', $input['robots']));
+        }
+
+        return $input;
+    }
+
+    /**
+     * @param  array<string, mixed>  $input
+     * @param  array<string, mixed>  $source
+     * @param  list<string>  $keys
+     */
+    private function liftKey(array &$input, string $target, array $source, array $keys): void
+    {
+        if (array_key_exists($target, $input)) {
+            return;
+        }
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $source)) {
+                $input[$target] = $source[$key];
+                return;
+            }
+        }
+    }
+
+    /**
+     * @param  mixed  $value
+     */
+    private function coerceImageUrl($value): string
+    {
+        if (is_string($value)) {
+            return trim($value);
+        }
+        if (!is_array($value)) {
+            return '';
+        }
+        foreach (['url', 'src', 'href', 'image_url', 'imageUrl'] as $key) {
+            if (!empty($value[$key]) && is_string($value[$key])) {
+                return trim($value[$key]);
+            }
+        }
+
+        return '';
+    }
+
+    private function normalizeCanonical(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        if (str_starts_with($value, '/')) {
+            $value = 'https://storagekeys.com' . $value;
+        }
+        if (filter_var($value, FILTER_VALIDATE_URL) === false) {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function withImageError(array $payload): array
+    {
+        if ($this->lastImageError !== '') {
+            $payload['image_error'] = $this->lastImageError;
+            $payload['image_saved'] = false;
+        }
+
+        return $payload;
     }
 
     /**
@@ -415,8 +533,10 @@ class McpBlogController extends Controller
      * Local /storage/uploads/blog-images/* URLs are used as-is (no re-download).
      * Status must never gate this — drafts keep images too.
      */
-    public function resolveBlogImage(?string $url, ?string $filename = null): string
+    public function resolveBlogImage($url, $filename = null): string
     {
+        $this->lastImageError = '';
+        $url = $this->coerceImageUrl($url);
         $disk = Storage::disk('public');
         $this->migrateOrphanedBlogImages($disk);
 
@@ -428,8 +548,10 @@ class McpBlogController extends Controller
             }
         }
 
-        $url = trim((string) $url);
+        $url = $this->normalizeRemoteImageUrl($url);
         if ($url === '') {
+            $this->lastImageError = 'image_url was empty.';
+
             return 'empty';
         }
 
@@ -446,7 +568,7 @@ class McpBlogController extends Controller
                     return $localName;
                 }
                 // File may exist only on disk after migrate; still prefer basename over empty.
-                if (preg_match('/\.(jpe?g|png|webp|gif)$/i', $localName)) {
+                if (preg_match('/\.(jpe?g|png|webp|gif|avif)$/i', $localName)) {
                     Log::warning('mcp.blog_image_local_missing', ['filename' => $localName, 'url' => $url]);
 
                     return $localName;
@@ -459,19 +581,26 @@ class McpBlogController extends Controller
 
     public function storeImageFromUrl(?string $url): string
     {
-        $url = trim((string) $url);
+        $url = $this->normalizeRemoteImageUrl((string) $url);
         if ($url === '') {
+            $this->lastImageError = 'image_url was empty.';
+
             return 'empty';
         }
 
         try {
-            $bytes = $this->downloadImageBytes($url, 0);
+            $bytes = $this->inlineImageBytes($url) ?? $this->downloadImageBytes($url, 0);
             if ($bytes === null) {
+                if ($this->lastImageError === '') {
+                    $this->lastImageError = 'Could not download an image from image_url.';
+                }
+
                 return 'empty';
             }
 
             $ext = $this->imageExtension($bytes);
             if ($ext === null) {
+                $this->lastImageError = 'Downloaded file is not a jpeg, png, gif, webp, or avif image.';
                 Log::warning('mcp.blog_image_not_an_image', ['url' => $url]);
 
                 return 'empty';
@@ -481,10 +610,23 @@ class McpBlogController extends Controller
             // public disk root is storage/app, and /storage maps to storage/app/public.
             $disk = Storage::disk('public');
             $this->migrateOrphanedBlogImages($disk);
-            $disk->put('public/uploads/blog-images/' . $name, $bytes);
+            $directory = 'public/uploads/blog-images';
+            if (!$disk->exists($directory)) {
+                $disk->makeDirectory($directory);
+            }
+            $written = $disk->put($directory . '/' . $name, $bytes);
+            if ($written === false) {
+                $this->lastImageError = 'Storage rejected the file. Check write permission on storage/app/public/uploads/blog-images.';
+                Log::error('mcp.blog_image_store_failed', ['url' => $url, 'path' => $directory . '/' . $name]);
+
+                return 'empty';
+            }
+
+            $this->lastImageError = '';
 
             return $name;
         } catch (\Throwable $e) {
+            $this->lastImageError = 'Image download failed: ' . $e->getMessage();
             Log::error('mcp.blog_image_download_error', [
                 'url' => $url,
                 'error' => $e->getMessage(),
@@ -494,21 +636,68 @@ class McpBlogController extends Controller
         }
     }
 
+    private function normalizeRemoteImageUrl(string $url): string
+    {
+        $url = trim($url);
+        if ($url === '') {
+            return '';
+        }
+        if (preg_match('/!\[[^\]]*]\((https?:\/\/[^)\s]+)\)/', $url, $match)) {
+            $url = $match[1];
+        } elseif (!str_starts_with($url, 'data:image/') && preg_match('/https?:\/\/\S+/i', $url, $match)) {
+            $url = rtrim($match[0], ').,\'"');
+        }
+
+        return trim($url);
+    }
+
+    private function inlineImageBytes(string $url): ?string
+    {
+        if (!str_starts_with($url, 'data:image/')) {
+            return null;
+        }
+        $comma = strpos($url, ',');
+        if ($comma === false) {
+            $this->lastImageError = 'image_url data URI is missing image bytes.';
+
+            return null;
+        }
+        $meta = substr($url, 0, $comma);
+        $payload = substr($url, $comma + 1);
+        $bytes = str_contains($meta, ';base64') ? base64_decode($payload, true) : rawurldecode($payload);
+        if (!is_string($bytes) || $bytes === '') {
+            $this->lastImageError = 'image_url data URI could not be decoded.';
+
+            return null;
+        }
+
+        return $bytes;
+    }
+
     private function downloadImageBytes(string $url, int $depth): ?string
     {
         if ($depth > 2) {
+            $this->lastImageError = 'Image page did not lead to an image file.';
+
             return null;
+        }
+
+        $headers = [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept' => 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+        ];
+        $parts = parse_url($url);
+        if (!empty($parts['host'])) {
+            $headers['Referer'] = ($parts['scheme'] ?? 'https') . '://' . $parts['host'] . '/';
         }
 
         $response = Http::timeout(25)
             ->withOptions(['allow_redirects' => ['max' => 10, 'track_redirects' => true]])
-            ->withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-                'Accept' => 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
-            ])
+            ->withHeaders($headers)
             ->get($url);
 
         if (!$response->successful()) {
+            $this->lastImageError = 'Image host returned HTTP ' . $response->status() . '.';
             Log::warning('mcp.blog_image_download_failed', [
                 'url' => $url,
                 'status' => $response->status(),
@@ -518,7 +707,8 @@ class McpBlogController extends Controller
         }
 
         $body = $response->body();
-        if ($body === '' || strlen($body) > 8 * 1024 * 1024) {
+        if ($body === '' || strlen($body) > 12 * 1024 * 1024) {
+            $this->lastImageError = 'Image was empty or larger than 12MB.';
             Log::warning('mcp.blog_image_bad_size', ['url' => $url, 'bytes' => strlen($body)]);
 
             return null;
@@ -530,11 +720,57 @@ class McpBlogController extends Controller
 
         $contentType = strtolower((string) $response->header('Content-Type'));
         $looksLikeHtml = str_contains($contentType, 'text/html') || str_starts_with(ltrim($body), '<');
-        if ($looksLikeHtml && preg_match('/property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']/i', $body, $match)) {
-            return $this->downloadImageBytes(html_entity_decode($match[1], ENT_QUOTES), $depth + 1);
+        if ($looksLikeHtml) {
+            $next = $this->htmlImageUrl($body, $url);
+            if ($next !== null && $next !== $url) {
+                return $this->downloadImageBytes($next, $depth + 1);
+            }
+            $this->lastImageError = 'Page has no og:image or twitter:image to download.';
+
+            return null;
         }
-        if ($looksLikeHtml && preg_match('/content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']/i', $body, $match)) {
-            return $this->downloadImageBytes(html_entity_decode($match[1], ENT_QUOTES), $depth + 1);
+
+        $this->lastImageError = 'Downloaded file is not a jpeg, png, gif, webp, or avif image.';
+
+        return null;
+    }
+
+    private function htmlImageUrl(string $html, string $base): ?string
+    {
+        $patterns = [
+            '/property=["\']og:image(?::url)?["\'][^>]*content=["\']([^"\']+)["\']/i',
+            '/content=["\']([^"\']+)["\'][^>]*property=["\']og:image(?::url)?["\']/i',
+            '/name=["\']twitter:image(?::src)?["\'][^>]*content=["\']([^"\']+)["\']/i',
+            '/content=["\']([^"\']+)["\'][^>]*name=["\']twitter:image(?::src)?["\']/i',
+        ];
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $html, $match)) {
+                return $this->absoluteUrl(html_entity_decode($match[1], ENT_QUOTES), $base);
+            }
+        }
+
+        return null;
+    }
+
+    private function absoluteUrl(string $maybe, string $base): ?string
+    {
+        $maybe = trim($maybe);
+        if ($maybe === '') {
+            return null;
+        }
+        if (str_starts_with($maybe, '//')) {
+            return 'https:' . $maybe;
+        }
+        if (preg_match('#^https?://#i', $maybe)) {
+            return $maybe;
+        }
+        $parts = parse_url($base);
+        if (empty($parts['host'])) {
+            return null;
+        }
+        $origin = ($parts['scheme'] ?? 'https') . '://' . $parts['host'];
+        if (str_starts_with($maybe, '/')) {
+            return $origin . $maybe;
         }
 
         return null;
@@ -553,6 +789,12 @@ class McpBlogController extends Controller
         }
         if (strlen($bytes) > 12 && str_starts_with($bytes, 'RIFF') && substr($bytes, 8, 4) === 'WEBP') {
             return 'webp';
+        }
+        if (strlen($bytes) > 12 && substr($bytes, 4, 4) === 'ftyp') {
+            $brand = substr($bytes, 8, 4);
+            if ($brand === 'avif' || $brand === 'avis') {
+                return 'avif';
+            }
         }
 
         return null;
@@ -694,10 +936,11 @@ class McpBlogController extends Controller
         }
         if (array_key_exists('canonical_url', $provided)) {
             $canonical = $this->blankToNull($provided['canonical_url'], 2048, $warnings, 'canonical_url');
-            if ($canonical !== null && filter_var($canonical, FILTER_VALIDATE_URL) === false) {
+            $normalized = $this->normalizeCanonical($canonical);
+            if ($canonical !== null && $normalized === null) {
                 $warnings[] = 'canonical_url was not a valid URL and was not saved.';
             } else {
-                $blog->canonical_url = $canonical;
+                $blog->canonical_url = $normalized;
             }
         }
 
@@ -737,6 +980,13 @@ class McpBlogController extends Controller
         }
 
         $input = $this->jsonBody($request);
+        if (!array_key_exists('schema', $input) && !array_key_exists('schema_json', $input) && !array_key_exists('json_ld', $input)) {
+            if (isset($input['@context']) || isset($input['@graph']) || isset($input['@type'])) {
+                $schema = $input;
+                unset($schema['id'], $schema['slug'], $schema['schema_json']);
+                $input['schema'] = $schema;
+            }
+        }
         if (!array_key_exists('schema', $input) && !array_key_exists('schema_json', $input) && !array_key_exists('json_ld', $input)) {
             return response()->json([
                 'success' => false,
