@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\SitemapBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -57,51 +58,47 @@ class McpSiteController extends Controller
         ]);
     }
 
-    public function sitemap()
+    public function sitemap(SitemapBuilder $sitemap)
     {
-        $paths = $this->staticPaths();
+        $base = $sitemap->baseUrl();
         $entries = [];
 
-        foreach ($paths as $path) {
+        foreach ($sitemap->staticPaths() as $path) {
             $entries[] = [
-                'loc' => url($path === '/' ? '/' : ltrim($path, '/')),
+                'loc' => $base . ($path === '/' ? '/' : $path),
                 'type' => 'static',
             ];
         }
 
-        $blogs = \App\Models\Blog::query()
-            ->where('is_deleted', 0)
-            ->whereNotNull('slug')
-            ->where('slug', '!=', '')
-            ->orderByDesc('updated_at')
-            ->get(['slug', 'updated_at', 'created_at']);
-
-        foreach ($blogs as $blog) {
+        foreach ($sitemap->blogs() as $blog) {
             $entries[] = [
-                'loc' => url('/blogs/' . $blog->slug),
+                'loc' => $base . '/blogs/' . $blog->slug,
                 'type' => 'blog',
                 'slug' => $blog->slug,
                 'lastmod' => optional($blog->updated_at ?? $blog->created_at)->toAtomString(),
             ];
         }
 
-        $cmsPages = \App\Models\Page::query()
-            ->published()
-            ->orderByDesc('updated_at')
-            ->get(['slug', 'updated_at', 'created_at']);
+        $taken = array_fill_keys(array_map(static function ($path) {
+            return trim($path, '/');
+        }, $sitemap->staticPaths()), true);
 
-        foreach ($cmsPages as $cmsPage) {
+        foreach ($sitemap->cmsPages() as $cmsPage) {
+            $slug = trim((string) $cmsPage->slug, '/');
+            if ($slug === '' || isset($taken[$slug])) {
+                continue;
+            }
             $entries[] = [
-                'loc' => url('/' . $cmsPage->slug),
+                'loc' => $base . '/' . $slug,
                 'type' => 'cms_page',
-                'slug' => $cmsPage->slug,
+                'slug' => $slug,
                 'lastmod' => optional($cmsPage->updated_at ?? $cmsPage->created_at)->toAtomString(),
             ];
         }
 
         return response()->json([
             'success' => true,
-            'sitemap_xml_url' => url('/sitemap.xml'),
+            'sitemap_xml_url' => $base . '/sitemap.xml',
             'count' => count($entries),
             'entries' => $entries,
         ]);
@@ -225,31 +222,6 @@ class McpSiteController extends Controller
      */
     private function staticPaths(): array
     {
-        return [
-            '/',
-            '/storage-options',
-            '/personal-storage',
-            '/residential-storage',
-            '/furniture-storage',
-            '/box-storage',
-            '/appliance-storage',
-            '/business-storage',
-            '/warehouse-storage',
-            '/climate-controlled-storage',
-            '/moving-services',
-            '/luggage-storage',
-            '/car-storage',
-            '/shop',
-            '/booking',
-            '/blogs',
-            '/about-us',
-            '/contact-us',
-            '/frequently-asked-questions',
-            '/privacy-policy',
-            '/security-policy',
-            '/support-policy',
-            '/cookie-policy',
-            '/terms-of-service',
-        ];
+        return app(SitemapBuilder::class)->staticPaths();
     }
 }

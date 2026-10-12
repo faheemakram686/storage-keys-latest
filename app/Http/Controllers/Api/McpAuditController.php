@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Services\SitemapBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -211,28 +212,55 @@ class McpAuditController extends Controller
         ]);
     }
 
-    public function validateSitemapRobots()
+    public function validateSitemapRobots(?SitemapBuilder $sitemap = null)
     {
+        $sitemap = $sitemap ?: app(SitemapBuilder::class);
         $issues = [];
         $ok = [];
+        $warnings = [];
 
-        $sitemapUrl = url('/sitemap.xml');
+        $sitemapUrl = $sitemap->baseUrl() . '/sitemap.xml';
         $robotsPath = public_path('robots.txt');
+        $generated = '';
+        $generatedCount = 0;
 
         try {
-            $res = Http::timeout(10)->get($sitemapUrl);
+            $generated = $sitemap->xml();
+            $generatedCount = substr_count($generated, '<loc>');
+            if (!str_contains($generated, '<urlset') || $generatedCount < 1) {
+                $issues[] = 'Generated sitemap is not a valid urlset';
+            } else {
+                $ok[] = 'sitemap generated in-process (' . $generatedCount . ' URLs)';
+            }
+        } catch (\Throwable $e) {
+            $issues[] = 'sitemap generation failed: ' . $e->getMessage();
+        }
+
+        try {
+            $res = Http::timeout(15)->get($sitemapUrl);
             if (!$res->successful()) {
                 $issues[] = 'sitemap.xml HTTP ' . $res->status();
             } else {
                 $body = $res->body();
+                $servedCount = substr_count($body, '<loc>');
                 if (!str_contains($body, '<urlset') && !str_contains($body, '<sitemapindex')) {
                     $issues[] = 'sitemap.xml does not look like valid XML sitemap';
+                } elseif ($generatedCount > 0 && $servedCount < $generatedCount) {
+                    $issues[] = 'sitemap.xml is still the shorter static file (' . $servedCount . ' URLs, expected ' . $generatedCount . '). Deploy the Laravel route and remove public/sitemap.xml.';
                 } else {
-                    $ok[] = 'sitemap.xml reachable';
+                    $ok[] = 'sitemap.xml reachable (' . $servedCount . ' URLs)';
                 }
             }
         } catch (\Throwable $e) {
-            $issues[] = 'sitemap.xml fetch failed: ' . $e->getMessage();
+            $message = $e->getMessage();
+            if (str_contains($message, 'cURL error 60') || str_contains($message, 'certificate') || str_contains($message, 'SSL')) {
+                $warnings[] = 'The server could not fetch ' . $sitemapUrl . ' over HTTPS: the certificate name does not match storagekeys.com. Sitemap content was checked in-process instead. Point the vhost certificate at storagekeys.com (include it in the subject alternative name) so self-requests and Google see the same host.';
+                if ($generatedCount > 0) {
+                    $ok[] = 'sitemap content accepted without the public HTTPS fetch';
+                }
+            } else {
+                $issues[] = 'sitemap.xml fetch failed: ' . $message;
+            }
         }
 
         if (!is_file($robotsPath)) {
@@ -248,10 +276,12 @@ class McpAuditController extends Controller
         }
 
         return response()->json([
-            'success' => true,
+            'success' => $issues === [],
             'ok' => $ok,
+            'warnings' => $warnings,
             'issues' => $issues,
             'sitemap_url' => $sitemapUrl,
+            'url_count' => $generatedCount,
             'robots_url' => url('/robots.txt'),
         ]);
     }

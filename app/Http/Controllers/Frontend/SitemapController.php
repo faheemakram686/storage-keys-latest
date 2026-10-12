@@ -3,62 +3,15 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
+use App\Services\SitemapBuilder;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    public function index(): Response
+    public function index(SitemapBuilder $sitemap): Response
     {
-        $base = rtrim((string) config('app.canonical_url'), '/');
-        if (str_starts_with($base, 'http://')) {
-            $base = 'https://' . substr($base, 7);
-        }
-
-        $staticPages = [
-            '/',
-            '/storage-options',
-            '/personal-storage',
-            '/residential-storage',
-            '/furniture-storage',
-            '/box-storage',
-            '/appliance-storage',
-            '/business-storage',
-            '/warehouse-storage',
-            '/climate-controlled-storage',
-            '/moving-services',
-            '/luggage-storage',
-            '/car-storage',
-            '/short-term-storage',
-            '/vehicle-storage',
-            '/long-term-storage',
-            '/shop',
-            '/booking',
-            '/blogs',
-            '/about-us',
-            '/contact-us',
-            '/frequently-asked-questions',
-            '/privacy-policy',
-            '/security-policy',
-            '/support-policy',
-            '/cookie-policy',
-            '/terms-of-service',
-        ];
-
-        $blogs = Blog::query()
-            ->where('is_deleted', 0)
-            ->whereNotNull('slug')
-            ->where('slug', '!=', '')
-            ->orderByDesc('updated_at')
-            ->get(['slug', 'updated_at', 'created_at']);
-
-        $cmsPages = \App\Models\Page::query()
-            ->published()
-            ->orderByDesc('updated_at')
-            ->get(['slug', 'updated_at', 'created_at']);
-
-        return response()
-            ->view('ui.sitemap', compact('base', 'staticPages', 'blogs', 'cmsPages'))
-            ->header('Content-Type', 'application/xml; charset=UTF-8');
+        return response($sitemap->xml(), 200, [
+            'Content-Type' => 'application/xml; charset=UTF-8',
+        ]);
     }
 }

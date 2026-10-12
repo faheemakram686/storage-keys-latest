@@ -23,6 +23,10 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Sitemap is built by Laravel from pages and published blogs.
+    # Do not serve a leftover public/sitemap.xml ahead of that route.
+    RewriteRule ^sitemap\.xml$ index.php [L]
+
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f

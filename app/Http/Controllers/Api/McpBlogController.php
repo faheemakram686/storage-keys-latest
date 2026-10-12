@@ -325,15 +325,67 @@ class McpBlogController extends Controller
 
     private function applySeoFields(Blog $blog, Request $request): void
     {
-        foreach (['meta_title', 'meta_description', 'canonical_url', 'robots'] as $field) {
-            if ($request->exists($field)) {
-                $value = $request->input($field);
-                $blog->{$field} = is_string($value) ? trim($value) : $value;
-                if ($blog->{$field} === '') {
-                    $blog->{$field} = null;
-                }
+        $input = $this->jsonBody($request);
+        $limits = [
+            'meta_title' => 255,
+            'meta_description' => 512,
+            'canonical_url' => 2048,
+            'robots' => 64,
+        ];
+        $warnings = [];
+        foreach ($limits as $field => $limit) {
+            if (!array_key_exists($field, $input)) {
+                continue;
             }
+            $value = $this->blankToNull($input[$field], $limit, $warnings, $field);
+            if ($field === 'canonical_url' && $value !== null && filter_var($value, FILTER_VALIDATE_URL) === false) {
+                continue;
+            }
+            $blog->{$field} = $value;
         }
+    }
+
+    /**
+     * Request input plus a raw JSON body, for clients that omit Content-Type.
+     *
+     * @return array<string, mixed>
+     */
+    private function jsonBody(Request $request): array
+    {
+        $data = $request->all();
+        $raw = $request->getContent();
+        if (!is_string($raw) || trim($raw) === '') {
+            return is_array($data) ? $data : [];
+        }
+        $decoded = json_decode($raw, true);
+        if (!is_array($decoded)) {
+            return is_array($data) ? $data : [];
+        }
+
+        return array_merge($decoded, is_array($data) ? $data : []);
+    }
+
+    /**
+     * @param  array<int, string>  $warnings
+     */
+    private function blankToNull($value, int $limit, array &$warnings, string $field): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+        if (is_array($value) || is_object($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+        if (mb_strlen($value) > $limit) {
+            $value = mb_substr($value, 0, $limit);
+            $warnings[] = $field . ' was shortened to ' . $limit . ' characters.';
+        }
+
+        return $value;
     }
 
     private function uniqueSlug(string $base, ?int $ignoreId = null): string
@@ -407,47 +459,29 @@ class McpBlogController extends Controller
 
     public function storeImageFromUrl(?string $url): string
     {
-        if (!$url) {
+        $url = trim((string) $url);
+        if ($url === '') {
             return 'empty';
         }
 
         try {
-            $response = Http::timeout(20)
-                ->withHeaders(['User-Agent' => 'StorageKeys-MCP-Blog/1.0'])
-                ->get($url);
+            $bytes = $this->downloadImageBytes($url, 0);
+            if ($bytes === null) {
+                return 'empty';
+            }
 
-            if (!$response->successful()) {
-                Log::warning('mcp.blog_image_download_failed', [
-                    'url' => $url,
-                    'status' => $response->status(),
-                ]);
+            $ext = $this->imageExtension($bytes);
+            if ($ext === null) {
+                Log::warning('mcp.blog_image_not_an_image', ['url' => $url]);
 
                 return 'empty';
             }
 
-            $contentType = strtolower((string) $response->header('Content-Type'));
-            $ext = 'jpg';
-            if (str_contains($contentType, 'png')) {
-                $ext = 'png';
-            } elseif (str_contains($contentType, 'webp')) {
-                $ext = 'webp';
-            } elseif (str_contains($contentType, 'gif')) {
-                $ext = 'gif';
-            } elseif (str_contains($contentType, 'jpeg') || str_contains($contentType, 'jpg')) {
-                $ext = 'jpg';
-            } else {
-                $pathExt = strtolower(pathinfo(parse_url($url, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION));
-                if (in_array($pathExt, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true)) {
-                    $ext = $pathExt === 'jpeg' ? 'jpg' : $pathExt;
-                }
-            }
-
             $name = Carbon::now()->format('Ymd') . '_' . uniqid('mcp_', true) . '.' . $ext;
-            // Must match admin BlogClass::storeAs('public/uploads/blog-images/') so
-            // asset('storage/uploads/blog-images/...') + storage:link can serve the file.
+            // public disk root is storage/app, and /storage maps to storage/app/public.
             $disk = Storage::disk('public');
             $this->migrateOrphanedBlogImages($disk);
-            $disk->put('public/uploads/blog-images/' . $name, $response->body());
+            $disk->put('public/uploads/blog-images/' . $name, $bytes);
 
             return $name;
         } catch (\Throwable $e) {
@@ -458,6 +492,70 @@ class McpBlogController extends Controller
 
             return 'empty';
         }
+    }
+
+    private function downloadImageBytes(string $url, int $depth): ?string
+    {
+        if ($depth > 2) {
+            return null;
+        }
+
+        $response = Http::timeout(25)
+            ->withOptions(['allow_redirects' => ['max' => 10, 'track_redirects' => true]])
+            ->withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept' => 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+            ])
+            ->get($url);
+
+        if (!$response->successful()) {
+            Log::warning('mcp.blog_image_download_failed', [
+                'url' => $url,
+                'status' => $response->status(),
+            ]);
+
+            return null;
+        }
+
+        $body = $response->body();
+        if ($body === '' || strlen($body) > 8 * 1024 * 1024) {
+            Log::warning('mcp.blog_image_bad_size', ['url' => $url, 'bytes' => strlen($body)]);
+
+            return null;
+        }
+
+        if ($this->imageExtension($body) !== null) {
+            return $body;
+        }
+
+        $contentType = strtolower((string) $response->header('Content-Type'));
+        $looksLikeHtml = str_contains($contentType, 'text/html') || str_starts_with(ltrim($body), '<');
+        if ($looksLikeHtml && preg_match('/property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']/i', $body, $match)) {
+            return $this->downloadImageBytes(html_entity_decode($match[1], ENT_QUOTES), $depth + 1);
+        }
+        if ($looksLikeHtml && preg_match('/content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']/i', $body, $match)) {
+            return $this->downloadImageBytes(html_entity_decode($match[1], ENT_QUOTES), $depth + 1);
+        }
+
+        return null;
+    }
+
+    private function imageExtension(string $bytes): ?string
+    {
+        if (str_starts_with($bytes, "\xFF\xD8\xFF")) {
+            return 'jpg';
+        }
+        if (str_starts_with($bytes, "\x89PNG\r\n\x1A\n")) {
+            return 'png';
+        }
+        if (str_starts_with($bytes, 'GIF87a') || str_starts_with($bytes, 'GIF89a')) {
+            return 'gif';
+        }
+        if (strlen($bytes) > 12 && str_starts_with($bytes, 'RIFF') && substr($bytes, 8, 4) === 'WEBP') {
+            return 'webp';
+        }
+
+        return null;
     }
 
     private function blogImageExists($disk, string $filename): bool
@@ -560,28 +658,46 @@ class McpBlogController extends Controller
             return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:512',
-            'canonical_url' => 'nullable|url|max:2048',
-            'robots' => 'nullable|string|max:64',
-        ]);
+        $input = $this->jsonBody($request);
+        $map = [
+            'meta_title' => ['meta_title', 'seo_title', 'title'],
+            'meta_description' => ['meta_description', 'seo_description', 'description'],
+            'canonical_url' => ['canonical_url', 'canonical'],
+            'robots' => ['robots'],
+        ];
+        $provided = [];
+        foreach ($map as $column => $keys) {
+            foreach ($keys as $key) {
+                if (array_key_exists($key, $input)) {
+                    $provided[$column] = $input[$key];
+                    break;
+                }
+            }
+        }
 
-        if ($validator->fails()) {
+        if ($provided === []) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors(),
+                'message' => 'No SEO fields were provided. Send meta_title, meta_description, canonical_url, or robots as JSON.',
             ], 422);
         }
 
-        foreach (['meta_title', 'meta_description', 'canonical_url', 'robots'] as $field) {
-            if ($request->exists($field)) {
-                $value = $request->input($field);
-                $blog->{$field} = is_string($value) ? trim($value) : $value;
-                if ($blog->{$field} === '') {
-                    $blog->{$field} = null;
-                }
+        $warnings = [];
+        if (array_key_exists('meta_title', $provided)) {
+            $blog->meta_title = $this->blankToNull($provided['meta_title'], 255, $warnings, 'meta_title');
+        }
+        if (array_key_exists('meta_description', $provided)) {
+            $blog->meta_description = $this->blankToNull($provided['meta_description'], 512, $warnings, 'meta_description');
+        }
+        if (array_key_exists('robots', $provided)) {
+            $blog->robots = $this->blankToNull($provided['robots'], 64, $warnings, 'robots');
+        }
+        if (array_key_exists('canonical_url', $provided)) {
+            $canonical = $this->blankToNull($provided['canonical_url'], 2048, $warnings, 'canonical_url');
+            if ($canonical !== null && filter_var($canonical, FILTER_VALIDATE_URL) === false) {
+                $warnings[] = 'canonical_url was not a valid URL and was not saved.';
+            } else {
+                $blog->canonical_url = $canonical;
             }
         }
 
@@ -592,6 +708,7 @@ class McpBlogController extends Controller
             'message' => 'SEO meta updated',
             'id' => $blog->id,
             'slug' => $blog->slug,
+            'warnings' => $warnings,
             'seo' => $this->formatSeo($blog->fresh()),
         ]);
     }
@@ -619,16 +736,30 @@ class McpBlogController extends Controller
             return response()->json(['success' => false, 'message' => 'Blog not found.'], 404);
         }
 
-        // Accept either schema object or schema_json string; null clears.
-        if (!$request->exists('schema') && !$request->exists('schema_json')) {
+        $input = $this->jsonBody($request);
+        if (!array_key_exists('schema', $input) && !array_key_exists('schema_json', $input) && !array_key_exists('json_ld', $input)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Provide schema (object) or schema_json (string). Pass null to clear.',
+                'message' => 'Provide schema (object or JSON string) or schema_json. Pass null to clear.',
             ], 422);
         }
 
-        if ($request->exists('schema')) {
-            $schema = $request->input('schema');
+        if (array_key_exists('json_ld', $input) && !array_key_exists('schema', $input)) {
+            $input['schema'] = $input['json_ld'];
+        }
+
+        if (array_key_exists('schema', $input)) {
+            $schema = $input['schema'];
+            if (is_string($schema)) {
+                $decoded = json_decode($schema, true);
+                if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'schema string is not a JSON object or array.',
+                    ], 422);
+                }
+                $schema = $decoded;
+            }
             if ($schema === null || $schema === '') {
                 $blog->schema_json = null;
             } elseif (is_array($schema) || is_object($schema)) {
@@ -640,7 +771,7 @@ class McpBlogController extends Controller
                 ], 422);
             }
         } else {
-            $raw = $request->input('schema_json');
+            $raw = $input['schema_json'] ?? null;
             if ($raw === null || $raw === '') {
                 $blog->schema_json = null;
             } elseif (is_array($raw) || is_object($raw)) {
