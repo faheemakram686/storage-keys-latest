@@ -18,6 +18,7 @@ use App\Repositories\Core\Status\StatusRepository;
 use App\Services\Tenant\Attendance\AttendanceSummaryService;
 use App\Services\Tenant\Employee\AnnouncementService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeDashboardController extends Controller
@@ -35,19 +36,91 @@ class EmployeeDashboardController extends Controller
     public function employeeAttendance()
     {
         $attendanceApprove = resolve(StatusRepository::class)->attendanceApprove();
+        $userId = auth()->id();
+        // Same row punch-in refuses: any approved detail with no out_time, including a previous day.
+        $openDetail = AttendanceDetails::getUnPunchedOut($userId);
 
-        return Attendance::filters($this->filter)->with([
+        $attendance = Attendance::filters($this->filter)->with([
             'user:id,first_name,last_name,status_id',
             'workingShift:id,name',
             'workingShift.details' => fn(HasMany $hasMany) => $hasMany
                 ->where('weekday', strtolower(todayFromApp()->format('D'))),
-            'details' => fn(HasMany $hasMany) => $hasMany
-                ->select('id', 'in_time', 'out_time', 'attendance_id', 'status_id')
+            'details' => function (HasMany $hasMany) use ($attendanceApprove, $openDetail) {
+                $hasMany
+                    ->select('id', 'in_time', 'out_time', 'attendance_id', 'status_id')
+                    ->where('status_id', $attendanceApprove);
+                if ($openDetail) {
+                    $hasMany->orderByRaw('CASE WHEN out_time IS NULL THEN 0 ELSE 1 END');
+                }
+                $hasMany->orderBy('in_time', 'DESC');
+            },
+        ])->where('user_id', $userId);
+
+        $record = $openDetail
+            ? $attendance->where('id', $openDetail->attendance_id)->first()
+            : $attendance
                 ->where('status_id', $attendanceApprove)
-                ->orderBy('in_time', 'DESC')
-        ])->where('status_id', $attendanceApprove)
-            ->whereDate('in_date', todayFromApp())
-            ->where('user_id', auth()->user()->id)->first();
+                ->whereDate('in_date', todayFromApp())
+                ->first();
+
+        if ($record && request()->is('api/*')) {
+            $this->presentPunchTimes($record);
+        }
+
+        return $record;
+    }
+
+    /**
+     * Punch times are stored in UTC. The mobile app prints them as clock time,
+     * so the API returns the company timezone. The web dashboard converts UTC itself.
+     */
+    private function presentPunchTimes(Attendance $attendance): void
+    {
+        $zone = $this->punchDisplayTimezone();
+        if (!$attendance->relationLoaded('details')) {
+            return;
+        }
+
+        foreach ($attendance->details as $detail) {
+            foreach (['in_time', 'out_time'] as $field) {
+                if (empty($detail->{$field})) {
+                    $detail->{$field} = null;
+                    continue;
+                }
+                $detail->{$field} = Carbon::parse($detail->{$field}, 'UTC')
+                    ->timezone($zone)
+                    ->format('Y-m-d H:i:s');
+            }
+            $detail->syncOriginal();
+        }
+    }
+
+    private function punchDisplayTimezone(): string
+    {
+        $candidates = [
+            request('timeZone'),
+            request()->header('X-Timezone'),
+        ];
+
+        try {
+            $candidates[] = $this->getSettingFromKey('app')('time_zone');
+        } catch (\Throwable $e) {
+            $candidates[] = null;
+        }
+
+        $candidates[] = 'Asia/Dubai';
+
+        foreach ($candidates as $zone) {
+            if (!is_string($zone)) {
+                continue;
+            }
+            $zone = trim($zone);
+            if ($zone !== '' && $zone !== 'UTC' && in_array($zone, timezone_identifiers_list(), true)) {
+                return $zone;
+            }
+        }
+
+        return 'Asia/Dubai';
     }
 
     public function employeeMonthlyAttendanceLog(): array
