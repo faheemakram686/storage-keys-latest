@@ -475,6 +475,27 @@ html, body {
   border-color: #F48922;
   color: #fff;
 }
+.pv-foot-contact .pv-store {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.pv-foot-contact .pv-store a {
+  display: inline-flex;
+  line-height: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: opacity .2s;
+}
+.pv-foot-contact .pv-store a:hover {
+  opacity: .82;
+}
+.pv-foot-contact .pv-store img {
+  display: block;
+  height: 36px;
+  width: auto;
+}
 .pv-copy {
   border-top: 1px solid #E7DDD4;
   margin-top: 40px;

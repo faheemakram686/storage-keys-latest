@@ -72,6 +72,14 @@
         <p><i class="fas fa-phone"></i> <a href="tel:+971565018785">+971 56 501 8785</a></p>
         <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
+        <div class="pv-store">
+          <a href="https://apps.apple.com/us/search?term=Storage%20Keys" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <img src="{{ asset('sk-assets/assets/images/frontend/app-store-badge.svg') }}" alt="Download on the App Store" width="120" height="36">
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=com.storagekeys.customer.app" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+            <img src="{{ asset('sk-assets/assets/images/frontend/google-play-badge.png') }}" alt="Get it on Google Play" width="120" height="36">
+          </a>
+        </div>
       </div>
     </div>
     <div class="pv-copy">© StorageKeys 2026 — All rights reserved.</div>
