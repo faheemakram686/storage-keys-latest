@@ -10,7 +10,7 @@
 .bl-page .ps-hero {
     background:
         linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .35) 46%, rgba(5, 5, 5, .12) 100%),
-        url('../../assets/images/frontend/landing-page/corridor%20area-80kb.jpg') center/cover no-repeat;
+        url('../../assets/images/frontend/blog-header.jpg') center/cover no-repeat;
     padding: 78px 0 84px;
 }
 
