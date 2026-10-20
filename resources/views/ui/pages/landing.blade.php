@@ -5,7 +5,7 @@
 
 @section('css')
 {{-- LCP: responsive preload so mobile gets the smaller hero first --}}
-<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=2" fetchpriority="high">
 <link rel="preconnect" href="https://d2mpatx37cqexb.cloudfront.net" crossorigin>
 <link rel="dns-prefetch" href="https://d2mpatx37cqexb.cloudfront.net">
 @endsection
@@ -17,12 +17,12 @@
     <!-- ============ HERO ============ -->
     <section class="sk-hero">
         <picture class="sk-hero-media">
-            <source srcset="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}" type="image/webp">
+            <source srcset="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=2" type="image/webp">
             <img
-                src="{{ asset('sk-assets/assets/images/frontend/home-header.jpg') }}"
+                src="{{ asset('sk-assets/assets/images/frontend/home-header.jpg') }}?v=2"
                 alt=""
-                width="1024"
-                height="426"
+                width="1942"
+                height="809"
                 fetchpriority="high"
                 decoding="sync"
             >
