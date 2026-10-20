@@ -296,37 +296,48 @@ a.bk-page-btn:hover {
     white-space: nowrap;
 }
 
-.bk-unit {
+.bk-results .product-section {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 22px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.bk-results .bk-empty {
+    grid-column: 1 / -1;
+}
+
+.bk-unit,
+.sk-home .booking-page .apartment {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    grid-template-areas:
+        "photo copy"
+        "photo cta";
+    gap: 10px 16px;
+    align-items: center;
+    width: 100%;
     background: #fff;
     border: 1px solid var(--sk-line);
-    border-radius: var(--sk-radius);
-    padding: 18px;
-    margin-bottom: 16px;
-    align-items: center;
+    border-radius: 18px;
+    padding: 12px;
+    margin: 0;
+    box-shadow: 0 8px 22px rgba(5, 5, 5, .04);
 }
 
 .bk-unit.is-picked {
     border-color: #F48922;
-    box-shadow: 0 0 0 1px #F48922;
-}
-
-.sk-home .booking-page .apartment {
-    display: grid;
-    width: auto;
-    border: 1px solid var(--sk-line);
-    background: #fff;
+    box-shadow: 0 10px 26px rgba(244, 137, 34, .16);
 }
 
 .bk-unit-img,
 .sk-home .booking-page .apartment-img {
-    height: 160px;
-    width: auto;
+    grid-area: photo;
+    height: 100%;
+    min-height: 128px;
+    width: 100%;
     max-width: none;
     max-height: none;
-    border-radius: 12px;
+    border-radius: 14px;
     background: var(--sk-soft) center/cover no-repeat;
     padding: 0;
     margin: 0;
@@ -336,25 +347,21 @@ a.bk-page-btn:hover {
     display: none;
 }
 
-.bk-unit-body h3,
-.sk-home .booking-page .apartment-size {
-    font-size: 18px;
-    margin: 6px 0 12px;
-    font-family: inherit;
+.bk-unit-body,
+.sk-home .booking-page .apartment-details {
+    grid-area: copy;
+    min-width: 0;
+    align-self: end;
 }
 
-.bk-unit-body h3 span {
-    color: var(--sk-muted);
-    font-weight: 500;
-    font-size: 14px;
-}
-
+.bk-unit-loc,
 .sk-home .booking-page .city-name-option {
+    margin: 0;
     color: var(--sk-accent-2);
     font-family: inherit;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: .04em;
+    letter-spacing: .06em;
     text-transform: uppercase;
     white-space: normal;
 }
@@ -362,8 +369,26 @@ a.bk-page-btn:hover {
 .sk-home .booking-page .area-name {
     color: var(--sk-muted);
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0;
     text-transform: none;
+}
+
+.bk-unit-body h3,
+.sk-home .booking-page .apartment-size {
+    margin: 4px 0 0;
+    color: #050505;
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+.bk-unit-meta {
+    margin: 6px 0 0;
+    color: var(--sk-body);
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .bk-unit-tags,
@@ -371,7 +396,7 @@ a.bk-page-btn:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 14px;
+    margin-top: 12px;
 }
 
 .sk-home .booking-page .feature-name {
@@ -386,15 +411,25 @@ a.bk-page-btn:hover {
 }
 
 .sk-home .booking-page .btn-reserve {
+    grid-area: cta;
     display: inline-flex;
+    align-self: start;
+    justify-self: start;
     width: auto;
-    margin-top: 0;
+    margin: 2px 0 0;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow: none;
     text-transform: none;
+    white-space: nowrap;
 }
 
 .sk-home .booking-page .btn:last-child {
-    padding: 15px 30px !important;
-    border-radius: 50px;
+    padding: 14px 36px !important;
+    border-radius: 10px;
 }
 
 .bk-empty {
@@ -471,14 +506,14 @@ a.bk-page-btn:hover {
 
 .bk-fan-card {
     position: absolute;
-    top: 28px;
+    top: 34px;
     left: 50%;
-    width: 150px;
-    height: 168px;
+    width: 142px;
+    height: 158px;
     border-radius: 18px;
     background: #fff center/cover no-repeat;
     border: 1px solid #E7DDD4;
-    box-shadow: 0 14px 28px rgba(5, 5, 5, .08);
+    box-shadow: 0 10px 22px rgba(5, 5, 5, .06);
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -529,21 +564,24 @@ a.bk-page-btn:hover {
     color: #F48922;
 }
 
-.bk-fan-card:nth-child(1) { transform: translateX(-168%) rotate(-16deg); background: #F7F1EC; }
-.bk-fan-card:nth-child(2) { transform: translateX(-108%) rotate(-8deg); color: #6C365B; }
+.bk-fan-card:nth-child(1) { transform: translateX(-158%) rotate(-14deg); background: #F7F1EC; opacity: .72; }
+.bk-fan-card:nth-child(2) { transform: translateX(-102%) rotate(-7deg); color: #6C365B; opacity: .88; }
 .bk-fan-card:nth-child(3),
 .bk-fan-card.is-front {
     transform: translateX(-50%);
     top: 0;
-    width: 196px;
-    height: 210px;
+    width: 188px;
+    height: 214px;
     z-index: 3;
+    opacity: 1;
     text-decoration: none;
     background: #fff;
+    border-color: #F48922;
+    box-shadow: 0 16px 32px rgba(5, 5, 5, .12);
 }
 .bk-fan-card.is-front .bk-fan-icons i:nth-child(2) { color: #6C365B; }
-.bk-fan-card:nth-child(4) { transform: translateX(8%) rotate(8deg); color: #6C365B; }
-.bk-fan-card:nth-child(5) { transform: translateX(68%) rotate(16deg); background: #F7F1EC; }
+.bk-fan-card:nth-child(4) { transform: translateX(2%) rotate(7deg); color: #6C365B; opacity: .88; }
+.bk-fan-card:nth-child(5) { transform: translateX(58%) rotate(14deg); background: #F7F1EC; opacity: .72; }
 
 .bk-size-readout {
     display: flex;
@@ -576,6 +614,7 @@ a.bk-page-btn:hover {
     border-radius: 99px;
     background: #F48922;
     position: relative;
+    transition: width .16s ease;
 }
 
 .bk-size-bar span.is-set::after {
@@ -607,11 +646,20 @@ a.bk-page-btn:hover {
     margin: 0;
     border-radius: 12px;
     border: 1.5px solid var(--sk-line);
-    background: var(--sk-soft);
+    background: #fff;
     color: var(--sk-dark);
     font-family: inherit;
     cursor: pointer;
     position: relative;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+
+.bk-visual-card .size-container:hover {
+    border-color: #F48922;
+}
+
+.bk-visual-card .size-container:active {
+    transform: scale(0.98);
 }
 
 .bk-visual-card .size-container span {
@@ -725,9 +773,18 @@ a.bk-page-btn:hover {
         flex-wrap: wrap;
     }
 
+    .bk-results .product-section {
+        grid-template-columns: 1fr;
+    }
+
     .bk-unit,
     .sk-home .booking-page .apartment {
         grid-template-columns: 1fr;
+        grid-template-areas:
+            "photo"
+            "copy"
+            "cta";
+        padding: 12px;
     }
 
     .bk-unit-img,
@@ -735,5 +792,10 @@ a.bk-page-btn:hover {
         height: 180px;
         width: 100%;
         margin: 0;
+    }
+
+    .sk-home .booking-page .btn-reserve {
+        justify-content: center;
+        margin: 4px 0 6px;
     }
 }

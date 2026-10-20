@@ -41,16 +41,138 @@
     min-height: 450px;
 }
 
+.sk-locs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+    align-items: stretch;
+}
+
+.sk-loc-tile {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(5, 5, 5, .06);
+}
+
+.sk-loc-map {
+    position: relative;
+    height: 240px;
+    background: var(--sk-soft);
+}
+
+.sk-loc-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+.sk-loc-body {
+    padding: 22px 26px 28px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.sk-loc-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.sk-loc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #050505;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 999px;
+}
+
+.sk-loc-badge i { color: #F48922; }
+
+.sk-loc-pin {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #7A7168;
+}
+
+.sk-loc-body .h3 {
+    font-size: 22px;
+    margin: 0 0 6px;
+}
+
+.sk-loc-rating {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #050505;
+    margin: 0 0 10px;
+}
+
+.sk-loc-rating .fa-star { color: #fbbc04; margin-right: 2px; }
+.sk-loc-rating .fa-google { color: #4285f4; margin: 0 2px; }
+
+.sk-loc-addr {
+    font-size: 14.5px;
+    color: #7A7168;
+    line-height: 1.65;
+    margin: 0 0 18px;
+}
+
+.sk-locfeat {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.sk-locfeat span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #050505;
+    background: #FCF8F5;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.sk-locfeat i { color: #F48922; }
+
+.sk-loc-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.sk-loc-actions .sk-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
 @media (max-width: 991px) {
     .ct-trust .ps-trust-in,
-    .ct-cards {
+    .ct-cards,
+    .sk-locs-grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 767px) {
     .ct-trust .ps-trust-in,
-    .ct-cards {
+    .ct-cards,
+    .sk-locs-grid {
         grid-template-columns: 1fr;
     }
 }

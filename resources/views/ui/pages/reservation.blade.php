@@ -503,7 +503,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="background: #F7FAFC; border-top: 1px solid #EDF2F7; padding: 20px 40px; display: flex; justify-content: flex-end;">
-                    <button type="button" class="btn" data-dismiss="modal" style="background: #6C365B; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none;">Close</button>
+                    <button type="button" class="btn" data-dismiss="modal" style="background: #6C365B; color: white; padding: 14px 36px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none;">Close</button>
                 </div>
             </div>
         </div>

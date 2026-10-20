@@ -320,7 +320,8 @@ body:has(.sh-page) {
 
 .sh-page .sh-add,
 .sh-page .sh-help {
-    border-radius: 14px;
+    border-radius: 10px;
+    padding: 14px 36px;
     box-shadow: none;
     font-weight: 700;
 }

@@ -40,7 +40,7 @@ p { margin: 0 0 1em; }
 /* ---------- Buttons ---------- */
 .sk-btn {
     display: inline-flex; align-items: center; gap: 10px;
-    padding: 15px 30px; border-radius: 50px; font-weight: 600; font-size: 15px;
+    padding: 14px 36px; border-radius: 10px; font-weight: 600; font-size: 15px;
     text-decoration: none; transition: .25s; border: 2px solid transparent; cursor: pointer; font-family: inherit;
 }
 .sk-btn-primary { background: var(--sk-accent); color: #fff; box-shadow: 0 12px 24px rgba(244, 137, 34, .30); }

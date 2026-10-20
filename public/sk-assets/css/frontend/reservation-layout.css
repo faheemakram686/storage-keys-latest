@@ -368,9 +368,9 @@ body:has(.rsv-page) .rsv-page .ps-hero {
 .rsv-page .btn-submit {
     height: auto;
     margin: 0;
-    padding: 14px 32px;
+    padding: 14px 36px;
     border: 0;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #F48922;
     color: #fff;
     font-size: 14px;

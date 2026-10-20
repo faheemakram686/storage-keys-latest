@@ -178,6 +178,7 @@
             var addonList = [];
             var currentPage = 1;
             var perPage = 5;
+            var filterReq = 0;
             var unitImg = @json(asset('sk-assets/assets/images/frontend/blog/Image_8.png'));
             var reserveBase = @json(url('reservation'));
             var durationMarks = ['1 month', '3 months', '6 months', '8 months', '8 months+'];
@@ -201,7 +202,17 @@
             getCities(country_id);
             var city_id = $('.citySection').val();
             getLocations(city_id);
-            getFilterResults(slevel, stype, ssize);
+            var $fifty = $('.size-container').filter(function () {
+                return /50/.test($(this).text());
+            }).first();
+            if ($fifty.length) {
+                $fifty.addClass('checked');
+                ssize = $fifty.attr('data');
+                syncSizeVisual();
+            }
+            setTimeout(function () {
+                getFilterResults();
+            }, 0);
 
             $("#country_id").on('change', function() {
                 getCities($(this).val());
@@ -292,23 +303,14 @@
                 getFilterResults(slevel, stype, ssize);
             });
 
-            $(".size-container").click(function() {
+            $(".size-container").on('click', function() {
+                if ($(this).hasClass('checked')) return;
                 $('.size-container').removeClass('checked');
                 $(this).addClass('checked');
                 ssize = $(this).attr('data');
                 fanIndex = 0;
-                getFilterResults(slevel, stype, ssize);
-                syncSizeVisual();
+                applySizeView();
             });
-
-            var $fifty = $('.size-container').filter(function () {
-                return /50/.test($(this).text());
-            }).first();
-            if ($fifty.length) {
-                $fifty.trigger('click');
-            } else {
-                syncSizeVisual();
-            }
 
             $('#bk-duration').on('input change', function() {
                 renderUnits();
@@ -324,13 +326,33 @@
                 var $on = $all.filter('.checked');
                 var total = $all.length || 1;
                 var index = $on.length ? $all.index($on) : -1;
-                var pct = index < 0 ? 0 : Math.round(((index + 1) / total) * 100);
+                var pct = index < 0 ? 0 : Math.round(((index + 0.5) / total) * 100);
                 var $fill = $('#bk-size-fill');
                 $fill.css('width', pct + '%');
                 $fill.toggleClass('is-set', index >= 0);
                 var label = $on.length ? $.trim($on.find('span').text()) : 'All sizes';
                 $('#bk-size-readout').text(label);
                 $('#bk-size-hint').text($on.length ? sizeHint(label) : 'Select a size');
+            }
+
+            function applySizeView() {
+                syncSizeVisual();
+                var sizeLabel = $.trim($('.size-container.checked span').text());
+                if (ssize) {
+                    allUnits.sort(function(a, b) {
+                        return (sizeMatches(a, ssize) ? 0 : 1) - (sizeMatches(b, ssize) ? 0 : 1);
+                    });
+                }
+                fanUnits = [];
+                for (var u = 0; u < allUnits.length; u++) {
+                    if (!ssize || sizeMatches(allUnits[u], ssize)) fanUnits.push(allUnits[u]);
+                }
+                if (fanIndex >= fanUnits.length) fanIndex = 0;
+                if (ssize && sizeLabel && !fanUnits.length && allUnits.length) {
+                    $('#search_title').text('No ' + sizeLabel + ' in this area. Showing the other available units.');
+                }
+                currentPage = 1;
+                renderUnits();
             }
 
             $('#bk-per-page').on('change', function() {
@@ -369,14 +391,19 @@
                     tags += '<span class="feature-name">' + addonList[ie].name + '</span>';
                 }
                 var picked = sizeMatches(unit, ssize) ? ' is-picked' : '';
+                var meta = [];
+                if (level) meta.push(level);
+                if (name) meta.push('Unit ' + name);
                 return '<article class="bk-unit apartment' + picked + '">' +
                     '<div class="bk-unit-img apartment-img" style="background-image:url(\'' + unitImg + '\')"></div>' +
                     '<div class="bk-unit-body apartment-details">' +
-                    '<div class="city-name-option">' + city + ' <span class="area-name">' + loc + '</span></div>' +
-                    '<h3 class="apartment-size">' + size + ' <span>(' + level + ' / Unit ' + name + ')</span></h3>' +
-                    '<div class="bk-unit-tags apartment-features">' + tags + '</div>' +
-                    '<div class="apartment-reserve"><a href="' + reserveBase + '/' + unit.id + '?duration=' + encodeURIComponent(currentDuration()) + '" class="sk-btn sk-btn-primary btn-reserve">Enquire about this unit</a></div>' +
-                    '</div></article>';
+                    '<p class="bk-unit-loc city-name-option">' + city + (loc ? ' <span class="area-name">' + loc + '</span>' : '') + '</p>' +
+                    '<h3 class="apartment-size">' + size + '</h3>' +
+                    (meta.length ? '<p class="bk-unit-meta">' + meta.join(' · ') + '</p>' : '') +
+                    (tags ? '<div class="bk-unit-tags apartment-features">' + tags + '</div>' : '') +
+                    '</div>' +
+                    '<a href="' + reserveBase + '/' + unit.id + '?duration=' + encodeURIComponent(currentDuration()) + '" class="sk-btn sk-btn-primary btn-reserve">Enquire about this unit</a>' +
+                    '</article>';
             }
 
             function pageItem(page, label) {
@@ -534,48 +561,35 @@
                 return values;
             }
 
-            function getFilterResults(slevel, stype, ssize) {
+            function getFilterResults() {
                 slevel = checkedValues('.storagelevelfilter');
                 stype = checkedValues('.storagetypefilter');
                 var country_id = $('select[name=country_id]').val();
                 var city_id = $('select[name=city_id]').val();
                 var loc_id = $('select[name=loc_id]').val();
-                var sizeLabel = $.trim($('.size-container.checked span').text());
+                var req = ++filterReq;
 
                 $.ajax({
                     url: '{{ url('country-wise') }}',
                     type: 'get',
-                    async: false,
                     dataType: 'json',
                     data: { country_id: country_id, city_id: city_id, id: loc_id, level: slevel, sType: stype },
                     success: function(data) {
+                        if (req !== filterReq) return;
                         allUnits = (data.su && data.su.length) ? data.su : [];
                         addonList = data.addon || [];
-                        if (ssize) {
-                            allUnits.sort(function(a, b) {
-                                return (sizeMatches(a, ssize) ? 0 : 1) - (sizeMatches(b, ssize) ? 0 : 1);
-                            });
-                        }
-                        fanUnits = [];
-                        for (var u = 0; u < allUnits.length; u++) {
-                            if (!ssize || sizeMatches(allUnits[u], ssize)) fanUnits.push(allUnits[u]);
-                        }
-                        if (fanIndex >= fanUnits.length) fanIndex = 0;
                         var countryName = $.trim($('#country_id').find(':selected').text());
                         var cityName = $.trim($('#citySection').find(':selected').text());
                         var locName = $.trim($('#loc_id').find(':selected').text());
                         var title = [countryName, cityName, locName].filter(function(part) {
                             return part && part !== 'Choose One' && part !== 'Select City' && part !== 'Select Location';
                         }).join(' · ');
-                        if (ssize && sizeLabel && !fanUnits.length && allUnits.length) {
-                            title = 'No ' + sizeLabel + ' in this area. Showing the other available units.';
-                        }
                         if (title) $('#search_title').text(title);
-                        currentPage = 1;
-                        renderUnits();
+                        fanIndex = 0;
+                        applySizeView();
                     },
                     error: function() {
-                        toastr.error('any technical error');
+                        if (window.toastr) toastr.error('any technical error');
                     }
                 });
             }
