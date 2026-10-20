@@ -73,7 +73,6 @@
         <p><i class="fas fa-phone"></i> Toll Free: <a href="tel:8005397">800 5397</a></p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:sales@storagekeys.com">sales@storagekeys.com</a></p>
       </div>
-      
     </div>
     <div class="pv-copy">© StorageKeys 2026 — All rights reserved.</div>
   </div>

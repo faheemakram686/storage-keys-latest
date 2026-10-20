@@ -41,7 +41,7 @@
     @endif
     @yield('headExtra')
 </head>
-<body>
+<body class="{{ $isHome ? 'sk-is-home' : '' }}">
     @include('ui.includes.google-tag-manager-noscript')
     @include('ui.includes.header')
     @yield('content')

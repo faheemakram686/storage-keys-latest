@@ -4,45 +4,18 @@
 @section('metaDescription', 'Buy packing supplies and storage accessories from StorageKeys. Boxes, tape, wrap and more for your move or storage in the UAE.')
 
 @section('content')
-<div class="sk-home">
+<div class="sk-home sh-page">
 
     <section class="ps-hero">
         <div class="sk-container">
-            <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <span>Shop</span></div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">Shop</span>
-            <h1>Packing supplies for <span>storage &amp; moving</span></h1>
-            <p class="lead">Boxes, tape, wrap and other essentials to pack safely and make the most of your storage unit in Sharjah and Dubai.</p>
-            <div class="ps-hero-cta">
-                <a href="#sh-products" class="sk-btn sk-btn-primary"><i class="fas fa-box-open"></i> Browse Products</a>
-                <a href="{{ url('/cart') }}" class="sk-btn sk-btn-ghost"><i class="fas fa-shopping-cart"></i> View Cart</a>
-            </div>
-            <div class="ps-hero-badges">
-                <span class="ps-hbadge"><i class="fas fa-box"></i> Boxes &amp; cartons</span>
-                <span class="ps-hbadge"><i class="fas fa-tape"></i> Tape &amp; wrap</span>
-                <span class="ps-hbadge"><i class="fas fa-shield-alt"></i> Packing protection</span>
-            </div>
+            <h1>Packing supplies</h1>
+            <p class="lead">In addition to our provided supplies with our unit, extra boxes and tape are available for purchase here.</p>
         </div>
     </section>
 
-    <div class="ps-trust ct-trust">
+    <section class="sh-products" id="sh-products">
         <div class="sk-container">
-            <div class="ps-trust-in">
-                <div class="ps-trust-i"><i class="fas fa-box-open"></i> Packing supplies</div>
-                <div class="ps-trust-i"><i class="fas fa-truck"></i> Ready for your move</div>
-                <div class="ps-trust-i"><i class="fas fa-shopping-cart"></i> Add to cart</div>
-                <div class="ps-trust-i"><i class="fas fa-headset"></i> Team support</div>
-            </div>
-        </div>
-    </div>
-
-    <section class="sk-section" id="sh-products">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Our Shop</span>
-                <h2>Storage &amp; Packing Products</h2>
-                <p>Choose the supplies you need, add them to your cart, and we will help you get ready for storage or moving.</p>
-            </div>
-
+            <div class="sh-wrap">
             @if(session('success'))
                 <div class="sh-alert">{{ session('success') }} <a href="{{ url('/cart') }}">View cart</a></div>
             @endif
@@ -50,13 +23,16 @@
             @isset($data['product'])
                 @if($data['product']->count())
                     <div class="sh-grid product_list sk-reveal">
-                        @foreach($data['product'] as $product)
+                        @foreach($data['product']->getCollection()->sortBy(fn ($product) => stripos((string) $product->p_name, 'box') === false)->values() as $product)
                             @php
                                 $img = $product->image
                                     ? asset('storage/uploads/product-images/'.$product->image)
                                     : asset('sk-assets/assets/images/frontend/product/1.png');
                                 $sale = $product->sell_price - (($product->sell_price * $product->disc_amount) / 100);
                                 $hasDisc = (float) $product->disc_amount > 0;
+                                $isBox = stripos((string) $product->p_name, 'box') !== false;
+                                $cartId = $isBox ? $product->id.'-s' : $product->id;
+                                $cartName = $isBox ? $product->p_name.' (S - 45 cm)' : $product->p_name;
                             @endphp
                             <article class="sh-card">
                                 <div class="sh-card-img" style="background-image:url('{{ $img }}');">
@@ -68,23 +44,32 @@
                                     </button>
                                 </div>
                                 <div class="sh-card-body">
-                                    <h3>{{ $product->p_name }}</h3>
-                                    <div class="sh-price">
-                                        <span>AED {{ number_format($sale, 2) }}</span>
-                                        @if($hasDisc)
-                                            <del>AED {{ number_format($product->sell_price, 2) }}</del>
-                                        @endif
+                                    <div class="sh-card-row">
+                                        <h3>{{ $product->p_name }}</h3>
+                                        <div class="sh-price">
+                                            <span>AED {{ number_format($sale, 2) }}</span>
+                                            @if($hasDisc)
+                                                <del>AED {{ number_format($product->sell_price, 2) }}</del>
+                                            @endif
+                                        </div>
                                     </div>
+                                    @if($isBox)
+                                        <div class="sh-sizes" role="group" aria-label="Box size">
+                                            <button type="button" class="sh-size is-on" data-size="s" data-label="S - 45 cm" aria-pressed="true">S - 45 cm</button>
+                                            <button type="button" class="sh-size" data-size="m" data-label="M - 60 cm" aria-pressed="false">M - 60 cm</button>
+                                            <button type="button" class="sh-size" data-size="l" data-label="L - 75 cm" aria-pressed="false">L - 75 cm</button>
+                                        </div>
+                                    @endif
                                     <form action="{{ route('cart.store') }}" method="POST" id="add_cart_{{ $product->id }}">
                                         @csrf
-                                        <input type="hidden" value="{{ $product->id }}" name="id">
-                                        <input type="hidden" value="{{ $product->p_name }}" name="name">
+                                        <input type="hidden" value="{{ $cartId }}" name="id" data-base="{{ $product->id }}">
+                                        <input type="hidden" value="{{ $cartName }}" name="name" data-base="{{ $product->p_name }}">
                                         <input type="hidden" value="{{ $sale }}" name="price">
                                         <input type="hidden" value="{{ $product->image }}" name="image">
                                         <input type="hidden" value="1" name="quantity">
                                     </form>
                                     <button type="submit" form="add_cart_{{ $product->id }}" class="sk-btn sk-btn-primary sh-add">
-                                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        Add to Cart
                                     </button>
                                 </div>
                             </article>
@@ -104,6 +89,46 @@
                     </div>
                 @endif
             @endisset
+
+            <section class="sh-guide" aria-labelledby="sh-box-sizes">
+                <svg class="sh-swoosh" viewBox="0 0 140 140" aria-hidden="true">
+                    <path d="M150 8C96 18 58 58 48 118" fill="none" stroke="#F48922" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M150 30C108 38 78 68 70 116" fill="none" stroke="#F6A15A" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M150 52C118 58 96 82 90 114" fill="none" stroke="#F8C898" stroke-width="8" stroke-linecap="round"/>
+                </svg>
+                <h2 id="sh-box-sizes">Our box sizes</h2>
+                <p>We provide a range of boxes for your things. Select your items from below and we'll recommend a box size for you.</p>
+                <div class="sh-guide-grid">
+                    <div class="sh-guide-item is-hot">
+                        <span class="ic"><i class="fas fa-tshirt" aria-hidden="true"></i></span>
+                        <span><strong>Clothing</strong><small>Seasonal clothing, shoes, bags</small></span>
+                    </div>
+                    <div class="sh-guide-item">
+                        <span class="ic"><i class="fas fa-biking" aria-hidden="true"></i></span>
+                        <span><strong>Sports Gear</strong><small>Roller skates, hockey sticks, balls</small></span>
+                    </div>
+                    <div class="sh-guide-item is-hot">
+                        <span class="ic"><i class="fas fa-couch" aria-hidden="true"></i></span>
+                        <span><strong>Appliances</strong><small>Toaster, kitchen tools</small></span>
+                    </div>
+                    <div class="sh-guide-item">
+                        <span class="ic"><i class="fas fa-user" aria-hidden="true"></i></span>
+                        <span><strong>Hobby Items</strong><small>Figurines, collectibles, dolls</small></span>
+                    </div>
+                    <div class="sh-guide-item">
+                        <span class="ic"><i class="fas fa-folder" aria-hidden="true"></i></span>
+                        <span><strong>Documents</strong><small>Papers, records, binders</small></span>
+                    </div>
+                    <div class="sh-guide-item is-hot">
+                        <span class="ic"><i class="fas fa-desktop" aria-hidden="true"></i></span>
+                        <span><strong>Electronics</strong><small>Monitors, PC, speakers</small></span>
+                    </div>
+                </div>
+                <div class="sh-guide-actions">
+                    <a href="{{ url('/contact-us') }}" class="sk-btn sk-btn-primary sh-help">Help me choose</a>
+                </div>
+            </section>
+            </div>
         </div>
     </section>
 
@@ -153,6 +178,16 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('.product_list').on('click', '.sh-size', function () {
+            var btn = $(this);
+            var card = btn.closest('.sh-card');
+            card.find('.sh-size').removeClass('is-on').attr('aria-pressed', 'false');
+            btn.addClass('is-on').attr('aria-pressed', 'true');
+            var form = card.find('form');
+            form.find('[name=id]').val(form.find('[name=id]').data('base') + '-' + btn.data('size'));
+            form.find('[name=name]').val(form.find('[name=name]').data('base') + ' (' + btn.data('label') + ')');
+        });
+
         $('.product_list').on('click', '.btn-quick', function () {
             var id = $(this).attr('data');
             $.ajax({

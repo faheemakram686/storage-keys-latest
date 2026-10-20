@@ -94,7 +94,7 @@
                     <p>StorageKeys provides pharmaceutical storage for pharmacies, clinics, medical centres, distributors and suppliers across Dubai and Sharjah. Our Sharjah facility holds the licence required for storing pharmaceutical products in the UAE, and documentation is available to customers on request.</p>
                     <p>It sits within our <a href="{{ url('/business-storage') }}">storage for companies across the UAE</a>, so healthcare businesses can keep regulated stock, records and equipment with one provider. Flexible, quote-based terms mean you pay for the space you use, not a long fixed lease.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -129,7 +129,7 @@
                         <li class="row-i"><div class="ic"><i class="fas fa-tooth"></i></div><div><h4>Veterinary &amp; Dental Practices</h4><p>Smaller practices often buy consumables in bulk to control costs, and need somewhere secure to keep the surplus.</p></div></li>
                     </ul>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/web/Image_3.png') }}');"></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Conditions &amp; Compliance</span>
                     <h2>Why Conditions and Records Matter</h2>
@@ -178,7 +178,7 @@
                     <p>Archive boxes kept in <a href="{{ url('/box-storage') }}">space sized around archive boxes</a> stay dry and flat, and labelling by year and branch makes retrieval quick. Only staff you authorise can access them. Keep an index of what each box contains, so a single record can be found in minutes rather than hours.</p>
                     <p>For companies moving premises at the same time, <a href="{{ url('/office-storage') }}">storage for office furniture and files</a> can be arranged alongside your pharmaceutical storage.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline-2.jpg') }}');"></div>
             </div>
         </div>
     </section>

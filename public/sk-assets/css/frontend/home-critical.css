@@ -22,14 +22,14 @@ html, body {
 }
 
 :root {
-  --sk-primary: #123a63;
-  --sk-primary-2: #1c5a99;
-  --sk-accent: #ff8a1e;
-  --sk-accent-2: #ff6a00;
-  --sk-dark: #0e2036;
-  --sk-line: #e6ecf2;
-  --sk-soft: #f4f8fc;
-  --sk-chrome-max: 1200px;
+  --sk-primary: #050505;
+  --sk-primary-2: #6C365B;
+  --sk-accent: #F48922;
+  --sk-accent-2: #EC5D2C;
+  --sk-dark: #050505;
+  --sk-line: #E7DDD4;
+  --sk-soft: #FCF8F5;
+  --sk-chrome-max: 1600px;
   --sk-chrome-pad: 20px;
 }
 
@@ -45,7 +45,7 @@ html, body {
 
 /* ---------- Top banner ---------- */
 .pv-banner-note {
-  background: #0e2036 !important;
+  background: #050505 !important;
   color: #ffcf9e !important;
   text-align: center;
   font-size: 13px;
@@ -98,7 +98,7 @@ html, body {
 }
 .pv-banner-note .ltn__top-bar-menu > ul > li > a > i,
 .pv-banner-note .ltn__top-bar-menu > ul > li > i {
-  color: #f58320 !important;
+  color: #F48922 !important;
   display: inline-block;
   flex: 0 0 auto;
   width: 1em;
@@ -114,7 +114,7 @@ html, body {
   color: #ffe0b8 !important;
 }
 .pv-banner-note .ltn__top-bar-menu > ul > li > a:hover > i {
-  color: #ff8a1e !important;
+  color: #F48922 !important;
 }
 .pv-banner-note .ltn__social-media > ul {
   display: flex;
@@ -161,7 +161,8 @@ html, body {
   top: 0;
   z-index: 50;
   background: #fff;
-  box-shadow: 0 6px 20px rgba(18, 58, 99, .08);
+  box-shadow: 0 6px 20px rgba(5, 5, 5, .08);
+  transition: background .2s ease, box-shadow .2s ease;
   box-sizing: border-box;
   width: 100%;
   font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
@@ -331,7 +332,7 @@ html, body {
   border: 1px solid var(--sk-line);
   border-radius: 12px;
   padding: 8px;
-  box-shadow: 0 18px 40px rgba(18, 58, 99, .14);
+  box-shadow: 0 18px 40px rgba(5, 5, 5, .14);
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
@@ -504,7 +505,7 @@ html, body {
     bottom: 0;
     z-index: 60;
     background: #fff;
-    box-shadow: 0 -6px 20px rgba(18, 58, 99, .12);
+    box-shadow: 0 -6px 20px rgba(5, 5, 5, .12);
   }
   .wh-mobilebar a {
     padding: 12px 6px;
@@ -535,24 +536,24 @@ html, body {
 }
 :root {
     /* Brand colours */
-    --sk-primary: #123a63;
-    --sk-primary-2: #1c5a99;
-    --sk-accent: #ff8a1e;
-    --sk-accent-2: #ff6a00;
+    --sk-primary: #050505;
+    --sk-primary-2: #6C365B;
+    --sk-accent: #F48922;
+    --sk-accent-2: #EC5D2C;
 
     /* Neutrals */
-    --sk-dark: #0e2036;
-    --sk-body: #4a5a6a;
-    --sk-muted: #7c8a99;
-    --sk-line: #e6ecf2;
-    --sk-soft: #f4f8fc;
+    --sk-dark: #050505;
+    --sk-body: #4A403C;
+    --sk-muted: #7A7168;
+    --sk-line: #E7DDD4;
+    --sk-soft: #FCF8F5;
 
     /* Shape & depth */
     --sk-radius: 16px;
-    --sk-shadow: 0 18px 40px rgba(18, 58, 99, .10);
+    --sk-shadow: 0 18px 40px rgba(5, 5, 5, .10);
 
     /* Layout rhythm — override inside a media query to rescale the page */
-    --sk-container: 1200px;
+    --sk-container: 1600px;
     --sk-gutter: 20px;
     --sk-section-y: 84px;
 
@@ -655,7 +656,7 @@ html, body {
 .sk-btn-primary {
     background: var(--sk-accent);
     color: #fff;
-    box-shadow: 0 12px 24px rgba(255, 138, 30, .30);
+    box-shadow: 0 12px 24px rgba(244, 137, 34, .30);
 }
 
 .sk-btn-primary:hover {
@@ -665,15 +666,15 @@ html, body {
 }
 
 .sk-btn-ghost {
-    background: transparent;
-    color: #fff;
-    border-color: rgba(255, 255, 255, .55);
+    background: #fff;
+    color: #050505;
+    border-color: #E7DDD4;
 }
 
 .sk-btn-ghost:hover {
-    background: #fff;
-    color: var(--sk-primary);
-    border-color: #fff;
+    background: #6C365B;
+    color: #fff;
+    border-color: #6C365B;
 }
 
 .sk-btn-outline {
@@ -689,13 +690,15 @@ html, body {
 }
 
 .sk-btn-white {
-    background: #fff;
-    color: var(--sk-accent-2);
+    background: #6C365B;
+    color: #fff;
+    border-color: #6C365B;
 }
 
 .sk-btn-white:hover {
-    background: var(--sk-dark);
+    background: #050505;
     color: #fff;
+    border-color: #050505;
 }
 
 .sk-btn-wa {
@@ -710,7 +713,7 @@ html, body {
 /* ---------- Hero ---------- */
 .sk-hero {
     position: relative;
-    background-color: #0e2036;
+    background-color: #050505;
     color: #fff;
     padding: 120px 0 96px;
     overflow: visible;
@@ -740,7 +743,7 @@ html, body {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(120deg, rgba(14, 32, 54, .92) 0%, rgba(28, 90, 153, .80) 100%);
+    background: linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .42) 46%, rgba(5, 5, 5, .08) 100%);
     pointer-events: none;
 }
 
@@ -965,7 +968,7 @@ html, body {
 
 .sk-usp-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(18, 58, 99, .08);
+    box-shadow: 0 12px 28px rgba(5, 5, 5, .08);
     border-color: transparent;
 }
 .sk-hero-chips {
@@ -1042,3 +1045,101 @@ html, body {
     .sk-hero .sk-quote {
         padding: 28px 16px 16px;
     }
+}
+}
+
+/* Home only: brand colours win over the shared header and footer. */
+body.sk-is-home {
+  --sk-primary: #050505;
+  --sk-primary-2: #6C365B;
+  --sk-accent: #F48922;
+  --sk-accent-2: #EC5D2C;
+  --sk-dark: #050505;
+  --sk-body: #4A403C;
+  --sk-muted: #7A7168;
+  --sk-line: #E7DDD4;
+  --sk-soft: #FCF8F5;
+  background: #FCF8F5;
+  color: #4A403C;
+}
+body.sk-is-home .pv-banner-note {
+  background: #050505 !important;
+  color: #FCF8F5 !important;
+}
+body.sk-is-home .pv-banner-note .ltn__top-bar-menu > ul > li,
+body.sk-is-home .pv-banner-note .ltn__top-bar-menu > ul > li > a,
+body.sk-is-home .pv-banner-note .ltn__social-media > ul > li,
+body.sk-is-home .pv-banner-note .ltn__social-media a,
+body.sk-is-home .pv-banner-note .ltn__social-media a i {
+  color: #FCF8F5 !important;
+}
+body.sk-is-home .pv-banner-note .ltn__top-bar-menu > ul > li > a > i,
+body.sk-is-home .pv-banner-note .ltn__top-bar-menu > ul > li > i,
+body.sk-is-home .pv-banner-note .ltn__top-bar-menu > ul > li > a:hover > i {
+  color: #F48922 !important;
+}
+body.sk-is-home .pv-header {
+  box-shadow: 0 6px 20px rgba(5, 5, 5, .08);
+}
+body.sk-is-home .pv-footer {
+  background: #FCF8F5;
+  color: #4A403C;
+}
+body.sk-is-home .pv-footer p,
+body.sk-is-home .pv-footer a {
+  color: #4A403C;
+}
+body.sk-is-home .pv-footer h5,
+body.sk-is-home .pv-footer .h5 {
+  color: #050505;
+}
+body.sk-is-home .pv-social a {
+  background: #6C365B;
+  border-color: #6C365B;
+  color: #fff;
+}
+body.sk-is-home .pv-social a:hover {
+  background: #F48922;
+  border-color: #F48922;
+  color: #fff;
+}
+body.sk-is-home .pv-foot-copy,
+body.sk-is-home .pv-foot-copy a {
+  color: #7A7168;
+}
+
+/* Home first paint: transparent header over the hero. site-chrome.css repeats this for every page. */
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) {
+  background: transparent;
+  box-shadow: none;
+}
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-logo img {
+  filter: brightness(0) invert(1);
+}
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > a,
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > .pv-has-sub > a {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(5, 5, 5, .35);
+}
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > a:hover,
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > a.active,
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > .pv-has-sub > a:hover,
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav > .pv-has-sub > a.active {
+  color: #F48922;
+}
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-cart {
+  color: #fff;
+  border-color: rgba(255, 255, 255, .55);
+  background: transparent;
+}
+body.sk-is-home:has(.sk-hero) .pv-header:not(.is-solid):not(:has(.pv-nav.open)) .pv-nav-toggle {
+  color: #fff;
+}
+body.sk-is-home:has(.sk-hero) .sk-hero {
+  margin-top: calc(var(--pv-header-h, 100px) * -1);
+  padding-top: calc(var(--pv-header-h, 100px) + 56px);
+}
+body.sk-is-home .pv-header.is-solid {
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(5, 5, 5, .08);
+}

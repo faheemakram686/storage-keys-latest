@@ -59,7 +59,7 @@
                         <span>Store luggage after hotel checkout</span><span>Keep bags before hotel check-in</span><span>Store belongings between connecting flights</span><span>Leave luggage while exploring the city</span><span>Keep bags during a temporary stay</span><span>Store belongings during a move or relocation</span><span>Arrange longer-term storage while travelling</span>
                     </div>
                 </div>
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -112,7 +112,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="svc-split rev sk-reveal">
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline-2.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Flexible Baggage Storage</span>
                     <h2>Flexible Baggage Storage for Short or Extended Stays</h2>

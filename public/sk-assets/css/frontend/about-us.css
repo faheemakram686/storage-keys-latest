@@ -133,7 +133,7 @@
 }
 .sk-review p {
     font-size: 15px;
-    color: var(--sk-body, #4a5a6a);
+    color: var(--sk-body, #4A403C);
     line-height: 1.7;
     margin-bottom: 22px;
     position: relative;
@@ -159,4 +159,237 @@
 .sk-review .who span {
     font-size: 13px;
     color: var(--sk-muted);
+}
+
+/* About page — PDF page 26 layout. Scoped so contact and storage-options stay unchanged. */
+.ab-page .ps-hero.ab-hero {
+    background:
+        linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .35) 48%, rgba(5, 5, 5, .12) 100%),
+        url('../../assets/images/frontend/landing-page/corridor%20area-80kb.jpg') center/cover no-repeat;
+    padding: 88px 0 96px;
+}
+
+.ab-page .ab-hero h1 {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    max-width: 680px;
+    margin-bottom: 16px;
+}
+
+.ab-page .ab-hero h1 i {
+    color: #F48922;
+    font-size: .62em;
+    margin-top: .18em;
+}
+
+.ab-page .ab-hero p.lead {
+    max-width: 560px;
+    margin-bottom: 0;
+}
+
+.ab-stats {
+    background: #6C365B;
+    color: #fff;
+}
+
+.ab-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    text-align: center;
+    padding: 28px 0;
+}
+
+.ab-stats .n {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.ab-stats .l {
+    margin-top: 4px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .82);
+}
+
+.ab-page .ab-provide {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.ab-page .ab-provide h2,
+.ab-page .ab-head h2 {
+    margin-bottom: 10px;
+}
+
+.ab-page .ab-provide > div > p,
+.ab-page .ab-head p {
+    color: var(--sk-body, #4A403C);
+    max-width: 720px;
+    margin-bottom: 22px;
+}
+
+.ab-checks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 28px;
+}
+
+.ab-checks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: var(--sk-dark, #050505);
+}
+
+.ab-checks i {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    margin-top: 1px;
+    border-radius: 6px;
+    background: #6C365B;
+    color: #fff;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ab-photo {
+    min-height: 380px;
+    border-radius: 18px;
+    background: #F3EBE4 center/cover no-repeat;
+}
+
+.ab-head {
+    margin-bottom: 28px;
+}
+
+.ab-solutions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.ab-sol {
+    background: #fff;
+    border: 1px solid var(--sk-line, #E7DDD4);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ab-sol-img {
+    height: 148px;
+    background: #F3EBE4 center/cover no-repeat;
+}
+
+.ab-sol-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.ab-sol h3 {
+    font-size: 18px;
+    margin: 0 0 8px;
+}
+
+.ab-sol p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--sk-muted, #7A7168);
+    margin: 0 0 16px;
+    flex: 1;
+}
+
+.ab-sol a {
+    color: #F48922;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.ab-sol a:hover {
+    color: #EC5D2C;
+}
+
+.ab-said {
+    position: relative;
+    overflow: hidden;
+}
+
+.ab-said::before,
+.ab-said::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.ab-said::before {
+    width: 240px;
+    height: 240px;
+    left: -70px;
+    bottom: -90px;
+    border: 16px solid rgba(108, 54, 91, .22);
+}
+
+.ab-said::after {
+    width: 180px;
+    height: 180px;
+    right: 6%;
+    top: 18px;
+    border: 14px solid rgba(244, 137, 34, .28);
+}
+
+.ab-said-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+@media (max-width: 991px) {
+    .ab-stats-grid,
+    .ab-page .ab-provide,
+    .ab-solutions,
+    .ab-said-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ab-photo {
+        min-height: 260px;
+    }
+}
+
+@media (max-width: 767px) {
+    .ab-stats-grid,
+    .ab-checks,
+    .ab-page .ab-provide,
+    .ab-solutions,
+    .ab-said-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ab-page .ab-hero h1 {
+        font-size: 32px;
+    }
 }

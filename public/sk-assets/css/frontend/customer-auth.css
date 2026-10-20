@@ -61,7 +61,7 @@
 .ca-auth-form input:focus {
     outline: none;
     border-color: var(--sk-primary-2);
-    box-shadow: 0 0 0 3px rgba(28, 90, 153, .12);
+    box-shadow: 0 0 0 3px rgba(108, 54, 91, .12);
 }
 
 .ca-auth-form .sk-btn {
@@ -140,13 +140,13 @@
     height: 64px;
     margin: 0 auto 18px;
     border-radius: 50%;
-    background: #fff;
-    color: var(--sk-accent);
+    background: #6C365B;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 26px;
-    box-shadow: 0 8px 20px rgba(18, 58, 99, .08);
+    box-shadow: 0 8px 20px rgba(5, 5, 5, .08);
 }
 
 .ca-auth-aside ul {
@@ -236,7 +236,7 @@
     background: #fff;
     border-color: var(--sk-accent);
     color: var(--sk-accent-2);
-    box-shadow: 0 0 0 3px rgba(255, 138, 30, .12);
+    box-shadow: 0 0 0 3px rgba(244, 137, 34, .12);
 }
 
 .ca-type-option label:hover {
@@ -331,12 +331,12 @@
 }
 
 .cd-nav-btn:hover {
-    background: var(--sk-soft);
-    color: var(--sk-primary-2);
+    background: #6C365B;
+    color: #fff;
 }
 
 .cd-nav-btn.is-active {
-    background: rgba(255, 138, 30, .1);
+    background: rgba(244, 137, 34, .1);
     color: var(--sk-accent-2);
 }
 

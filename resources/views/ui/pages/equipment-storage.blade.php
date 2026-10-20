@@ -94,7 +94,7 @@
                     <p>StorageKeys provides equipment storage for event companies, gyms, AV and IT teams, schools and tradespeople across Dubai and Sharjah. Our Sharjah facility is monitored around the clock and the units are climate controlled, so electronics, motors, rubber and cables are not sitting through a UAE summer in a hot container.</p>
                     <p>It forms part of our wider <a href="{{ url('/business-storage') }}">commercial storage for companies</a>, and suits anything that needs to be ready to load out the moment a booking comes in.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -129,7 +129,7 @@
                     </ul>
                     <p style="font-size:13.5px;color:var(--sk-muted);margin:0;">Whatever the trade, the aim is the same: kit that is protected, counted and ready to go when the phone rings, without paying for a bigger workshop or warehouse.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Climate &amp; Security</span>
                     <h2>Why Conditions Matter for Equipment</h2>

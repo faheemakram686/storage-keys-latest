@@ -50,7 +50,7 @@
                     <p>StorageKeys provides furniture self storage in Dubai and Sharjah for customers who need practical space without giving up useful furniture. Our furniture storage units can be used for individual items, the contents of selected rooms, or larger collections depending on your requirements.</p>
                     <p>Whether you need temporary furniture storage during a home renovation or long term furniture storage for items you rarely use, you can choose a storage arrangement based on the amount of furniture you need to keep.</p>
                 </div>
-                <div class="ps-media" style="background-image:url('images/overview.jpg');"></div>
+                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -220,7 +220,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="ps-split rev sk-reveal">
-                <div class="ps-media" style="background-image:url('images/home-storage.jpg');"></div>
+                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Where We Serve</span>
                     <h2>Furniture Storage Facilities in Dubai &amp; Sharjah</h2>

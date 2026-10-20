@@ -2,8 +2,8 @@
 
 .lt-hero {
     position: relative;
-    background: linear-gradient(115deg, rgba(14, 32, 54, .92), rgba(28, 90, 153, .80)),
-        url("../../assets/images/frontend/bg/Inner_Small_Banner_1.jpg") center / cover no-repeat;
+    background: linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .42) 46%, rgba(5, 5, 5, .08) 100%),
+        url('../../assets/images/frontend/landing-hero.jpg') center / cover no-repeat;
     color: #fff;
     padding: 64px 0 88px;
 }
@@ -64,7 +64,7 @@
     font-weight: 600;
     color: var(--sk-dark);
 }
-.lt-trust-i i { color: var(--sk-accent); font-size: 20px; }
+.lt-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px; background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
 .lt-split {
     display: grid;
@@ -95,8 +95,8 @@
     width: 60px;
     height: 60px;
     border-radius: 14px;
-    background: var(--sk-soft);
-    color: var(--sk-accent);
+    background: #6C365B;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -205,7 +205,7 @@
 .lt-chip .act { color: var(--sk-muted); font-size: 12px; }
 .lt-col.store .lt-chip {
     background: var(--sk-soft);
-    border-color: rgba(255, 138, 30, .35);
+    border-color: rgba(244, 137, 34, .35);
 }
 .lt-col.store .lt-chip .act { color: var(--sk-accent-2); }
 .lt-empty {
@@ -262,8 +262,8 @@
     width: 60px;
     height: 60px;
     border-radius: 14px;
-    background: var(--sk-soft);
-    color: var(--sk-accent);
+    background: #6C365B;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -327,8 +327,8 @@
     width: 60px;
     height: 60px;
     border-radius: 14px;
-    background: var(--sk-soft);
-    color: var(--sk-accent);
+    background: #6C365B;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -410,7 +410,7 @@
         bottom: 0;
         z-index: 60;
         background: #fff;
-        box-shadow: 0 -6px 20px rgba(18, 58, 99, .12);
+        box-shadow: 0 -6px 20px rgba(5, 5, 5, .12);
     }
     .lt-mobilebar a {
         padding: 12px 6px;

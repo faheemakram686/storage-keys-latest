@@ -94,7 +94,7 @@
                     <p>StorageKeys provides boat storage for owners of leisure boats, small yachts, RIBs and jet skis across Dubai and Sharjah. Our Sharjah facility is monitored around the clock with coded access, giving your boat and its equipment a secure place to wait out the hot months or your time away.</p>
                     <p>It sits within our <a href="{{ url('/vehicle-storage') }}">storage for vehicles of every kind</a>, so one provider can look after the boat, the trailer and the family car together.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -129,7 +129,7 @@
                     </ul>
                     <p style="font-size:13.5px;color:var(--sk-muted);margin:0;">Fishing enthusiasts who head out mainly in the cooler months also use boat storage between trips, without paying for a year-round berth.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Security &amp; Conditions</span>
                     <h2>Protecting Your Boat Between Trips</h2>

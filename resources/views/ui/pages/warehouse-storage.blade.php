@@ -54,7 +54,7 @@
                         <span>Retailers</span><span>Wholesalers</span><span>Manufacturers</span><span>Distributors</span><span>E-commerce</span>
                     </div>
                 </div>
-                <div class="wh-media" style="background-image:url('images/overview.jpg');"></div>
+                <div class="wh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -63,7 +63,7 @@
     <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="wh-split rev sk-reveal in">
-                <div class="wh-media" style="background-image:url('images/what-is.jpg');"></div>
+                <div class="wh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">The Basics</span>
                     <h2>What Is Warehouse Storage?</h2>
@@ -161,7 +161,7 @@
                         <li><i class="fas fa-check-circle"></i> Controlled access for a secure storage environment</li>
                     </ul>
                 </div>
-                <div class="wh-media" style="background-image:url('images/facility.jpg');"></div>
+                <div class="wh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>

@@ -48,7 +48,7 @@
                     <p>Long term storage gives these items a dedicated place outside your everyday environment. Instead of repeatedly moving them around your home, office or warehouse, you keep them stored until you need them again.</p>
                     <p>It's particularly useful for belongings that are important to retain but don't justify permanent space in your current property — and an alternative when space is becoming limited but you're not ready to dispose of items you may need later. StorageKeys provides long-term options for personal and commercial requirements in Dubai and Sharjah, with services available across the UAE.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -108,7 +108,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Furniture</span>
                     <h2>Long Term Furniture Storage Without Giving Up Space</h2>
@@ -147,7 +147,7 @@
                     <p>Boxes are often the most practical way to group smaller possessions for an extended period — and clear labelling becomes increasingly useful when belongings are stored for months or longer. Grouping household items, documents, clothing and books into labelled boxes, rather than filling a room with loosely placed items, makes the whole arrangement much easier to understand.</p>
                     <p>Before storing boxes for an extended period, it helps to think about what you're likely to need first — pack and label frequently-needed items separately from belongings that may remain untouched for longer. And where appropriate, boxes can sit alongside furniture, appliances or other suitable items within the same storage arrangement.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>

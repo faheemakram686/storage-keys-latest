@@ -94,7 +94,7 @@
                     <p>StorageKeys provides office storage for companies across Dubai and Sharjah, from small teams in business centres to corporate offices in towers and free zones. Our facility in Sharjah is monitored around the clock, and the units are climate controlled, which matters for furniture, paper and electronics in the UAE summer.</p>
                     <p>It sits within our wider <a href="{{ url('/business-storage') }}">storage options for companies</a>, and suits anything that needs to stay safe and retrievable rather than in the way.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -128,7 +128,7 @@
                         <li class="row-i"><div class="ic"><i class="fas fa-file-invoice"></i></div><div><h4>Records You Must Keep</h4><p>UAE businesses hold accounting and tax records for years. Off-site storage keeps them organised without filling a room at head office.</p></div></li>
                     </ul>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/web/Image_3.png') }}');"></div>
             </div>
         </div>
     </section>
@@ -136,7 +136,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Climate &amp; Security</span>
                     <h2>Built for UAE Conditions and Business Records</h2>

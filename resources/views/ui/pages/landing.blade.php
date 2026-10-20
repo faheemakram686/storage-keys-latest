@@ -938,7 +938,9 @@
     <!-- ============ CTA BAND ============ -->
     <section style="padding:0 0 84px;">
         <div class="sk-container">
-            <div class="sk-cta">
+            <div class="sk-bookband" id="sk-bookband">
+                <div class="sk-bookband-photo" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
+                <div class="sk-cta">
                 <div>
                     <h2>Get Started With Secure Storage Solutions Today</h2>
                     <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>
@@ -946,6 +948,7 @@
                 <div class="btns">
                     <a href="/booking" class="sk-btn sk-btn-white"><i class="fas fa-boxes"></i> Book Your Storage Unit</a>
                     <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+                </div>
                 </div>
             </div>
         </div>

@@ -56,7 +56,7 @@
                         <li><i class="fas fa-check-circle"></i> Free up space at home without giving anything up</li>
                     </ul>
                 </div>
-                <div class="ps-media" style="background-image:url('images/overview.jpg');"></div>
+                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -176,7 +176,7 @@
                         <li><i class="fas fa-check-circle"></i> Professional customer support</li>
                     </ul>
                 </div>
-                <div class="ps-media" style="background-image:url('images/security.jpg');"></div>
+                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -185,7 +185,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="ps-split rev sk-reveal">
-                <div class="ps-media" style="background-image:url('images/home-storage.jpg');"></div>
+                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline-2.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">At Home</span>
                     <h2>Home Storage Solutions in Dubai</h2>

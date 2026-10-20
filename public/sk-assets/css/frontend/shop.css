@@ -74,7 +74,7 @@
     background: #fff;
     color: var(--sk-dark);
     cursor: pointer;
-    box-shadow: 0 8px 18px rgba(18, 58, 99, .12);
+    box-shadow: 0 8px 18px rgba(5, 5, 5, .12);
 }
 
 .sh-quick:hover {
@@ -195,5 +195,250 @@
     .sh-grid,
     .sh-modal-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- PDF shop page (listing only; home cards stay on .sh-grid) ---------- */
+body:has(.sh-page) {
+    background: #FCF8F5;
+}
+
+.sh-page {
+    background: #FCF8F5;
+}
+
+.sh-page .ps-hero {
+    background:
+        linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .35) 46%, rgba(5, 5, 5, .12) 100%),
+        url('../../assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') center/cover no-repeat;
+    padding: 72px 0 78px;
+}
+
+.sh-page .ps-hero h1 {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    max-width: 640px;
+    margin-bottom: 14px;
+}
+
+.sh-page .ps-hero p.lead {
+    max-width: 460px;
+    margin: 0;
+}
+
+.sh-products {
+    background: #FCF8F5;
+    padding: 36px 0 80px;
+}
+
+.sh-wrap {
+    width: 100%;
+}
+
+.sh-page .sh-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.sh-page .sh-card {
+    border: none;
+    border-radius: 24px;
+    padding: 14px 14px 16px;
+    box-shadow: 0 12px 30px rgba(5, 5, 5, .06);
+    overflow: visible;
+}
+
+.sh-page .sh-card:hover {
+    transform: none;
+    box-shadow: 0 12px 30px rgba(5, 5, 5, .06);
+}
+
+.sh-page .sh-card-img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+    background-color: #fff;
+}
+
+.sh-page .sh-card-body {
+    padding: 16px 6px 2px;
+}
+
+.sh-page .sh-card-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.sh-page .sh-card-body h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #6C365B;
+}
+
+.sh-page .sh-price {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.sh-page .sh-price span {
+    font-size: 15px;
+    font-weight: 700;
+    color: #050505;
+}
+
+.sh-sizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+}
+
+.sh-size {
+    border: 1.5px solid #E7DDD4;
+    background: #fff;
+    color: #050505;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.sh-size.is-on {
+    background: #050505;
+    border-color: #050505;
+    color: #fff;
+}
+
+.sh-page .sh-add,
+.sh-page .sh-help {
+    border-radius: 14px;
+    box-shadow: none;
+    font-weight: 700;
+}
+
+.sh-page .sh-add {
+    min-height: 48px;
+}
+
+.sh-page .sh-add:hover,
+.sh-page .sh-help:hover {
+    transform: none;
+    box-shadow: none;
+    background: #EC5D2C;
+}
+
+.sh-guide {
+    position: relative;
+    margin-top: 28px;
+    background: #fff;
+    border-radius: 28px;
+    padding: 32px 28px 26px;
+    box-shadow: 0 12px 30px rgba(5, 5, 5, .06);
+    overflow: hidden;
+}
+
+.sh-swoosh {
+    position: absolute;
+    top: -18px;
+    right: -24px;
+    width: 150px;
+    height: 150px;
+    pointer-events: none;
+}
+
+.sh-guide h2 {
+    position: relative;
+    margin: 0 0 8px;
+    font-size: clamp(26px, 3vw, 34px);
+    color: #050505;
+}
+
+.sh-guide > p {
+    position: relative;
+    max-width: 560px;
+    margin: 0 0 22px;
+    color: #4A403C;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+.sh-guide-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.sh-guide-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 74px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #FBF6F2;
+}
+
+.sh-guide-item.is-hot {
+    background: #F8C898;
+}
+
+.sh-guide-item .ic {
+    flex: 0 0 32px;
+    width: 32px;
+    text-align: center;
+    color: #6C365B;
+    font-size: 22px;
+}
+
+.sh-guide-item strong {
+    display: block;
+    color: #050505;
+    font-size: 16px;
+    line-height: 1.25;
+}
+
+.sh-guide-item small {
+    display: block;
+    margin-top: 2px;
+    color: #4A403C;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.sh-guide-actions {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sh-page .sh-help {
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+@media (max-width: 700px) {
+    .sh-page .sh-grid,
+    .sh-guide-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sh-guide-actions {
+        justify-content: stretch;
+    }
+
+    .sh-page .sh-help {
+        width: 100%;
+        justify-content: center;
     }
 }

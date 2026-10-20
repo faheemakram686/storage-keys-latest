@@ -76,7 +76,7 @@
                         <span>Retailers</span><span>E-commerce</span><span>Contractors</span><span>Corporate offices</span><span>Startups &amp; SMEs</span>
                     </div>
                 </div>
-                <div class="svc-media" style="background-image:url('images/overview.jpg');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>

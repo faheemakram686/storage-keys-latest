@@ -1,0 +1,511 @@
+/* Reservation enquiry — same card pattern as the booking page */
+
+body:has(.rsv-page) {
+    background: #FCF8F5;
+}
+
+body:has(.rsv-page) .rsv-page .ps-hero {
+    background:
+        linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .35) 46%, rgba(5, 5, 5, .12) 100%),
+        url('../../assets/images/frontend/landing-page/corridor%20area-80kb.jpg') center/cover no-repeat;
+    margin-top: calc(var(--pv-header-h, 100px) * -1);
+    padding: calc(var(--pv-header-h, 100px) + 28px) 0 48px;
+}
+
+.rsv-page .ps-crumb {
+    margin-bottom: 14px;
+}
+
+.rsv-page .ps-hero h1 {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    max-width: 640px;
+}
+
+.rsv-page .ps-hero p.lead {
+    max-width: 540px;
+    margin-bottom: 0;
+}
+
+.rsv-body {
+    padding: 28px 0 80px;
+}
+
+.rsv-page #LeadForm {
+    display: grid;
+    gap: 18px;
+}
+
+.rsv-page #su_ids_inputs {
+    display: none;
+}
+
+.rsv-page p {
+    margin: 0;
+    hyphens: manual;
+}
+
+.rsv-stack {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    gap: 18px;
+}
+
+.rsv-units {
+    display: grid;
+    gap: 14px;
+}
+
+.rsv-unit {
+    background: #fff;
+    border: 1px solid #E7DDD4;
+    border-radius: 18px;
+    padding: 22px 24px 20px;
+}
+
+.rsv-page .rsv-kicker {
+    margin: 0 0 6px;
+    color: #F48922;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.rsv-unit h2 {
+    margin: 0 0 12px;
+    font-size: clamp(24px, 3vw, 32px);
+    color: #050505;
+}
+
+.rsv-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.rsv-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #FCF8F5;
+    border: 1px solid #E7DDD4;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4A403C;
+}
+
+.rsv-meta i {
+    color: #6C365B;
+    font-size: 12px;
+}
+
+.rsv-meta .is-duration {
+    background: #6C365B;
+    border-color: #6C365B;
+    color: #fff;
+}
+
+.rsv-meta .is-duration i {
+    color: #fff;
+}
+
+.rsv-card {
+    background: #fff;
+    border: 1px solid #E7DDD4;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.rsv-page .rsv-h {
+    margin: 0;
+    background: #F48922;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 14px 22px;
+}
+
+.rsv-card-b {
+    padding: 22px;
+}
+
+.rsv-page .rsv-card-b > p,
+.rsv-page .rsv-empty {
+    margin: 0 0 14px;
+    color: #7A7168;
+    font-size: 14.5px;
+}
+
+.rsv-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rsv-page .rsv-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #7A7168;
+    padding: 0 0 10px;
+    border-bottom: 1px solid #E7DDD4;
+}
+
+.rsv-page .rsv-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #E7DDD4;
+    color: #050505;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.rsv-page .rsv-table td:last-child,
+.rsv-page .rsv-table th:last-child {
+    text-align: right;
+    width: 110px;
+}
+
+.rsv-primary {
+    color: #7A7168;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.rsv-page .rsv-remove {
+    border: 0;
+    background: transparent;
+    color: #EC5D2C;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 0;
+    cursor: pointer;
+}
+
+.rsv-page .rsv-remove:hover {
+    color: #050505;
+}
+
+.rsv-addbox {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #E7DDD4;
+}
+
+.rsv-page .rsv-addbox h4 {
+    margin: 0 0 14px;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.rsv-page .rsv-table tr:last-child td {
+    border-bottom: 0;
+    padding-bottom: 2px;
+}
+
+.rsv-field-action {
+    display: flex;
+    align-items: flex-end;
+}
+
+.rsv-date-row {
+    margin-bottom: 14px;
+}
+
+.rsv-date-row:has(#companyfeild[style*="none"]) {
+    grid-template-columns: 1fr;
+}
+
+.rsv-page .rsv-terms-link {
+    margin: 12px 0 0;
+}
+
+.rsv-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+}
+
+.rsv-span {
+    grid-column: 1 / -1;
+}
+
+.rsv-page .lbl,
+.rsv-page .rsv-fields label,
+.rsv-page .rsv-field > label {
+    display: block;
+    margin: 0 0 6px;
+    color: #050505;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.rsv-page input[type="text"],
+.rsv-page input[type="email"],
+.rsv-page input[type="date"],
+.rsv-page input[type="tel"],
+.rsv-page select.form-control,
+.rsv-page textarea {
+    width: 100%;
+    height: 46px !important;
+    margin: 0 !important;
+    padding: 10px 14px;
+    border: 1.5px solid #E7DDD4;
+    border-radius: 10px;
+    background: #FCF8F5;
+    color: #050505;
+    font-size: 14.5px;
+    font-family: inherit;
+    box-shadow: none;
+}
+
+.rsv-page input:focus,
+.rsv-page select.form-control:focus,
+.rsv-page textarea:focus {
+    outline: none;
+    border-color: #F48922;
+    background: #fff;
+}
+
+.rsv-choices,
+.rsv-addons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.rsv-choices {
+    margin-bottom: 16px;
+}
+
+.rsv-page .rsv-choice,
+.rsv-page .rsv-term {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1.5px solid #E7DDD4;
+    border-radius: 12px;
+    background: #fff;
+    color: #050505;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.rsv-page .rsv-term {
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.rsv-page .rsv-term:last-child {
+    margin-bottom: 0;
+}
+
+.rsv-term-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rsv-term-note {
+    color: #F48922;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.rsv-page .rsv-choice:has(input:checked),
+.rsv-page .rsv-term:has(input:checked) {
+    border-color: #F48922;
+    background: #FFF6EE;
+}
+
+.rsv-page .form-check-input {
+    position: static;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex: 0 0 18px;
+    accent-color: #F48922;
+}
+
+.rsv-page .rsv-add {
+    width: 100%;
+    height: 46px !important;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 10px;
+    background: #6C365B;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .03em;
+    cursor: pointer;
+}
+
+.rsv-page .rsv-add:hover {
+    background: #050505;
+}
+
+.rsv-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rsv-page .btn-qoutation,
+.rsv-page .btn-submit {
+    height: auto;
+    margin: 0;
+    padding: 14px 32px;
+    border: 0;
+    border-radius: 12px;
+    background: #F48922;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.rsv-page .btn-qoutation:hover,
+.rsv-page .btn-submit:hover {
+    background: #EC5D2C;
+    color: #fff;
+}
+
+.rsv-page .form-link {
+    color: #F48922;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rsv-page .form-link:hover {
+    color: #EC5D2C;
+}
+
+.rsv-page .insurance-selector-root,
+.rsv-page .insurance-selector-root > div,
+.rsv-page .insurance-selector-root .row {
+    margin: 0 !important;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+    width: 100%;
+}
+
+.rsv-page .insurance-selector-root > div {
+    flex: 0 0 100%;
+}
+
+.rsv-page .insurance-selector-root > div > p {
+    margin: 0 0 12px;
+    color: #4A403C;
+}
+
+.rsv-page .insurance-selector-root .form-check,
+.rsv-page .check-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+}
+
+.rsv-page .separator {
+    display: none;
+}
+
+.rsv-page .insurance-package-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 16px;
+    align-items: center;
+    margin: 0 !important;
+    padding: 12px 0;
+    border-bottom: 1px solid #E7DDD4;
+}
+
+.rsv-page .insurance-package-row > div {
+    width: auto;
+    max-width: none;
+    flex: none;
+    padding: 0;
+}
+
+.rsv-page .insurance-package-row > div:nth-child(3) {
+    display: none;
+}
+
+.rsv-page .insurance-package-row > div:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.rsv-page .insurance-monthly-label,
+.rsv-page .insurance-cover-label,
+.rsv-page .text-right {
+    margin: 0;
+    text-align: right;
+}
+
+.rsv-page .insurance-monthly-label {
+    color: #050505;
+    font-weight: 700;
+}
+
+.rsv-page .insurance-cover-label {
+    color: #7A7168;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.rsv-page .insurance-selector-root .row:not(.insurance-package-row) > div {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+    padding: 0;
+}
+
+.rsv-page .insurance-goods-input {
+    max-width: 100%;
+    margin-top: 16px !important;
+}
+
+.rsv-page .insurance-selector-root > div > .form-check {
+    margin-top: 14px;
+}
+
+@media (max-width: 700px) {
+    .rsv-fields,
+    .rsv-choices,
+    .rsv-addons {
+        grid-template-columns: 1fr;
+    }
+
+    .rsv-page .rsv-term {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .rsv-actions {
+        justify-content: stretch;
+    }
+
+    .rsv-page .btn-submit {
+        width: 100%;
+    }
+}

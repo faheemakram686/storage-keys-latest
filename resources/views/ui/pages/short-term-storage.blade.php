@@ -51,7 +51,7 @@
                     <p>You may have moved out of a property before your new home is ready, started renovation work, arranged an extended trip, or found yourself with more business stock than your current premises can hold. In these situations, renting additional permanent space may not make sense.</p>
                     <p>Our short term storage service provides a practical option for these temporary gaps — keep suitable belongings outside your home, office or other premises until you're ready to use them again. It's particularly useful when the requirement is measured in <b>weeks or months</b>, giving individuals a simple way to keep belongings outside their usual living space while waiting for a move, renovation or travel period to end.</p>
                 </div>
-                <div class="st-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="st-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -142,7 +142,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="st-split rev sk-reveal">
-                <div class="st-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="st-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Flexible</span>
                     <h2>On-Demand Storage When Your Plans Change</h2>

@@ -257,6 +257,25 @@
             toggle.innerHTML = '<i class="fas fa-bars"></i>';
         }
 
+        var hero = document.querySelector('.sk-hero, .ps-hero');
+        function measureHeader() {
+            if (nav && nav.classList.contains('open')) return;
+            var height = header.offsetHeight || 100;
+            document.documentElement.style.setProperty('--pv-header-h', height + 'px');
+        }
+        function syncHeader() {
+            if (!hero) return;
+            var y = window.scrollY || document.documentElement.scrollTop || 0;
+            header.classList.toggle('is-solid', y > 24);
+        }
+        measureHeader();
+        syncHeader();
+        window.addEventListener('scroll', syncHeader, { passive: true });
+        window.addEventListener('resize', function () {
+            measureHeader();
+            syncHeader();
+        });
+
         if (nav && toggle) {
             toggle.addEventListener('click', function () {
                 var isOpen = nav.classList.toggle('open');

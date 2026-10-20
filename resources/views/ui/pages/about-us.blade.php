@@ -4,109 +4,97 @@
 @section('metaDescription', 'We began operations as an LLC in the UAE in 2016. Premium moving and storage services in Sharjah at reduced cost.')
 @section('content')
 
-<div class="sk-home">
+<div class="sk-home ab-page">
 
-    <!-- ============ HERO ============ -->
-    <section class="ps-hero">
+    <section class="ps-hero ab-hero">
         <div class="sk-container">
-            <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <span>About Us</span></div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">About Us</span>
-            <h1>Solutions For <span>your needs!</span></h1>
+            <h1><i class="fas fa-infinity" aria-hidden="true"></i> Solutions for your needs</h1>
             <p class="lead">We began operations as an LLC. in the UAE in 2016. Our founders wanted to eliminate the sweat, cost, and hassle from the experience of moving and storage in UAE to make it feel like a breeze. They set out to build a storage company in Sharjah that offers premium services to clients at reduced cost.</p>
-            <div class="ps-hero-cta">
-                <a href="#ab-quote" class="sk-btn sk-btn-primary"><i class="fas fa-file-invoice-dollar"></i> Get A Quote</a>
-                <a href="{{ url('booking') }}" class="sk-btn sk-btn-ghost"><i class="fas fa-boxes"></i> Looking for a secure storage?</a>
-            </div>
-            <div class="ps-hero-badges">
-                <span class="ps-hbadge"><i class="fas fa-temperature-low"></i> Climate-controlled</span>
-                <span class="ps-hbadge"><i class="fas fa-clock"></i> 24/7 access</span>
-                <span class="ps-hbadge"><i class="fas fa-tags"></i> Highly competitive rates</span>
-                <span class="ps-hbadge"><i class="fas fa-shield-alt"></i> Automatic insurance coverage</span>
+        </div>
+    </section>
+
+    <section class="ab-stats">
+        <div class="sk-container">
+            <div class="ab-stats-grid">
+                <div><div class="n">10+</div><div class="l">Years of Experience</div></div>
+                <div><div class="n">5,000+</div><div class="l">Happy Customers</div></div>
+                <div><div class="n">100,000+</div><div class="l">Sq. Ft. of Storage</div></div>
+                <div><div class="n">7</div><div class="l">Emirates Covered</div></div>
             </div>
         </div>
     </section>
 
-    <!-- ============ TRUST ============ -->
-    <div class="ps-trust">
-        <div class="sk-container">
-            <div class="ps-trust-in">
-                <div class="ps-trust-i"><i class="fas fa-tags"></i> Highly competitive rates</div>
-                <div class="ps-trust-i"><i class="fas fa-temperature-low"></i> Climate-controlled</div>
-                <div class="ps-trust-i"><i class="fas fa-clock"></i> 24/7 access</div>
-                <div class="ps-trust-i"><i class="fas fa-video"></i> IP security</div>
-                <div class="ps-trust-i"><i class="fas fa-expand-arrows-alt"></i> Flexible lease options</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ ABOUT (SPLIT) ============ -->
     <section class="sk-section">
         <div class="sk-container">
-            <div class="ps-split sk-reveal">
+            <div class="ab-provide">
                 <div>
-                    <span class="sk-eyebrow">About Us</span>
-                    <h2>Solutions For your needs!</h2>
-                    <p>We began operations as an LLC. in the UAE in 2016. Our founders wanted to eliminate the sweat, cost, and hassle from the experience of moving and storage in UAE to make it feel like a breeze. They set out to build a storage company in Sharjah that offers premium services to clients at reduced cost.</p>
-                    <ul class="ps-points">
-                        <li><i class="fas fa-check-circle"></i> Highly competitive rates</li>
-                        <li><i class="fas fa-check-circle"></i> Climate-controlled and spotless individual storage units</li>
-                        <li><i class="fas fa-check-circle"></i> 24/7 access to your pod</li>
-                        <li><i class="fas fa-check-circle"></i> Accessible UAE warehouse via Emirates Bypass Road</li>
-                        <li><i class="fas fa-check-circle"></i> State-of-the-art IP security and surveillance by fully-vetted professionals</li>
-                        <li><i class="fas fa-check-circle"></i> Automatic and comprehensive insurance coverage</li>
-                        <li><i class="fas fa-check-circle"></i> Flexible lease options and easily scalable storage solutions</li>
-                        <li><i class="fas fa-check-circle"></i> Wide loading/unloading bays to accommodate items of all sizes</li>
+                    <h2>What we provide</h2>
+                    <p>Our units cover a range of your necessities so we have you covered on all your needs.</p>
+                    <ul class="ab-checks">
+                        <li><i class="fas fa-check"></i> Highly competitive rates</li>
+                        <li><i class="fas fa-check"></i> State-of-the-art IP security and surveillance by fully-vetted professionals</li>
+                        <li><i class="fas fa-check"></i> Climate-controlled and spotless individual storage units</li>
+                        <li><i class="fas fa-check"></i> Automatic and comprehensive insurance coverage</li>
+                        <li><i class="fas fa-check"></i> 24/7 access to your pod</li>
+                        <li><i class="fas fa-check"></i> Flexible lease options and easily scalable storage solutions</li>
+                        <li><i class="fas fa-check"></i> Accessible UAE warehouse via Emirates Bypass Road</li>
+                        <li><i class="fas fa-check"></i> Wide loading/unloading bays to accommodate items of all sizes</li>
                     </ul>
                 </div>
-                <div class="ps-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/web/Image_7.png') }}');"></div>
+                <div class="ab-photo" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/web/Image_7.png') }}');"></div>
             </div>
         </div>
     </section>
 
-    <!-- ============ OUR SERVICES ============ -->
     <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Our Services</span>
-                <h2>Storage Solution</h2>
+            <div class="ab-head">
+                <h2>Our solutions for you</h2>
+                <p>We organise our services around how people and businesses actually use extra space, making it easy to find the option that matches your situation.</p>
             </div>
-            <div class="ab-services sk-reveal">
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-home"></i></div>
-                    <span class="h4">Personal Storage</span>
-                    <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
-                    <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-briefcase"></i></div>
-                    <span class="h4">Business Storage</span>
-                    <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
-                    <a class="ab-svc-link" href="{{ url('/business-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-warehouse"></i></div>
-                    <span class="h4">Warehouse Storage</span>
-                    <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
-                    <a class="ab-svc-link" href="{{ url('/warehouse-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-truck"></i></div>
-                    <span class="h4">Moving</span>
-                    <p>over 1 million+ homes for sale available on the website, we can match you with a house you will want to call home.</p>
-                    <a class="ab-svc-link" href="{{ url('/moving-services') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
+            <div class="ab-solutions">
+                <article class="ab-sol">
+                    <div class="ab-sol-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
+                    <div class="ab-sol-body">
+                        <h3>Personal Storage</h3>
+                        <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
+                        <a href="{{ url('/personal-storage') }}">Explore personal storage <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="ab-sol">
+                    <div class="ab-sol-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
+                    <div class="ab-sol-body">
+                        <h3>Business Storage</h3>
+                        <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory solutions and regular access to their goods.</p>
+                        <a href="{{ url('/business-storage') }}">Explore business storage <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="ab-sol">
+                    <div class="ab-sol-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
+                    <div class="ab-sol-body">
+                        <h3>Warehouse Storage</h3>
+                        <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
+                        <a href="{{ url('/warehouse-storage') }}">Explore warehouse storage <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="ab-sol">
+                    <div class="ab-sol-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
+                    <div class="ab-sol-body">
+                        <h3>Moving Storage</h3>
+                        <p>A convenient moving and temporary storage solution that helps simplify relocations for both households and businesses.</p>
+                        <a href="{{ url('/moving-services') }}">Explore moving storage <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
 
-    <!-- ============ TESTIMONIALS ============ -->
-    <section class="sk-section">
+    <section class="sk-section ab-said">
         <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Client,s Testimonial</span>
-                <h2>Client's Feedback</h2>
+            <div class="ab-head">
+                <h2>What our customers have said about us</h2>
             </div>
-            <div class="ab-reviews sk-reveal">
+            <div class="ab-said-grid">
                 <article class="sk-review">
                     <div class="qi">“</div>
                     <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
@@ -139,18 +127,6 @@
                         <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/3.jpg') }}" alt="Muhammed Alshebli">
                         <div>
                             <span class="h4">Muhammed Alshebli</span>
-                            <span>Local Guide</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="sk-review">
-                    <div class="qi">“</div>
-                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <p>We took the warehouse for a long time and their services are very good, fast and very friendly yet professional staff. Thank you</p>
-                    <div class="who">
-                        <img src="{{ asset('sk-assets/assets/images/frontend/testimonial/4.jpg') }}" alt="pooja nayal">
-                        <div>
-                            <span class="h4">pooja nayal</span>
                             <span>Local Guide</span>
                         </div>
                     </div>

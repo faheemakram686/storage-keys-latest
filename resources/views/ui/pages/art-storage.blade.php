@@ -94,7 +94,7 @@
                     <p>StorageKeys provides art storage for private collectors, galleries, artists, interior designers and families across Dubai and Sharjah. Our Sharjah facility is monitored around the clock and the units are climate controlled, so works are kept away from heat, damp and daylight while they are not on display.</p>
                     <p>Art storage sits alongside our <a href="{{ url('/personal-storage') }}">storage for household belongings</a>, so a family can keep a painting collection and other valuables in one place.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -129,7 +129,7 @@
                         <li class="row-i"><div class="ic"><i class="fas fa-home"></i></div><div><h4>Families &amp; Expats</h4><p>During a move, a renovation or a long stay abroad, paintings and heirlooms are safer in storage than left in an empty, unconditioned home.</p></div></li>
                     </ul>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/web/Image_3.png') }}');"></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Climate &amp; Security</span>
                     <h2>Why Conditions Matter More Than Square Metres</h2>

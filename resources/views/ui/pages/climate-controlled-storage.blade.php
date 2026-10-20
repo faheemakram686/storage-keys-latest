@@ -54,7 +54,7 @@
                         <li><i class="fas fa-check-circle"></i> Flexible, on-demand terms for personal &amp; business needs</li>
                     </ul>
                 </div>
-                <div class="cc-media" style="background-image:url('images/overview.jpg');"></div>
+                <div class="cc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -142,7 +142,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="cc-split rev sk-reveal">
-                <div class="cc-media" style="background-image:url('images/facility.jpg');"></div>
+                <div class="cc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Our Facility</span>
                     <h2>Our Climate-Controlled Storage Facility</h2>

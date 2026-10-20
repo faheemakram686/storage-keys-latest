@@ -62,7 +62,7 @@
                         <span>Second car</span><span>Extended travel</span><span>Between properties</span><span>Occasional-use vehicles</span><span>Long-term storage</span>
                     </div>
                 </div>
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_5.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -113,7 +113,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="svc-split rev sk-reveal">
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Locations</span>
                     <h2>Car Storage in Dubai and Across the UAE</h2>

@@ -51,7 +51,7 @@
                     <p>Whether you need vehicle self storage for a personal vehicle or additional space for business vehicles, we can help you identify an appropriate arrangement — for vehicles that are temporarily unused, kept aside for future use, or no longer required on a daily basis.</p>
                     <p>For businesses, that means space for company cars, vans, motorcycles, delivery vehicles and other fleet vehicles. For individuals, it's a practical option when residential parking is limited or a vehicle needs to remain stored for an extended period.</p>
                 </div>
-                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -136,7 +136,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="vh-split rev sk-reveal">
-                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">How Long?</span>
                     <h2>Short-Term &amp; Long-Term Vehicle Storage</h2>
@@ -192,7 +192,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="vh-split rev sk-reveal">
-                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="vh-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Right-Sized Value</span>
                     <h2>Affordable Vehicle Storage Without Excess Space</h2>

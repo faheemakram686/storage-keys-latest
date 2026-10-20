@@ -144,7 +144,7 @@ class StorageUnitClass implements StorageUnitInterface {
             return $query->whereRelation('warehouse.loc.city', 'id', $city_id);
         });
         $qry=$qry->when($request->id, function ($query, $id) {
-            return $query->whereRelation('warehouse.loc', 'loc_id', $id);
+            return $query->whereRelation('warehouse.loc', 'locations.id', $id);
         });
         $qry=$qry->when($request->level, function ($query, $level) {
             return $query->whereRelationIn('storagelevel', 'id', $level);
@@ -162,7 +162,7 @@ class StorageUnitClass implements StorageUnitInterface {
 
     public  function  leadStorageUnit($id)
     {
-        $qry = StorageUnit::with('warehouse.loc','warehouse.loc.city.country');
+        $qry = StorageUnit::with(['warehouse.loc.city.country', 'storagesize', 'storagelevel', 'storagetype']);
         $qry = $qry->where( 'id' , $id );
         $qry = $qry->get();
         return $qry;

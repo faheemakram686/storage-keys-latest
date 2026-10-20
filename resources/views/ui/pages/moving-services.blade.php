@@ -59,7 +59,7 @@
                     <p>Our team can assist with packing, loading, transportation, storage, and delivery according to your moving schedule. If you need temporary storage for a few days or longer-term space while your plans develop, we provide flexible storage units to accommodate your requirements. This means you can move out when necessary and arrange delivery when you're actually ready to receive your belongings.</p>
                     <p>For customers searching for moving companies in Dubai, the advantage of choosing StorageKeys is having moving and storage available through the same provider. Instead of arranging a moving company and then finding a separate storage facility, you can coordinate both requirements together. Whether you're planning a residential move, office relocation, or longer-distance move, our services are designed around the practical needs of your transition.</p>
                 </div>
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_5.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -109,7 +109,7 @@
     <section class="sk-section">
         <div class="sk-container">
             <div class="svc-split rev sk-reveal">
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">One Provider</span>
                     <h2>A Complete Moving Solution From Start to Finish</h2>
@@ -132,7 +132,7 @@
                     <p>Our storage units provide a practical option during these transitions. You can use temporary storage while waiting for your new home or office, or choose a longer storage period if your relocation timeline is uncertain. Your belongings remain at our storage facility until you're ready to arrange the next stage of your move.</p>
                     <p>For customers who have already arranged transportation, storage can also be added when required. This makes our storage facilities suitable for people who need a place between two properties as well as those looking for longer-term storage during a wider relocation.</p>
                 </div>
-                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="svc-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>

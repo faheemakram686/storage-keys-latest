@@ -94,7 +94,7 @@
                     <p>StorageKeys provides construction storage for main contractors, fit-out companies, MEP subcontractors, joiners and small builders across Dubai and Sharjah. Our Sharjah facility is monitored around the clock with coded access, so materials and tools are protected between deliveries and between contracts.</p>
                     <p>It sits within our <a href="{{ url('/business-storage') }}">storage services for companies</a>, alongside space for offices, stock and archives. Your site team gets one place to send surplus stock, returned items and kit waiting for the next job, instead of several half-full containers spread across different projects.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -129,7 +129,7 @@
                     </ul>
                     <p style="font-size:13.5px;color:var(--sk-muted);margin:0;">Construction storage works best when it is planned with the programme, so materials arrive on site when the trades need them rather than weeks before.</p>
                 </div>
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_1.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/inline.jpg') }}');"></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="lt-split rev sk-reveal">
-                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/bg/Inner_Small_Banner_2.jpg') }}');"></div>
+                <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor area-80kb.jpg') }}');"></div>
                 <div>
                     <span class="sk-eyebrow">Security &amp; Conditions</span>
                     <h2>Protecting Materials From Heat, Dust and Theft</h2>

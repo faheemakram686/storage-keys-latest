@@ -1,22 +1,73 @@
 @extends('ui.layouts.frontend')
-@section('title', '| Bookings')
+@section('title', '| Reserve')
+@section('metaTitle', 'Reserve your unit | Storage Keys')
+@section('metaDescription', 'Send an enquiry to reserve your StorageKeys unit. Share your contact details, preferred stay and any add-ons.')
+
+@section('css')
+<link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/reservation-layout.css') }}">
+@endsection
+
 @section('content')
     @isset($data)
     @php
         $primarySu = isset($data['su'][0]) ? $data['su'][0] : null;
+        $preferredDuration = trim((string) request('duration'));
+        $matchedTermId = null;
+        if ($preferredDuration !== '' && !empty($data['term_length'])) {
+            foreach ($data['term_length'] as $termOption) {
+                $termTitle = strtolower(trim((string) $termOption->title));
+                $pref = strtolower($preferredDuration);
+                if ($termTitle !== '' && ($termTitle === $pref || strpos($termTitle, $pref) !== false)) {
+                    $matchedTermId = $termOption->id;
+                    break;
+                }
+            }
+        }
     @endphp
-    <div class="justify-content-center checkout-page">
-        <div class="container">
-            <div class="row" id="selected_units_header">
-                @foreach ($data['su'] as $su)
-                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 greeting-user unit-header-row" data-su-id="{{ $su->id }}">
-                    <h3 class="animated fadeIn" style="color:#FF8820;" >{{$su->warehouse->loc->city->city_name}} <span class="area-name">-{{$su->warehouse->loc->loc_name}}- {{$su->warehouse->name}} - {{$su->storage_unit_name}}</span> </h3>
-                </div>
-                @endforeach
+    <div class="sk-home rsv-page">
+        <section class="ps-hero">
+            <div class="sk-container">
+                <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('booking') }}">Booking</a> <i class="fas fa-chevron-right"></i> <span>Reserve</span></div>
+                <h1>Reserve your unit</h1>
+                <p class="lead">Tell us how to reach you. We will confirm availability and the next step for the unit you selected.</p>
             </div>
+        </section>
 
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 details-section">
+        <section class="rsv-body">
+            <div class="sk-container">
+                <div class="rsv-stack">
+                    <div class="rsv-units" id="selected_units_header">
+                        @foreach ($data['su'] as $su)
+                        <article class="rsv-unit unit-header-row" data-su-id="{{ $su->id }}">
+                            <p class="rsv-kicker">Selected unit</p>
+                            <h2>{{ $su->storage_unit_name }}</h2>
+                            <div class="rsv-meta">
+                                @if(optional(optional(optional($su->warehouse)->loc)->city)->city_name)
+                                <span><i class="fas fa-map-marker-alt"></i> {{ $su->warehouse->loc->city->city_name }}@if(optional(optional($su->warehouse)->loc)->loc_name) · {{ $su->warehouse->loc->loc_name }}@endif</span>
+                                @endif
+                                @if(optional($su->warehouse)->name)
+                                <span><i class="fas fa-warehouse"></i> {{ $su->warehouse->name }}</span>
+                                @endif
+                                @if(optional($su->storagesize)->unit_type_name)
+                                <span><i class="fas fa-vector-square"></i> {{ $su->storagesize->unit_type_name }}</span>
+                                @endif
+                                @if(optional($su->storagelevel)->name)
+                                <span><i class="fas fa-layer-group"></i> {{ $su->storagelevel->name }}</span>
+                                @endif
+                                @if(optional($su->storagetype)->name)
+                                <span><i class="fas fa-box"></i> {{ $su->storagetype->name }}</span>
+                                @endif
+                                @if($su->price)
+                                <span><i class="fas fa-tag"></i> AED {{ number_format($su->price) }}</span>
+                                @endif
+                                @if($preferredDuration !== '')
+                                <span class="is-duration"><i class="fas fa-clock"></i> {{ $preferredDuration }}</span>
+                                @endif
+                            </div>
+                        </article>
+                        @endforeach
+                    </div>
+
                     <form method="post" action="{{ url('save-lead') }}" id="LeadForm">
                         @csrf
                         @if($primarySu)
@@ -28,215 +79,171 @@
                             @endforeach
                         </div>
 
-                    <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
-                            Storage Units</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <label class="lbl">Selected Units</label>
-                                    <table class="table table-sm table-bordered" id="selected_units_table">
-                                        <thead>
-                                            <tr>
-                                                <th>Unit</th>
-                                                <th style="width:90px;">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($data['su'] as $su)
-                                            <tr data-id="{{ $su->id }}">
-                                                <td>{{ $su->storage_unit_name }}</td>
-                                                <td>
-                                                    @if(!$loop->first)
-                                                    <button type="button" class="btn btn-sm btn-danger btn-remove-unit" data-id="{{ $su->id }}">Remove</button>
-                                                    @else
-                                                    <span class="text-muted">Primary</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-
-                                    <hr>
-                                    <p class="mb-2"><strong>Add another unit</strong></p>
-                                    <div class="row">
-                                        <div class="col-6 mb-2">
-                                            <label class="lbl">Country</label>
-                                            <select class="form-control" name="country_id" id="country_id">
-                                                <option value="">Choose One</option>
-                                                @isset($data['loc'])
-                                                    @foreach ($data['loc'] as $country)
-                                                        <option value="{{ $country->id }}">{{$country->name }}</option>
-                                                    @endforeach
-                                                @endisset
-                                            </select>
-                                        </div>
-                                        <div class="col-6 mb-2">
-                                            <label class="lbl">City</label>
-                                            <select name="city_id" class="form-control citySection" id="citySection">
-                                                <option value="">Choose One</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6 mb-2">
-                                            <label class="lbl">Location</label>
-                                            <select class="form-control loc_id" name="loc_id" id="loc_id">
-                                                <option value="">Choose One</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-6 mb-2">
-                                            <label class="lbl">Warehouse</label>
-                                            <select class="form-control warehouse_id" name="warehouse_id" id="warehouse_id">
-                                                <option value="">Choose One</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-8 mb-2">
-                                            <label class="lbl">Storage Unit</label>
-                                            <select class="form-control" id="extra_su_id">
-                                                <option value="">Choose One</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-4 mb-2 d-flex align-items-end">
-                                            <button type="button" class="btn btn-primary btn-sm" id="btn_add_unit" style="height:35px;">Add Unit</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
-                            Contact Information</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="type" type="radio" value="individual"  id="ind" />
-                                                <label class="check-container" for="ind">For Individual?</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="type" type="radio" value="company"  id="com" />
-                                                <label class="check-container" for="com">For Company?</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-
-                                        <div class="col-6">
-                                            <label class="">Requested date</label>
-                                            <input type="date" class="form-control" name="r_date" style="height:35px;" required>
-                                        </div>
-                                        <div class="col-6" id="companyfeild">
-                                            <label class="">Company Name</label>
-                                            <input type="text" class="form-control" name="company_name" style="height:35px;" >
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-6">
-                                            <label class="">First Name</label>
-                                            <input type="text" class="form-control" name="f_name" style="height:35px;" required>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="">Last Name</label>
-                                            <input type="text" class="form-control" name="l_name" style="height:35px;" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-6">
-                                            <label class="">Email</label>
-                                            <input type="email" class="form-control" name="email" style="height:35px;" required>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="">Phone</label>
-                                            <input type="text" class="form-control" name="phone" style="height:35px;" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-3">
-                                        <div class="col-6">
-                                            <label class="">Mobile 1</label>
-                                            <input type="text" class="form-control" name="mobile1" style="height:35px;">
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="">Mobile 2</label>
-                                            <input type="text" class="form-control" name="mobile2" style="height:35px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row reservations-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 term-section-header">
-                            Select term length</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 term-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <p>Select longer periods to enjoy massive savings!</p>
-                                    @isset($data['term_length'])
-                                        @foreach($data['term_length'] as $term_length)
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="price" type="radio" value="{{$term_length->id}}"  id="flexCheckDefault" />
-                                                <label class="check-container" for="flexCheckDefault">{{$term_length->title}}</label>
-                                            </div>
-                                        </div>
-                                        @if($term_length->term_period == 1)
-                                        <div class="col-6">
-                                            <p class="no-bottom-margin text-right">Fixed Price</p>
-                                        </div>
-                                        @else
-                                            <div class="col-6">
-                                                <p class="no-bottom-margin text-right on-sale-text">On Sale (Save {{$term_length->discount_percentage}}%)</p>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="separator"></div>
-                                        @endforeach
-                                    @endisset
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row padlock-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 padlock-section-header">
-                            Addons</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 padlock-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <div class="row">
-                                @isset($data['addon'])
-                                    @foreach ($data['addon'] as $addon)
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-checkbox">
-                                            <div class="form-check">
-                                                <input class="form-check-input" name="addon[]" id="addon_id" type="checkbox" value="{{$addon->id}}"  id="flexCheckDefault" />
-                                                <label class="check-container" for="flexCheckDefault">{{$addon->name}}</label>
-                                            </div>
-                                        </div>
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Storage units</h3>
+                        <div class="rsv-card-b">
+                            <table class="rsv-table" id="selected_units_table">
+                                <thead>
+                                    <tr>
+                                        <th>Unit</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data['su'] as $su)
+                                    <tr data-id="{{ $su->id }}">
+                                        <td>{{ $su->storage_unit_name }}</td>
+                                        <td>
+                                            @if(!$loop->first)
+                                            <button type="button" class="rsv-remove btn-remove-unit" data-id="{{ $su->id }}">Remove</button>
+                                            @else
+                                            <span class="rsv-primary">Primary</span>
+                                            @endif
+                                        </td>
+                                    </tr>
                                     @endforeach
-                                @endisset
+                                </tbody>
+                            </table>
+
+                            <div class="rsv-addbox">
+                                <h4>Add another unit</h4>
+                                <div class="rsv-fields">
+                                    <div class="rsv-field">
+                                        <label class="lbl" for="country_id">Country</label>
+                                        <select class="form-control" name="country_id" id="country_id">
+                                            <option value="">Choose one</option>
+                                            @isset($data['loc'])
+                                                @foreach ($data['loc'] as $country)
+                                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                    </div>
+                                    <div class="rsv-field">
+                                        <label class="lbl" for="citySection">City</label>
+                                        <select name="city_id" class="form-control citySection" id="citySection">
+                                            <option value="">Choose one</option>
+                                        </select>
+                                    </div>
+                                    <div class="rsv-field">
+                                        <label class="lbl" for="loc_id">Location</label>
+                                        <select class="form-control loc_id" name="loc_id" id="loc_id">
+                                            <option value="">Choose one</option>
+                                        </select>
+                                    </div>
+                                    <div class="rsv-field">
+                                        <label class="lbl" for="warehouse_id">Warehouse</label>
+                                        <select class="form-control warehouse_id" name="warehouse_id" id="warehouse_id">
+                                            <option value="">Choose one</option>
+                                        </select>
+                                    </div>
+                                    <div class="rsv-field">
+                                        <label class="lbl" for="extra_su_id">Storage unit</label>
+                                        <select class="form-control" id="extra_su_id">
+                                            <option value="">Choose one</option>
+                                        </select>
+                                    </div>
+                                    <div class="rsv-field rsv-field-action">
+                                        <button type="button" class="rsv-add" id="btn_add_unit">Add unit</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row insurance-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 insurance-section-header">
-                            Insurance</div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-10 insurance-section-body">
+                    </section>
+
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Contact information</h3>
+                        <div class="rsv-card-b">
+                            <div class="rsv-choices">
+                                <label class="rsv-choice" for="ind">
+                                    <input class="form-check-input" name="type" type="radio" value="individual" id="ind" checked>
+                                    <span>Individual</span>
+                                </label>
+                                <label class="rsv-choice" for="com">
+                                    <input class="form-check-input" name="type" type="radio" value="company" id="com">
+                                    <span>Company</span>
+                                </label>
+                            </div>
+                            <div class="rsv-fields rsv-date-row">
+                                <div class="rsv-field">
+                                    <label for="rsv_date">Requested date</label>
+                                    <input type="date" class="form-control" id="rsv_date" name="r_date" required>
+                                </div>
+                                <div class="rsv-field" id="companyfeild">
+                                    <label for="rsv_company">Company name</label>
+                                    <input type="text" class="form-control" id="rsv_company" name="company_name">
+                                </div>
+                            </div>
+                            <div class="rsv-fields">
+                                <div class="rsv-field">
+                                    <label for="rsv_fname">First name</label>
+                                    <input type="text" class="form-control" id="rsv_fname" name="f_name" required>
+                                </div>
+                                <div class="rsv-field">
+                                    <label for="rsv_lname">Last name</label>
+                                    <input type="text" class="form-control" id="rsv_lname" name="l_name" required>
+                                </div>
+                                <div class="rsv-field">
+                                    <label for="rsv_email">Email</label>
+                                    <input type="email" class="form-control" id="rsv_email" name="email" required>
+                                </div>
+                                <div class="rsv-field">
+                                    <label for="rsv_phone">Phone</label>
+                                    <input type="text" class="form-control" id="rsv_phone" name="phone" required>
+                                </div>
+                                <div class="rsv-field">
+                                    <label for="rsv_mobile1">Mobile 1</label>
+                                    <input type="text" class="form-control" id="rsv_mobile1" name="mobile1">
+                                </div>
+                                <div class="rsv-field">
+                                    <label for="rsv_mobile2">Mobile 2</label>
+                                    <input type="text" class="form-control" id="rsv_mobile2" name="mobile2">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Term length</h3>
+                        <div class="rsv-card-b">
+                            <p>Longer stays include a discount. Your preferred stay from booking is shown on the unit above.</p>
+                            @forelse($data['term_length'] ?? [] as $term_length)
+                            <label class="rsv-term" for="term_{{ $term_length->id }}">
+                                <span class="rsv-term-main">
+                                    <input class="form-check-input" name="price" type="radio" value="{{ $term_length->id }}" id="term_{{ $term_length->id }}" {{ (string) $matchedTermId === (string) $term_length->id ? 'checked' : '' }}>
+                                    <span>{{ $term_length->title }}</span>
+                                </span>
+                                @if($term_length->term_period == 1)
+                                <span class="rsv-term-note">Fixed price</span>
+                                @else
+                                <span class="rsv-term-note">Save {{ $term_length->discount_percentage }}%</span>
+                                @endif
+                            </label>
+                            @empty
+                            <p class="rsv-empty">Term options will be confirmed with you after this enquiry.</p>
+                            @endforelse
+                        </div>
+                    </section>
+
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Addons</h3>
+                        <div class="rsv-card-b">
+                            <div class="rsv-addons">
+                            @forelse($data['addon'] ?? [] as $addon)
+                                <label class="rsv-choice" for="addon_{{ $addon->id }}">
+                                    <input class="form-check-input" name="addon[]" id="addon_{{ $addon->id }}" type="checkbox" value="{{ $addon->id }}">
+                                    <span>{{ $addon->name }}@if(!empty($addon->price)) · AED {{ number_format($addon->price) }}@endif</span>
+                                </label>
+                            @empty
+                                <p class="rsv-empty">No add-ons are available right now.</p>
+                            @endforelse
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Insurance</h3>
+                        <div class="rsv-card-b">
                             @include('partials.insurance-selector', [
                                 'insurances' => $data['insurances'] ?? collect([]),
                                 'selectedInsuranceId' => null,
@@ -244,31 +251,26 @@
                                 'readonly' => false,
                             ])
                         </div>
-                    </div>
-                    <div class="row terms-conditions-sections">
-                        <div class="offset-sm-2 offset-md-2 offset-lg-2 offset-1 col-8 col-sm-6 col-md-4 col-lg-4 terms-conditions-section-header">
-                            TERMS &amp; CONDITIONS
+                    </section>
+
+                    <section class="rsv-card">
+                        <h3 class="rsv-h">Terms and conditions</h3>
+                        <div class="rsv-card-b">
+                            <label class="rsv-choice" for="rsv_terms">
+                                <input class="form-check-input" type="checkbox" name="terms" value="agree" id="rsv_terms" required>
+                                <span>I agree to the StorageKeys terms and conditions</span>
+                            </label>
+                            <p class="rsv-terms-link"><a href="#" data-toggle="modal" data-target="#quick_view_modal" class="form-link">View terms</a></p>
                         </div>
-                        <div class="offset-md-1 offset-lg-1 col-12 col-sm-12 col-md-10 col-lg-7 terms-conditions-section-body">
-                            <div class="row">
-                                <div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-10 col-lg-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="terms" value="agree"  id="flexCheckDefault" required />
-                                        <label class="check-container" for="flexCheckDefault">I agree to the standard terms and conditions of storage
-                                            keys<a href="#" data-toggle="modal" data-target="#quick_view_modal" class="form-link"> (click here)</a></label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row submission-sections">
-                        <button class="offset-md-1 offset-lg-1 btn btn-qoutation btn-sm active btn-submit float-end" type="submit">SUBMIT</button>
+                    </section>
+
+                    <div class="rsv-actions">
+                        <button class="btn btn-qoutation btn-submit" type="submit">Submit enquiry</button>
                     </div>
                     </form>
                 </div>
             </div>
-
-        </div>
+        </section>
     </div>
     @endisset
 
@@ -309,9 +311,10 @@
                 var ids = Object.keys(selectedUnitsMap);
                 ids.forEach(function(id, idx) {
                     var action = idx === 0
-                        ? '<span class="text-muted">Primary</span>'
-                        : '<button type="button" class="btn btn-sm btn-danger btn-remove-unit" data-id="'+id+'">Remove</button>';
-                    $tbody.append('<tr data-id="'+id+'"><td>'+selectedUnitsMap[id]+'</td><td>'+action+'</td></tr>');
+                        ? '<span class="rsv-primary">Primary</span>'
+                        : '<button type="button" class="rsv-remove btn-remove-unit" data-id="'+id+'">Remove</button>';
+                    var safeName = $('<div>').text(selectedUnitsMap[id]).html();
+                    $tbody.append('<tr data-id="'+id+'"><td>'+safeName+'</td><td>'+action+'</td></tr>');
                 });
                 syncInputsAndPrimary();
             }
@@ -407,9 +410,10 @@
                 }
                 selectedUnitsMap[id] = name;
                 renderSelectedUnitsTable();
+                var safeName = $('<div>').text(name).html();
                 $('#selected_units_header').append(
-                    '<div class="offset-lg-1 offset-md-1 col-12 col-sm-12 col-md-11 col-lg-11 greeting-user unit-header-row" data-su-id="'+id+'">'+
-                    '<h3 class="animated fadeIn" style="color:#FF8820;"><span class="area-name">'+name+'</span></h3></div>'
+                    '<article class="rsv-unit unit-header-row" data-su-id="'+id+'">'+
+                    '<p class="rsv-kicker">Added unit</p><h2>'+safeName+'</h2></article>'
                 );
             });
 
@@ -441,7 +445,7 @@
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        $('.btn-submit').text('Saving...');
+                        $('.btn-submit').text('Saving');
                         $(".btn-submit").prop("disabled", true);
                     },
                     success: function(data) {
@@ -453,18 +457,18 @@
                             toastr.error(data.message);
                         }
                         if (data.errors) {
-                            $('.btn-submit').text('Save');
+                            $('.btn-submit').text('Submit enquiry');
                             $(".btn-submit").prop("disabled", false);
                         }
                     },
                     complete: function(data) {
-                        $(".btn-submit").html("Save");
+                        $(".btn-submit").html("Submit enquiry");
                         $(".btn-submit").prop("disabled", false);
                     },
                     error: function(xhr) {
                         var msg = (xhr.responseJSON && (xhr.responseJSON.message || xhr.responseJSON.error)) ? (xhr.responseJSON.message || xhr.responseJSON.error) : 'any technical error';
                         toastr.error(msg);
-                        $('.btn-submit').text('Save');
+                        $('.btn-submit').text('Submit enquiry');
                         $(".btn-submit").prop("disabled", false);
                     }
                 });
@@ -476,7 +480,7 @@
     <div class="modal fade" id="quick_view_modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content" style="border: none; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; font-family: 'Inter', sans-serif;">
-                <div class="modal-header" style="background: linear-gradient(135deg, #FF8820 0%, #FF6B00 100%); border: none; padding: 25px 30px; position: relative;">
+                <div class="modal-header" style="background: #F48922; border: none; padding: 25px 30px; position: relative;">
                     <span class="h4 modal-title" style="color: #ffffff; font-weight: 700; margin: 0; font-size: 1.4rem; letter-spacing: -0.02em;">Terms & Conditions</span>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; opacity: 1; transition: all 0.3s ease; cursor: pointer;">
                         <span aria-hidden="true" style="font-size: 24px; line-height: 1;">&times;</span>
@@ -499,7 +503,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="background: #F7FAFC; border-top: 1px solid #EDF2F7; padding: 20px 40px; display: flex; justify-content: flex-end;">
-                    <button type="button" class="btn" data-dismiss="modal" style="background: #2D3748; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none; transition: background 0.3s ease;">Close Document</button>
+                    <button type="button" class="btn" data-dismiss="modal" style="background: #6C365B; color: white; padding: 12px 30px; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none;">Close</button>
                 </div>
             </div>
         </div>
@@ -519,7 +523,7 @@
         .terms-content ul, .terms-content ol { margin-bottom: 15px; padding-left: 20px; }
         .terms-content li { margin-bottom: 8px; }
         .terms-content h1, .terms-content h2, .terms-content h3 { margin-top: 20px; margin-bottom: 10px; color: #2D3748; }
-        .form-link { color: #FF8820; font-weight: 600; text-decoration: none; transition: color 0.3s ease; }
-        .form-link:hover { color: #FF6B00; text-decoration: underline; }
+        .form-link { color: #F48922; font-weight: 600; text-decoration: none; }
+        .form-link:hover { color: #EC5D2C; text-decoration: underline; }
     </style>
 @endsection

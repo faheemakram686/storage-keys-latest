@@ -3,17 +3,17 @@
    Design tokens shared site-wide
 ============================================================ */
 :root {
-    --sk-primary:   #123a63;
-    --sk-primary-2: #1c5a99;
-    --sk-accent:    #ff8a1e;
-    --sk-accent-2:  #ff6a00;
-    --sk-dark:      #0e2036;
-    --sk-body:      #4a5a6a;
-    --sk-muted:     #7c8a99;
-    --sk-line:      #e6ecf2;
-    --sk-soft:      #f4f8fc;
+    --sk-primary:   #050505;
+    --sk-primary-2: #6C365B;
+    --sk-accent:    #F48922;
+    --sk-accent-2:  #EC5D2C;
+    --sk-dark:      #050505;
+    --sk-body:      #4A403C;
+    --sk-muted:     #7A7168;
+    --sk-line:      #E7DDD4;
+    --sk-soft:      #FCF8F5;
     --sk-radius:    16px;
-    --sk-shadow:    0 18px 40px rgba(18, 58, 99, .10);
+    --sk-shadow:    0 18px 40px rgba(5, 5, 5, .10);
 }
 
 * { box-sizing: border-box; }
@@ -27,7 +27,7 @@ body {
 img { max-width: 100%; height: auto; }
 
 .sk-container {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -87,14 +87,14 @@ p { margin: 0 0 1em; }
     cursor: pointer;
     font-family: inherit;
 }
-.sk-btn-primary { background: var(--sk-accent); color: #fff; box-shadow: 0 12px 24px rgba(255, 138, 30, .30); }
+.sk-btn-primary { background: var(--sk-accent); color: #fff; box-shadow: 0 12px 24px rgba(244, 137, 34, .30); }
 .sk-btn-primary:hover { background: var(--sk-accent-2); color: #fff; transform: translateY(-2px); }
-.sk-btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, .55); }
-.sk-btn-ghost:hover { background: #fff; color: var(--sk-primary); border-color: #fff; }
+.sk-btn-ghost { background: #fff; color: #050505; border-color: #E7DDD4; }
+.sk-btn-ghost:hover { background: #6C365B; color: #fff; border-color: #6C365B; }
 .sk-btn-outline { background: transparent; color: var(--sk-primary); border-color: var(--sk-line); }
 .sk-btn-outline:hover { background: var(--sk-primary); color: #fff; border-color: var(--sk-primary); }
-.sk-btn-white { background: #fff; color: var(--sk-accent-2); }
-.sk-btn-white:hover { background: var(--sk-dark); color: #fff; }
+.sk-btn-white { background: #6C365B; color: #fff; border-color: #6C365B; }
+.sk-btn-white:hover { background: #050505; color: #fff; border-color: #050505; }
 .sk-btn-wa { background: #25d366; color: #fff; }
 .sk-btn-wa:hover { background: #1eb457; color: #fff; }
 
@@ -106,8 +106,8 @@ p { margin: 0 0 1em; }
 .svc-hero {
     position: relative;
     background:
-        linear-gradient(115deg, rgba(14, 32, 54, .94) 0%, rgba(28, 90, 153, .82) 100%),
-        url('images/hero-bg.jpg') center/cover no-repeat;
+        linear-gradient(90deg, rgba(5, 5, 5, .78) 0%, rgba(5, 5, 5, .42) 46%, rgba(5, 5, 5, .08) 100%),
+        url('../../assets/images/frontend/landing-hero.jpg') center/cover no-repeat;
     color: #fff;
     padding: 64px 0 88px;
 }
@@ -129,10 +129,10 @@ p { margin: 0 0 1em; }
 .svc-trust { background: #fff; border-bottom: 1px solid var(--sk-line); }
 .svc-trust-in { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; padding: 26px 0; }
 .svc-trust-i { display: flex; align-items: center; gap: 12px; justify-content: center; font-size: 14px; font-weight: 600; color: var(--sk-dark); }
-.svc-trust-i i { color: var(--sk-accent); font-size: 20px; }
+.svc-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px; background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
 /* ---------- Stats counter ---------- */
-.svc-stats { background: var(--sk-primary); color: #fff; }
+.svc-stats { background: #6C365B; color: #fff; }
 .svc-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
 .svc-stat .n { font-size: 44px; font-weight: 700; color: #fff; line-height: 1; font-variant-numeric: tabular-nums; }
 .svc-stat .n .plus { color: var(--sk-accent); }
@@ -165,7 +165,7 @@ p { margin: 0 0 1em; }
 .svc-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .svc-card { background: #fff; border: 1px solid var(--sk-line); border-radius: var(--sk-radius); padding: 32px; display: flex; gap: 20px; transition: .3s; }
 .svc-card:hover { box-shadow: var(--sk-shadow); border-color: transparent; transform: translateY(-4px); }
-.svc-card .ic { flex: 0 0 60px; width: 60px; height: 60px; border-radius: 14px; background: var(--sk-soft); color: var(--sk-accent); display: flex; align-items: center; justify-content: center; font-size: 26px; }
+.svc-card .ic { flex: 0 0 60px; width: 60px; height: 60px; border-radius: 14px; background: #6C365B; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; }
 .svc-card h3, .svc-card .h3 { font-size: 19px; margin-bottom: 8px; display: block; }
 .svc-card p { font-size: 14px; color: var(--sk-muted); margin: 0; line-height: 1.7; }
 
@@ -198,7 +198,7 @@ p { margin: 0 0 1em; }
     padding: 40px;
     box-shadow: var(--sk-shadow);
 }
-.svc-tabgrid .ic { width: 88px; height: 88px; border-radius: 20px; background: var(--sk-soft); color: var(--sk-accent); display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 18px; }
+.svc-tabgrid .ic { width: 88px; height: 88px; border-radius: 20px; background: #6C365B; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 18px; }
 .svc-tabgrid h3 { font-size: 24px; margin-bottom: 12px; }
 .svc-tabgrid p { font-size: 15px; line-height: 1.8; color: var(--sk-body); margin: 0 0 18px; }
 .svc-tabgrid ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
@@ -217,7 +217,7 @@ p { margin: 0 0 1em; }
     gap: 34px;
     align-items: center;
 }
-.svc-ind .ic { width: 86px; height: 86px; border-radius: 20px; background: var(--sk-soft); color: var(--sk-accent); display: flex; align-items: center; justify-content: center; font-size: 38px; }
+.svc-ind .ic { width: 86px; height: 86px; border-radius: 20px; background: #6C365B; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 38px; }
 .svc-ind h3 { font-size: 22px; margin-bottom: 10px; }
 .svc-ind p { font-size: 15px; line-height: 1.8; color: var(--sk-body); margin: 0 0 14px; }
 .svc-ind ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
@@ -396,7 +396,7 @@ p { margin: 0 0 1em; }
         bottom: 0;
         z-index: 60;
         background: #fff;
-        box-shadow: 0 -6px 20px rgba(18, 58, 99, .12);
+        box-shadow: 0 -6px 20px rgba(5, 5, 5, .12);
     }
     .svc-mobilebar a {
         padding: 12px 6px;
