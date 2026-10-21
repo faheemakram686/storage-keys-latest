@@ -2,34 +2,57 @@
 
 namespace App\Services;
 
+use App\Models\CustomerPaymentMethod;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class NgeniusPaymentService
 {
-    protected $baseUrl;
-    protected $outletReference;
-    protected $tokenService;
+    protected string $baseUrl;
+    protected string $outletReference;
+    protected NgeniusTokenService $tokenService;
 
     public function __construct(NgeniusTokenService $tokenService)
     {
-        $this->baseUrl = env('NGENIUS_BASE_URL');
-        $this->outletReference = env('NGENIUS_OUTLET_REFERENCE');
+        $this->baseUrl = rtrim((string) config('services.ngenius.base_url'), '/');
+        $this->outletReference = (string) config('services.ngenius.outlet_reference');
         $this->tokenService = $tokenService;
     }
 
-    public function createOrder($amount, $currency = 'AED', $redirectUrl = null, $customerRef = null)
+    /**
+     * Create a hosted-page order.
+     *
+     * @param  mixed  $redirectUrl  Truthy = invoice return path; null/false = checkout return path
+     * @param  mixed  $customerRef  Customer model (or object with billing fields)
+     * @param  array  $options  merchant_order_reference, cancel_url, include_saved_card
+     */
+    public function createOrder($amount, $currency = 'AED', $redirectUrl = null, $customerRef = null, array $options = [])
+    {
+        return $this->doCreateOrder($amount, $currency, $redirectUrl, $customerRef, $options, true);
+    }
+
+    protected function doCreateOrder($amount, $currency, $redirectUrl, $customerRef, array $options, bool $allowRetry)
     {
         $token = $this->tokenService->getAccessToken();
-
         if (!$token) {
             Log::error('Failed to get Ngenius access token');
             return false;
         }
 
         $billing = $this->resolveBillingDetails($customerRef);
-        $resolvedRedirectUrl = $this->resolveRedirectUrl($redirectUrl !== null);
+        if ($billing['email'] === '' || $billing['first_name'] === '') {
+            Log::error('Ngenius order refused: missing payer email or first name', [
+                'has_email' => $billing['email'] !== '',
+                'has_first_name' => $billing['first_name'] !== '',
+            ]);
+            return false;
+        }
 
+        if ($billing['last_name'] === '') {
+            $billing['last_name'] = '-';
+        }
+
+        $resolvedRedirectUrl = $this->resolveRedirectUrl($redirectUrl !== null);
         if (!$resolvedRedirectUrl) {
             Log::error('Ngenius redirect URL could not be resolved', [
                 'app_url' => config('app.url'),
@@ -40,26 +63,50 @@ class NgeniusPaymentService
 
         $endpoint = $this->baseUrl . '/transactions/outlets/' . $this->outletReference . '/orders';
 
+        $merchantAttributes = [
+            'maskPaymentInfo' => true,
+            'redirectUrl' => $resolvedRedirectUrl,
+        ];
+
+        $cancelUrl = trim((string) ($options['cancel_url'] ?? ''));
+        if ($cancelUrl !== '' && $this->isUsableRedirectUrl($this->normalizeRedirectUrl($cancelUrl), !app()->environment('production'))) {
+            $merchantAttributes['cancelUrl'] = $this->normalizeRedirectUrl($cancelUrl);
+        }
+
+        // Unattended MIT / recurring charges: ask the outlet to skip shopper 3DS when allowed.
+        if (!empty($options['skip_3ds'])) {
+            $merchantAttributes['skip3DS'] = true;
+        }
+
         $payload = [
             'action' => 'SALE',
             'amount' => [
                 'currencyCode' => $currency,
-                'value' => (int) round(((float) $amount) * 100), // minor units
+                'value' => (int) round(((float) $amount) * 100),
             ],
             'emailAddress' => $billing['email'],
-            'merchantAttributes' => [
-                'maskPaymentInfo' => true,
-                'paymentAttempts' => '3',
-                'redirectUrl' => $resolvedRedirectUrl,
-            ],
+            'paymentAttempts' => 3,
+            'merchantAttributes' => $merchantAttributes,
             'billingAddress' => [
                 'firstName' => $billing['first_name'],
                 'lastName' => $billing['last_name'],
-                'address1' => $billing['address'],
-                'city' => $billing['city'],
+                'address1' => $billing['address'] !== '' ? $billing['address'] : 'N/A',
+                'city' => $billing['city'] !== '' ? $billing['city'] : 'Dubai',
                 'countryCode' => $billing['country_code'],
             ],
         ];
+
+        $merchantOrderReference = $this->sanitizeMerchantOrderReference($options['merchant_order_reference'] ?? null);
+        if ($merchantOrderReference) {
+            $payload['merchantOrderReference'] = $merchantOrderReference;
+        }
+
+        if (!empty($options['include_saved_card']) && is_object($customerRef) && !empty($customerRef->id)) {
+            $saved = CustomerPaymentMethod::activeForCustomer((int) $customerRef->id);
+            if ($saved) {
+                $payload['savedCard'] = $saved->toNgeniusSavedCard();
+            }
+        }
 
         try {
             $response = Http::withHeaders([
@@ -69,24 +116,24 @@ class NgeniusPaymentService
             ])->post($endpoint, $payload);
 
             if ($response->successful()) {
+                $json = $response->json();
                 Log::info('Ngenius Order Creation successful', [
                     'status' => $response->status(),
+                    'reference' => $json['reference'] ?? null,
                     'redirectUrl' => $resolvedRedirectUrl,
-                    'response' => $response->body(),
                 ]);
-                return $response->json();
+                return $json;
             }
 
-            // If token might be expired, clear cache and retry once
-            if ($response->status() === 401) {
+            if ($response->status() === 401 && $allowRetry) {
                 $this->tokenService->clearTokenCache();
-                return $this->createOrder($amount, $currency, $redirectUrl, $customerRef);
+                return $this->doCreateOrder($amount, $currency, $redirectUrl, $customerRef, $options, false);
             }
 
             Log::error('Ngenius Order Creation Failed', [
                 'status' => $response->status(),
                 'redirectUrl' => $resolvedRedirectUrl,
-                'response' => $response->body(),
+                'body' => $response->json() ?? $response->body(),
             ]);
 
             return false;
@@ -97,35 +144,94 @@ class NgeniusPaymentService
     }
 
     /**
-     * Build the N-Genius return URL.
-     * Always uses /redirect-response (invoice) or /redirectPaymentRef (orders).
-     * Live servers must have a public APP_URL (not 127.0.0.1 / localhost).
+     * Charge a saved card without the hosted page (unattended recurring).
+     *
+     * @return array{order: array, payment: array|false}|false
      */
+    public function chargeSavedCard($amount, $currency, $customerRef, CustomerPaymentMethod $paymentMethod, array $options = [])
+    {
+        $order = $this->doCreateOrder($amount, $currency, 1, $customerRef, array_merge($options, [
+            'include_saved_card' => false,
+        ]), true);
+
+        if (!$order) {
+            return false;
+        }
+
+        $savedCardHref = $this->extractSavedCardPaymentHref($order);
+        if (!$savedCardHref) {
+            Log::error('Ngenius saved-card charge: payment:saved-card link missing', [
+                'reference' => $order['reference'] ?? null,
+            ]);
+            return false;
+        }
+
+        $payment = $this->submitSavedCard($savedCardHref, $paymentMethod, true);
+
+        return [
+            'order' => $order,
+            'payment' => $payment,
+        ];
+    }
+
+    protected function submitSavedCard(string $href, CustomerPaymentMethod $paymentMethod, bool $allowRetry)
+    {
+        $token = $this->tokenService->getAccessToken();
+        if (!$token) {
+            return false;
+        }
+
+        $body = $paymentMethod->toNgeniusSavedCard();
+        $body['recaptureCsc'] = false;
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/vnd.ni-payment.v2+json',
+                'Accept' => 'application/vnd.ni-payment.v2+json',
+            ])->put($href, $body);
+
+            if ($response->successful()) {
+                $json = $response->json();
+                Log::info('Ngenius saved-card charge response', [
+                    'state' => $json['state'] ?? null,
+                    'orderReference' => $json['orderReference'] ?? null,
+                ]);
+                return $json;
+            }
+
+            if ($response->status() === 401 && $allowRetry) {
+                $this->tokenService->clearTokenCache();
+                return $this->submitSavedCard($href, $paymentMethod, false);
+            }
+
+            Log::error('Ngenius saved-card charge failed', [
+                'status' => $response->status(),
+            ]);
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error('Ngenius saved-card charge exception', ['error' => $e->getMessage()]);
+            return false;
+        }
+    }
+
     protected function resolveRedirectUrl(bool $forInvoice = true): ?string
     {
         $path = $forInvoice ? '/redirect-response' : '/redirectPaymentRef';
         $allowPrivate = !app()->environment('production');
         $candidates = [];
 
-        // Optional override: treat as site base (ignore wrong paths like /payment/callback).
-        $configured = trim((string) config('services.ngenius.callback_url', ''));
-        if ($configured !== '' && stripos($configured, 'yourdomain.com') === false) {
-            $base = $this->extractBaseUrl($configured);
-            if ($base) {
-                $candidates[] = $base . $path;
-            }
-        }
-        
-
-        // Prefer APP_URL — this must be the live public domain on production.
-        $appUrl = rtrim((string) config('app.url'), '/');
-        if ($appUrl !== '') {
-            $candidates[] = $appUrl . $path;
-        }
-
-        // Current browser host (useful for local artisan serve on 127.0.0.1:8000).
+        // Prefer the current request root (includes subdirectory + port), e.g.
+        // http://127.0.0.1/storage-keys-latest/public or http://127.0.0.1:8000
         if (!app()->runningInConsole() && request()) {
-            $candidates[] = rtrim(request()->getSchemeAndHttpHost(), '/') . $path;
+            $candidates[] = rtrim(request()->root(), '/') . $path;
+        }
+
+        try {
+            $candidates[] = url($path);
+        } catch (\Throwable $e) {
+            // url() helper may be unavailable in some contexts.
         }
 
         try {
@@ -136,7 +242,20 @@ class NgeniusPaymentService
             // Named route may be unavailable in some contexts.
         }
 
-        foreach (array_unique($candidates) as $url) {
+        $configured = trim((string) config('services.ngenius.callback_url', ''));
+        if ($configured !== '' && stripos($configured, 'yourdomain.com') === false) {
+            $base = $this->extractAppBase($configured);
+            if ($base) {
+                $candidates[] = rtrim($base, '/') . $path;
+            }
+        }
+
+        $appUrl = rtrim((string) config('app.url'), '/');
+        if ($appUrl !== '') {
+            $candidates[] = $appUrl . $path;
+        }
+
+        foreach (array_unique(array_filter($candidates)) as $url) {
             $normalized = $this->normalizeRedirectUrl($url);
             if ($this->isUsableRedirectUrl($normalized, $allowPrivate)) {
                 return $normalized;
@@ -146,15 +265,31 @@ class NgeniusPaymentService
         return null;
     }
 
-    protected function extractBaseUrl(string $url): ?string
+    /**
+     * Site base for building redirect URLs. Keeps subdirectory paths
+     * (e.g. /storage-keys-latest/public) and strips known callback endpoints.
+     */
+    protected function extractAppBase(string $url): ?string
     {
         $parts = parse_url($url);
         if (empty($parts['scheme']) || empty($parts['host'])) {
             return null;
         }
 
-        return $parts['scheme'] . '://' . $parts['host']
+        $base = $parts['scheme'] . '://' . $parts['host']
             . (isset($parts['port']) ? ':' . $parts['port'] : '');
+
+        $path = (string) ($parts['path'] ?? '');
+        $path = preg_replace('#/(redirect-response|redirectPaymentRef|payment/callback)/?$#i', '', $path);
+        $path = rtrim((string) $path, '/');
+
+        return $base . $path;
+    }
+
+    /** @deprecated Use extractAppBase() */
+    protected function extractBaseUrl(string $url): ?string
+    {
+        return $this->extractAppBase($url);
     }
 
     protected function normalizeRedirectUrl(?string $url): ?string
@@ -163,7 +298,6 @@ class NgeniusPaymentService
             return null;
         }
 
-        // N-Genius rejects hostname "localhost" but accepts 127.0.0.1.
         return preg_replace('#://localhost(?=[:/]|$)#i', '://127.0.0.1', $url);
     }
 
@@ -201,6 +335,26 @@ class NgeniusPaymentService
         return true;
     }
 
+    protected function sanitizeMerchantOrderReference($value): ?string
+    {
+        $value = preg_replace('/[^A-Za-z0-9\-]/', '', (string) $value);
+        return $value !== '' ? $value : null;
+    }
+
+    /**
+     * N-Genius requires merchantOrderReference to be unique per order.
+     * Reusing the same invoice number on a second Pay Now causes HTTP 422.
+     */
+    public function uniqueMerchantOrderReference(?string $invoiceNo, ?int $invoiceId = null): string
+    {
+        $base = $this->sanitizeMerchantOrderReference($invoiceNo)
+            ?: ('INV' . ($invoiceId ?: '0'));
+
+        $suffix = strtoupper(substr(str_replace('.', '', uniqid('', true)), -8));
+
+        return $this->sanitizeMerchantOrderReference($base . '-' . $suffix) ?: ($base . $suffix);
+    }
+
     protected function resolveBillingDetails($customerRef): array
     {
         $contact = null;
@@ -222,7 +376,6 @@ class NgeniusPaymentService
         $parts = $displayName !== '' ? explode(' ', $displayName, 2) : [];
 
         $country = is_object($customerRef) ? strtoupper(trim((string) ($customerRef->country ?? ''))) : '';
-        // N-Genius expects an ISO country code; default to AE for this app.
         if ($country === '' || strlen($country) !== 2) {
             $country = 'AE';
         }
@@ -241,14 +394,9 @@ class NgeniusPaymentService
         ];
     }
 
-    /**
-     * Fetch the current status of an Ngenius order by its reference.
-     * Returns the decoded order array on success, or false on failure.
-     */
-    public function getOrderStatus($reference)
+    public function getOrderStatus($reference, bool $allowRetry = true)
     {
         $token = $this->tokenService->getAccessToken();
-
         if (!$token) {
             Log::error('Failed to get Ngenius access token for order status');
             return false;
@@ -266,15 +414,14 @@ class NgeniusPaymentService
                 return $response->json();
             }
 
-            // Token may be expired: clear cache and retry once.
-            if ($response->status() === 401) {
+            if ($response->status() === 401 && $allowRetry) {
                 $this->tokenService->clearTokenCache();
-                return $this->getOrderStatus($reference);
+                return $this->getOrderStatus($reference, false);
             }
 
             Log::error('Ngenius Order Status Failed', [
                 'status' => $response->status(),
-                'response' => $response->body(),
+                'reference' => $reference,
             ]);
 
             return false;
@@ -285,35 +432,119 @@ class NgeniusPaymentService
     }
 
     /**
-     * Extract the payment state (e.g. PURCHASED, CAPTURED, FAILED) from an order response.
+     * Latest payment block from an order response (recurring orders grow the array).
      */
+    public function extractLatestPayment($orderResponse): ?array
+    {
+        $payments = $this->extractPayments($orderResponse);
+        if ($payments === []) {
+            return null;
+        }
+
+        return $payments[array_key_last($payments)];
+    }
+
+    /**
+     * Prefer a successful payment block; fall back to the latest.
+     */
+    public function extractSuccessfulPayment($orderResponse): ?array
+    {
+        foreach (array_reverse($this->extractPayments($orderResponse)) as $payment) {
+            if ($this->isPaidState($payment['state'] ?? null)) {
+                return $payment;
+            }
+        }
+
+        return $this->extractLatestPayment($orderResponse);
+    }
+
+    public function extractPayments($orderResponse): array
+    {
+        $payments = $orderResponse['_embedded']['payment'] ?? null;
+        if (!is_array($payments) || $payments === []) {
+            return [];
+        }
+
+        return array_values(array_filter($payments, 'is_array'));
+    }
+
     public function extractPaymentState($orderResponse)
     {
-        return $orderResponse['_embedded']['payment'][0]['state'] ?? null;
+        $payment = $this->extractSuccessfulPayment($orderResponse);
+        return $payment['state'] ?? null;
     }
 
-    /**
-     * Extract the captured amount in minor units from an order response.
-     */
     public function extractCapturedAmount($orderResponse)
     {
-        return $orderResponse['_embedded']['payment'][0]['amount']['value'] ?? null;
+        $payment = $this->extractSuccessfulPayment($orderResponse);
+        return $payment['amount']['value'] ?? null;
     }
 
-    /**
-     * Whether the given order response represents a successfully paid order.
-     */
-    public function isPaid($orderResponse)
+    public function extractCurrency($orderResponse): ?string
     {
-        return in_array($this->extractPaymentState($orderResponse), ['PURCHASED', 'CAPTURED'], true);
+        $payment = $this->extractSuccessfulPayment($orderResponse);
+        $currency = $payment['amount']['currencyCode']
+            ?? $orderResponse['amount']['currencyCode']
+            ?? null;
+
+        return is_string($currency) ? strtoupper($currency) : null;
+    }
+
+    public function extractSavedCard($orderResponse): ?array
+    {
+        $payment = $this->extractSuccessfulPayment($orderResponse);
+        $saved = $payment['savedCard'] ?? null;
+        if (!is_array($saved) || empty($saved['cardToken'])) {
+            return null;
+        }
+
+        return $saved;
+    }
+
+    public function extractSavedCardPaymentHref($orderResponse): ?string
+    {
+        $payment = $this->extractLatestPayment($orderResponse);
+        $fromPayment = $payment['_links']['payment:saved-card']['href']
+            ?? $payment['_links']['cnp:payment:saved-card']['href']
+            ?? null;
+        if ($fromPayment) {
+            return $fromPayment;
+        }
+
+        return $orderResponse['_links']['payment:saved-card']['href']
+            ?? $orderResponse['_links']['cnp:payment:saved-card']['href']
+            ?? null;
+    }
+
+    public function isPaid($orderResponse): bool
+    {
+        foreach ($this->extractPayments($orderResponse) as $payment) {
+            if ($this->isPaidState($payment['state'] ?? null)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isPaidState(?string $state): bool
+    {
+        return in_array($state, ['PURCHASED', 'CAPTURED'], true);
+    }
+
+    public function isPendingState(?string $state): bool
+    {
+        return in_array($state, ['STARTED', 'AWAIT_3DS', 'PENDING', 'AUTHORISED'], true);
+    }
+
+    public function isFailedState(?string $state): bool
+    {
+        return in_array($state, ['FAILED', 'DECLINED', 'CANCELLED', 'CANCELED', 'EXPIRED'], true);
     }
 
     public function getPaymentUrl($orderResponse)
     {
-        if (isset($orderResponse['_links']['payment']['href'])) {
-            return $orderResponse['_links']['payment']['href'];
-        }
-        return null;
+        return $orderResponse['_links']['payment']['href'] ?? null;
     }
 
     public function getOrderReference($orderResponse)

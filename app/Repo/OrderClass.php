@@ -7,12 +7,14 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use App\Repo\Interfaces\ContactInterface;
 
 use App\Repo\Interfaces\ContractInterface;
 use App\Repo\Interfaces\InvoiceInterface;
 use App\Repo\Interfaces\OrderInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class OrderClass implements OrderInterface {
@@ -20,33 +22,58 @@ class OrderClass implements OrderInterface {
 
     public function saveOrder($request)
     {
+        $cartItems = \Cart::getContent();
+        if ($cartItems->isEmpty()) {
+            throw new \RuntimeException('Your cart is empty.');
+        }
 
-        $order =new Order();
-        $order->customer_id  = $request->customer_id;
-        $order->notes = $request->orderRef;
-        $order->payment_method = $request->payment_method;
-        $order->sub_amount = $request->total_amount;
-        $order->total_amount = $request->due_date;
-        $order->status = 0;
-        if($order->save()){
-            $cartItems = \Cart::getContent();
-                if ($cartItems)
-                {
-                   foreach ($cartItems as $item)
-                    {
-                             $orderItem = new OrderItem();
-                             $orderItem->order_id  = $order->id;
-                             $orderItem->product_id = $item->id;
-                             $orderItem->qty = $item->quantity;
-                             $orderItem->price = $item->price;
-                             $orderItem->total = $item->price * $item->quantity;
-                             $orderItem->status = 1;
-                             $orderItem->save();
-                    }
-                    \Cart::clear();
-                }
+        $amount = (int) round((float) $request->total_amount);
+
+        return DB::transaction(function () use ($request, $cartItems, $amount) {
+            $order = new Order();
+            $order->customer_id = $request->customer_id;
+            $order->notes = $request->notes;
+            $order->gateway_reference = $request->gateway_reference;
+            $order->payment_method = $request->payment_method;
+            $order->sub_amount = $amount;
+            $order->total_amount = $amount;
+            $order->status = 0;
+            $order->save();
+
+            foreach ($cartItems as $item) {
+                $price = (int) round((float) $item->price);
+                $qty = (int) $item->quantity;
+                $orderItem = new OrderItem();
+                $orderItem->order_id = $order->id;
+                $orderItem->product_id = $this->cartProductId($item->id);
+                $orderItem->item_name = (string) $item->name;
+                $orderItem->qty = $qty;
+                $orderItem->price = $price;
+                $orderItem->total = $price * $qty;
+                $orderItem->status = 1;
+                $orderItem->save();
             }
-            return response()->json(['success' => 'Record save successfully'], 200);
+
+            return $order;
+        });
+    }
+
+    /**
+     * Cart ids for sized products are "{productId}-{size}" (for example "12-s").
+     */
+    private function cartProductId($cartId): int
+    {
+        $raw = (string) $cartId;
+        if (!preg_match('/^(\d+)/', $raw, $matches)) {
+            throw new \RuntimeException('A cart item is not linked to a product.');
+        }
+
+        $productId = (int) $matches[1];
+        if (!Product::whereKey($productId)->exists()) {
+            throw new \RuntimeException('A cart item is not linked to a product.');
+        }
+
+        return $productId;
     }
     public function convertOrder($request)
     {
@@ -68,7 +95,7 @@ class OrderClass implements OrderInterface {
 
     public function getAllOrders()
     {
-        $qry=Order::with('customer.primaryContact');
+        $qry=Order::with(['customer.primaryContact', 'invoice']);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();
         return $qry;
@@ -131,7 +158,14 @@ class OrderClass implements OrderInterface {
     }
     public function getOrder($id)
     {
-        $qry=Order::with('orderItems.productdetail','customer.contact');
+        $qry=Order::with([
+            'orderItems.productdetail',
+            'customer.primaryContact',
+            'customer.contact',
+            'invoice.payments' => function ($query) {
+                $query->where('is_deleted', 0);
+            },
+        ]);
         $qry=$qry->where('id',$id);
         $qry=$qry->where('is_deleted',0)->orderBy('id','DESC');
         $qry=$qry->get();

@@ -37,7 +37,14 @@
                                             </div>
                                             <div class="d-flex align-center">
                                                 <div class="nk-tab-actions me-n1">
-                                                    <a class="btn btn-primary" title="Payment"  href="{{url('admin/generate/invoice/'.$data['invoice'][0]->id)}}">Generate Invoice</a>
+                                                    @php
+                                                        $linkedInvoice = $data['invoice'][0]->invoice ?? null;
+                                                    @endphp
+                                                    @if($linkedInvoice)
+                                                        <a class="btn btn-primary" title="View Invoice" href="{{url('admin/invoice/detail/'.$linkedInvoice->id)}}">View Invoice</a>
+                                                    @else
+                                                        <a class="btn btn-primary" title="Generate Invoice" href="{{url('admin/generate/invoice/'.$data['invoice'][0]->id)}}">Generate Invoice</a>
+                                                    @endif
                                                 </div>
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -59,11 +66,15 @@
                                                     <div class="invoice-contact">
                                                         <span class="overline-title">Invoice To</span>
                                                         <div class="invoice-contact-info">
-                                                            <h4 class="title">{{$data['invoice'][0]->customer->company_name}}</h4>
-                                                            <h5 class="title">{{$data['invoice'][0]->customer->contact->first_name}} {{$data['invoice'][0]->customer->contact->last_name}}</h5>
+                                                            @php
+                                                                $orderCustomer = $data['invoice'][0]->customer;
+                                                                $orderContact = $orderCustomer->primaryContact ?? optional($orderCustomer->contact)->first();
+                                                            @endphp
+                                                            <h4 class="title">{{ $orderCustomer->company_name ?: $orderCustomer->customer_name }}</h4>
+                                                            <h5 class="title">{{ trim(($orderContact->first_name ?? '') . ' ' . ($orderContact->last_name ?? '')) }}</h5>
                                                             <ul class="list-plain">
-                                                                <li><em class="icon ni ni-emails-fill"></em><span>{{$data['invoice'][0]->customer->contact->email}}</span></li>
-                                                                <li><em class="icon ni ni-call-fill"></em><span>{{$data['invoice'][0]->customer->contact->phone}}</span></li>
+                                                                <li><em class="icon ni ni-emails-fill"></em><span>{{ $orderContact->email ?? $orderCustomer->email }}</span></li>
+                                                                <li><em class="icon ni ni-call-fill"></em><span>{{ $orderContact->phone ?? $orderCustomer->phone }}</span></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -72,6 +83,27 @@
                                                         <ul class="list-plain">
                                                             <li class="invoice-id"><span>Order No</span>-<span>{{$data['invoice'][0]->id}}</span></li>
                                                             <li class="invoice-date"><span>Date</span>:<span>{{$data['invoice'][0]->created_at}}</span></li>
+                                                            @php
+                                                                $orderInvoice = $data['invoice'][0]->invoice ?? null;
+                                                                $orderPayment = $orderInvoice
+                                                                    ? optional($orderInvoice->payments)->sortByDesc('id')->first()
+                                                                    : null;
+                                                            @endphp
+                                                            @if($orderInvoice)
+                                                                <li class="invoice-id">
+                                                                    <span>Invoice</span>:
+                                                                    <span>
+                                                                        <a href="{{url('admin/invoice/detail/'.$orderInvoice->id)}}">{{ $orderInvoice->invoice_no }}</a>
+                                                                    </span>
+                                                                </li>
+                                                            @endif
+                                                            @if(!empty($data['invoice'][0]->gateway_reference))
+                                                                <li class="invoice-id"><span>Payment Ref</span>:<span>{{ $data['invoice'][0]->gateway_reference }}</span></li>
+                                                            @endif
+                                                            @if($orderPayment)
+                                                                <li class="invoice-id"><span>Paid</span>:<span>{{ number_format((float) $orderPayment->amount_received, 2) }} AED</span></li>
+                                                                <li class="invoice-id"><span>Status</span>:<span class="text-success">Paid</span></li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </div><!-- .invoice-head -->
@@ -94,7 +126,7 @@
                                                             <tr>
                                                                 <td>{{$key + 1}}</td>
                                                                 <td></td>
-                                                                <td>{{$item->productdetail->p_name}}</td>
+                                                                <td>{{ $item->item_name ?: optional($item->productdetail)->p_name }}</td>
                                                                 <td></td>
                                                                 <td>{{$item->qty}}</td>
                                                                 <td>{{$item->price}}</td>

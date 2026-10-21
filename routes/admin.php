@@ -54,6 +54,7 @@ require __DIR__.'/auth.php';
     Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [Backend\DashboardController::class, 'index'])->name('admin.index');
     Route::get('/get-lead-stat', [Backend\DashboardController::class, 'getLeadStat'])->name('admin.lead-stat');
+    Route::get('/sales-stat', [Backend\DashboardController::class, 'getSalesStat'])->name('admin.sales-stat');
 
     Route::resource('profile', Backend\ProfileController::class);
     Route::any('edit-profile', [Backend\ProfileController::class,'editProfile']);
@@ -352,6 +353,7 @@ require __DIR__.'/auth.php';
     Route::any('customer/estimates/{id}', [CustomerController::class,'showEstimates'])->name('customer-estimates');
     Route::any('customer/invoices/{id}', [CustomerController::class,'showInvoices'])->name('customer-invoices');
     Route::any('customer/toggle-invoice-reminders', [CustomerController::class, 'toggleInvoiceReminders']);
+    Route::post('customer/deactivate-payment-method', [CustomerController::class, 'deactivatePaymentMethod']);
     Route::any('customer/reminders/{id}', [CustomerController::class,'showReminders'])->name('customer-reminders');
 
 
@@ -540,10 +542,11 @@ require __DIR__.'/auth.php';
 
 
     Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice'])->middleware('hashid');
-    Route::any('pay-now/{id}',[InvoiceController::class,'payNowByCustomer'])->middleware('hashid');
+    Route::match(['get', 'post'], 'pay-now/{id}',[InvoiceController::class,'payNowByCustomer'])->middleware('hashid');
     Route::any('/redirect-response',[InvoiceController::class,'saveResponse'])->name('invoice.redirect-response');
     // Legacy N-Genius callback path (older env used /payment/callback)
     Route::any('/payment/callback',[InvoiceController::class,'saveResponse']);
+    Route::get('/payment-status/{ref}',[InvoiceController::class,'paymentStatus'])->name('invoice.payment-status');
 
 Route::get('/oauth/gmail', function (){
     return LaravelGmail::redirect();

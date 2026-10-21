@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\Backend\PaymentReminder;
 use App\Console\Commands\Backend\GenerateRecurringInvoices;
 use App\Console\Commands\Backend\RecalculateStorageUnitStatus;
+use App\Console\Commands\Backend\ReconcileNgeniusPayments;
 use App\Console\Commands\DB\FlushTransactionalDataCommand;
 use App\Jobs\Tenant\AssignLeaveByStatusJob;
 use App\Jobs\Tenant\AssignLeaveJob;
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
         PaymentReminder::class,
         GenerateRecurringInvoices::class,
         RecalculateStorageUnitStatus::class,
+        ReconcileNgeniusPayments::class,
         FlushTransactionalDataCommand::class,
     ];
 
@@ -43,6 +45,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('invoice:recurring')
             ->daily();
+
+        // Confirm N-Genius payments even if the customer never clicks "Return to basket".
+        $schedule->command('ngenius:reconcile-payments')
+            ->everyMinute()
+            ->withoutOverlapping();
 
         $schedule->command('queue:work --queue=high,default --tries=2 --stop-when-empty')->everyMinute()->withoutOverlapping();
 

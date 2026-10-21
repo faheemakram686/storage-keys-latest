@@ -22,9 +22,9 @@ Route::middleware(['auth:contact'])->prefix('customer')->name('customer.')->grou
         Route::any('invoice-to-customer/{id}',[InvoiceController::class,'viewAsCustomerInvoice']);
         Route::any('contract-pdf/{id}', [ContractController::class,'contractPdf'])->name('contract-pdf');
         Route::get('/contract-to-customer/{id}', [ContractController::class, 'contractToCustomer'])->name('contract-customer');
-        Route::any('pay-now/{id}',[InvoiceController::class,'payNowByCustomer']);
+        Route::match(['get', 'post'], 'pay-now/{id}',[InvoiceController::class,'payNowByCustomer']);
     });
-    Route::any('/redirect-response',[InvoiceController::class,'saveResponse'])->name('invoice.redirect-response');
+    // Do not name this invoice.redirect-response — the public return URL must keep that name.
 
 });
 

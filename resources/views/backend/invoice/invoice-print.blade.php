@@ -295,7 +295,14 @@
 
                 <div class="col-6 col-sm-6 col-md-3 invoice-pay-block">
                     @if($data['invoice'][0]->payment_status !== "Paid")
-                    <a href="{{url('pay-now/'.hashid_encode($data['invoice'][0]->id))}}" class="btn btn-primary pay-now-btn">Pay Now</a>
+                    <form method="post" action="{{ url('pay-now/'.hashid_encode($data['invoice'][0]->id)) }}" class="pay-now-form">
+                        @csrf
+                        <label class="d-block mb-2" style="font-size: 0.8rem; font-weight: 400;">
+                            <input type="checkbox" name="save_card" value="1" class="mr-1">
+                            Save this card for future invoices
+                        </label>
+                        <button type="submit" class="btn btn-primary pay-now-btn">Pay Now</button>
+                    </form>
                         @endif
                 </div>
 

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerPaymentMethod;
 use App\Repo\EstimateClass;
 use App\Repo\Interfaces\CustomerInterface;
 use App\Repo\UserClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
@@ -79,7 +81,31 @@ class CustomerController extends Controller
     public function showCustomer($request)
     {
         $data['customer']=$this->customer->getCustomer($request);
+        if ($data['customer']) {
+            $data['customer']->load('activePaymentMethod');
+        }
         return view('backend.customer.show')->with(compact('data'));
+    }
+
+    public function deactivatePaymentMethod(Request $request)
+    {
+        $request->validate([
+            'customer_id' => 'required|integer',
+        ]);
+
+        $updated = CustomerPaymentMethod::query()
+            ->where('customer_id', $request->customer_id)
+            ->where('is_active', true)
+            ->update(['is_active' => false]);
+
+        Log::info('Customer payment method deactivated', [
+            'customer_id' => $request->customer_id,
+            'rows' => $updated,
+        ]);
+
+        return redirect()
+            ->to(url('admin/customer/profile/' . $request->customer_id))
+            ->with('success', $updated ? 'Saved card deactivated.' : 'No active saved card found.');
     }
     public function showContacts($request)
     {

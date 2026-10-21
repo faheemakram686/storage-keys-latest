@@ -183,7 +183,7 @@
                 });
             });
             run.then(function () {
-                window.location.href = {{ json_encode(route('cart.list')) }};
+                window.location.href = @json(route('cart.list'));
             }).catch(function () {
                 btn.disabled = false;
             });

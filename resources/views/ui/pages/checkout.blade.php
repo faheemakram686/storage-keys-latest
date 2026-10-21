@@ -50,6 +50,14 @@
                             </div>
                         @endif
 
+                        @if(isset($errors) && $errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ $errors->first() }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <div class="ltn__checkout-single-content mt-50">
                             <span class="h4 title-2">Billing Details</span>
                             <div class="ltn__checkout-single-content-info">
@@ -61,25 +69,25 @@
                                         <div class="col-md-6">
                                             <div class="input-item input-item-name ltn__custom-icon">
                                                 <input type="text" name="first_name" placeholder="First name"
-                                                       value="{{Auth::user()->first_name}}" required disabled>
+                                                       value="{{Auth::user()->first_name}}" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-name ltn__custom-icon">
                                                 <input type="text" name="last_name" placeholder="Last name"
-                                                       value="{{Auth::user()->last_name}}" required disabled>
+                                                       value="{{Auth::user()->last_name}}" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-email ltn__custom-icon">
                                                 <input type="email" name="email" placeholder="email address"
-                                                       value="{{Auth::user()->email}}" required disabled>
+                                                       value="{{Auth::user()->email}}" disabled>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-item input-item-phone ltn__custom-icon">
                                                 <input type="text" name="phone" placeholder="phone number"
-                                                       value="{{Auth::user()->phone}}" required disabled>
+                                                       value="{{Auth::user()->phone}}" disabled>
                                             </div>
                                         </div>
                                         {{--                                        <div class="col-md-6">--}}
@@ -149,7 +157,6 @@
                                         <textarea name="notes"
                                                   placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
                                     </div>
-                                    <input name="payment_method" type="hidden" value="cash on delivery">
                                     <input name="total_amount" type="hidden" value="{{Cart::getTotal()}}">
 
                             </div>
@@ -165,7 +172,7 @@
                                 <span class="h5 ltn__card-title" data-toggle="collapse" data-target="#faq-item-2-2"
                                     aria-expanded="false" style=" padding: 15px;">
                                     <label>
-                                        <input type="radio" name="payment_method" value="cod" required="" style=" margin-right: 14px;">
+                                        <input type="radio" name="payment_method" value="cod" form="place_order1" required style=" margin-right: 14px;">
                                         Cash on Delivery
                                     </label>
                                 </span>
@@ -183,7 +190,7 @@
                                 <span class="h5 ltn__card-title" data-toggle="collapse" data-target="#faq-item-3-3"
                                     aria-expanded="false" style="padding: 15px;">
                                     <label style="">
-                                        <input type="radio" name="payment_method" value="online" required="" style="margin-right: 14px;">
+                                        <input type="radio" name="payment_method" value="online" form="place_order1" required style="margin-right: 14px;">
                                         Online Payment
                                     </label>
                                 </span>
@@ -194,7 +201,6 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
                         <div class="ltn__payment-note mt-30 mb-30">
                             <p>Your personal data will be used to process your order, support your experience throughout
                                 this website, and for other purposes described in our privacy policy.</p>
@@ -202,6 +208,7 @@
                         <button form="place_order1" class="btn btn-submit theme-btn-1 btn-effect-1 text-uppercase"
                                 type="submit">Place order
                         </button>
+                        </form>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -227,48 +234,16 @@
         </div>
     </div>
     <!-- WISHLIST AREA START -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        $(document).ready(function () {
-
-
-            $('#place_order').on('submit', function (e) {
-                e.preventDefault();
-                let formData = new FormData($('#place_order')[0])
-
-                $.ajax({
-                    type: "post",
-                    url: '{{ route('order.save') }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    beforeSend: function () {
-                        $('.btn-submit').text('Saving...');
-                        $(".btn-submit").prop("disabled", true);
-                    },
-                    success: function (data) {
-                        if (data.success) {
-                            $('#place_order')[0].reset();
-                            toastr.success(data.success);
-                            window.location.href = "{{ url('shop')}}";
-                        }
-                        if (data.errors) {
-                            toastr.error(data.errors);
-                            $('.btn-submit').text('Save');
-                            $(".btn-submit").prop("disabled", false);
-                        }
-                    },
-                    complete: function (data) {
-                        $(".btn-submit").html("Save");
-                        $(".btn-submit").prop("disabled", false);
-                    },
-                    error: function () {
-                        toastr.error('any technical error');
-                        $('.btn-submit').text('Save');
-                        $(".btn-submit").prop("disabled", false);
-                    }
-                });
-            });
+        document.getElementById('place_order1').addEventListener('submit', function () {
+            var button = document.querySelector('button[form="place_order1"]');
+            if (!button) {
+                return;
+            }
+            setTimeout(function () {
+                button.disabled = true;
+                button.textContent = 'Placing order...';
+            }, 0);
         });
     </script>
 

@@ -134,13 +134,25 @@
 
                         for (i = 0; i < data.length; i++) {
                             c++;
+                            var customer = data[i].customer || {};
+                            var contact = customer.primary_contact || null;
+                            if (!contact && customer.contact && customer.contact.length) {
+                                contact = customer.contact[0];
+                            }
+                            var customerName = contact
+                                ? (((contact.first_name || '') + ' ' + (contact.last_name || '')).trim())
+                                : (customer.full_display_name || customer.customer_name || '');
+                            var email = (contact && contact.email) ? contact.email : (customer.email || '');
+                            var invoiceAction = data[i].invoice && data[i].invoice.id
+                                ? '<li><a href={{url('admin/invoice/detail')}}/'+data[i].invoice.id +' ><em class="icon ni ni-file-text"></em><span>View Invoice</span></a></li>'
+                                : '<li><a href={{url('admin/generate/invoice')}}/'+data[i].id +' ><em class="icon ni ni-file-text"></em><span>Generate Invoice</span></a></li>';
                             html += '<tr class="nk-tb-item odd">'+
                                 ' <td class="nk-tb-col nk-tb-col-tools sorting_1">'+c+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools"><a href={{url('admin/order/detail')}}/' + data[i].id + '>Order No#-'+data[i].id+'</a></td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.contact.first_name +' '+data[i].customer.contact.last_name +'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+customerName+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].created_at+'</td>'+
                                 // ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].contract_type+'</td>'+
-                                ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].customer.contact.email+'</td>'+
+                                ' <td class="nk-tb-col nk-tb-col-tools">'+email+'</td>'+
                                 ' <td class="nk-tb-col nk-tb-col-tools">'+data[i].sub_amount+'</td>'+
                                 '<td class="nk-tb-col nk-tb-col-tools" >'+
                                 ' <span class="badge badge-success">'+data[i].status+'</span>'+
@@ -155,7 +167,7 @@
                                 '<li><a href={{url('admin/order/detail')}}/'+data[i].id +' ><em class="icon ni ni-eye"></em><span>View Order</span></a></li>'+
                                 '<li><a href={{url('admin/edit-order')}}/'+data[i].id +' ><em class="icon ni ni-edit"></em><span>Edit Order</span></a></li>'+
                                 '<li><a href={{url('admin/print-order')}}/'+data[i].id +' ><em class="icon ni ni-printer"></em><span>Print Order</span></a></li>'+
-                                '<li><a href={{url('admin/generate/invoice')}}/'+data[i].id +' ><em class="icon ni ni-file-text"></em><span>Generate Invoice</span></a></li>'+
+                                invoiceAction+
                                 '<li><a href="#" class="btn-delete" data='+data[i].id+'><em class="icon ni ni-trash"></em><span>Delete</span></a></li>'+
                                 '</ul>'+
                                 ' </div>'+

@@ -21,9 +21,11 @@ class Order extends Model
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-
-
-
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class, 'order_id', 'id')
+            ->where('is_deleted', 0);
+    }
 
     public function setStatusAttribute($value)
     {

@@ -9,6 +9,20 @@ class Payment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'customer_id',
+        'contract_id',
+        'order_id',
+        'invoice_id',
+        'payment_date',
+        'amount_received',
+        'payment_method',
+        'note',
+        'gateway_order_reference',
+        'status',
+        'is_deleted',
+    ];
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'invoice_id', 'id');

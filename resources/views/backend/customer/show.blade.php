@@ -179,6 +179,45 @@
                                         </form>
                                     </div>
                                 </div>
+                                @php
+                                    $savedCard = $data['customer']->activePaymentMethod;
+                                @endphp
+                                <div class="nk-block mt-4">
+                                    <div class="nk-block-head">
+                                        <div class="nk-block-head-content">
+                                            <h5 class="nk-block-title">Saved Payment Card</h5>
+                                            <div class="nk-block-des">
+                                                <p>Card token used for automatic charges on recurring invoices. Card numbers are never stored here.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card border border-light">
+                                        <div class="card-inner">
+                                            @if($savedCard)
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-8">
+                                                        <p class="mb-1"><strong>{{ $savedCard->scheme ?: 'Card' }}</strong> {{ $savedCard->masked_pan }}</p>
+                                                        <p class="mb-1 text-soft">Expires {{ $savedCard->expiry }} @if($savedCard->cardholder_name)&middot; {{ $savedCard->cardholder_name }}@endif</p>
+                                                        @if($savedCard->hasRecurringConsent())
+                                                            <p class="mb-0 text-success">Recurring charges enabled (opted in {{ optional($savedCard->recurring_consent_at)->format('Y-m-d') }}).</p>
+                                                        @else
+                                                            <p class="mb-0 text-warning">No recurring consent. This card will not be charged automatically.</p>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col-md-4 text-md-right mt-2 mt-md-0">
+                                                        <form method="post" action="{{ url('admin/customer/deactivate-payment-method') }}" onsubmit="return confirm('Stop automatic charges for this customer?');">
+                                                            @csrf
+                                                            <input type="hidden" name="customer_id" value="{{ $data['customer']->id }}">
+                                                            <button type="submit" class="btn btn-outline-danger btn-sm">Deactivate card</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <p class="mb-0 text-soft">No active saved card. A token is stored only when the customer checks “Save this card for future invoices” on Pay Now.</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             @include('backend.customer.aside')
                             <!-- card-aside -->

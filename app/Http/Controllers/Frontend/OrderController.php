@@ -9,9 +9,11 @@ use App\Models\Order;
 use App\Repo\Interfaces\OrderInterface;
 use App\Services\NgeniusPaymentService;
 use App\Services\NgeniusTokenService;
+use App\Services\ShopOrderSettlementService;
 use App\Repo\CustomerClass;
 use App\Repo\UserClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -19,46 +21,92 @@ class OrderController extends Controller
     private $order;
     private $paymentService;
     private $tokenService;
+    private $settlementService;
     private $customer;
     private $user;
-    public function __construct(OrderInterface $order, NgeniusPaymentService  $paymentService,NgeniusTokenService $tokenService)
-    {
+    public function __construct(
+        OrderInterface $order,
+        NgeniusPaymentService $paymentService,
+        NgeniusTokenService $tokenService,
+        ShopOrderSettlementService $settlementService
+    ) {
         $this->order = $order;
         $this->paymentService = $paymentService;
         $this->tokenService = $tokenService;
+        $this->settlementService = $settlementService;
         $this->customer = new CustomerClass();
         $this->user = new UserClass();
     }
 
     public function save(Request $request)
     {
+        $order = null;
+
         try {
-
-
-            $paymentMethod = $request->payment_method;
-
-            if ($paymentMethod === 'online') {
-                $customerRef = Customer::find($request->customer_id);
-
-                $response = $this->paymentService->createOrder($request->total_amount,'AED',null,$customerRef);
-                if (!$response || empty($response['_links']['payment']['href'])) {
-                    return back()->withErrors(['error' => 'Payment initiation failed. Please try again.']);
-                }
-                if($response['_links']['payment']['href']){
-                    $request->orderRef = $response['reference'];
-                    $this->order->saveOrder($request);
-                    return redirect()->away($response['_links']['payment']['href']);
-                }
-            } elseif ($paymentMethod === 'cod') {
-                $request->orderRef = $request->note ?? "";
-                $this->order->saveOrder($request);
-                return redirect()->back()->with('success', 'Order placed successfully.');
+            $user = auth()->guard('contact')->user();
+            if (!$user || !$user->customer_id) {
+                return redirect()->route('customer.login');
             }
 
-        }catch (\Exception $e){
-            return back()->withErrors($e->getMessage());
-        }
+            $paymentMethod = (string) $request->input('payment_method');
+            if (!in_array($paymentMethod, ['online', 'cod'], true)) {
+                return back()->with('error', 'Please choose a payment method.');
+            }
 
+            $cartItems = \Cart::getContent();
+            if ($cartItems->isEmpty()) {
+                return back()->with('error', 'Your cart is empty.');
+            }
+
+            $amount = (float) \Cart::getTotal();
+            if ($amount <= 0) {
+                return back()->with('error', 'Your cart total must be greater than zero.');
+            }
+
+            $request->merge([
+                'customer_id' => $user->customer_id,
+                'payment_method' => $paymentMethod,
+                'total_amount' => $amount,
+            ]);
+
+            $order = $this->order->saveOrder($request);
+
+            if ($paymentMethod === 'cod') {
+                \Cart::clear();
+                return redirect()->route('checkout')->with('success', 'Order placed successfully.');
+            }
+
+            $customerRef = Customer::with('primaryContact')->find($user->customer_id);
+            if (!$customerRef) {
+                $this->discardOrder($order);
+                return back()->with('error', 'Customer details are missing for this order.');
+            }
+
+            $response = $this->paymentService->createOrder($amount, 'AED', null, $customerRef, [
+                'include_saved_card' => true,
+                'merchant_order_reference' => 'ORD' . $order->id,
+                'cancel_url' => route('checkout', ['payment' => 'cancelled']),
+            ]);
+
+            $paymentUrl = $response['_links']['payment']['href'] ?? null;
+            $reference = $response['reference'] ?? null;
+            if (!$response || !$paymentUrl || !$reference) {
+                $this->discardOrder($order);
+                return back()->with('error', 'Payment initiation failed. Please try again.');
+            }
+
+            $order->gateway_reference = $reference;
+            $order->save();
+            \Cart::clear();
+
+            return redirect()->away($paymentUrl);
+        } catch (\Exception $e) {
+            if ($order && !$order->gateway_reference) {
+                $this->discardOrder($order);
+            }
+            Log::error('Checkout place order failed', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Could not place your order. Please try again.');
+        }
     }
     public function index()
     {
@@ -76,9 +124,13 @@ class OrderController extends Controller
 
     public function detailOrder($id)
     {
-         $data['invoice'] = $this->order->getOrder($id);
-        return view('backend.order.show')->with(compact('data'));
+        $order = Order::query()->where('id', $id)->where('is_deleted', 0)->first();
+        if ($order) {
+            $this->settlementService->settleIfMissingInvoice($order);
+        }
 
+        $data['invoice'] = $this->order->getOrder($id);
+        return view('backend.order.show')->with(compact('data'));
     }
     public function getOrder($id)
     {
@@ -125,22 +177,55 @@ class OrderController extends Controller
 
     public function handleRedirect(Request $request)
     {
-        $ref = $request->query('ref'); // The order reference
-        if (!$ref) {
-            return redirect()->route('checkout')->with('error', 'Invalid payment reference');
-        }
-        // Update your local DB
-        $payment = Order::where('notes', $ref)->first();
-        if ($payment) {
-            $payment->status = 1; // STARTED, SUCCESS, FAILED
-            $payment->save();
+        $ref = (string) $request->query('ref', '');
+        if ($ref === '') {
+            return redirect()->route('checkout')->with('error', 'Invalid payment reference.');
         }
 
-        // Redirect user with status
-        if ($payment) {
-            return redirect()->route('checkout')->with('success', 'Payment successful!');
-        } else {
+        $order = Order::query()
+            ->where('gateway_reference', $ref)
+            ->orWhere('notes', $ref)
+            ->first();
+
+        if (!$order) {
             return redirect()->route('checkout')->with('error', 'Payment failed or cancelled.');
+        }
+
+        $gatewayOrder = $this->paymentService->getOrderStatus($ref);
+        if (!$gatewayOrder || !$this->paymentService->isPaid($gatewayOrder)) {
+            if ((int) $order->getRawOriginal('status') === 1) {
+                \Cart::clear();
+                return redirect()->route('checkout')->with('success', 'Payment successful! Your order has been placed.');
+            }
+
+            return redirect()->route('checkout')->with('error', 'Payment was not completed. Please add the items to your cart and try again.');
+        }
+
+        $result = $this->settlementService->settlePaidOrder($order, $gatewayOrder);
+        if (empty($result['success'])) {
+            Log::error('Shop checkout settlement failed on redirect', [
+                'order_id' => $order->id,
+                'reference' => $ref,
+                'message' => $result['message'] ?? null,
+            ]);
+            return redirect()->route('checkout')->with('error', 'Payment was received but could not be recorded. Please contact support with reference ' . $ref . '.');
+        }
+
+        \Cart::clear();
+
+        return redirect()->route('checkout')->with('success', 'Payment successful! Your order has been placed.');
+    }
+
+    private function discardOrder(Order $order): void
+    {
+        try {
+            $order->orderItems()->delete();
+            $order->delete();
+        } catch (\Exception $e) {
+            Log::error('Failed to discard unpaid checkout order', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

@@ -32,10 +32,15 @@ return [
     ],
     'ngenius' => [
         'base_url' => env('NGENIUS_BASE_URL', 'https://api-gateway.sandbox.ngenius-payments.com'),
+        'auth_url' => env('NGENIUS_AUTH_URL', 'https://api-gateway.sandbox.ngenius-payments.com/identity/auth/access-token'),
+        'api_key' => env('NGENIUS_API_KEY'),
         'outlet_reference' => env('NGENIUS_OUTLET_REFERENCE'),
-        'access_token' => env('NGENIUS_ACCESS_TOKEN'),
+        // Sandbox: ni — Production: networkinternational
+        'realm' => env('NGENIUS_REALM', 'ni'),
         // Optional public site base or full URL. Path is always forced to /redirect-response.
         'callback_url' => env('NGENIUS_CALLBACK_URL'),
+        'webhook_header' => env('NGENIUS_WEBHOOK_HEADER', 'X-Webhook-Token'),
+        'webhook_secret' => env('NGENIUS_WEBHOOK_SECRET'),
     ],
 
 

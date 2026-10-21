@@ -32,6 +32,18 @@ class Customer extends Model
             ->orderBy('id');
     }
 
+    public function paymentMethods()
+    {
+        return $this->hasMany(CustomerPaymentMethod::class, 'customer_id', 'id');
+    }
+
+    public function activePaymentMethod()
+    {
+        return $this->hasOne(CustomerPaymentMethod::class, 'customer_id', 'id')
+            ->where('is_active', true)
+            ->orderByDesc('id');
+    }
+
     protected $casts = [
         'created_at'  => 'datetime:Y-m-d H:00'
     ];

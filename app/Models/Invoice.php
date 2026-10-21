@@ -46,6 +46,8 @@ class Invoice extends Model
         'payment_method',
         'status',
         'invoice_ref',
+        'recurring_charge_attempts',
+        'last_recurring_charge_at',
     ];
 
 

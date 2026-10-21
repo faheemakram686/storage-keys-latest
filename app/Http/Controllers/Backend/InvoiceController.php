@@ -16,6 +16,8 @@ use App\Repo\Interfaces\InvoiceInterface;
 use App\Repo\OrderClass;
 use App\Repo\PaymentClass;
 use App\Repo\UserClass;
+use App\Models\InvoicePaymentAttempt;
+use App\Services\InvoiceNgeniusPaymentService;
 use App\Services\NgeniusPaymentService;
 use App\Services\ZapierService;
 use Illuminate\Http\Request;
@@ -34,10 +36,15 @@ class InvoiceController extends Controller
     private $payment;
     private $order;
     private $paymentService;
+    private $invoicePaymentService;
     private $zapier;
 
-    public function __construct(InvoiceInterface $invoice, NgeniusPaymentService $paymentService,ZapierService $zapier)
-    {
+    public function __construct(
+        InvoiceInterface $invoice,
+        NgeniusPaymentService $paymentService,
+        InvoiceNgeniusPaymentService $invoicePaymentService,
+        ZapierService $zapier
+    ) {
         $this->invoice = $invoice;
         $this->zapier = $zapier;
         $this->customer = new CustomerClass();
@@ -49,6 +56,7 @@ class InvoiceController extends Controller
         $this->payment = new PaymentClass();
         $this->order = new OrderClass();
         $this->paymentService = $paymentService;
+        $this->invoicePaymentService = $invoicePaymentService;
     }
     public function index()
     {
@@ -151,7 +159,7 @@ class InvoiceController extends Controller
         $data['invoice'] = $this->invoice->getInvoice($id);
         return view('backend.invoice.invoice-print')->with(compact('data'));
     }
-    public function payNowByCustomer($id)
+    public function payNowByCustomer(Request $request, $id)
     {
         $invoices = $this->invoice->getInvoice($id);
         $invoice = $invoices[0] ?? null;
@@ -185,18 +193,37 @@ class InvoiceController extends Controller
                 ->with('error', 'Customer details are missing for this invoice.');
         }
 
-        $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer);
+        $saveCard = $request->boolean('save_card');
+        $invoiceUrl = url('invoice-to-customer/' . hashid_encode($invoice->id));
+        $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer, [
+            'merchant_order_reference' => $this->paymentService->uniqueMerchantOrderReference(
+                $invoice->invoice_no,
+                (int) $invoice->id
+            ),
+            'cancel_url' => $invoiceUrl,
+            'include_saved_card' => $saveCard,
+        ]);
 
         if (!$response || empty($response['_links']['payment']['href'])) {
             return redirect()
-                ->to(url('invoice-to-customer/' . hashid_encode($invoice->id)))
+                ->to($invoiceUrl)
                 ->with('error', 'Payment initiation failed. Please try again.');
         }
 
-        $this->invoice->updateInvoiceRef((object) [
-            'id' => $invoice->id,
-            'invoice_ref' => $response['reference'] ?? null,
-        ]);
+        $orderReference = (string) ($response['reference'] ?? '');
+        if ($orderReference === '') {
+            return redirect()
+                ->to($invoiceUrl)
+                ->with('error', 'Payment initiation failed. Please try again.');
+        }
+
+        $this->invoicePaymentService->recordAttempt(
+            $invoice,
+            $orderReference,
+            $balance,
+            InvoicePaymentAttempt::SOURCE_HOSTED,
+            $saveCard
+        );
 
         return redirect()->away($response['_links']['payment']['href']);
     }
@@ -215,6 +242,7 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'invoice_id' => 'required|integer',
+            'save_card' => 'sometimes|boolean',
         ]);
 
         $customerId = optional($request->user())->customer_id;
@@ -239,26 +267,51 @@ class InvoiceController extends Controller
         }
 
         $balance = $invoice->balanceAmount();
+        if ($balance <= 0) {
+            return response()->json(['status' => false, 'message' => 'No outstanding balance to pay'], 422);
+        }
 
-        $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer);
+        $invoice->loadMissing(['customer.primaryContact']);
+        if (!$invoice->customer) {
+            return response()->json(['status' => false, 'message' => 'Customer details are missing for this invoice'], 422);
+        }
+
+        $saveCard = $request->boolean('save_card');
+        $response = $this->paymentService->createOrder($balance, 'AED', 1, $invoice->customer, [
+            'merchant_order_reference' => $this->paymentService->uniqueMerchantOrderReference(
+                $invoice->invoice_no,
+                (int) $invoice->id
+            ),
+            'cancel_url' => url('invoice-to-customer/' . hashid_encode($invoice->id)),
+            'include_saved_card' => $saveCard,
+        ]);
 
         if (!$response || empty($response['_links']['payment']['href'])) {
             return response()->json(['status' => false, 'message' => 'Payment initiation failed. Please try again.'], 502);
         }
 
-        $this->invoice->updateInvoiceRef((object)[
-            'id'          => $invoice->id,
-            'invoice_ref' => $response['reference'] ?? null,
-        ]);
+        $orderReference = (string) ($response['reference'] ?? '');
+        if ($orderReference === '') {
+            return response()->json(['status' => false, 'message' => 'Payment initiation failed. Please try again.'], 502);
+        }
+
+        $this->invoicePaymentService->recordAttempt(
+            $invoice,
+            $orderReference,
+            $balance,
+            InvoicePaymentAttempt::SOURCE_MOBILE,
+            $saveCard
+        );
 
         return response()->json([
             'status'      => true,
             'message'     => 'Payment initiated',
             'payment_url' => $response['_links']['payment']['href'],
-            'reference'   => $response['reference'] ?? null,
+            'reference'   => $orderReference,
             'invoice_id'  => $invoice->id,
             'amount'      => $balance,
             'currency'    => 'AED',
+            'save_card'   => $saveCard,
         ], 200);
     }
 
@@ -287,10 +340,13 @@ class InvoiceController extends Controller
             return response()->json(['status' => false, 'message' => 'Invoice not found'], 404);
         }
 
-        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
-        $invoice->syncPaymentStatus();
+        $result = $this->invoicePaymentService->confirmByReference(
+            $invoice,
+            $invoice->invoice_ref,
+            'Paid via mobile app (N-Genius, verified)'
+        );
 
-        if ($invoice->isFullyPaid()) {
+        if (!empty($result['success']) && ($result['message'] ?? '') === 'Payment already recorded') {
             return response()->json([
                 'status'     => true,
                 'message'    => 'Payment already recorded',
@@ -298,52 +354,24 @@ class InvoiceController extends Controller
             ], 200);
         }
 
-        $order = $this->paymentService->getOrderStatus($invoice->invoice_ref);
-
-        if (!$order) {
+        if (($result['message'] ?? '') === 'Unable to verify payment') {
             return response()->json(['status' => false, 'message' => 'Unable to verify payment. Please try again.'], 502);
         }
 
-        if (!$this->paymentService->isPaid($order)) {
+        if (empty($result['success'])) {
+            $order = $this->paymentService->getOrderStatus($invoice->invoice_ref);
             return response()->json([
                 'status'        => false,
                 'message'       => 'Payment not completed',
-                'payment_state' => $this->paymentService->extractPaymentState($order),
+                'payment_state' => $order ? $this->paymentService->extractPaymentState($order) : null,
             ], 402);
         }
-
-        $capturedMinor = $this->paymentService->extractCapturedAmount($order);
-        $amountReceived = $capturedMinor !== null
-            ? round($capturedMinor / 100, 2)
-            : $invoice->balanceAmount();
-
-        $inovicePayment = (object)[
-            'invoice_ref'    => $invoice->invoice_ref,
-            'invoice_id'     => $invoice->id,
-            'customer_id'    => $invoice->customer_id,
-            'contract_id'    => $invoice->contract_id,
-            'order_id'       => $invoice->order_id,
-            'payment_method' => 3,
-            'payment_date'   => now(),
-            'amount_received'=> $amountReceived,
-            'note'           => 'Paid via mobile app (N-Genius, verified)',
-        ];
-
-        $paymentResponse = $this->payment->savePayment($inovicePayment);
-        $responseData = $paymentResponse->getData();
-        $payment = $responseData->data;
-        $payload = $this->payment->savePaymentToQuickbook($payment);
-        if ($payload) {
-            $this->zapier->send('add_payment', $payload);
-        }
-
-        $this->invoice->syncPaymentStatus($invoice->id);
 
         return response()->json([
             'status'     => true,
             'message'    => 'Payment verified successfully',
             'invoice_id' => $invoice->id,
-            'amount'     => $amountReceived,
+            'amount'     => $result['amount'],
         ], 200);
     }
     public function orderInvoice($id)
@@ -354,13 +382,14 @@ class InvoiceController extends Controller
 
     public function saveResponse(Request $request)
     {
-        $ref = $request->query('ref'); // The order reference
-        if (!$ref) {
+        $ref = (string) $request->query('ref', '');
+        if ($ref === '') {
             return redirect('/')
                 ->with('error', 'Invalid payment reference');
         }
 
-        $invoice = Invoice::where('invoice_ref', $ref)->first();
+        $resolved = $this->invoicePaymentService->resolveByOrderReference($ref);
+        $invoice = $resolved['invoice'];
         if (!$invoice) {
             return redirect('/')
                 ->with('error', 'Invalid payment reference');
@@ -368,49 +397,50 @@ class InvoiceController extends Controller
 
         $invoiceUrl = url('invoice-to-customer/' . hashid_encode($invoice->id));
 
-        $invoice->load(array_keys(Invoice::paymentStatusRelations()));
-        $invoice->syncPaymentStatus();
+        $result = $this->invoicePaymentService->confirmByReference(
+            $invoice,
+            $ref,
+            'This invoice has been received via online payment method'
+        );
 
-        if ($invoice->isFullyPaid()) {
+        if (!empty($result['success'])) {
             return redirect()->to($invoiceUrl)->with('success', 'Payment successful!');
         }
 
-        // Verify the payment with Ngenius before marking the invoice paid.
-        $order = $this->paymentService->getOrderStatus($ref);
-        if (!$order || !$this->paymentService->isPaid($order)) {
-            return redirect()->to($invoiceUrl)->with('error', 'Payment failed or cancelled.');
-        }
-
-        $capturedMinor = $this->paymentService->extractCapturedAmount($order);
-        $amountReceived = $capturedMinor !== null
-            ? round($capturedMinor / 100, 2)
-            : $invoice->balanceAmount();
-
-        $inovicePayment = (object) [
-            'invoice_ref' => $ref,
-            'invoice_id' => $invoice->id,
-            'customer_id' => $invoice->customer_id,
-            'contract_id' => $invoice->contract_id,
-            'order_id' => $invoice->order_id,
-            'payment_method' => 3,
-            'payment_date' => now(),
-            'amount_received' => $amountReceived,
-            'note' => 'This invoice has been received via online payment method',
-        ];
-        $paymentResponse = $this->payment->savePayment($inovicePayment);
-        $responseData = $paymentResponse->getData();
-        $payment = $responseData->data;
-        $payload = $this->payment->savePaymentToQuickbook($payment);
-        if ($payload) {
-            $this->zapier->send('add_payment', $payload);
-        }
-
-        $this->invoice->syncPaymentStatus($invoice->id);
-
-        if ($payment) {
-            return redirect()->to($invoiceUrl)->with('success', 'Payment successful!');
+        if (($result['status'] ?? '') === 'pending'
+            || $this->paymentService->isPendingState($result['payment_state'] ?? null)
+            || ($result['message'] ?? '') === 'Unable to verify payment') {
+            return view('backend.invoice.payment-processing', [
+                'ref' => $ref,
+                'invoiceUrl' => $invoiceUrl,
+                'statusUrl' => url('payment-status/' . urlencode($ref)),
+            ]);
         }
 
         return redirect()->to($invoiceUrl)->with('error', 'Payment failed or cancelled.');
+    }
+
+    /**
+     * Public polling endpoint for the payment processing page.
+     * Returns only paid / pending / failed for a known order reference.
+     */
+    public function paymentStatus(string $ref)
+    {
+        $ref = trim($ref);
+        if ($ref === '') {
+            return response()->json(['status' => 'failed', 'message' => 'Invalid payment reference'], 400);
+        }
+
+        $result = $this->invoicePaymentService->statusForReference($ref);
+        $payload = [
+            'status' => $result['status'] ?? 'failed',
+            'message' => $result['message'] ?? '',
+        ];
+
+        if (!empty($result['invoice_id'])) {
+            $payload['invoice_url'] = url('invoice-to-customer/' . hashid_encode($result['invoice_id']));
+        }
+
+        return response()->json($payload);
     }
 }

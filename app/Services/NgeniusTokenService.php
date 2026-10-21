@@ -8,52 +8,65 @@ use Illuminate\Support\Facades\Log;
 
 class NgeniusTokenService
 {
-    protected $apiKey;
-    protected $authUrl;
-    protected $cacheKey = 'ngenius_access_token';
+    protected string $cacheKey = 'ngenius_access_token';
 
-    public function __construct()
+    public function getAccessToken(): ?string
     {
-        $this->apiKey = env('NGENIUS_API_KEY');
-        $this->authUrl = env('NGENIUS_AUTH_URL');
+        $cached = Cache::get($this->cacheKey);
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
+        return $this->requestNewToken();
     }
 
-    public function getAccessToken()
+    protected function requestNewToken(): ?string
     {
-        return Cache::remember($this->cacheKey, now()->addMinutes(30), function () {
-            return $this->requestNewToken();
-        });
-    }
+        $apiKey = trim((string) config('services.ngenius.api_key'));
+        $authUrl = trim((string) config('services.ngenius.auth_url'));
+        $realm = trim((string) config('services.ngenius.realm', 'ni'));
 
-    protected function requestNewToken()
-    {
+        if ($apiKey === '' || $authUrl === '') {
+            Log::error('Ngenius Token Request Failed: missing API key or auth URL');
+            return null;
+        }
+
         try {
             $response = Http::withHeaders([
-                'accept' => 'application/vnd.ni-identity.v1+json',
-                'authorization' => 'Basic ' . $this->apiKey,
-                'content-type' => 'application/vnd.ni-identity.v1+json',
-            ])->post($this->authUrl, [
-//                'realmName' => 'ni'
-                'grant_type' => 'client_credentials'
+                'Accept' => 'application/vnd.ni-identity.v1+json',
+                'Authorization' => 'Basic ' . $apiKey,
+                'Content-Type' => 'application/vnd.ni-identity.v1+json',
+            ])->post($authUrl, [
+                'grant_type' => 'client_credentials',
+                'realm' => $realm !== '' ? $realm : 'ni',
             ]);
 
-            if ($response->successful()) {
-                return $response->json()['access_token'];
+            if (!$response->successful()) {
+                Log::error('Ngenius Token Request Failed', [
+                    'status' => $response->status(),
+                ]);
+                return null;
             }
 
-            Log::error('Ngenius Token Request Failed', [
-                'status' => $response->status(),
-                'response' => $response->body(),
-            ]);
-            return null;
+            $data = $response->json();
+            $accessToken = $data['access_token'] ?? null;
+            if (!is_string($accessToken) || $accessToken === '') {
+                Log::error('Ngenius Token Request Failed: access_token missing');
+                return null;
+            }
 
+            $expiresIn = (int) ($data['expires_in'] ?? 300);
+            $ttlSeconds = max(30, $expiresIn - 30);
+            Cache::put($this->cacheKey, $accessToken, now()->addSeconds($ttlSeconds));
+
+            return $accessToken;
         } catch (\Exception $e) {
             Log::error('Ngenius Token Request Exception', ['error' => $e->getMessage()]);
             return null;
         }
     }
 
-    public function clearTokenCache()
+    public function clearTokenCache(): void
     {
         Cache::forget($this->cacheKey);
     }

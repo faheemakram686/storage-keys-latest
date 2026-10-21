@@ -17,10 +17,12 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Backend\InquiryController;
+use App\Http\Controllers\NgeniusWebhookController;
 
 
 require __DIR__.'/auth.php';
 
+Route::post('/webhooks/ngenius', [NgeniusWebhookController::class, 'handle'])->name('ngenius.webhook');
 
 Route::middleware(['set.guard'])->group(function () {
     // Your protected routes here...
@@ -99,9 +101,13 @@ Route::middleware(['set.guard'])->group(function () {
 });
     //checkout
     Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout')->middleware(['customer','set.guard']);
-    Route::post('save-order', [OrderController::class, 'save'])->name('order.save');
+    Route::post('save-order', [OrderController::class, 'save'])
+        ->middleware(['set.guard', 'customer'])
+        ->name('order.save');
 
-    Route::get('/redirectPaymentRef', [OrderController::class, 'handleRedirect'])->name('handle.redirect');
+    Route::get('/redirectPaymentRef', [OrderController::class, 'handleRedirect'])
+        ->middleware(['set.guard'])
+        ->name('handle.redirect');
 
 
 //lead save

@@ -3,27 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Core\Auth\User;
-use App\Models\Invoice;
-use App\Models\Order;
 use App\Repo\Interfaces\AdminDashboardInterface;
-use App\Repo\OrderClass;
 use Illuminate\Http\Request;
-use Auth;
-use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
-
     private $dashboard;
-    private $order;
 
     public function __construct(AdminDashboardInterface $dashboard)
     {
         $this->dashboard = $dashboard;
-        $this->order = new OrderClass();
     }
-
 
     /**
      * Display a listing of the resource.
@@ -32,85 +22,39 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $data['leads']  = $this->dashboard->getLeadsCount();
-        $data['estimates']  = $this->dashboard->getEstimatesCount();
-        $data['customers']  = $this->dashboard->getCustomersCount();
-        $data['contracts']  = $this->dashboard->getContractCount();
-        $data['addons']  = $this->dashboard->getAddonsCount();
-        $data['products']  = $this->dashboard->getProductsCount();
-        $data['storageunits']  = $this->dashboard->getStorageUnitsCount();
-        $data['order']  = $this->order->getAllOrders();
+        $data = [
+            'leads' => $this->dashboard->getLeadsCount(),
+            'estimates' => $this->dashboard->getEstimatesCount(),
+            'customers' => $this->dashboard->getCustomersCount(),
+            'contracts' => $this->dashboard->getContractCount(),
+            'addons' => $this->dashboard->getAddonsCount(),
+            'products' => $this->dashboard->getProductsCount(),
+            'storageunits' => $this->dashboard->getStorageUnitsCount(),
+            'collected_this_month' => $this->dashboard->getCollectedThisMonth(),
+            'outstanding_balance' => $this->dashboard->getOutstandingBalance(),
+            'overdue_invoices' => $this->dashboard->getOverdueInvoiceCount(),
+            'occupancy_percent' => $this->dashboard->getOccupancyPercent(),
+            'sales' => $this->dashboard->getSalesStatistics('weekly'),
+            'lead_stats' => $this->dashboard->getLeadStatistics(),
+            'storage_stats' => $this->dashboard->getStorageUnitStatistics(),
+            'invoice_stats' => $this->dashboard->getInvoicePaymentStatistics(),
+            'orders' => $this->dashboard->getRecentOrders(8),
+            'recent_invoices' => $this->dashboard->getRecentInvoices(8),
+            'contracts_ending' => $this->dashboard->getContractsEndingSoon(30, 8),
+        ];
+
         return view('backend.dashboard')->with(compact('data'));
+    }
+
+    public function getSalesStat(Request $request)
+    {
+        $period = $request->query('period', 'weekly');
+
+        return response()->json($this->dashboard->getSalesStatistics($period));
     }
 
     public function getLeadStat()
     {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json($this->dashboard->getLeadStatistics());
     }
 }

@@ -75,63 +75,86 @@ class InvoiceClass implements InvoiceInterface {
                 }
             }
 
-            $invoice = Invoice::with(['invoiceItems.productdetail', 'invoiceItems.termsdetail','invoiceItems.addOndetail','customer'])->find($invoice->id);
-
-            if ($invoice->invoiceItems->isEmpty()) {
-                \Log::info("Invoice #{$invoice->id} has no items yet. Zapier sync skipped.");
-                return;
-            }
-
-            $payload = [
-                'invoice' => [
-                    'id' => $invoice->id,
-                    'customer_id' => optional($invoice->customer)->q_customer_id,
-                    'type' => $invoice->type,
-                    'contract_id' => $invoice->contract_id,
-                    'order_id' => $invoice->order_id,
-                    'recurring' => $invoice->recurring,
-                    'no_cycle' => $invoice->no_cycle,
-                    'duration' => $invoice->duration,
-                    'duration_type' => $invoice->duration_type,
-                    'invoice_date' => $invoice->invoice_date,
-                    'invoice_no' => $invoice->invoice_no,
-                    'user_id' => $invoice->user_id,
-                    'sub_total' => $invoice->sub_total,
-                    'vat' => $invoice->vat,
-                    'grand_total' => $invoice->grand_total,
-                    'due_date' => $invoice->due_date,
-                    'note' => $invoice->note,
-                    'remarks' => $invoice->remarks,
-                    'payment_method' => $invoice->payment_method,
-                    'status' => $invoice->status,
-                ],
-                'invoiceItems' => $invoice->invoiceItems->map(function ($item) {
-                    $itemId = match ($item->category) {
-                        'product'       => optional($item->productdetail)->q_product_id,
-                        'addon'         => optional($item->addOndetail)->q_service_id,
-                        'storage_unit'  => optional($item->termsdetail)->q_service_id,
-                        default         => null,
-                    };
-                    return [
-                        'id' => $item->id,
-                        'invoice_id' => $item->invoice_id,
-                        'item_id' => $itemId,
-                        'category' => $item->category,
-                        'item_name' => $item->item_name,
-                        'quantity' => $item->quantity,
-                        'unit' => $item->unit,
-                        'unit_price' => $item->unit_price,
-                        'total_price' => $item->total_price,
-                    ];
-                })->toArray(),
-            ];
-
-            app(ZapierService::class)->send('invoice', $payload);
+            $this->syncInvoiceToZapier($invoice->id);
 
             return response()->json(['success' => 'Record save successfully'], 200);
 
             }
 
+    }
+
+    /**
+     * Push a saved invoice (with line items) to the Zapier invoice webhook.
+     *
+     * @param  int|\App\Models\Invoice  $invoice
+     */
+    public function syncInvoiceToZapier($invoice): bool
+    {
+        $invoiceId = $invoice instanceof Invoice ? $invoice->id : (int) $invoice;
+
+        $invoice = Invoice::with([
+            'invoiceItems.productdetail',
+            'invoiceItems.termsdetail',
+            'invoiceItems.addOndetail',
+            'customer',
+        ])->find($invoiceId);
+
+        if (!$invoice) {
+            \Log::warning("Zapier invoice sync skipped: invoice #{$invoiceId} not found.");
+            return false;
+        }
+
+        if ($invoice->invoiceItems->isEmpty()) {
+            \Log::info("Invoice #{$invoice->id} has no items yet. Zapier sync skipped.");
+            return false;
+        }
+
+        $payload = [
+            'invoice' => [
+                'id' => $invoice->id,
+                'customer_id' => optional($invoice->customer)->q_customer_id,
+                'type' => $invoice->type,
+                'contract_id' => $invoice->contract_id,
+                'order_id' => $invoice->order_id,
+                'recurring' => $invoice->recurring,
+                'no_cycle' => $invoice->no_cycle,
+                'duration' => $invoice->duration,
+                'duration_type' => $invoice->duration_type,
+                'invoice_date' => $invoice->invoice_date,
+                'invoice_no' => $invoice->invoice_no,
+                'user_id' => $invoice->user_id,
+                'sub_total' => $invoice->sub_total,
+                'vat' => $invoice->vat,
+                'grand_total' => $invoice->grand_total,
+                'due_date' => $invoice->due_date,
+                'note' => $invoice->note,
+                'remarks' => $invoice->remarks,
+                'payment_method' => $invoice->payment_method,
+                'status' => $invoice->status,
+                'parent_invoice_id' => $invoice->parent_invoice_id,
+            ],
+            'invoiceItems' => $invoice->invoiceItems->map(function ($item) {
+                $itemId = match ($item->category) {
+                    'product'       => optional($item->productdetail)->q_product_id,
+                    'addon'         => optional($item->addOndetail)->q_service_id,
+                    'storage_unit'  => optional($item->termsdetail)->q_service_id,
+                    default         => null,
+                };
+                return [
+                    'id' => $item->id,
+                    'invoice_id' => $item->invoice_id,
+                    'item_id' => $itemId,
+                    'category' => $item->category,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'unit' => $item->unit,
+                    'unit_price' => $item->unit_price,
+                    'total_price' => $item->total_price,
+                ];
+            })->toArray(),
+        ];
+
+        return app(ZapierService::class)->send('invoice', $payload);
     }
     public function convertInvoice($request)
     {

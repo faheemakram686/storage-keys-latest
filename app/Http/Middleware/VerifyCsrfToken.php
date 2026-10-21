@@ -21,6 +21,8 @@ class VerifyCsrfToken extends Middleware
         'customer-api/customer/login',
         'customer-api/customer/register',
         'customer-api/customer/forgot-password',
+        // N-Genius server-to-server payment notifications
+        'webhooks/ngenius',
     ];
 
 }

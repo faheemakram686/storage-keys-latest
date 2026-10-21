@@ -43,7 +43,7 @@
                                         <div class="nk-block-between g-3">
                                             <div class="nk-block-head-content">
                                                 <h4 class="nk-block-title page-title">Invoice <strong class="text-primary small">#{{$data['invoice'][0]->invoice_no}}</strong>  <span class="badge {{ $data['invoice'][0]->paymentStatusBadgeClass() }}">{{ $data['invoice'][0]->payment_status }}</span></h4>
-                                                @if($data['invoice'][0]->recurring != '0')
+                                                @if($data['invoice'][0]->recurring && $data['invoice'][0]->recurring !== '0')
                                                 <span class="badge badge-outline-primary">Recurring</span>
                                                 @if($data['invoice'][0]->recurringIntervalLabel())
                                                 <span class="badge badge-outline-info">{{ $data['invoice'][0]->recurringIntervalLabel() }}</span>

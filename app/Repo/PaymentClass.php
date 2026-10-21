@@ -36,6 +36,9 @@ class PaymentClass implements PaymentInterface {
         $payment->payment_date=$request->payment_date;
         $payment->status=1;
         $payment->note=$request->note;
+        if (!empty($request->gateway_order_reference)) {
+            $payment->gateway_order_reference = $request->gateway_order_reference;
+        }
         if($payment->save()){
             return response()->json(['success' => 'Record save successfully','data'=>$payment], 200);
         }

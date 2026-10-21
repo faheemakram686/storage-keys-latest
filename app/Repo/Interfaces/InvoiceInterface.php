@@ -14,7 +14,5 @@ interface InvoiceInterface{
     public function getCustomerInvoices($id);
     public function getCustomerInvoicesApi($id);
     public function generateOrderInvoice($id);
-
-
-
+    public function syncPaymentStatus($id);
 }
