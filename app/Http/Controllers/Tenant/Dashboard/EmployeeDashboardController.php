@@ -71,8 +71,9 @@ class EmployeeDashboardController extends Controller
     }
 
     /**
-     * Punch times are stored in UTC. The mobile app prints them as clock time,
-     * so the API returns the company timezone. The web dashboard converts UTC itself.
+     * Punch times are stored in UTC. The API returns them in the company timezone as
+     * ISO 8601 with the offset (e.g. 2026-10-26T13:37:00+04:00) so the mobile app can
+     * convert them to the phone's local time. The web dashboard converts UTC itself.
      */
     private function presentPunchTimes(Attendance $attendance): void
     {
@@ -89,7 +90,7 @@ class EmployeeDashboardController extends Controller
                 }
                 $detail->{$field} = Carbon::parse($detail->{$field}, 'UTC')
                     ->timezone($zone)
-                    ->format('Y-m-d H:i:s');
+                    ->toIso8601String();
             }
             $detail->syncOriginal();
         }
