@@ -130,7 +130,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Group similar items together for easier retrieval later.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Keep a simple inventory of stored boxes and contents.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your boxes are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your boxes are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#6C365B;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
         </div>
     </section>

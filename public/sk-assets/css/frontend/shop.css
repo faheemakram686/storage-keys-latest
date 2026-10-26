@@ -4,7 +4,7 @@
     background: #e9f8ef;
     border: 1px solid #b7e4c7;
     color: #1b7a43;
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 14px 18px;
     margin-bottom: 28px;
     font-weight: 600;
@@ -59,7 +59,7 @@
     font-weight: 700;
     letter-spacing: .06em;
     text-transform: uppercase;
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 5px 10px;
 }
 
@@ -123,7 +123,7 @@
 
 .sh-modal .modal-content {
     border: none;
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     overflow: hidden;
     padding: 28px;
     position: relative;
@@ -151,7 +151,7 @@
 
 .sh-modal-img img {
     width: 100%;
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: var(--sk-soft);
 }
 
@@ -170,7 +170,7 @@
     width: 110px;
     padding: 10px 12px;
     border: 1.5px solid var(--sk-line);
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: var(--sk-soft);
 }
 
@@ -242,7 +242,7 @@ body:has(.sh-page) {
 
 .sh-page .sh-card {
     border: none;
-    border-radius: 24px;
+    border-radius: var(--sk-radius-lg, 22px);
     padding: 14px 14px 16px;
     box-shadow: 0 12px 30px rgba(5, 5, 5, .06);
     overflow: visible;
@@ -256,7 +256,7 @@ body:has(.sh-page) {
 .sh-page .sh-card-img {
     height: auto;
     aspect-ratio: 4 / 3;
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     background-color: #fff;
 }
 
@@ -303,7 +303,7 @@ body:has(.sh-page) {
     border: 1.5px solid #E7DDD4;
     background: #fff;
     color: #050505;
-    border-radius: 999px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 6px 12px;
     font-size: 13px;
     font-weight: 600;
@@ -320,7 +320,7 @@ body:has(.sh-page) {
 
 .sh-page .sh-add,
 .sh-page .sh-help {
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 14px 36px;
     box-shadow: none;
     font-weight: 700;
@@ -341,18 +341,21 @@ body:has(.sh-page) {
     position: relative;
     margin-top: 28px;
     background: #fff;
-    border-radius: 28px;
-    padding: 32px 28px 26px;
+    border-radius: 40px;
+    padding: 56px 64px 44px;
     box-shadow: 0 12px 30px rgba(5, 5, 5, .06);
     overflow: hidden;
 }
 
-.sh-swoosh {
+/* Brand ribbon pattern in the top-right corner (shop mockup) */
+.sh-guide::before {
+    content: "";
     position: absolute;
-    top: -18px;
-    right: -24px;
-    width: 150px;
-    height: 150px;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 142px;
+    background: url('../../assets/images/frontend/brand/ribbon.svg') no-repeat right top / contain;
     pointer-events: none;
 }
 
@@ -365,10 +368,10 @@ body:has(.sh-page) {
 
 .sh-guide > p {
     position: relative;
-    max-width: 560px;
-    margin: 0 0 22px;
-    color: #4A403C;
-    font-size: 15px;
+    max-width: 640px;
+    margin: 0 0 32px;
+    color: #2E2826;
+    font-size: 17px;
     line-height: 1.55;
 }
 
@@ -376,22 +379,54 @@ body:has(.sh-page) {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 18px;
+    gap: 16px 24px;
+    margin: 0 auto 18px;
+    max-width: 960px;
 }
 
 .sh-guide-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    min-height: 74px;
-    padding: 14px 16px;
-    border-radius: 16px;
+    gap: 18px;
+    width: 100%;
+    min-height: 86px;
+    padding: 16px 24px;
+    border: 2px solid transparent;
+    border-radius: 22px;
     background: #FBF6F2;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .2s, border-color .2s;
 }
 
-.sh-guide-item.is-hot {
+.sh-guide-item:hover {
+    border-color: #F8C898;
+}
+
+.sh-guide-item:focus-visible {
+    outline: 3px solid #6C365B;
+    outline-offset: 2px;
+}
+
+.sh-guide-item.is-hot,
+.sh-guide-item[aria-pressed="true"] {
     background: #F8C898;
+}
+
+.sh-guide > .sh-guide-result {
+    position: relative;
+    max-width: 960px;
+    margin: 6px auto 18px;
+    min-height: 1.5em;
+    text-align: center;
+    color: #050505;
+    font-size: 16px;
+}
+
+.sh-guide-result a {
+    color: #6C365B;
+    font-weight: 600;
 }
 
 .sh-guide-item .ic {
@@ -405,22 +440,23 @@ body:has(.sh-page) {
 .sh-guide-item strong {
     display: block;
     color: #050505;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 600;
     line-height: 1.25;
 }
 
 .sh-guide-item small {
     display: block;
     margin-top: 2px;
-    color: #4A403C;
-    font-size: 13px;
+    color: #2E2826;
+    font-size: 15px;
     line-height: 1.35;
 }
 
 .sh-guide-actions {
     position: relative;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .sh-page .sh-help {
@@ -432,6 +468,16 @@ body:has(.sh-page) {
     .sh-page .sh-grid,
     .sh-guide-grid {
         grid-template-columns: 1fr;
+    }
+
+    .sh-guide {
+        padding: 80px 20px 28px;
+        border-radius: 28px;
+    }
+
+    .sh-guide::before {
+        width: 180px;
+        height: 86px;
     }
 
     .sh-guide-actions {

@@ -60,7 +60,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
 .rsv-unit {
     background: #fff;
     border: 1px solid #E7DDD4;
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     padding: 22px 24px 20px;
 }
 
@@ -91,7 +91,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
     gap: 7px;
     background: #FCF8F5;
     border: 1px solid #E7DDD4;
-    border-radius: 999px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 7px 12px;
     font-size: 13px;
     font-weight: 600;
@@ -116,7 +116,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
 .rsv-card {
     background: #fff;
     border: 1px solid #E7DDD4;
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     overflow: hidden;
 }
 
@@ -262,7 +262,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
     margin: 0 !important;
     padding: 10px 14px;
     border: 1.5px solid #E7DDD4;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: #FCF8F5;
     color: #050505;
     font-size: 14.5px;
@@ -297,7 +297,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
     margin: 0;
     padding: 12px 14px;
     border: 1.5px solid #E7DDD4;
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: #fff;
     color: #050505;
     font-size: 14.5px;
@@ -347,7 +347,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
     height: 46px !important;
     padding: 0 18px;
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: #6C365B;
     color: #fff;
     font-weight: 700;
@@ -370,7 +370,7 @@ body:has(.rsv-page) .rsv-page .ps-hero {
     margin: 0;
     padding: 14px 36px;
     border: 0;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: #F48922;
     color: #fff;
     font-size: 14px;

@@ -488,13 +488,13 @@
                 </div>
                 <div class="modal-body" style="padding: 40px; background: #ffffff;">
                     <div style="max-height: 450px; overflow-y: auto; padding-right: 15px; custom-scrollbar;">
-                        <div style="font-size: 15px; line-height: 1.8; color: #4A5568; text-align: justify;">
+                        <div style="font-size: 15px; line-height: 1.8; color: #4A403C; text-align: justify;">
                             @isset($data['terms_conditions'][9])
                                 <div class="terms-content">
                                     {!! $data['terms_conditions'][9]->value !!}
                                 </div>
                             @else
-                                <div style="text-align: center; padding: 40px; color: #A0AEC0;">
+                                <div style="text-align: center; padding: 40px; color: #7A7168;">
                                     <em class="icon ni ni-info-fill" style="font-size: 48px; display: block; margin-bottom: 15px;"></em>
                                     <p>Terms and conditions content is currently unavailable.</p>
                                 </div>
@@ -502,7 +502,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" style="background: #F7FAFC; border-top: 1px solid #EDF2F7; padding: 20px 40px; display: flex; justify-content: flex-end;">
+                <div class="modal-footer" style="background: #FCF8F5; border-top: 1px solid #E7DDD4; padding: 20px 40px; display: flex; justify-content: flex-end;">
                     <button type="button" class="btn" data-dismiss="modal" style="background: #6C365B; color: white; padding: 14px 36px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: none;">Close</button>
                 </div>
             </div>
@@ -511,9 +511,9 @@
 
     <style>
         [custom-scrollbar]::-webkit-scrollbar { width: 6px; }
-        [custom-scrollbar]::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
-        [custom-scrollbar]::-webkit-scrollbar-thumb { background: #CBD5E0; border-radius: 10px; }
-        [custom-scrollbar]::-webkit-scrollbar-thumb:hover { background: #A0AEC0; }
+        [custom-scrollbar]::-webkit-scrollbar-track { background: #F3EBE4; border-radius: 10px; }
+        [custom-scrollbar]::-webkit-scrollbar-thumb { background: #E7DDD4; border-radius: 10px; }
+        [custom-scrollbar]::-webkit-scrollbar-thumb:hover { background: #7A7168; }
         .modal-content { animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes modalSlideUp {
             from { transform: translateY(30px); opacity: 0; }
@@ -522,7 +522,7 @@
         .terms-content p { margin-bottom: 15px; }
         .terms-content ul, .terms-content ol { margin-bottom: 15px; padding-left: 20px; }
         .terms-content li { margin-bottom: 8px; }
-        .terms-content h1, .terms-content h2, .terms-content h3 { margin-top: 20px; margin-bottom: 10px; color: #2D3748; }
+        .terms-content h1, .terms-content h2, .terms-content h3 { margin-top: 20px; margin-bottom: 10px; color: #050505; }
         .form-link { color: #F48922; font-weight: 600; text-decoration: none; }
         .form-link:hover { color: #EC5D2C; text-decoration: underline; }
     </style>

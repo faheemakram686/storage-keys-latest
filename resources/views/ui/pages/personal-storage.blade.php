@@ -137,7 +137,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Avoid overloading boxes to make lifting safer and prevent damage.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Keep a simple inventory of stored belongings for easier organisation.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your belongings are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#6C365B;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
         </div>
     </section>

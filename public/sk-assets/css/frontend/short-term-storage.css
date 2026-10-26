@@ -40,7 +40,7 @@
     gap: 9px;
     background: rgba(255, 255, 255, .08);
     border: 1px solid rgba(255, 255, 255, .16);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 10px 18px;
     font-size: 13.5px;
     font-weight: 500;
@@ -64,7 +64,7 @@
     font-weight: 600;
     color: var(--sk-dark);
 }
-.st-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px; background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
+.st-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: var(--sk-radius-sm, 12px); background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
 .st-split {
     display: grid;
@@ -102,7 +102,7 @@
     flex: 0 0 60px;
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -141,7 +141,7 @@
 .st-type {
     background: var(--sk-soft);
     border: 1.5px solid var(--sk-line);
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 16px;
     text-align: center;
     cursor: pointer;
@@ -181,7 +181,7 @@
     appearance: none;
     width: 100%;
     height: 8px;
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     background: var(--sk-line);
     outline: none;
 }
@@ -214,7 +214,7 @@
 .st-out {
     background: var(--sk-primary);
     color: #fff;
-    border-radius: 16px;
+    border-radius: var(--sk-radius, 16px);
     padding: 26px 28px;
     display: flex;
     align-items: center;
@@ -255,7 +255,7 @@
 .st-blc .ic {
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -297,7 +297,7 @@
     right: 12%;
     height: 3px;
     background: rgba(255, 255, 255, .15);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
 }
 .st-nodes .prog {
     position: absolute;
@@ -305,7 +305,7 @@
     left: 12%;
     height: 3px;
     background: var(--sk-accent);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     width: 0;
     transition: width .4s ease;
     z-index: 1;
@@ -340,7 +340,7 @@
 .st-panel {
     background: #fff;
     color: var(--sk-body);
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     padding: 32px;
     display: flex;
     gap: 22px;
@@ -350,7 +350,7 @@
     flex: 0 0 60px;
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -375,7 +375,7 @@
     background: transparent;
     border: 1.5px solid rgba(255, 255, 255, .3);
     color: #fff;
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 10px 22px;
     font-size: 13.5px;
     font-weight: 600;
@@ -409,7 +409,7 @@
 .st-covc .ic {
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -433,7 +433,7 @@
     color: var(--sk-muted);
     background: var(--sk-soft);
     border: 1px dashed var(--sk-line);
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 18px 24px;
 }
 .st-cover-note i { color: var(--sk-accent); margin-right: 8px; }
@@ -449,7 +449,7 @@
 .st-pcc .ic {
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -479,7 +479,7 @@
 .st-faq details {
     background: #fff;
     border: 1px solid var(--sk-line);
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 0 24px;
 }
 .st-faq details[open] {

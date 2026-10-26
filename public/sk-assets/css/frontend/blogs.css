@@ -40,7 +40,7 @@
     align-items: stretch;
     background: #fff;
     border: none;
-    border-radius: 28px;
+    border-radius: var(--sk-radius-lg, 22px);
     overflow: visible;
     margin-bottom: 28px;
     padding: 16px 22px 22px 16px;
@@ -51,7 +51,7 @@
     display: block;
     position: relative;
     min-height: 280px;
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     background: var(--sk-soft);
     overflow: hidden;
 }
@@ -114,7 +114,7 @@
     flex-direction: column;
     background: #fff;
     border: none;
-    border-radius: 22px;
+    border-radius: var(--sk-radius-lg, 22px);
     overflow: visible;
     height: 100%;
     padding: 12px 12px 18px;
@@ -130,7 +130,7 @@
     position: relative;
     z-index: 0;
     aspect-ratio: 16 / 11;
-    border-radius: 16px;
+    border-radius: var(--sk-radius, 16px);
     background: var(--sk-soft);
     overflow: hidden;
 }
@@ -182,7 +182,7 @@
     display: inline-flex;
     align-items: center;
     padding: 8px 16px;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: #F48922;
     color: #fff;
     font-size: 12px;
@@ -264,7 +264,7 @@
 .bl-empty .ic {
     width: 64px;
     height: 64px;
-    border-radius: 16px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: inline-flex;
@@ -302,7 +302,7 @@
     min-width: 42px;
     height: 42px;
     padding: 0 12px;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     border: 1px solid var(--sk-line);
     background: #fff;
     color: var(--sk-dark);
@@ -369,7 +369,7 @@
 }
 
 .bl-prose img {
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     margin: 18px 0;
 }
 
@@ -408,7 +408,7 @@
 
 .bl-recent .thumb {
     height: 64px;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     background-size: cover;
     background-position: center;
 }
@@ -488,5 +488,150 @@
 
     .bl-card-title {
         font-size: 17px;
+    }
+}
+
+/* ============================================================
+   Blog list matched to the brand book mockup (p.27):
+   featured card with full-height photo, FEATURED tab over the corner,
+   slanted grape date labels, cards with edge-to-edge photos.
+============================================================ */
+.bl-featured {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0;
+    border-radius: 40px;
+    box-shadow: 0 16px 40px rgba(5, 5, 5, .06);
+    margin: 30px 0 56px;
+    padding: 0;
+}
+
+.bl-featured-media {
+    min-height: 380px;
+    border-radius: 40px 0 0 40px;
+}
+
+.bl-featured-body {
+    justify-content: flex-start;
+    padding: 0 52px 40px 52px;
+}
+
+.bl-date-flag {
+    margin: 0;
+    padding: 12px 46px 12px 22px;
+    border-radius: 0;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 28px) 100%, 0 100%);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .03em;
+}
+
+.bl-featured .bl-date-flag {
+    margin: 0 0 26px -52px;
+    padding: 22px 64px 22px 52px;
+    font-size: 16px;
+}
+
+.bl-card-tag {
+    top: -22px;
+    left: -26px;
+    padding: 12px 52px;
+    border-radius: 8px;
+    border: 2px solid #F48922;
+    box-shadow: inset 0 0 0 2px #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: .02em;
+}
+
+.bl-featured-title {
+    font-size: clamp(26px, 2.4vw, 34px);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 22px;
+}
+
+.bl-featured-excerpt {
+    font-size: 17px;
+    line-height: 1.55;
+    color: #2E2826;
+    text-align: justify;
+    margin: 0 0 28px;
+}
+
+.bl-featured .bl-card-more {
+    margin-top: auto;
+    font-size: 15px;
+}
+
+.bl-grid {
+    gap: 28px;
+}
+
+.bl-card {
+    padding: 0;
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.bl-card-media {
+    aspect-ratio: 4 / 3;
+    border-radius: 0;
+}
+
+.bl-card-body {
+    padding: 22px 24px 24px;
+}
+
+.bl-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.bl-card-excerpt {
+    font-size: 14.5px;
+    color: #2E2826;
+}
+
+.bl-card-more {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media (max-width: 991px) {
+    .bl-featured {
+        grid-template-columns: 1fr;
+    }
+
+    .bl-featured-media {
+        min-height: 0;
+        border-radius: 40px 40px 0 0;
+    }
+
+    .bl-featured-body {
+        padding: 0 28px 32px;
+    }
+
+    .bl-featured .bl-date-flag {
+        margin: 0 0 22px -28px;
+        padding: 16px 52px 16px 28px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .bl-card-tag {
+        top: -16px;
+        left: 12px;
+        padding: 8px 28px;
+        font-size: 14px;
+    }
+
+    .bl-featured {
+        border-radius: 28px;
+    }
+
+    .bl-featured-media {
+        border-radius: 28px 28px 0 0;
     }
 }
