@@ -28,8 +28,12 @@
                 <p>Compare the sizes of our units.</p>
                 <div class="bk-fan" id="bk-fan"></div>
                 <p class="bk-size-readout"><span id="bk-size-readout">50 sq. ft.</span><span id="bk-size-hint">Garage size</span></p>
-                <div class="bk-size-bar" aria-hidden="true"><span id="bk-size-fill"></span></div>
-                <div class="size-sqft-section-body">
+                {{-- Drag to compare sizes; the size list below stays as the data source for the filters --}}
+                <div class="bk-slider bk-size-slider">
+                    <input type="range" id="bk-size-range" class="bk-range" min="0" max="0" step="1" value="0" aria-label="Unit size">
+                    <div class="bk-range-marks" id="bk-size-marks" aria-hidden="true"></div>
+                </div>
+                <div class="size-sqft-section-body" hidden>
                     @isset($data)
                         @foreach (collect($data['ss'])->sortBy(function ($ss) { preg_match('/\d+/', (string) $ss->unit_type_name, $m); return (int) ($m[0] ?? 0); }) as $ss)
                             <div class="size-container" data="{{ $ss->id }}">
@@ -77,7 +81,7 @@
                     <h3 class="units-section-header">Duration</h3>
                     <div class="units-section-body">
                         <p class="bk-duration-lead">Let us know approximately how long you want to have your unit</p>
-                        <input type="range" id="bk-duration" min="0" max="4" value="2" step="1" aria-label="Storage duration">
+                        <input type="range" id="bk-duration" class="bk-range" min="0" max="4" value="2" step="1" aria-label="Storage duration">
                         <div class="bk-duration-marks">
                             <span>1 month</span>
                             <span>3 months</span>
@@ -182,6 +186,42 @@
             var unitImg = @json(asset('sk-assets/assets/images/frontend/blog/Image_8.png'));
             var reserveBase = @json(url('reservation'));
             var durationMarks = ['1 month', '3 months', '6 months', '8 months', '8 months+'];
+
+            // Size slider: one draggable control instead of a button per size.
+            var $sizeRange = $('#bk-size-range');
+            var thumbHalf = 19; // half the thumb width in booking-layout.css
+
+            function setRangeFill(el) {
+                var max = parseInt(el.max, 10) || 0;
+                el.style.setProperty('--p', max ? (parseInt(el.value, 10) || 0) / max : 0);
+            }
+
+            (function initSizeSlider() {
+                var $sizes = $('.size-container');
+                var n = $sizes.length;
+                if (!n) {
+                    $('.bk-size-slider').hide();
+                    return;
+                }
+                $sizeRange.attr('max', n - 1);
+                // Label at most six evenly spaced stops; the slider still reaches every size.
+                var shown = Math.min(n, 6);
+                var marks = '';
+                for (var k = 0; k < shown; k++) {
+                    var idx = shown === 1 ? 0 : Math.round(k * (n - 1) / (shown - 1));
+                    var p = n > 1 ? idx / (n - 1) : 0;
+                    marks += '<span style="left:calc(' + thumbHalf + 'px + (100% - ' + (thumbHalf * 2) + 'px) * ' + p + ')">' +
+                        $('<div>').text($.trim($sizes.eq(idx).text())).html() + '</span>';
+                }
+                $('#bk-size-marks').html(marks);
+                $sizeRange.on('input change', function () {
+                    var $c = $sizes.eq(parseInt(this.value, 10) || 0);
+                    if ($c.length && !$c.hasClass('checked')) $c.trigger('click');
+                    setRangeFill(this);
+                });
+            })();
+
+            $('#bk-duration').each(function () { setRangeFill(this); });
 
             function isChosen(row) {
                 return row.is_defult == '1' || row.is_default === true || row.is_default === 1 || row.is_default === '1' || row.is_default === 'Default';
@@ -313,6 +353,7 @@
             });
 
             $('#bk-duration').on('input change', function() {
+                setRangeFill(this);
                 renderUnits();
             });
 
@@ -324,13 +365,12 @@
             function syncSizeVisual() {
                 var $all = $('.size-container');
                 var $on = $all.filter('.checked');
-                var total = $all.length || 1;
                 var index = $on.length ? $all.index($on) : -1;
-                var pct = index < 0 ? 0 : Math.round(((index + 0.5) / total) * 100);
-                var $fill = $('#bk-size-fill');
-                $fill.css('width', pct + '%');
-                $fill.toggleClass('is-set', index >= 0);
                 var label = $on.length ? $.trim($on.find('span').text()) : 'All sizes';
+                if (index >= 0 && $sizeRange.length) {
+                    $sizeRange.val(index).attr('aria-valuetext', label);
+                    setRangeFill($sizeRange[0]);
+                }
                 $('#bk-size-readout').text(label);
                 $('#bk-size-hint').text($on.length ? sizeHint(label) : 'Select a size');
             }

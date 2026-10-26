@@ -91,41 +91,26 @@
             @endisset
 
             <section class="sh-guide" aria-labelledby="sh-box-sizes">
-                <svg class="sh-swoosh" viewBox="0 0 140 140" aria-hidden="true">
-                    <path d="M150 8C96 18 58 58 48 118" fill="none" stroke="#F48922" stroke-width="12" stroke-linecap="round"/>
-                    <path d="M150 30C108 38 78 68 70 116" fill="none" stroke="#F6A15A" stroke-width="10" stroke-linecap="round"/>
-                    <path d="M150 52C118 58 96 82 90 114" fill="none" stroke="#F8C898" stroke-width="8" stroke-linecap="round"/>
-                </svg>
                 <h2 id="sh-box-sizes">Our box sizes</h2>
                 <p>We provide a range of boxes for your things. Select your items from below and we'll recommend a box size for you.</p>
-                <div class="sh-guide-grid">
-                    <div class="sh-guide-item is-hot">
-                        <span class="ic"><i class="fas fa-tshirt" aria-hidden="true"></i></span>
-                        <span><strong>Clothing</strong><small>Seasonal clothing, shoes, bags</small></span>
-                    </div>
-                    <div class="sh-guide-item">
-                        <span class="ic"><i class="fas fa-biking" aria-hidden="true"></i></span>
-                        <span><strong>Sports Gear</strong><small>Roller skates, hockey sticks, balls</small></span>
-                    </div>
-                    <div class="sh-guide-item is-hot">
-                        <span class="ic"><i class="fas fa-couch" aria-hidden="true"></i></span>
-                        <span><strong>Appliances</strong><small>Toaster, kitchen tools</small></span>
-                    </div>
-                    <div class="sh-guide-item">
-                        <span class="ic"><i class="fas fa-user" aria-hidden="true"></i></span>
-                        <span><strong>Hobby Items</strong><small>Figurines, collectibles, dolls</small></span>
-                    </div>
-                    <div class="sh-guide-item">
-                        <span class="ic"><i class="fas fa-folder" aria-hidden="true"></i></span>
-                        <span><strong>Documents</strong><small>Papers, records, binders</small></span>
-                    </div>
-                    <div class="sh-guide-item is-hot">
-                        <span class="ic"><i class="fas fa-desktop" aria-hidden="true"></i></span>
-                        <span><strong>Electronics</strong><small>Monitors, PC, speakers</small></span>
-                    </div>
+                <div class="sh-guide-grid" id="sh-guide-grid">
+                    @foreach([
+                        ['Clothing', 'Seasonal clothing, shoes, bags', 'fa-tshirt', 'm'],
+                        ['Sports Gear', 'Roller skates, hockey sticks, balls', 'fa-bicycle', 'l'],
+                        ['Appliances', 'Toaster, kitchen tools', 'fa-couch', 'm'],
+                        ['Hobby Items', 'Figurines, collectibles, dolls', 'fa-chess-queen', 's'],
+                        ['Documents', 'Papers, records, binders', 'fa-folder-open', 's'],
+                        ['Electronics', 'Monitors, PC, speakers', 'fa-desktop', 'l'],
+                    ] as [$name, $hint, $icon, $size])
+                        <button type="button" class="sh-guide-item" aria-pressed="false" data-size="{{ $size }}" data-name="{{ $name }}">
+                            <span class="ic"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
+                            <span><strong>{{ $name }}</strong><small>{{ $hint }}</small></span>
+                        </button>
+                    @endforeach
                 </div>
+                <p class="sh-guide-result" id="sh-guide-result" aria-live="polite"></p>
                 <div class="sh-guide-actions">
-                    <a href="{{ url('/contact-us') }}" class="sk-btn sk-btn-primary sh-help">Help me choose</a>
+                    <button type="button" class="sk-btn sk-btn-primary sh-help" id="sh-help">Help me choose</button>
                 </div>
             </section>
             </div>
@@ -186,6 +171,39 @@
             var form = card.find('form');
             form.find('[name=id]').val(form.find('[name=id]').data('base') + '-' + btn.data('size'));
             form.find('[name=name]').val(form.find('[name=name]').data('base') + ' (' + btn.data('label') + ')');
+        });
+
+        // "Our box sizes": tap items, then recommend the largest box any of them needs
+        var boxLabels = { s: 'S - 45 cm', m: 'M - 60 cm', l: 'L - 75 cm' };
+        $('#sh-guide-grid').on('click', '.sh-guide-item', function () {
+            var on = $(this).attr('aria-pressed') !== 'true';
+            $(this).attr('aria-pressed', on ? 'true' : 'false').toggleClass('is-hot', on);
+            $('#sh-guide-result').text('');
+        });
+        $('#sh-help').on('click', function () {
+            var picked = $('#sh-guide-grid .sh-guide-item[aria-pressed="true"]');
+            var $result = $('#sh-guide-result');
+            if (!picked.length) {
+                $result.text('Select the items you plan to pack and we will recommend a box size.');
+                return;
+            }
+            var order = ['s', 'm', 'l'];
+            var best = 's';
+            var names = [];
+            picked.each(function () {
+                var size = $(this).data('size');
+                if (order.indexOf(size) > order.indexOf(best)) best = size;
+                names.push($(this).data('name').toLowerCase());
+            });
+            var $sizeBtn = $('.product_list .sh-size[data-size="' + best + '"]').first();
+            $result.html('We recommend the <strong>' + boxLabels[best] + '</strong> packing box for ' + names.join(', ') + '.' +
+                ($sizeBtn.length ? ' <a href="#" id="sh-go-box">Choose this box</a>' : ''));
+            if ($sizeBtn.length) $sizeBtn.trigger('click');
+        });
+        $('#sh-guide-result').on('click', '#sh-go-box', function (e) {
+            e.preventDefault();
+            var card = $('.product_list .sh-size.is-on').first().closest('.sh-card')[0];
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
 
         $('.product_list').on('click', '.btn-quick', function () {

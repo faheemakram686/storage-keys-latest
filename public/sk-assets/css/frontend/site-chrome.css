@@ -29,8 +29,83 @@ html, body {
   --sk-dark: #050505;
   --sk-line: #E7DDD4;
   --sk-soft: #FCF8F5;
-  --sk-chrome-max: 1600px;
+  --sk-chrome-max: 1280px;
   --sk-chrome-pad: 20px;
+  /* Layout rhythm (brand mockups): one radius scale + one vertical section spacing */
+  --sk-radius-sm: 12px;
+  --sk-radius: 16px;
+  --sk-radius-lg: 22px;
+  --sk-radius-pill: 999px;
+  --sk-section-y: 84px;
+  /* Brand book: Capitana (EN) / Tajawal (AR). Poppins stands in until Capitana is installed (ui.includes.brand-fonts) */
+  --sk-font: 'Capitana', 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --sk-font-ar: 'Tajawal', 'Capitana', 'Segoe UI', system-ui, sans-serif;
+  /* Brand book gradients (p.9). Grape-led so white text stays readable */
+  --sk-grad-grape: radial-gradient(70% 160% at 100% 100%, rgba(236, 93, 44, .55) 0%, rgba(236, 93, 44, 0) 60%), radial-gradient(60% 140% at 0% 0%, rgba(5, 5, 5, .45) 0%, rgba(5, 5, 5, 0) 60%), #6C365B;
+  --sk-grad-night: radial-gradient(55% 140% at 100% 0%, rgba(244, 137, 34, .38) 0%, rgba(244, 137, 34, 0) 60%), radial-gradient(60% 150% at 90% 110%, rgba(236, 93, 44, .45) 0%, rgba(236, 93, 44, 0) 60%), linear-gradient(120deg, #050505 0%, #6C365B 100%);
+  --sk-grad-ember: radial-gradient(120% 130% at 75% 105%, #F48922 0%, #EC5D2C 30%, #6C365B 58%, #050505 85%);
+}
+
+body {
+  font-family: var(--sk-font);
+}
+:lang(ar),
+[dir="rtl"] {
+  font-family: var(--sk-font-ar);
+}
+
+/* ---------- Brand patterns (brand book p.19–20) ----------
+   Add to a section/card: .sk-lines-tr (three-line arc, top right), .sk-lines-bl (bottom left), .sk-wave-br (wave, bottom right) */
+.sk-lines-tr,
+.sk-lines-bl,
+.sk-wave-br {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.sk-lines-tr::before,
+.sk-lines-bl::before,
+.sk-wave-br::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  background: no-repeat center / contain;
+}
+.sk-lines-tr::before,
+.sk-lines-bl::before {
+  width: 240px;
+  height: 150px;
+  background-image: url('../../assets/images/frontend/brand/lines-arc.svg');
+}
+.sk-lines-tr::before {
+  top: 0;
+  right: 0;
+}
+.sk-lines-bl::before {
+  bottom: 0;
+  left: 0;
+  transform: rotate(180deg);
+}
+.sk-wave-br::before {
+  width: 260px;
+  height: 130px;
+  right: -20px;
+  bottom: -18px;
+  opacity: .9;
+  background-image: url('../../assets/images/frontend/brand/wave.svg');
+}
+@media (max-width: 767px) {
+  .sk-lines-tr::before,
+  .sk-lines-bl::before {
+    width: 140px;
+    height: 88px;
+    opacity: .7;
+  }
+  .sk-wave-br::before {
+    width: 160px;
+    height: 80px;
+  }
 }
 
 /* Shared page container — single source for header, banner, footer & page content */
@@ -50,7 +125,7 @@ html, body {
   text-align: center;
   font-size: 13px;
   padding: 10px 0;
-  font-family: 'Poppins', system-ui, sans-serif;
+  font-family: var(--sk-font);
   letter-spacing: .02em;
   box-sizing: border-box;
   width: 100%;
@@ -165,7 +240,7 @@ html, body {
   transition: background .2s ease, box-shadow .2s ease;
   box-sizing: border-box;
   width: 100%;
-  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sk-font);
   font-weight: 400;
 }
 .pv-header > .sk-container.pv-header-in,
@@ -203,7 +278,7 @@ html, body {
 .pv-nav > .pv-has-sub > a {
   color: var(--sk-dark);
   text-decoration: none;
-  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sk-font);
   font-size: 16px;
   font-weight: 700;
   white-space: nowrap;
@@ -230,8 +305,8 @@ html, body {
   color: #fff;
   text-decoration: none;
   padding: 14px 36px;
-  border-radius: 10px;
-  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  border-radius: var(--sk-radius-sm, 12px);
+  font-family: var(--sk-font);
   font-weight: 600;
   font-size: 14px;
   white-space: nowrap;
@@ -270,7 +345,7 @@ html, body {
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  border-radius: 999px;
+  border-radius: var(--sk-radius-pill, 999px);
   background: var(--sk-accent);
   color: #fff;
   font-size: 10px;
@@ -330,7 +405,7 @@ html, body {
   gap: 2px;
   background: #fff;
   border: 1px solid var(--sk-line);
-  border-radius: 12px;
+  border-radius: var(--sk-radius-sm, 12px);
   padding: 8px;
   box-shadow: 0 18px 40px rgba(5, 5, 5, .14);
   opacity: 0;
@@ -347,7 +422,7 @@ html, body {
 .pv-nav .pv-sub a {
   padding: 9px 12px;
   border-radius: 8px;
-  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sk-font);
   font-size: 14.5px;
   white-space: nowrap;
   color: var(--sk-dark);
@@ -368,7 +443,7 @@ html, body {
   border-top: 4px solid #F48922;
   box-sizing: border-box;
   width: 100%;
-  font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sk-font);
 }
 .pv-foot-grid {
   display: grid;
@@ -576,6 +651,7 @@ html, body {
 @media (max-width: 991px) {
   :root {
     --sk-chrome-pad: 16px;
+    --sk-section-y: 64px;
   }
   .pv-header-in {
     display: flex;
@@ -612,7 +688,7 @@ html, body {
   }
   .pv-book {
     padding: 14px 36px;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     font-size: 14px;
   }
   .pv-nav.open {
@@ -694,6 +770,7 @@ html, body {
 @media (max-width: 575px) {
   :root {
     --sk-chrome-pad: 16px;
+    --sk-section-y: 48px;
   }
   .pv-cart {
     width: 38px;
@@ -713,7 +790,7 @@ html, body {
   }
   .pv-book {
     padding: 14px 36px;
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     font-size: 14px;
   }
 }
@@ -779,7 +856,7 @@ html, body {
   margin: 0 auto;
   display: block;
   padding: 0;
-  border-radius: 16px;
+  border-radius: var(--sk-radius, 16px);
   overflow: visible;
 }
 /* Hover bridge from the nav link down to the panel */
@@ -810,7 +887,7 @@ html, body {
   margin: 0 0 8px;
   padding: 0 10px 10px;
   border-bottom: 1px solid var(--sk-line);
-  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sk-font);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .08em;
@@ -891,7 +968,7 @@ html, body {
   background: var(--sk-accent);
   color: #fff;
   padding: 14px 36px;
-  border-radius: 10px;
+  border-radius: var(--sk-radius-sm, 12px);
 }
 .pv-nav .pv-mega-foot a.pv-mega-cta:hover {
   background: var(--sk-accent-2);
@@ -948,7 +1025,7 @@ html, body {
     font-size: 12px;
   }
   .pv-mega-foot {
-    border-radius: 10px;
+    border-radius: var(--sk-radius-sm, 12px);
     margin-top: 8px;
     padding: 12px;
   }
@@ -1081,5 +1158,5 @@ button.theme-btn-2,
 .btn-qoutation,
 .btn-submit {
   padding: 14px 36px;
-  border-radius: 10px;
+  border-radius: var(--sk-radius-sm, 12px);
 }

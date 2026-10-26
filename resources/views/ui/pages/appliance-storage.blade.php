@@ -169,7 +169,7 @@
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Pay special attention to refrigerators, freezers, washers and dishwashers.</span></li>
                     <li><span class="box"><i class="fas fa-check"></i></span><span class="t">Protect finishes and reduce damage risk during handling and movement.</span></li>
                 </ul>
-                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your appliances are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#1f9d57;text-decoration:underline;">Browse our shop</a>.</div>
+                <div class="ps-check-done" id="psCheckDone"><i class="fas fa-check-circle"></i> Nicely done — your appliances are ready for storage! Need packing supplies? <a href="{{ url('/shop') }}" style="color:#6C365B;text-decoration:underline;">Browse our shop</a>.</div>
             </div>
             <p class="fs-facilities-note sk-reveal" style="margin-top:28px;">Refrigerators, freezers, washing machines, and dishwashers may require particular preparation because of their internal components and water connections.</p>
         </div>

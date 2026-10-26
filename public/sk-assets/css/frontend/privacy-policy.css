@@ -107,7 +107,11 @@
 
 @media (max-width: 991px) {
     .lp-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lp-layout > * {
+        min-width: 0;
     }
 
     .lp-toc {

@@ -81,7 +81,7 @@
         <div class="sk-container">
             <div class="sk-usp-inner">
                 <div class="sk-usp-item">
-                    <i class="fas fa-shield-alt"></i>
+                    <i aria-hidden="true">@include('ui.includes.brand-icon', ['name' => 'security'])</i>
                     <span class="h4">Secure Storage</span>
                     <p>CCTV surveillance &amp; access control</p>
                 </div>
@@ -91,7 +91,7 @@
                     <p>Protects sensitive belongings</p>
                 </div>
                 <div class="sk-usp-item">
-                    <i class="fas fa-clock"></i>
+                    <i aria-hidden="true">@include('ui.includes.brand-icon', ['name' => 'safe'])</i>
                     <span class="h4">24/7 Access</span>
                     <p>Reach your unit any time</p>
                 </div>
@@ -108,6 +108,92 @@
             </div>
         </div>
     </div>
+
+    <!-- ============ STORAGE SOLUTIONS ============ -->
+    <section class="sk-section" style="background:var(--sk-soft);">
+        <div class="sk-container">
+            <div class="sk-section-head">
+                <h2>Storage Solutions for Every Need</h2>
+                <p>We organise our services around how people and businesses actually use extra space, making it easy to find the option that matches your situation.</p>
+            </div>
+            <div class="sk-sol-grid">
+                <article class="sk-sol-card">
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
+                    <div class="bd">
+                        <h3>Personal Storage</h3>
+                        <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
+                        <a class="sk-explore" href="{{ url('/personal-storage') }}">Explore personal storage</a>
+                    </div>
+                </article>
+                <article class="sk-sol-card">
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
+                    <div class="bd">
+                        <h3>Business Storage</h3>
+                        <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory and regular access to their goods.</p>
+                        <a class="sk-explore" href="{{ url('/business-storage') }}">Explore business storage</a>
+                    </div>
+                </article>
+                <article class="sk-sol-card">
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
+                    <div class="bd">
+                        <h3>Warehouse Storage</h3>
+                        <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
+                        <a class="sk-explore" href="{{ url('/warehouse-storage') }}">Explore warehouse storage</a>
+                    </div>
+                </article>
+                <article class="sk-sol-card">
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
+                    <div class="bd">
+                        <h3>Moving Storage</h3>
+                        <p>A convenient moving and temporary storage solution that simplifies relocations for both households and businesses.</p>
+                        <a class="sk-explore" href="{{ url('/moving-services') }}">Explore moving storage</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SERVICE BAND (brand book additional icons) ============ -->
+    <div class="sk-svc-band">
+        <div class="sk-container">
+            <div class="sk-svc-band-in">
+                <div class="sk-svc-band-item">@include('ui.includes.brand-icon', ['name' => 'pickup', 'size' => 54])<span>Our team is available to pick up and deliver your things</span></div>
+                <div class="sk-svc-band-item">@include('ui.includes.brand-icon', ['name' => 'safe', 'size' => 54])<span>Your belongings are kept safe and monitored 24/7</span></div>
+                <div class="sk-svc-band-item">@include('ui.includes.brand-icon', ['name' => 'tracking', 'size' => 54])<span>Tracking your belongings made easier on the app</span></div>
+                <div class="sk-svc-band-item">@include('ui.includes.brand-icon', ['name' => 'delivery', 'size' => 54])<span>We deliver whenever you need, wherever you need it</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ HOW BOOKING WORKS + GET STARTED ============ -->
+    <section class="sk-section" style="background:var(--sk-soft);">
+        <div class="sk-container">
+            <div class="sk-book-card">
+                <div class="sk-book-card-in">
+                    <h2>How booking works</h2>
+                    <p class="lead">Renting a storage unit with Storage Keys is designed to be simple — whether you need personal storage, business inventory support or warehouse facilities.</p>
+                    <div class="sk-book-steps">
+                        <div><div class="num">1</div><h3>Choose Your Unit</h3><p>Select your preferred unit size and service type.</p></div>
+                        <div><div class="num">2</div><h3>Confirm Details</h3><p>Confirm availability and pricing with our team.</p></div>
+                        <div><div class="num">3</div><h3>Complete Rental</h3><p>Sign your rental agreement and provide the required identification.</p></div>
+                        <div><div class="num">4</div><h3>Move In</h3><p>Move your belongings in and access your unit whenever you need it.</p></div>
+                    </div>
+                </div>
+                <div class="sk-panel" id="sk-bookband">
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/shop-header.jpg') }}');"></div>
+                    <div class="bd">
+                        <h2>Get started with secure storage solutions today</h2>
+                        <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>
+                        <div class="btns">
+                            <a href="{{ url('/booking') }}" class="sk-btn sk-btn-grape">Book your unit</a>
+                            <a href="https://wa.me/971565018785" class="sk-btn sk-btn-ghost">Chat on WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- ============ INTRO / ABOUT ============ -->
     <section class="sk-section sk-about">
@@ -255,64 +341,8 @@
         </div>
     </section>
 
-    <!-- ============ PRICING ============ -->
-    <!-- <section class="sk-section" style="background:var(--sk-soft);">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Pricing</span>
-                <h2>Simple, Transparent Pricing</h2>
-                <p>Flexible monthly plans with no hidden costs. Starting prices are a guide — confirm the exact rate for your unit with our team.</p>
-            </div>
-            <div class="sk-price-grid">
-                <div class="sk-price">
-                    <span class="h3">Small Unit</span>
-                    <div class="size">Boxes, documents &amp; seasonal items</div>
-                    <div class="amount"><small>from AED</small> XXX<small>/mo</small></div>
-                    <div class="per">Ideal for a few boxes</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Secure, CCTV-monitored unit</li>
-                        <li><i class="fas fa-check"></i> Climate controlled</li>
-                        <li><i class="fas fa-check"></i> 24/7 access</li>
-                        <li><i class="fas fa-check"></i> Flexible monthly term</li>
-                    </ul>
-                    <a href="{{ url('/contact-us') }}#ct-quote" class="sk-btn sk-btn-outline">Get a Quote</a>
-                </div>
-                <div class="sk-price featured">
-                    <span class="tag">Most Popular</span>
-                    <span class="h3">Medium Unit</span>
-                    <div class="size">Contents of a 1–2 bedroom home</div>
-                    <div class="amount"><small>from AED</small> XXX<small>/mo</small></div>
-                    <div class="per">Beds, sofas &amp; appliances</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Everything in Small</li>
-                        <li><i class="fas fa-check"></i> More room for furniture</li>
-                        <li><i class="fas fa-check"></i> Short &amp; long-term plans</li>
-                        <li><i class="fas fa-check"></i> Friendly customer support</li>
-                    </ul>
-                    <a href="{{ url('/booking') }}" class="sk-btn sk-btn-primary">Book This Unit</a>
-                </div>
-                <div class="sk-price">
-                    <span class="h3">Large / Warehouse</span>
-                    <div class="size">Full home or business inventory</div>
-                    <div class="amount"><small>from AED</small> XXX<small>/mo</small></div>
-                    <div class="per">Bulk stock &amp; equipment</div>
-                    <ul>
-                        <li><i class="fas fa-check"></i> Everything in Medium</li>
-                        <li><i class="fas fa-check"></i> Warehouse-scale space</li>
-                        <li><i class="fas fa-check"></i> Scalable rental terms</li>
-                        <li><i class="fas fa-check"></i> Business inventory support</li>
-                    </ul>
-                    <a href="{{ url('/contact-us') }}#ct-quote" class="sk-btn sk-btn-outline">Get a Quote</a>
-                </div>
-            </div>
-            <div class="sk-size-note">
-                <i class="fas fa-info-circle"></i> Prices vary by unit size, rental duration and location. Contact our team for an exact, no-obligation quote tailored to what you're storing.
-            </div>
-        </div>
-    </section> -->
-
     <!-- ============ PROMO BANNER ============ -->
-    <section style="padding:0 0 84px;">
+    <section style="padding:0 0 var(--sk-section-y, 84px);">
         <div class="sk-container">
             <div class="sk-promo sk-reveal">
                 <div class="pc">
@@ -324,55 +354,6 @@
                     <a href="/booking/" class="sk-btn sk-btn-primary"><i class="fas fa-tag"></i> Claim This Offer</a>
                     <a href="tel:+971565018785" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Call Us</a>
                     <a href="tel:8005397" class="sk-btn sk-btn-ghost"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ OUR STORAGE SOLUTIONS ============ -->
-    <section class="sk-section" style="background:var(--sk-soft);">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Our Solutions</span>
-                <h2>Storage Solutions for Every Need</h2>
-                <p>We organise our services around how people and businesses actually use extra space, making it easy to find the option that matches your situation.</p>
-            </div>
-            <div class="sk-cards">
-                <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
-                    <div class="sk-card-body">
-                        <div class="ic"><i class="fas fa-home"></i></div>
-                        <h3>Personal Storage</h3>
-                        <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
-                        <a href="{{ url('/personal-storage') }}">Explore personal storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
-                    <div class="sk-card-body">
-                        <div class="ic"><i class="fas fa-briefcase"></i></div>
-                        <h3>Business Storage</h3>
-                        <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory solutions and regular access to their goods.</p>
-                        <a href="{{ url('/business-storage') }}">Explore business storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
-                    <div class="sk-card-body">
-                        <div class="ic"><i class="fas fa-warehouse"></i></div>
-                        <h3>Warehouse Storage</h3>
-                        <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
-                        <a href="{{ url('/warehouse-storage') }}">Explore warehouse storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="sk-card">
-                    <div class="sk-card-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
-                    <div class="sk-card-body">
-                        <div class="ic"><i class="fas fa-truck"></i></div>
-                        <h3>Moving Storage</h3>
-                        <p>A convenient moving and temporary storage solution that helps simplify relocations for both households and businesses.</p>
-                        <a href="{{ url('/moving-services') }}">Explore moving &amp; storage<i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -557,12 +538,12 @@
             </div>
             <div class="sk-values">
                 <div class="sk-value">
-                    <div class="ic"><i class="fas fa-shield-alt"></i></div>
+                    <div class="ic">@include('ui.includes.brand-icon', ['name' => 'insurance'])</div>
                     <span class="h4">Secure &amp; Climate-Controlled</span>
                     <p>Every unit is monitored with CCTV surveillance and kept in a climate-controlled environment for complete peace of mind.</p>
                 </div>
                 <div class="sk-value">
-                    <div class="ic"><i class="fas fa-clock"></i></div>
+                    <div class="ic">@include('ui.includes.brand-icon', ['name' => 'safe'])</div>
                     <span class="h4">24/7 Access</span>
                     <p>Registered customers can reach their belongings around the clock, whenever it suits them.</p>
                 </div>
@@ -590,41 +571,8 @@
         </div>
     </section>
 
-    <!-- ============ HOW BOOKING WORKS ============ -->
-    <section class="sk-section">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Simple Process</span>
-                <p class="sk-section-title">How Booking Works</p>
-                <p>Renting a storage unit with Storage Keys is designed to be simple — whether you need personal storage, business inventory support or warehouse facilities.</p>
-            </div>
-            <div class="sk-steps">
-                <div class="sk-step">
-                    <div class="num">1</div>
-                    <span class="h3">Choose Your Unit</span>
-                    <p>Select your preferred unit size and service type.</p>
-                </div>
-                <div class="sk-step">
-                    <div class="num">2</div>
-                    <span class="h3">Confirm Details</span>
-                    <p>Confirm availability and pricing with our team.</p>
-                </div>
-                <div class="sk-step">
-                    <div class="num">3</div>
-                    <span class="h3">Complete Rental</span>
-                    <p>Sign your rental agreement and provide the required identification.</p>
-                </div>
-                <div class="sk-step">
-                    <div class="num">4</div>
-                    <span class="h3">Move In</span>
-                    <p>Move your belongings in and access your unit whenever you need it.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- ============ TESTIMONIALS + LOGOS ============ -->
-    <section class="sk-section" style="background:var(--sk-soft);">
+    <section class="sk-section sk-lines-bl" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Customer Reviews</span>
@@ -641,7 +589,7 @@
                     [
                         'name' => 'Danish Siddiqui',
                         'initials' => 'D',
-                        'avatar_color' => '#4285f4',
+                        'avatar_color' => '#6C365B',
                         'meta' => 'Local Guide · 33 reviews · 5 photos',
                         'when' => '5 years ago',
                         'stars' => 5,
@@ -652,7 +600,7 @@
                     [
                         'name' => 'Mohammad Ghassan',
                         'initials' => 'M',
-                        'avatar_color' => '#ea4335',
+                        'avatar_color' => '#EC5D2C',
                         'meta' => 'Local Guide · 79 reviews · 3 photos',
                         'when' => '3 years ago',
                         'stars' => 5,
@@ -663,7 +611,7 @@
                     [
                         'name' => 'Nadeem Baig',
                         'initials' => 'N',
-                        'avatar_color' => '#fbbc04',
+                        'avatar_color' => '#F48922',
                         'meta' => 'Local Guide',
                         'when' => 'Google review',
                         'stars' => 5,
@@ -674,7 +622,7 @@
                     [
                         'name' => 'Ashik S',
                         'initials' => 'A',
-                        'avatar_color' => '#34a853',
+                        'avatar_color' => '#050505',
                         'meta' => 'Local Guide',
                         'when' => 'Google review',
                         'stars' => 5,
@@ -685,7 +633,7 @@
                     [
                         'name' => 'Muhammed Alshebli',
                         'initials' => 'M',
-                        'avatar_color' => '#ea4335',
+                        'avatar_color' => '#EC5D2C',
                         'meta' => 'Local Guide',
                         'when' => 'Google review',
                         'stars' => 5,
@@ -696,7 +644,7 @@
                     [
                         'name' => 'pooja nayal',
                         'initials' => 'P',
-                        'avatar_color' => '#4285f4',
+                        'avatar_color' => '#6C365B',
                         'meta' => 'Local Guide',
                         'when' => 'Google review',
                         'stars' => 5,
@@ -847,46 +795,6 @@
         </div>
     </section>
 
-    <!-- ============ STORAGE TIPS / BLOG ============ -->
-    <!-- <section class="sk-section" style="background:var(--sk-soft);">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Storage Tips &amp; Guides</span>
-                <h2>Advice to Help You Store Smarter</h2>
-                <p>Practical tips on packing, choosing the right unit and getting the most from your storage space.</p>
-            </div>
-            <div class="sk-blog sk-reveal">
-                <div class="sk-blogcard">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-21.jpg') }}');"></div>
-                    <div class="b">
-                        <div class="meta">Packing Tips</div>
-                        <span class="h3">How to Pack Your Storage Unit Efficiently</span>
-                        <p>Simple techniques to protect your belongings and make the most of every square foot.</p>
-                        <a href="{{ url('/blogs') }}">Read packing tips on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="sk-blogcard">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-22.jpg') }}');"></div>
-                    <div class="b">
-                        <div class="meta">Choosing a Unit</div>
-                        <span class="h3">What Size Storage Unit Do You Actually Need?</span>
-                        <p>A quick guide to matching unit sizes to household and business items.</p>
-                        <a href="{{ url('/blogs') }}">Read unit size guide on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <div class="sk-blogcard">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-23.jpg') }}');"></div>
-                    <div class="b">
-                        <div class="meta">Business Storage</div>
-                        <span class="h3">Using Self Storage for Inventory Management</span>
-                        <p>How UAE retailers and e-commerce sellers use storage to scale flexibly.</p>
-                        <a href="{{ url('/blogs') }}">Read inventory storage tips on our blog <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
     <!-- ============ FAQ ============ -->
     <section class="sk-section" style="background:#fff;">
         <div class="sk-container">
@@ -920,25 +828,6 @@
                     <summary>Can I access my unit at any time?</summary>
                     <div class="a">Yes, registered customers enjoy 24/7 access to their rented space across our storage facilities.</div>
                 </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ CTA BAND ============ -->
-    <section style="padding:0 0 84px;">
-        <div class="sk-container">
-            <div class="sk-bookband" id="sk-bookband">
-                <div class="sk-bookband-photo" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
-                <div class="sk-cta">
-                <div>
-                    <h2>Get Started With Secure Storage Solutions Today</h2>
-                    <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>
-                </div>
-                <div class="btns">
-                    <a href="/booking" class="sk-btn sk-btn-white"><i class="fas fa-boxes"></i> Book Your Storage Unit</a>
-                    <a href="https://wa.me/971565018785" class="sk-btn sk-btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
-                </div>
-                </div>
             </div>
         </div>
     </section>

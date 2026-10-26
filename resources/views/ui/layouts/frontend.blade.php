@@ -35,9 +35,11 @@
     <link rel="preload" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" as="style">
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}"></noscript>
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/brand.css') }}">
     @else
-    {{-- Site chrome last so header/footer match on every page --}}
+    {{-- Site chrome last so header/footer match on every page; brand system after it --}}
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/brand.css') }}">
     @endif
     @yield('headExtra')
 </head>

@@ -1,5 +1,5 @@
 a.link, .link, .link-primary, .link-sm {
-  color: #f58320 !important;
+  color: #F48922 !important;
 }
 
 a.link:hover {
@@ -9,9 +9,9 @@ a.link:hover {
 .padlock-section-header,.term-section-header,.terms-conditions-section-header{
   margin-top:10px;
   font-family: sans-serif;
-  color: #F58320;
+  color: #F48922;
   background-color: #F4F5F5;
-  border: 2px solid #d1dae0;
+  border: 2px solid #E7DDD4;
   font-weight: bold;
   z-index: 2;
   text-align: center;
@@ -19,7 +19,7 @@ a.link:hover {
 }
 .padlock-section-body,.term-section-body,.insurance-section-body,.terms-conditions-section-body{
   background: #f6f6f6;
-  border: 2px solid #d1dae0;
+  border: 2px solid #E7DDD4;
   border-radius: 5px;
   padding-top: 40px;
   padding-bottom: 20px;
@@ -64,7 +64,7 @@ a.link:hover {
   line-height: 1;
   height: auto;
   width: auto;
-  color: #6c757d;
+  color: #7A7168;
   cursor: pointer;
   z-index: 2;
   box-shadow: none;
@@ -72,7 +72,7 @@ a.link:hover {
 
 .password-field-wrap .password-toggle:hover,
 .password-field-wrap .password-toggle:focus {
-  color: #f58320;
+  color: #F48922;
   outline: none;
   background: transparent;
   box-shadow: none;

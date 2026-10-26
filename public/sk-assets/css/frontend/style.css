@@ -129,87 +129,77 @@ font-family: 'Rajdhani', sans-serif;
 /* ----------------------------------------------------
     Normalize    0B2C3D
 ---------------------------------------------------- */
+/* Mapped to the brand book palette: Tangerine #F48922, Burnt Orange #EC5D2C, Warm Grape #6C365B,
+   Light Clay #FCF8F5, Black #050505, plus the warm neutrals used across the page sheets (#4A403C text, #7A7168 muted, #E7DDD4 line) */
 :root {
-  --ltn__primary-color: #58595b;
-  /* --ltn__primary-color: #0B2C3D; */
-  --ltn__primary-color-2: #141414;
+  --ltn__primary-color: #050505;
+  --ltn__primary-color-2: #050505;
   /* Darken */
-  --ltn__primary-color-3: #133236;
+  --ltn__primary-color-3: #4A403C;
   /* Lighten */
   --ltn__secondary-color: #F48922;
-  --ltn__secondary-color-2: #F48922;
+  --ltn__secondary-color-2: #EC5D2C;
   /* Darken */
   --ltn__secondary-color-3: #F48922;
   /* Lighten */
-  /* --ltn__secondary-color: #FF5E15; */
-  /* --ltn__secondary-color-2: #cb3421; */
-  /* Darken */
-  /* --ltn__secondary-color-3: #fb412a; */
-  /* Lighten */
-  --ltn__heading-color: #0B1E33;
-  --ltn__heading-color: #58595b;
-  --ltn__paragraph-color: #58595b;
-  --ltn__heading-font: 'Rajdhani', sans-serif;
-  --ltn__body-font: 'Nunito Sans', sans-serif;
-  /* Footer ACD2D8 8CB2B2  */
-  --ltn__color-1: #8cb2b2;
-  --ltn__color-2: #ACD2D8;
-  --ltn__color-3: #A3BCC0;
-  --ltn__color-4: #84A2A6;
-  --ltn__color-5: #5C727D;
-  --ltn__color-6: #969FA5;
-  --ltn__color-7: #e5e5e5;
+  --ltn__heading-color: #050505;
+  --ltn__paragraph-color: #4A403C;
+  --ltn__heading-font: var(--sk-font, 'Poppins', sans-serif);
+  --ltn__body-font: var(--sk-font, 'Poppins', sans-serif);
+  /* Muted text / footer */
+  --ltn__color-1: #7A7168;
+  --ltn__color-2: #E7DDD4;
+  --ltn__color-3: #7A7168;
+  --ltn__color-4: #7A7168;
+  --ltn__color-5: #4A403C;
+  --ltn__color-6: #7A7168;
+  --ltn__color-7: #E7DDD4;
   /* Gradient Colors */
-  --gradient-color-1: linear-gradient(90deg, rgba(242,139,194,1) 0%, rgba(216,177,242,1) 50%);
-  --gradient-color-2: linear-gradient(to top, rgba(7,28,31,0) 0%, rgba(7,28,31,1) 90%);
-  --gradient-color-3: linear-gradient(to bottom, rgba(7,28,31,0) 0%, rgba(7,28,31,1) 90%);
-  --gradient-color-4: linear-gradient(to top, rgba(242,246,247,0) 0%, rgba(242,246,247,1) 90%);
-  --gradient-color-5: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 70%);
+  --gradient-color-1: linear-gradient(90deg, #F48922 0%, #EC5D2C 55%, #6C365B 100%);
+  --gradient-color-2: linear-gradient(to top, rgba(5,5,5,0) 0%, rgba(5,5,5,1) 90%);
+  --gradient-color-3: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,1) 90%);
+  --gradient-color-4: linear-gradient(to top, rgba(252,248,245,0) 0%, rgba(252,248,245,1) 90%);
+  --gradient-color-5: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.8) 70%);
   /* Background Colors ( 1, 2, 3, 4, 5 )  */
-  --section-bg-1: #F9F8FB;
-  /* White */
-  /* --section-bg-1: #F2F6F7; */
-  /* White */
-  /* --section-bg-2: #171B2A; */
-  --section-bg-2: #58595b;
+  --section-bg-1: #FCF8F5;
+  /* Light Clay */
+  --section-bg-2: #050505;
   /* Black */
-  --section-bg-5: #FFF2F0;
-  /* White */
-  /* --section-bg-6: #0B2C3D; */
-  --section-bg-6: #58595b;
+  --section-bg-5: #FCF8F5;
+  /* Light Clay */
+  --section-bg-6: #050505;
   /* Black */
-  --section-bg-7: #58595b;
-  /* --section-bg-7: #282b38; */
+  --section-bg-7: #050505;
   /* Black */
-  --section-bg-8: #2D4A58;
-  /* Black */
+  --section-bg-8: #6C365B;
+  /* Warm Grape */
   /* Border Colors */
-  --border-color-1: #e5eaee;
-  /* White */
-  --border-color-2: #1e2021;
+  --border-color-1: #E7DDD4;
+  /* Light */
+  --border-color-2: #050505;
   /* Black */
-  --border-color-3: #5C617F;
+  --border-color-3: #7A7168;
+  /* Muted */
+  --border-color-4: #EC5D2C;
+  /* Burnt Orange */
+  --border-color-5: #EC5D2C;
+  /* Burnt Orange */
+  --border-color-6: #050505;
   /* Black */
-  --border-color-4: #eb6954;
-  /* Red */
-  --border-color-5: #bc3928;
-  /* Red */
-  --border-color-6: #103034;
-  /* Black */
-  --border-color-7: #d1dae0;
-  /* White */
-  --border-color-8: #f6f6f6;
-  /* White */
-  --border-color-9: #e4ecf2;
-  /* White */
-  --border-color-10: #ebeeee;
-  /* White */
-  --border-color-11: #ededed;
-  /* White */
-  --border-color-12: #e1e6ff;
-  /* White */
-  --border-color-13: #f1f8ff;
-  /* White */
+  --border-color-7: #E7DDD4;
+  /* Light */
+  --border-color-8: #F3EBE4;
+  /* Light */
+  --border-color-9: #E7DDD4;
+  /* Light */
+  --border-color-10: #E7DDD4;
+  /* Light */
+  --border-color-11: #E7DDD4;
+  /* Light */
+  --border-color-12: #E7DDD4;
+  /* Light */
+  --border-color-13: #FCF8F5;
+  /* Light Clay */
   /* Box Shadow Colors */
   --ltn__box-shadow-1: 0 16px 32px 0 rgba(7, 28, 31, 0.1);
   --ltn__box-shadow-2: 0 0 4px rgba(0, 0, 0, 0.1);
@@ -334,11 +324,7 @@ h6,
 
 p {
   color: var(--ltn__paragraph-color);
-  margin-bottom: 1.5em;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto; }
+  margin-bottom: 1.5em; }
 
 a {
   color: inherit;

@@ -4,160 +4,128 @@
 @section('metaDescription', 'Personal, business, warehouse, climate-controlled, luggage and car storage in Sharjah and Dubai, plus professional movers and packers.')
 @section('content')
 
+@php
+    $img = fn ($path) => asset('sk-assets/assets/images/frontend/' . $path);
+    $options = [
+        ['Personal Storage', 'personal-storage', 'landing-page/personal-storage-80kb.jpg', 'Secure units for furniture, boxes, seasonal items and household belongings, for a few weeks or several years.'],
+        ['Business Storage', 'business-storage', 'landing-page/Business-storage-80kb.jpg', 'Scalable space for equipment, archived documents, excess stock and office furniture without paying for office floor area.'],
+        ['Warehouse Storage', 'warehouse-storage', 'landing-page/warehouse-storage-80kb.jpg', 'Cost-effective warehousing for palletised goods, inventory overflow and commercial stock across Dubai and Sharjah.'],
+        ['Climate Controlled Storage', 'climate-controlled-storage', 'landing-page/peace-of-mind-80kb.jpg', 'Protect furniture, electronics, documents and valuables from UAE heat and humidity.'],
+        ['Residential Storage', 'residential-storage', 'landing-page/inline.jpg', 'Practical space for moves, renovations, relocations and homes that need extra room.'],
+        ['Furniture Storage', 'furniture-storage', 'landing-page/inline-5.jpg', 'Keep sofas, beds, wardrobes and office furniture protected during moves or renovations.'],
+        ['Box Storage', 'box-storage', 'Box.jpg', 'A dedicated place for packed boxes, documents and seasonal items — from a few cartons to large collections.'],
+        ['Appliance Storage', 'appliance-storage', 'landing-page/inline-2.jpg', 'Store fridges, washers, ovens and commercial appliances safely while you move or renovate.'],
+        ['Moving Services', 'moving-services', 'landing-page/Moving-Storage-80kb.jpg', 'Professional movers and packers who dismantle, pack, load, move and reassemble your belongings.'],
+        ['Luggage Storage', 'luggage-storage', 'landing-page/inline-9.jpg', 'Keep bags secure between flights, hotel stays or moves without carrying them around.'],
+        ['Car Storage', 'car-storage', 'landing-page/inline-8.jpg', 'Secure short- and long-term space for personal, classic or luxury cars.'],
+        ['Vehicle Storage', 'vehicle-storage', 'landing-page/inline-6.jpg', 'Indoor or outdoor space for cars, motorcycles, vans and fleet vehicles.'],
+        ['Short Term Storage', 'short-term-storage', 'landing-page/inline-7.jpg', 'Flexible space for weeks or months — between moves, renovations, travel or business peaks.'],
+        ['Long Term Storage', 'long-term-storage', 'landing-page/inline-3.jpg', 'Right-sized units for months or years for furniture, documents and business stock.'],
+    ];
+    $storeItems = [
+        ['Furniture & Home Decor', 'fa-couch'],
+        ['Household Goods & Appliances', 'fa-blender'],
+        ['Documents & Reports', 'fa-folder-open'],
+        ['Luggage & Travel', 'fa-suitcase-rolling'],
+        ['Seasonal Clothing & Decor', 'fa-tshirt'],
+        ['Sports & Hobby Gear', 'fa-bicycle'],
+        ['Electronics & Valuables', 'fa-desktop'],
+    ];
+@endphp
+
 <div class="sk-home">
 
-    <!-- ============ HERO ============ -->
-    <section class="ps-hero">
+    <!-- ============ HERO (brand book storage page mockup) ============ -->
+    <section class="ps-hero so-hero">
         <div class="sk-container">
-            <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <span>Storage Options</span></div>
-            <span class="sk-eyebrow" style="color:#ffcf9e;">Storage Options</span>
-            <h1>Storage <span>Options</span></h1>
-            <p class="lead">Our individually lockable, climate-controlled personal storage units near you, in Sharjah and Dubai, plus affordable business storage, cost-effective warehousing, luggage and car storage, and professional movers and packers.</p>
-            <div class="ps-hero-cta">
-                <a href="#so-options" class="sk-btn sk-btn-primary"><i class="fas fa-boxes"></i> View Options</a>
-                <a href="#so-quote" class="sk-btn sk-btn-ghost"><i class="fas fa-file-invoice-dollar"></i> Get A Quote</a>
-            </div>
-            <div class="ps-hero-badges">
-                <span class="ps-hbadge"><i class="fas fa-home"></i> Personal Storage</span>
-                <span class="ps-hbadge"><i class="fas fa-briefcase"></i> Business Storage</span>
-                <span class="ps-hbadge"><i class="fas fa-warehouse"></i> Warehouse</span>
-                <span class="ps-hbadge"><i class="fas fa-snowflake"></i> Climate Controlled</span>
-                <span class="ps-hbadge"><i class="fas fa-truck"></i> Moving</span>
-                <span class="ps-hbadge"><i class="fas fa-suitcase-rolling"></i> Luggage</span>
-                <span class="ps-hbadge"><i class="fas fa-car"></i> Car Storage</span>
+            <h1>Flexible storage options for every need.</h1>
+            <div class="so-hero-card">
+                <p>Our individually lockable, climate-controlled self storage units near you, in Sharjah and Dubai, plus affordable business storage, cost-effective warehousing, luggage and car storage, and professional movers and packers.</p>
+                <p>Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible. Browse our storage options below or contact us for more information on our services.</p>
+                <div class="btns">
+                    <a href="{{ url('/booking') }}" class="sk-btn sk-btn-primary">Book now</a>
+                    <a href="https://wa.me/971565018785" class="sk-btn sk-btn-primary">Chat on WhatsApp</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ============ TRUST ============ -->
-    <div class="ps-trust">
+    <!-- ============ OPTIONS ============ -->
+    <section class="sk-section" id="so-options" style="background:var(--sk-soft);">
         <div class="sk-container">
-            <div class="ps-trust-in">
-                <div class="ps-trust-i"><i class="fas fa-temperature-low"></i> Climate-controlled</div>
-                <div class="ps-trust-i"><i class="fas fa-map-marker-alt"></i> Sharjah and Dubai</div>
-                <div class="ps-trust-i"><i class="fas fa-expand-arrows-alt"></i> Scalable space</div>
-                <div class="ps-trust-i"><i class="fas fa-shield-alt"></i> Reliable security</div>
-                <div class="ps-trust-i"><i class="fas fa-truck"></i> Professional movers</div>
+            <div class="sk-section-head">
+                <h2>Which storage do you need?</h2>
+                <p>Whether you're planning a move, growing a business or simply reducing clutter, there is a storage option that keeps your belongings protected while freeing up space.</p>
+            </div>
+            <div class="so-card-grid">
+                @foreach($options as [$title, $slug, $photo, $text])
+                    <a class="so-card" href="{{ url('/' . $slug) }}">
+                        <div class="ph" style="background-image:url('{{ $img($photo) }}');"></div>
+                        <div class="bd">
+                            <h3>{{ $title }}</h3>
+                            <p>{{ $text }}</p>
+                            <span class="sk-explore">Explore {{ strtolower($title) }}</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHAT CAN YOU STORE ============ -->
+    <section class="sk-section" style="background:#fff;">
+        <div class="sk-container">
+            <div class="sk-section-head">
+                <h2>What can you store?</h2>
+                <p>From a few boxes to the contents of an entire home. Tap what you're planning to store and we'll pass the list straight to our team for a quick quote.</p>
+            </div>
+            <div class="so-store" id="so-store">
+                @foreach($storeItems as [$label, $icon])
+                    <button type="button" class="so-store-item" aria-pressed="false" data-item="{{ $label }}">
+                        <span class="tile"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
+                        <span>{!! str_replace(' &amp; ', '<br>&amp; ', e($label)) !!}</span>
+                    </button>
+                @endforeach
+            </div>
+            <p class="so-store-note" id="so-store-note" aria-live="polite"></p>
+
+            <div class="sk-panel sk-panel--card">
+                <div class="ph" style="background-image:url('{{ $img('landing-page/inline-4.jpg') }}');"></div>
+                <div class="bd">
+                    <h2>Not sure which size is right?</h2>
+                    <p>Choosing the correct unit depends on the type and quantity of items you plan to store. Our team can recommend a practical, cost-effective option based on your requirements.</p>
+                    <div class="btns">
+                        <a href="{{ url('/booking') }}#bk-visual" class="sk-btn sk-btn-grape">Help me choose</a>
+                        <a href="https://wa.me/971565018785" class="sk-btn sk-btn-ghost" id="so-wa">Chat on WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <div class="sk-statband">
+        <div class="sk-container">
+            <div class="sk-statband-in">
+                <div><strong>10<span>+</span></strong>Years of Experience</div>
+                <div><strong>5,000<span>+</span></strong>Happy Customers</div>
+                <div><strong>100,000<span>+</span></strong>Sq. Ft. of Storage</div>
+                <div><strong>7</strong>Emirates Covered</div>
             </div>
         </div>
     </div>
 
-    <!-- ============ OPTIONS ============ -->
-    <section class="sk-section" id="so-options">
-        <div class="sk-container">
-            <div class="sk-section-head">
-                <span class="sk-eyebrow" style="justify-content:center;">Our Services</span>
-                <h2>Storage Options</h2>
-            </div>
-            <div class="so-services sk-reveal">
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-home"></i></div>
-                    <span class="h4">Personal Storage</span>
-                    <p>Secure personal storage units in Dubai and Sharjah for furniture, boxes, seasonal items and household belongings. Flexible short- or long-term space that frees up room at home without giving anything up.</p>
-                    <a class="ab-svc-link" href="{{ url('/personal-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-building"></i></div>
-                    <span class="h4">Residential Storage</span>
-                    <p>Flexible residential storage for furniture, appliances, boxes and household belongings — practical space for moves, renovations, relocations, downsizing, and homes that need additional room.</p>
-                    <a class="ab-svc-link" href="{{ url('/residential-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-couch"></i></div>
-                    <span class="h4">Furniture Storage</span>
-                    <p>Store sofas, beds, dining sets, wardrobes and office furniture securely during moves, renovations or decluttering. Flexible furniture storage units keep large pieces protected without overcrowding your home or workplace.</p>
-                    <a class="ab-svc-link" href="{{ url('/furniture-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-box"></i></div>
-                    <span class="h4">Box Storage</span>
-                    <p>Keep packed belongings, documents, seasonal items and business stock in a dedicated facility instead of filling your home or office. Flexible box storage works for a few cartons or larger collections.</p>
-                    <a class="ab-svc-link" href="{{ url('/box-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-blender"></i></div>
-                    <span class="h4">Appliance Storage</span>
-                    <p>Store refrigerators, washers, ovens and commercial appliances securely during moves, renovations or inventory overflow. Dedicated appliance storage frees valuable space at home, in a shop or on business premises.</p>
-                    <a class="ab-svc-link" href="{{ url('/appliance-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-briefcase"></i></div>
-                    <span class="h4">Business Storage</span>
-                    <p>Affordable, scalable business storage for unused equipment, archived documents, excess stock and office furniture. Ideal for start-ups, SMEs and corporate teams that need space without wasting costly office floor area.</p>
-                    <a class="ab-svc-link" href="{{ url('/business-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-warehouse"></i></div>
-                    <span class="h4">Warehouse Storage</span>
-                    <p>Cost-effective warehouse storage with scalable space, flexible leases and reliable security for growing businesses. Ideal for palletised goods, inventory overflow and commercial stock across Dubai and Sharjah.</p>
-                    <a class="ab-svc-link" href="{{ url('/warehouse-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-snowflake"></i></div>
-                    <span class="h4">Climate Controlled Storage</span>
-                    <p>Protect furniture, electronics, documents and valuables from heat and humidity with climate-controlled units. Suitable for personal and business needs across Dubai, Sharjah and the wider UAE.</p>
-                    <a class="ab-svc-link" href="{{ url('/climate-controlled-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-truck"></i></div>
-                    <span class="h4">Moving</span>
-                    <p>Professional movers and packers for local or international shifts — we dismantle, pack, load, move and reassemble your belongings carefully. A smooth handover from your current home or office to the next.</p>
-                    <a class="ab-svc-link" href="{{ url('/moving-services') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-suitcase-rolling"></i></div>
-                    <span class="h4">Luggage Storage</span>
-                    <p>Store luggage safely between flights, hotel stays, moves or travel plans with flexible short-term options. Keep bags secure in Dubai and Sharjah without carrying them around all day.</p>
-                    <a class="ab-svc-link" href="{{ url('/luggage-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-car"></i></div>
-                    <span class="h4">Car Storage</span>
-                    <p>Secure vehicle storage with flexible short- and long-term options for personal, classic or luxury cars. A professionally managed facility for vehicles that need a suitable place between uses.</p>
-                    <a class="ab-svc-link" href="{{ url('/car-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-stopwatch"></i></div>
-                    <span class="h4">Short Term Storage</span>
-                    <p>Flexible temporary storage for weeks or months — between moves, renovations, travel or business overflow. Practical space in Dubai and Sharjah without a permanent commitment.</p>
-                    <a class="ab-svc-link" href="{{ url('/short-term-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-car-side"></i></div>
-                    <span class="h4">Vehicle Storage</span>
-                    <p>Cars, motorcycles, vans and fleet vehicles — indoor or outdoor space sized to your vehicle and storage period across Dubai, Sharjah and the UAE.</p>
-                    <a class="ab-svc-link" href="{{ url('/vehicle-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="ps-whyc">
-                    <div class="ic"><i class="fas fa-calendar-alt"></i></div>
-                    <span class="h4">Long Term Storage</span>
-                    <p>Extended storage for furniture, seasonal items, documents and business stock — right-sized units for months or years across Dubai, Sharjah and the UAE.</p>
-                    <a class="ab-svc-link" href="{{ url('/long-term-storage') }}">Service Details <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ QUOTE CTA ============ -->
+    <!-- ============ QUOTE ============ -->
     <section class="sk-section" id="so-quote">
         <div class="sk-container">
             <div class="svc-quote so-quote sk-reveal">
                 <div>
-                    <span class="sk-eyebrow" style="color:#ffcf9e;">Free Quote</span>
                     <h2>Find the Right Storage Option</h2>
-                    <p>Whether you need space for household items, business inventory, luggage between trips, or a vehicle that is not in regular use, StorageKeys can help you choose a practical storage solution in Dubai, Sharjah and across the UAE.</p>
                     <p>Tell us what you need to store and how long you need it. Our team will recommend the most suitable option — with no unnecessary long-term commitment.</p>
-                    <ul class="so-quote-points">
-                        <li><i class="fas fa-check"></i> Personal, business and warehouse storage</li>
-                        <li><i class="fas fa-check"></i> Climate-controlled units for sensitive items</li>
-                        <li><i class="fas fa-check"></i> Luggage storage and car storage</li>
-                        <li><i class="fas fa-check"></i> Moving and packing support</li>
-                    </ul>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
                         <a href="tel:8005397"><i class="fas fa-phone"></i> Toll Free: 800 5397</a>
                         <a href="mailto:sales@storagekeys.com"><i class="fas fa-envelope"></i> sales@storagekeys.com</a>
-                        <a href="https://wa.me/971565018785"><i class="fab fa-whatsapp"></i> Message us on WhatsApp</a>
                     </div>
                 </div>
                 @include('ui.partials.inquiry-form', [
@@ -184,4 +152,36 @@
     </div>
 
 </div>
+@endsection
+
+@section('javascriptWork')
+<script>
+    (function () {
+        var items = document.querySelectorAll('#so-store .so-store-item');
+        var note = document.getElementById('so-store-note');
+        var wa = document.getElementById('so-wa');
+        var base = 'https://wa.me/971565018785';
+
+        function update() {
+            var picked = [];
+            items.forEach(function (btn) {
+                if (btn.getAttribute('aria-pressed') === 'true') picked.push(btn.getAttribute('data-item'));
+            });
+            if (!picked.length) {
+                note.textContent = '';
+                wa.href = base;
+                return;
+            }
+            note.textContent = 'Selected: ' + picked.join(', ') + '. Tap "Chat on WhatsApp" to send this list to our team.';
+            wa.href = base + '?text=' + encodeURIComponent('Hi Storage Keys, I would like a quote to store: ' + picked.join(', ') + '.');
+        }
+
+        items.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+                update();
+            });
+        });
+    })();
+</script>
 @endsection

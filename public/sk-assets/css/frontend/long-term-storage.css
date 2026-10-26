@@ -40,7 +40,7 @@
     gap: 9px;
     background: rgba(255, 255, 255, .08);
     border: 1px solid rgba(255, 255, 255, .16);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 10px 18px;
     font-size: 13.5px;
     font-weight: 500;
@@ -64,7 +64,7 @@
     font-weight: 600;
     color: var(--sk-dark);
 }
-.lt-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 12px; background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
+.lt-trust-i i { width: 40px; height: 40px; flex: 0 0 40px; border-radius: var(--sk-radius-sm, 12px); background: #6C365B; color: #fff; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
 .lt-split {
     display: grid;
@@ -94,7 +94,7 @@
     flex: 0 0 60px;
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -129,7 +129,7 @@
     flex: 0 0 46px;
     width: 46px;
     height: 46px;
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     background: var(--sk-soft);
     color: var(--sk-accent-2);
     font-weight: 700;
@@ -151,7 +151,7 @@
 .lt-col {
     background: #fff;
     border: 1.5px solid var(--sk-line);
-    border-radius: 18px;
+    border-radius: var(--sk-radius, 16px);
     padding: 24px;
     min-height: 250px;
 }
@@ -170,7 +170,7 @@
 .lt-col h3 .n {
     background: var(--sk-soft);
     color: var(--sk-primary);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     font-size: 12.5px;
     font-weight: 700;
     padding: 3px 12px;
@@ -188,7 +188,7 @@
     gap: 9px;
     background: var(--sk-soft);
     border: 1.5px solid var(--sk-line);
-    border-radius: 50px;
+    border-radius: var(--sk-radius-pill, 999px);
     padding: 10px 16px;
     font-size: 13.5px;
     font-weight: 600;
@@ -261,7 +261,7 @@
 .lt-usec .ic {
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -285,7 +285,7 @@
 .lt-tip {
     background: rgba(255, 255, 255, .06);
     border: 1px solid rgba(255, 255, 255, .12);
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     padding: 26px;
 }
 .lt-tip i {
@@ -326,7 +326,7 @@
 .lt-covc .ic {
     width: 60px;
     height: 60px;
-    border-radius: 14px;
+    border-radius: var(--sk-radius, 16px);
     background: #6C365B;
     color: #fff;
     display: flex;
@@ -352,7 +352,7 @@
 .lt-faq details {
     background: #fff;
     border: 1px solid var(--sk-line);
-    border-radius: 12px;
+    border-radius: var(--sk-radius-sm, 12px);
     padding: 0 24px;
 }
 .lt-faq details[open] {

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 170" fill="none" aria-hidden="true">
+  <!-- Brand book main pattern as used on the website mockups: a three-stripe tangerine ribbon.
+       The white middle stroke assumes it sits on a white card. -->
+  <defs>
+    <linearGradient id="r" x1="0" y1="0" x2="360" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EC5D2C"/>
+      <stop offset=".3" stop-color="#F48922"/>
+      <stop offset=".82" stop-color="#F48922"/>
+      <stop offset="1" stop-color="#B2492E"/>
+    </linearGradient>
+  </defs>
+  <g stroke-linecap="butt" stroke-linejoin="round">
+    <path d="M58 -20C40 60 52 118 96 124c52 8 84-64 140-98 40-24 86-22 124 8" stroke="url(#r)" stroke-width="58"/>
+    <path d="M58 -20C40 60 52 118 96 124c52 8 84-64 140-98 40-24 86-22 124 8" stroke="#fff" stroke-width="38"/>
+    <path d="M58 -20C40 60 52 118 96 124c52 8 84-64 140-98 40-24 86-22 124 8" stroke="url(#r)" stroke-width="18"/>
+  </g>
+</svg>

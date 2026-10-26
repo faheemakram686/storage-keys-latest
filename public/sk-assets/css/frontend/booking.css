@@ -3,7 +3,7 @@
 }
 .city-name-option {
     color: var(--ltn__secondary-color);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: var(--sk-font, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif);
     letter-spacing: 0.5px;
     font-weight: 800;
     font-size: 1.3rem;
@@ -20,7 +20,7 @@
 }
 
 .locations-section-header, .sizes-section-header, .units-section-header, .price-filter-header, .size-sqft-section-header, .add-ons-section-header {
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
     color: var(--ltn__secondary-color);
     background-color: #E6E7E8;
     border: 1px solid var(--border-color-7);
@@ -88,7 +88,7 @@ input[type="checkbox"]
     background-color: #E6E7E8;
 }
 .size-container {
-    font-family: fantasy;
+    font-family: var(--sk-font, fantasy);
     height: 25px;
     position: relative;
     color: var(--ltn__primary-color-2);
@@ -156,7 +156,7 @@ input[type="checkbox"]
     border: 1px solid var(--border-color-6);
     text-transform: uppercase;
     margin-top: -20px;
-    font-family: 'Nunito Sans', sans-serif;;
+    font-family: var(--sk-font, 'Nunito Sans', sans-serif);
 }
 
 .btn-reserve, .btn-qoutation {
@@ -168,13 +168,13 @@ input[type="checkbox"]
     text-transform: uppercase;
     margin-top: 10px;
     font-weight: 600;
-    font-family: 'Nunito Sans', sans-serif;;
+    font-family: var(--sk-font, 'Nunito Sans', sans-serif);
     font-size: 0.9rem;
     border: 1px solid var(--ltn__secondary-color);
 }
 
 .apartment-size {
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
     font-weight: 600;
 }
 
@@ -204,7 +204,7 @@ input[type="checkbox"]
 }
 
 .term-section-header, .insurance-section-header, .terms-conditions-section-header, .padlock-section-header, .summary-section-header {
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
     color: var(--ltn__secondary-color);
     background-color: #E6E7E8;
     border: 2px solid var(--border-color-7);
@@ -221,7 +221,7 @@ input[type="checkbox"]
     padding-top: 40px;
     padding-bottom: 20px;
     margin-top: -20px;
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
     padding: 30px;
 }
 .order-section-body{
@@ -231,10 +231,10 @@ input[type="checkbox"]
     padding-top: 40px;
     padding-bottom: 20px;
     margin-top: -20px;
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
 }
 .order-section-header{
-    font-family: sans-serif;
+    font-family: var(--sk-font, sans-serif);
     color: var(--ltn__secondary-color);
     background-color: #E6E7E8;
     border: 2px solid var(--border-color-7);
