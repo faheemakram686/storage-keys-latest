@@ -144,8 +144,8 @@ font-family: 'Rajdhani', sans-serif;
   /* Lighten */
   --ltn__heading-color: #050505;
   --ltn__paragraph-color: #4A403C;
-  --ltn__heading-font: var(--sk-font, 'Poppins', sans-serif);
-  --ltn__body-font: var(--sk-font, 'Poppins', sans-serif);
+  --ltn__heading-font: var(--sk-font, 'Figtree', sans-serif);
+  --ltn__body-font: var(--sk-font, 'Figtree', sans-serif);
   /* Muted text / footer */
   --ltn__color-1: #7A7168;
   --ltn__color-2: #E7DDD4;

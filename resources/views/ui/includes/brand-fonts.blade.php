@@ -1,5 +1,5 @@
 {{-- Brand book typography: Capitana (licensed, self-hosted). Drop the .woff2 files into public/fonts/capitana/
-     and they are picked up automatically; until then --sk-font falls back to Poppins. --}}
+     and they are picked up automatically; until then --sk-font falls back to Figtree. --}}
 @php
     $capitanaWeights = [
         100 => 'Capitana-Thin',
