@@ -37,8 +37,8 @@ html, body {
   --sk-radius-lg: 22px;
   --sk-radius-pill: 999px;
   --sk-section-y: 84px;
-  /* Brand book: Capitana (EN) / Tajawal (AR). Poppins stands in until Capitana is installed (ui.includes.brand-fonts) */
-  --sk-font: 'Capitana', 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  /* Brand book: Capitana (EN) / Tajawal (AR). Figtree stands in until Capitana is installed (ui.includes.brand-fonts) */
+  --sk-font: 'Capitana', 'Figtree', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --sk-font-ar: 'Tajawal', 'Capitana', 'Segoe UI', system-ui, sans-serif;
   /* Brand book gradients (p.9). Grape-led so white text stays readable */
   --sk-grad-grape: radial-gradient(70% 160% at 100% 100%, rgba(236, 93, 44, .55) 0%, rgba(236, 93, 44, 0) 60%), radial-gradient(60% 140% at 0% 0%, rgba(5, 5, 5, .45) 0%, rgba(5, 5, 5, 0) 60%), #6C365B;
