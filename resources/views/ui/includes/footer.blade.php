@@ -36,7 +36,7 @@
           <a href="{{ url('/contact-us') }}">Contact Us</a>
         </div>
       </div>
-      <div class="pv-foot-col pv-foot-services">
+      <div class="pv-foot-col">
         <span class="h5">Our Services</span>
         <div class="pv-foot-links">
           <a href="{{ url('/personal-storage') }}">Personal Storage</a>
@@ -46,6 +46,11 @@
           <a href="{{ url('/appliance-storage') }}">Appliance Storage</a>
           <a href="{{ url('/business-storage') }}">Business Storage</a>
           <a href="{{ url('/warehouse-storage') }}">Warehouse Storage</a>
+        </div>
+      </div>
+      <div class="pv-foot-col">
+        <span class="h5">Specialised Storage</span>
+        <div class="pv-foot-links">
           <a href="{{ url('/climate-controlled-storage') }}">Climate Controlled Storage</a>
           <a href="{{ url('/moving-services') }}">Moving Services</a>
           <a href="{{ url('/luggage-storage') }}">Luggage Storage</a>

@@ -447,7 +447,7 @@ body {
 }
 .pv-foot-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.7fr 2fr 0.85fr 1.05fr;
+  grid-template-columns: 1.2fr 0.75fr 0.95fr 1.1fr 0.8fr 1.1fr;
   gap: 36px 28px;
   align-items: start;
 }

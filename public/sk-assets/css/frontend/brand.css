@@ -901,3 +901,18 @@ body .so-quote-points li i {
     display: none !important;
   }
 }
+
+/* Footer: six columns on wide screens, three on small laptops */
+@media (max-width: 1240px) and (min-width: 992px) {
+  body .pv-foot-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Corner line patterns: no free corner on narrow phones, so they would sit on the heading */
+@media (max-width: 575px) {
+  .sk-lines-tr::before,
+  .sk-lines-bl::before {
+    display: none;
+  }
+}

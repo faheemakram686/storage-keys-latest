@@ -572,7 +572,7 @@
     </section>
 
     <!-- ============ TESTIMONIALS + LOGOS ============ -->
-    <section class="sk-section sk-lines-bl" style="background:var(--sk-soft);">
+    <section class="sk-section sk-lines-tr" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Customer Reviews</span>
