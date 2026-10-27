@@ -83,7 +83,7 @@
 
 @if($showIndustries || $relatedServices || $relatedGuides)
 <!-- ============ EXPLORE MORE ============ -->
-<section class="sk-section sk-explore">
+<section class="sk-section sk-related">
     <div class="sk-container">
         <div class="sk-section-head">
             <span class="sk-eyebrow sk-eyebrow--center">Explore More</span>
@@ -91,27 +91,27 @@
         </div>
 
         @if($showIndustries)
-            <div class="sk-explore-chips">
+            <div class="sk-related-chips">
                 @foreach($industries as $slug)
-                    <a href="{{ url('/' . $slug) }}" class="sk-explore-chip">{{ $services[$slug] }}</a>
+                    <a href="{{ url('/' . $slug) }}" class="sk-related-chip">{{ $services[$slug] }}</a>
                 @endforeach
             </div>
         @endif
 
         @if($relatedServices)
-            <span class="h3 sk-explore-title">Related Storage Services</span>
-            <div class="sk-explore-chips">
+            <span class="h3 sk-related-title">Related Storage Services</span>
+            <div class="sk-related-chips">
                 @foreach($relatedServices as $slug)
-                    <a href="{{ url('/' . $slug) }}" class="sk-explore-chip">{{ $services[$slug] }}</a>
+                    <a href="{{ url('/' . $slug) }}" class="sk-related-chip">{{ $services[$slug] }}</a>
                 @endforeach
             </div>
         @endif
 
         @if($relatedGuides)
-            <span class="h3 sk-explore-title">Related Guides</span>
-            <div class="sk-explore-guides">
+            <span class="h3 sk-related-title">Related Guides</span>
+            <div class="sk-related-guides">
                 @foreach($relatedGuides as $slug)
-                    <a href="{{ url('/blogs/' . $slug) }}" class="sk-explore-guide">
+                    <a href="{{ url('/blogs/' . $slug) }}" class="sk-related-guide">
                         <span>{{ $guides[$slug] }}</span>
                         <i class="fas fa-arrow-right" aria-hidden="true"></i>
                     </a>

@@ -1171,7 +1171,7 @@ button.theme-btn-2,
 }
 
 /* ============ EXPLORE MORE (ui.partials.explore-more) ============ */
-.sk-explore .sk-explore-title {
+.sk-related .sk-related-title {
   display: block;
   margin: 28px 0 14px;
   font-size: 18px;
@@ -1179,13 +1179,13 @@ button.theme-btn-2,
   color: var(--sk-text, #050505);
   text-align: center;
 }
-.sk-explore-chips {
+.sk-related-chips {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
 }
-.sk-explore-chip {
+.sk-related-chip {
   display: inline-block;
   padding: 9px 18px;
   border: 1px solid var(--sk-line, #E7DDD4);
@@ -1197,16 +1197,16 @@ button.theme-btn-2,
   text-decoration: none;
   transition: border-color .2s, color .2s;
 }
-.sk-explore-chip:hover {
+.sk-related-chip:hover {
   border-color: var(--sk-accent, #F48922);
   color: var(--sk-accent, #F48922);
 }
-.sk-explore-guides {
+.sk-related-guides {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
-.sk-explore-guide {
+.sk-related-guide {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1222,16 +1222,16 @@ button.theme-btn-2,
   text-decoration: none;
   transition: border-color .2s, color .2s;
 }
-.sk-explore-guide i {
+.sk-related-guide i {
   color: var(--sk-accent, #F48922);
   flex: none;
 }
-.sk-explore-guide:hover {
+.sk-related-guide:hover {
   border-color: var(--sk-accent, #F48922);
   color: var(--sk-accent, #F48922);
 }
 @media (max-width: 767px) {
-  .sk-explore-guides {
+  .sk-related-guides {
     grid-template-columns: 1fr;
   }
 }
