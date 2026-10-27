@@ -902,10 +902,13 @@ body .so-quote-points li i {
   }
 }
 
-/* Footer: six columns on wide screens, three on small laptops */
+/* Footer: seven columns on wide screens; on small laptops the brand takes its own row above two rows of three */
 @media (max-width: 1240px) and (min-width: 992px) {
   body .pv-foot-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  body .pv-foot-brand {
+    grid-column: 1 / -1;
   }
 }
 
