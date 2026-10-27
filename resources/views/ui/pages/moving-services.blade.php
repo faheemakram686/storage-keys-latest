@@ -237,6 +237,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'moving-services'])
+
     <!-- ============ FAQ ============ -->
     <section class="sk-section">
         <div class="sk-container">

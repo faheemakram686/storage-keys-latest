@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Construction Storage That Keeps Sites Clear</h2>
                     <p>Construction sites in the UAE rarely have spare room. Laydown areas fill up quickly, site containers get hot and crowded, and expensive fixtures delivered early sit exposed to dust, sun and theft until the trades are ready to install them.</p>
-                    <p>StorageKeys provides construction storage for main contractors, fit-out companies, MEP subcontractors, joiners and small builders across Dubai and Sharjah. Our Sharjah facility is monitored around the clock with coded access, so materials and tools are protected between deliveries and between contracts.</p>
+                    <p>StorageKeys provides construction storage for main contractors, fit-out companies, MEP subcontractors, joiners and small builders across Dubai and Sharjah. Our facilities in Al Quoz, Dubai and Sharjah are monitored around the clock with coded access, so materials and tools are protected between deliveries and between contracts.</p>
                     <p>It sits within our <a href="{{ url('/business-storage') }}">storage services for companies</a>, alongside space for offices, stock and archives. Your site team gets one place to send surplus stock, returned items and kit waiting for the next job, instead of several half-full containers spread across different projects.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
@@ -207,11 +207,13 @@
             </div>
             <div class="lt-cover sk-reveal">
                 <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Dubai South, Jebel Ali, Dubai Industrial City, Al Quoz, Business Bay, Dubai Hills and Dubai Creek Harbour.</p></div>
-                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Industrial Areas, Al Sajaa, Muwaileh, Aljada and Al Khan. Our Sharjah facility suits contractors working in both emirates.</p></div>
+                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Industrial Areas, Al Sajaa, Muwaileh, Aljada and Al Khan. Our facilities in Al Quoz, Dubai and Sharjah suit contractors working in both emirates.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-project-diagram"></i></div><h4>Multiple Projects</h4><p>One unit can hold materials for each site in separate, labelled zones, a single organised point of supply instead of stock spread across containers, vans and cabins.</p></div>
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'construction-storage'])
 
     <section class="sk-section sk-section--soft">
         <div class="sk-container">

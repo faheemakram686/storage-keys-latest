@@ -246,6 +246,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'appliance-storage'])
+
     <!-- ============ QUOTE CTA ============ -->
     <section class="sk-section" id="ps-quote" style="background:var(--sk-soft);">
         <div class="sk-container">

@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Art Storage Built Around the UAE Climate</h2>
                     <p>Artwork reacts to its surroundings. Canvas slackens and tightens as humidity changes, wooden frames and panels move, paper cockles, and pigments fade in strong light. In the UAE, where summer heat and coastal humidity swing sharply, a spare room or garage is rarely a safe place for pieces you care about.</p>
-                    <p>StorageKeys provides art storage for private collectors, galleries, artists, interior designers and families across Dubai and Sharjah. Our Sharjah facility is monitored around the clock and the units are climate controlled, so works are kept away from heat, damp and daylight while they are not on display.</p>
+                    <p>StorageKeys provides art storage for private collectors, galleries, artists, interior designers and families across Dubai and Sharjah. Our facilities in Al Quoz, Dubai and Sharjah are monitored around the clock and the units are climate controlled, so works are kept away from heat, damp and daylight while they are not on display.</p>
                     <p>Art storage sits alongside our <a href="{{ url('/personal-storage') }}">storage for household belongings</a>, so a family can keep a painting collection and other valuables in one place.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
@@ -205,12 +205,14 @@
                 <p>Tell us about any pieces that need special handling, such as large canvases, heavy sculpture or fragile antiques, and we will plan the collection around them.</p>
             </div>
             <div class="lt-cover sk-reveal">
-                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Alserkal Avenue, Al Quoz, DIFC, Jumeirah, Emirates Hills, Palm Jumeirah and Dubai Marina. Our Sharjah facility gives Dubai collectors a secure option outside busy residential areas.</p></div>
+                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Alserkal Avenue, Al Quoz, DIFC, Jumeirah, Emirates Hills, Palm Jumeirah and Dubai Marina. Our facilities in Al Quoz, Dubai and Sharjah give collectors a secure option outside busy residential areas.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Al Majaz, Al Khan, Al Nahda and Muwaileh, collecting from homes, galleries and studios.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-route"></i></div><h4>Planned Collections</h4><p>Large or valuable works collected at a time that suits you, with route, vehicle and wrapping planned in advance to limit exposure to summer heat on the road.</p></div>
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'art-storage'])
 
     <section class="sk-section">
         <div class="sk-container">

@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Office Storage That Frees Up Space You Are Paying For</h2>
                     <p>Office space in Dubai is priced by the square foot, so every corner taken up by spare desks, archive boxes or old monitors is costing the business money. Moving those items out of the workplace into a secure unit means the space you rent goes back to people and work.</p>
-                    <p>StorageKeys provides office storage for companies across Dubai and Sharjah, from small teams in business centres to corporate offices in towers and free zones. Our facility in Sharjah is monitored around the clock, and the units are climate controlled, which matters for furniture, paper and electronics in the UAE summer.</p>
+                    <p>StorageKeys provides office storage for companies across Dubai and Sharjah, from small teams in business centres to corporate offices in towers and free zones. Our facilities in Al Quoz, Dubai and Sharjah are monitored around the clock, and the units are climate controlled, which matters for furniture, paper and electronics in the UAE summer.</p>
                     <p>It sits within our wider <a href="{{ url('/business-storage') }}">storage options for companies</a>, and suits anything that needs to stay safe and retrievable rather than in the way.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
@@ -206,12 +206,14 @@
                 <p>Collections are scheduled around your working hours, so the move does not disrupt your team or your building's loading rules.</p>
             </div>
             <div class="lt-cover sk-reveal">
-                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Business Bay, DIFC, Downtown, Dubai Internet City, JLT, Al Quoz and Deira. Our Sharjah facility is a cost-effective alternative to storage inside expensive commercial districts.</p></div>
+                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Business Bay, DIFC, Downtown, Dubai Internet City, JLT, Al Quoz and Deira. Our facilities in Al Quoz, Dubai and Sharjah are a cost-effective alternative to storage inside expensive commercial districts.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>From Al Majaz and Al Nahda to the industrial areas and free zones.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-building"></i></div><h4>Towers &amp; Business Centres</h4><p>Most buildings need a gate pass or NOC before furniture can leave. Book the loading bay and service lift early, share the time slot with us, and we will work within it.</p></div>
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'office-storage'])
 
     <section class="sk-section sk-section--soft">
         <div class="sk-container">

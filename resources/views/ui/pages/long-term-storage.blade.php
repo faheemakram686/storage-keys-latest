@@ -183,6 +183,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'long-term-storage'])
+
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="sk-section-head">

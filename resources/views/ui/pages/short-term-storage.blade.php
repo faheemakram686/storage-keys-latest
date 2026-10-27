@@ -261,6 +261,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'short-term-storage'])
+
     <section class="sk-section">
         <div class="sk-container">
             <div class="sk-section-head">

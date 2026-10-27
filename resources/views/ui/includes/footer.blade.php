@@ -60,6 +60,17 @@
           <a href="{{ url('/long-term-storage') }}">Long Term Storage</a>
         </div>
       </div>
+      <div class="pv-foot-col">
+        <span class="h5">Industries</span>
+        <div class="pv-foot-links">
+          <a href="{{ url('/office-storage') }}">Office Storage</a>
+          <a href="{{ url('/equipment-storage') }}">Equipment Storage</a>
+          <a href="{{ url('/construction-storage') }}">Construction Storage</a>
+          <a href="{{ url('/pharmaceutical-storage') }}">Pharmaceutical Storage</a>
+          <a href="{{ url('/art-storage') }}">Art Storage</a>
+          <a href="{{ url('/boat-storage') }}">Boat Storage</a>
+        </div>
+      </div>
       <div class="pv-foot-col pv-foot-policies">
         <span class="h5">Policies</span>
         <div class="pv-foot-links">

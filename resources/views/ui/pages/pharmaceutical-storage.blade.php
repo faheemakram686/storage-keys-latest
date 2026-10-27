@@ -30,7 +30,7 @@
         [
             '@type' => 'FAQPage',
             'mainEntity' => [
-                ['@type' => 'Question', 'name' => 'Is your facility licensed for pharmaceutical storage?', 'acceptedAnswer' => ['@type' => 'Answer', 'text' => 'Yes. Our Sharjah facility holds the licence required for pharmaceutical storage in the UAE, and documentation is available to customers on request.']],
+                ['@type' => 'Question', 'name' => 'Are your facilities licensed for pharmaceutical storage?', 'acceptedAnswer' => ['@type' => 'Answer', 'text' => 'Yes. Our facilities in Al Quoz, Dubai and Sharjah hold the licence required for pharmaceutical storage in the UAE, and documentation is available to customers on request.']],
                 ['@type' => 'Question', 'name' => 'Can you store refrigerated medicines?', 'acceptedAnswer' => ['@type' => 'Answer', 'text' => 'Products that need refrigeration or freezing must be confirmed before booking. Tell us the required temperature range and we will advise honestly whether we can meet it.']],
                 ['@type' => 'Question', 'name' => 'Who can access stored pharmaceutical stock?', 'acceptedAnswer' => ['@type' => 'Answer', 'text' => 'Only staff you authorise. Units are protected by 24/7 CCTV and coded access, and you can update the list of authorised people at any time.']],
                 ['@type' => 'Question', 'name' => 'What healthcare products cannot be stored?', 'acceptedAnswer' => ['@type' => 'Answer', 'text' => 'Controlled drugs, radioactive materials, hazardous chemicals, flammable products and clinical waste need specialist facilities and cannot be stored with us.']],
@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Pharmaceutical Storage Built for Compliance and Control</h2>
                     <p>Medicines and medical supplies are some of the most regulated products in the UAE. They need stable conditions, controlled access and clear records, and a back room in a pharmacy or a shared warehouse corner often cannot provide all three.</p>
-                    <p>StorageKeys provides pharmaceutical storage for pharmacies, clinics, medical centres, distributors and suppliers across Dubai and Sharjah. Our Sharjah facility holds the licence required for storing pharmaceutical products in the UAE, and documentation is available to customers on request.</p>
+                    <p>StorageKeys provides pharmaceutical storage for pharmacies, clinics, medical centres, distributors and suppliers across Dubai and Sharjah. Our facilities in Al Quoz, Dubai and Sharjah hold the licence required for storing pharmaceutical products in the UAE, and documentation is available to customers on request.</p>
                     <p>It sits within our <a href="{{ url('/business-storage') }}">storage for companies across the UAE</a>, so healthcare businesses can keep regulated stock, records and equipment with one provider. Flexible, quote-based terms mean you pay for the space you use, not a long fixed lease.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
@@ -227,6 +227,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'pharmaceutical-storage'])
+
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="sk-section-head">
@@ -235,8 +237,8 @@
             </div>
             <div class="lt-faq">
                 <details open>
-                    <summary>Is your facility licensed for pharmaceutical storage?</summary>
-                    <div class="a">Yes. Our Sharjah facility holds the licence required for pharmaceutical storage in the UAE, and documentation is available to customers on request.</div>
+                    <summary>Are your facilities licensed for pharmaceutical storage?</summary>
+                    <div class="a">Yes. Our facilities in Al Quoz, Dubai and Sharjah hold the licence required for pharmaceutical storage in the UAE, and documentation is available to customers on request.</div>
                 </details>
                 <details>
                     <summary>Can you store refrigerated medicines?</summary>
