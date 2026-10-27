@@ -447,9 +447,18 @@ body {
 }
 .pv-foot-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.75fr 0.95fr 1.1fr 0.8fr 1.1fr;
+  grid-template-columns: 1.2fr 0.75fr 0.95fr 1.05fr 1fr 0.8fr 1.1fr;
   gap: 36px 28px;
   align-items: start;
+}
+/* Seven columns get cramped below 1280px: brand spans two, then 2 + 4 links columns. */
+@media (min-width: 1101px) and (max-width: 1280px) {
+  .pv-foot-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .pv-foot-brand {
+    grid-column: span 2;
+  }
 }
 .pv-foot-brand .pv-foot-logo {
   display: inline-block;
@@ -1159,4 +1168,70 @@ button.theme-btn-2,
 .btn-submit {
   padding: 14px 36px;
   border-radius: var(--sk-radius-sm, 12px);
+}
+
+/* ============ EXPLORE MORE (ui.partials.explore-more) ============ */
+.sk-explore .sk-explore-title {
+  display: block;
+  margin: 28px 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sk-text, #050505);
+  text-align: center;
+}
+.sk-explore-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.sk-explore-chip {
+  display: inline-block;
+  padding: 9px 18px;
+  border: 1px solid var(--sk-line, #E7DDD4);
+  border-radius: var(--sk-radius-pill, 999px);
+  background: #fff;
+  color: var(--sk-copy, #2E2826);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.sk-explore-chip:hover {
+  border-color: var(--sk-accent, #F48922);
+  color: var(--sk-accent, #F48922);
+}
+.sk-explore-guides {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.sk-explore-guide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid var(--sk-line, #E7DDD4);
+  border-radius: var(--sk-radius, 16px);
+  background: #fff;
+  color: var(--sk-copy, #2E2826);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.sk-explore-guide i {
+  color: var(--sk-accent, #F48922);
+  flex: none;
+}
+.sk-explore-guide:hover {
+  border-color: var(--sk-accent, #F48922);
+  color: var(--sk-accent, #F48922);
+}
+@media (max-width: 767px) {
+  .sk-explore-guides {
+    grid-template-columns: 1fr;
+  }
 }

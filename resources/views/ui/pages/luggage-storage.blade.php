@@ -144,6 +144,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'luggage-storage'])
+
     <section class="sk-section">
         <div class="sk-container">
             <div class="sk-section-head">

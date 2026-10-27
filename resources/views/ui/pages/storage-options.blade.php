@@ -103,6 +103,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'storage-options'])
+
     <!-- ============ STATS ============ -->
     <div class="sk-statband">
         <div class="sk-container">

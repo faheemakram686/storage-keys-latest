@@ -144,6 +144,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'car-storage'])
+
     <!-- ============ QUOTE CTA ============ -->
     <section class="sk-section" id="car-quote">
         <div class="sk-container">

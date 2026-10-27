@@ -244,6 +244,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'box-storage'])
+
     <!-- ============ QUOTE CTA ============ -->
     <section class="sk-section" id="ps-quote" style="background:var(--sk-soft);">
         <div class="sk-container">

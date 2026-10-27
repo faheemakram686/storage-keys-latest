@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Equipment Storage for Kit That Earns Its Keep</h2>
                     <p>Equipment is expensive to replace and awkward to keep. Staging and lighting rigs, treadmills, projectors and generators spend weeks or months idle between jobs, and in Dubai the space to park them costs as much as the space you work in.</p>
-                    <p>StorageKeys provides equipment storage for event companies, gyms, AV and IT teams, schools and tradespeople across Dubai and Sharjah. Our Sharjah facility is monitored around the clock and the units are climate controlled, so electronics, motors, rubber and cables are not sitting through a UAE summer in a hot container.</p>
+                    <p>StorageKeys provides equipment storage for event companies, gyms, AV and IT teams, schools and tradespeople across Dubai and Sharjah. Our facilities in Al Quoz, Dubai and Sharjah are monitored around the clock and the units are climate controlled, so electronics, motors, rubber and cables are not sitting through a UAE summer in a hot container.</p>
                     <p>It forms part of our wider <a href="{{ url('/business-storage') }}">commercial storage for companies</a>, and suits anything that needs to be ready to load out the moment a booking comes in.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
@@ -206,11 +206,13 @@
             </div>
             <div class="lt-cover sk-reveal">
                 <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Al Quoz, Dubai Production City, Dubai Investments Park, JLT, Business Bay and Dubai South near the exhibition centre.</p></div>
-                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Al Nahda, Industrial Areas, Al Khan and Muwaileh. Our Sharjah facility gives Dubai companies cost-effective space outside expensive commercial districts.</p></div>
+                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Al Nahda, Industrial Areas, Al Khan and Muwaileh. Our facilities in Al Quoz, Dubai and Sharjah give companies cost-effective space outside expensive commercial districts.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-calendar-alt"></i></div><h4>Seasonal Plans</h4><p>Tell us your busy and quiet months. We can plan a unit size that suits the off season and adjust it when the calendar fills up again.</p></div>
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'equipment-storage'])
 
     <section class="sk-section sk-section--soft">
         <div class="sk-container">

@@ -178,6 +178,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'climate-controlled-storage'])
+
     <!-- ============ FAQ ============ -->
     <section class="sk-section">
         <div class="sk-container">

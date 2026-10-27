@@ -280,6 +280,8 @@
         </div>
     </section>
 
+    @include('ui.partials.explore-more', ['page' => 'residential-storage'])
+
     <!-- ============ FAQ ============ -->
     <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">

@@ -91,7 +91,7 @@
                     <span class="sk-eyebrow">Overview</span>
                     <h2>Boat Storage Away From Sun, Salt and Crowded Berths</h2>
                     <p>Owning a boat in the UAE is a pleasure in winter and a problem in summer. Months of strong sun fade gelcoat and upholstery, salt air corrodes fittings, and a boat left on a driveway or in a villa garden can break community rules and attract attention from the wrong people.</p>
-                    <p>StorageKeys provides boat storage for owners of leisure boats, small yachts, RIBs and jet skis across Dubai and Sharjah. Our Sharjah facility is monitored around the clock with coded access, giving your boat and its equipment a secure place to wait out the hot months or your time away.</p>
+                    <p>StorageKeys provides boat storage for owners of leisure boats, small yachts, RIBs and jet skis across Dubai and Sharjah. Our facilities in Al Quoz, Dubai and Sharjah are monitored around the clock with coded access, giving your boat and its equipment a secure place to wait out the hot months or your time away.</p>
                     <p>It sits within our <a href="{{ url('/vehicle-storage') }}">storage for vehicles of every kind</a>, so one provider can look after the boat, the trailer and the family car together.</p>
                 </div>
                 <div class="lt-media" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
@@ -141,7 +141,7 @@
                 <div>
                     <span class="sk-eyebrow">Security &amp; Conditions</span>
                     <h2>Protecting Your Boat Between Trips</h2>
-                    <p>A boat and its electronics, engines and gear represent a large investment. Our facility is monitored by CCTV around the clock and access is controlled by code, so only you and the people you authorise can reach it.</p>
+                    <p>A boat and its electronics, engines and gear represent a large investment. Our facilities are monitored by CCTV around the clock and access is controlled by code, so only you and the people you authorise can reach it.</p>
                     <ul class="lt-points">
                         <li class="row-i"><div class="ic"><i class="fas fa-ruler-combined"></i></div><div><h4>Space Planned Around Your Boat</h4><p>Planned around its length and height, with gear stored alongside the boat or in a separate unit.</p></div></li>
                         <li class="row-i"><div class="ic"><i class="fas fa-snowflake"></i></div><div><h4>Gear Kept Cool &amp; Dry</h4><p>Cushions, sails and electronics are best kept in <a href="{{ url('/climate-controlled-storage') }}">a cool, dry unit</a> rather than aboard, where heat and humidity break down fabrics, foam and circuit boards.</p></div></li>
@@ -206,11 +206,13 @@
             </div>
             <div class="lt-cover sk-reveal">
                 <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Dubai</h4><p>Owners who launch from Dubai Marina, Dubai Harbour, Jumeirah, Umm Suqeim, Palm Jumeirah and Dubai Creek Harbour.</p></div>
-                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Owners around Al Khan, Al Layyeh and Al Heera. Our Sharjah facility is a practical base for owners in both emirates.</p></div>
+                <div class="lt-covc"><div class="ic"><i class="fas fa-map-marker-alt"></i></div><h4>Sharjah</h4><p>Owners around Al Khan, Al Layyeh and Al Heera. Our facilities in Al Quoz, Dubai and Sharjah are a practical base for owners in both emirates.</p></div>
                 <div class="lt-covc"><div class="ic"><i class="fas fa-route"></i></div><h4>East Coast &amp; Musandam Trips</h4><p>For occasional longer trips, the boat stays secure between outings without tying up a berth all year.</p></div>
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'boat-storage'])
 
     <section class="sk-section">
         <div class="sk-container">

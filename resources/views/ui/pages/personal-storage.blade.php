@@ -13,8 +13,8 @@
         <div class="sk-container">
             <div class="ps-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <a href="{{ url('/storage-options') }}">Storage Solutions</a> <i class="fas fa-chevron-right"></i> <span>Personal Storage</span></div>
             <span class="sk-eyebrow" style="color:#ffcf9e;">Personal Storage</span>
-            <h1>Personal Storage Solutions in <span>Dubai &amp; Abu Dhabi</span></h1>
-            <p class="lead">Create more space at home with flexible personal storage in Dubai and Abu Dhabi. Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible.</p>
+            <h1>Personal Storage Solutions in <span>Dubai &amp; Sharjah</span></h1>
+            <p class="lead">Create more space at home with flexible personal storage in Dubai and Sharjah. Whether you're moving, renovating or travelling, Storage Keys keeps your belongings safe, secure and easily accessible.</p>
             <div class="ps-hero-cta">
                 <a href="#ps-quote" class="sk-btn sk-btn-primary"><i class="fas fa-box-open"></i> Get a Free Quote</a>
                 <a href="#ps-builder" class="sk-btn sk-btn-ghost"><i class="fas fa-tasks"></i> Build Your Storage List</a>
@@ -197,12 +197,12 @@
         </div>
     </section>
 
-    <!-- ============ COVERAGE DUBAI & ABU DHABI ============ -->
+    <!-- ============ COVERAGE DUBAI & SHARJAH ============ -->
     <section class="sk-section" style="background:var(--sk-soft);">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow" style="justify-content:center;">Where We Serve</span>
-                <h2>Personal Storage in Dubai &amp; Abu Dhabi</h2>
+                <h2>Personal Storage in Dubai &amp; Sharjah</h2>
                 <p>Short-term storage during a move or long-term space for household belongings — our facilities are designed to suit different lifestyles, with on-demand services and flexible rental plans that keep your belongings safe and accessible.</p>
             </div>
             <div class="ps-cover sk-reveal">
@@ -212,7 +212,7 @@
                 </div>
                 <div class="ps-covc">
                     <div class="ic"><i class="fas fa-map-marker-alt"></i></div>
-                    <div><span class="h4">Abu Dhabi</span><p>Secure, on-demand personal storage for customers in Abu Dhabi — short-term during a move or long-term for belongings you want to keep safe and accessible.</p></div>
+                    <div><span class="h4">Sharjah</span><p>Secure, on-demand personal storage for customers in Sharjah — short-term during a move or long-term for belongings you want to keep safe and accessible.</p></div>
                 </div>
             </div>
         </div>
@@ -236,6 +236,8 @@
             </div>
         </div>
     </section>
+
+    @include('ui.partials.explore-more', ['page' => 'personal-storage'])
 
     <!-- ============ FAQ ============ -->
     <section class="sk-section" style="background:var(--sk-soft);">
@@ -262,8 +264,8 @@
                     <div class="a">Yes. Our facilities include CCTV surveillance, secure access controls and professionally managed storage environments for added peace of mind.</div>
                 </details>
                 <details>
-                    <summary>Do you offer personal storage services in Abu Dhabi?</summary>
-                    <div class="a">Yes. We provide flexible personal storage solutions for customers in Dubai, Abu Dhabi and across the UAE.</div>
+                    <summary>Where are your personal storage facilities?</summary>
+                    <div class="a">We have two facilities, in Al Quoz, Dubai and in Sharjah, serving customers across the UAE.</div>
                 </details>
             </div>
         </div>
