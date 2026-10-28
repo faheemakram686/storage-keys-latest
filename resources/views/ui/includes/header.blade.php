@@ -38,7 +38,7 @@
 </div>
 <header class="pv-header">
   <div class="sk-container pv-header-in">
-    <a href="{{ url('/') }}" class="pv-logo"><img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys" width="223" height="64" decoding="async"></a>
+    <a href="{{ url('/') }}" class="pv-logo"><picture><source srcset="{{ asset('sk-assets/assets/images/frontend/front-logo.webp') }}" type="image/webp"><img src="{{ asset('sk-assets/assets/images/frontend/front-logo.png') }}" alt="StorageKeys" width="223" height="64" decoding="async"></picture></a>
     <nav class="pv-nav">
       <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
       <a href="{{ url('/about-us') }}" class="{{ request()->is('about-us') ? 'active' : '' }}">About Us</a>

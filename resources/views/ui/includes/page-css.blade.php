@@ -86,5 +86,11 @@
 @endphp
 
 @foreach($css as $file)
+@if($path === '/')
+{{-- Home: shop.css only styles the product cards far below the fold, so it must not block first paint --}}
+<link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/' . $file) }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/' . $file) }}"></noscript>
+@else
 <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/' . $file) }}">
+@endif
 @endforeach
