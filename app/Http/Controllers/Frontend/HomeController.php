@@ -249,14 +249,12 @@ class HomeController extends Controller
         return view('ui.pages.pharmaceutical-storage');
     }
 
-    public function selfStorageDubai()
+    public function location($slug)
     {
-        return view('ui.pages.self-storage-dubai');
-    }
+        $loc = \App\Support\LocationPages::page($slug);
+        abort_if(!$loc, 404);
 
-    public function selfStorageSharjah()
-    {
-        return view('ui.pages.self-storage-sharjah');
+        return view('ui.pages.location', compact('loc'));
     }
     public function bookingReservation($id)
     {

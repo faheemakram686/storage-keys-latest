@@ -53,8 +53,13 @@ Route::middleware(['set.guard'])->group(function () {
     Route::get('/construction-storage', [HomeController::class, 'constructionStorage'])->name('constructionStorage');
     Route::get('/boat-storage', [HomeController::class, 'boatStorage'])->name('boatStorage');
     Route::get('/pharmaceutical-storage', [HomeController::class, 'pharmaceuticalStorage'])->name('pharmaceuticalStorage');
-    Route::get('/self-storage-dubai', [HomeController::class, 'selfStorageDubai'])->name('selfStorageDubai');
-    Route::get('/self-storage-sharjah', [HomeController::class, 'selfStorageSharjah'])->name('selfStorageSharjah');
+    // Location pages: /self-storage-dubai, /personal-storage-sharjah, ... (App\Support\LocationPages)
+    // One literal route per slug: a second '/{slug}' route would be replaced by the CMS catch-all below.
+    foreach (\App\Support\LocationPages::slugs() as $locationSlug) {
+        Route::get('/' . $locationSlug, [HomeController::class, 'location'])
+            ->defaults('slug', $locationSlug)
+            ->name('location.' . $locationSlug);
+    }
     Route::get('/product-details', [HomeController::class, 'productDetails'])->name('productDetails');
     Route::any('/product-detail', [HomeController::class, 'productDetail'])->name('productDetails');
     Route::get('/booking', [HomeController::class, 'booking'])->name('booking');

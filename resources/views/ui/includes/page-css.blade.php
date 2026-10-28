@@ -34,7 +34,7 @@
     } elseif ($path === 'long-term-storage' || $path === 'office-storage' || $path === 'art-storage' || $path === 'equipment-storage' || $path === 'construction-storage' || $path === 'boat-storage' || $path === 'pharmaceutical-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'long-term-storage.css';
-    } elseif ($path === 'self-storage-dubai' || $path === 'self-storage-sharjah') {
+    } elseif (in_array($path, \App\Support\LocationPages::slugs(), true)) {
         $css[] = 'business-storage.css';
         $css[] = 'long-term-storage.css';
         $css[] = 'location.css';

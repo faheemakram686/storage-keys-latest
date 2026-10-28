@@ -160,7 +160,7 @@
 /* ---------- Service cards ---------- */
 .loc-services {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 .loc-svc {
@@ -198,6 +198,34 @@
 .loc-svc .more { margin-top: 16px; font-size: 13.5px; font-weight: 700; color: var(--sk-accent-2); }
 .loc-svc .more i { font-size: 11px; margin-left: 4px; transition: transform .2s ease; }
 .loc-svc:hover .more i { transform: translateX(4px); }
+
+/* ---------- What we store (service pages) ---------- */
+.loc-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.loc-item {
+    display: flex;
+    gap: 16px;
+    background: #fff;
+    border: 1px solid var(--sk-line);
+    border-radius: var(--sk-radius, 16px);
+    padding: 22px;
+}
+.loc-item .ic {
+    flex: 0 0 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--sk-primary-2);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+}
+.loc-item .h4 { display: block; font-size: 16.5px; font-weight: 700; color: var(--sk-dark); margin-bottom: 4px; }
+.loc-item p { font-size: 14px; line-height: 1.6; color: var(--sk-muted); margin: 0; }
 
 /* ---------- Map + visit ---------- */
 .loc-visit {
@@ -361,7 +389,6 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1199px) {
-    .loc-services { grid-template-columns: repeat(3, 1fr); }
     .loc-why { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 991px) {
@@ -369,6 +396,7 @@
     .loc-visit { grid-template-columns: 1fr; }
     .loc-card { max-width: 560px; }
     .loc-services,
+    .loc-items,
     .loc-areas { grid-template-columns: repeat(2, 1fr); }
     .loc-steps { grid-template-columns: repeat(2, 1fr); row-gap: 36px; }
     .loc-steps::before { display: none; }
@@ -380,6 +408,7 @@
     .loc-stats-in { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
     .loc-stat:nth-child(3) { border-left: 0; }
     .loc-services,
+    .loc-items,
     .loc-areas,
     .loc-why,
     .loc-compare,
