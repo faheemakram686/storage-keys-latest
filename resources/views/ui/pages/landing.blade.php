@@ -5,7 +5,8 @@
 
 @section('css')
 {{-- LCP: responsive preload so mobile gets the smaller hero first --}}
-<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=2" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header-mobile.webp') }}?v=3" media="(max-width: 767px)" fetchpriority="high">
+<link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=3" media="(min-width: 768px)" fetchpriority="high">
 <link rel="preconnect" href="https://d2mpatx37cqexb.cloudfront.net" crossorigin>
 <link rel="dns-prefetch" href="https://d2mpatx37cqexb.cloudfront.net">
 @endsection
@@ -17,7 +18,9 @@
     <!-- ============ HERO ============ -->
     <section class="sk-hero">
         <picture class="sk-hero-media">
-            <source srcset="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=2" type="image/webp">
+            {{-- Phones only see the centre strip of the hero (object-fit: cover), so they get a cropped file --}}
+            <source srcset="{{ asset('sk-assets/assets/images/frontend/home-header-mobile.webp') }}?v=3" media="(max-width: 767px)" type="image/webp">
+            <source srcset="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=3" type="image/webp">
             <img
                 src="{{ asset('sk-assets/assets/images/frontend/home-header.jpg') }}?v=2"
                 alt=""
@@ -180,7 +183,7 @@
                     </div>
                 </div>
                 <div class="sk-panel" id="sk-bookband">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/shop-header.jpg') }}');"></div>
+                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/shop-header.webp') }}');"></div>
                     <div class="bd">
                         <h2>Get started with secure storage solutions today</h2>
                         <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>

@@ -198,10 +198,38 @@
             <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
         </div>
         @once
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+            {{-- reCAPTCHA (~350 KB JS per frame) loads only once a visitor starts using a form, not on page load --}}
+            <script>
+            (function () {
+                var requested = false;
+
+                window.skRecaptchaReady = function () {
+                    document.querySelectorAll('.g-recaptcha').forEach(function (el) {
+                        if (!el.hasChildNodes()) {
+                            grecaptcha.render(el, { sitekey: el.getAttribute('data-sitekey') });
+                        }
+                    });
+                };
+
+                function load(e) {
+                    var form = e.target && e.target.closest ? e.target.closest('form') : null;
+                    if (requested || !form || !form.querySelector('.g-recaptcha')) return;
+                    requested = true;
+                    var s = document.createElement('script');
+                    s.src = 'https://www.google.com/recaptcha/api.js?onload=skRecaptchaReady&render=explicit';
+                    s.async = true;
+                    document.head.appendChild(s);
+                }
+
+                ['focusin', 'pointerdown', 'touchstart'].forEach(function (type) {
+                    document.addEventListener(type, load, { passive: true });
+                });
+            })();
+            </script>
             <style>
                 .sk-recaptcha { margin: .75rem 0 1rem; }
-                .sk-recaptcha .g-recaptcha { transform-origin: left top; }
+                {{-- Reserve the widget's height so it doesn't shift the form when it appears --}}
+                .sk-recaptcha .g-recaptcha { transform-origin: left top; min-height: 78px; }
                 @media (max-width: 380px) {
                     .sk-recaptcha .g-recaptcha { transform: scale(.92); }
                 }
