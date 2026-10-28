@@ -30,6 +30,8 @@
           <a href="{{ url('/') }}">Home</a>
           <a href="{{ url('/about-us') }}">About Us</a>
           <a href="{{ url('/storage-options') }}">Storage Options</a>
+          <a href="{{ url('/self-storage-dubai') }}">Storage in Dubai</a>
+          <a href="{{ url('/self-storage-sharjah') }}">Storage in Sharjah</a>
           <a href="{{ url('/booking') }}">Booking</a>
           <a href="{{ url('/shop') }}">Shop</a>
           <a href="{{ url('/blogs') }}">Blogs</a>

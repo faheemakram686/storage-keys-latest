@@ -248,6 +248,16 @@ class HomeController extends Controller
     {
         return view('ui.pages.pharmaceutical-storage');
     }
+
+    public function selfStorageDubai()
+    {
+        return view('ui.pages.self-storage-dubai');
+    }
+
+    public function selfStorageSharjah()
+    {
+        return view('ui.pages.self-storage-sharjah');
+    }
     public function bookingReservation($id)
     {
           $data['addon'] = $this->addon->getStorageUnitAddon();

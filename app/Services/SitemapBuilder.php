@@ -33,6 +33,8 @@ class SitemapBuilder
             '/construction-storage',
             '/boat-storage',
             '/pharmaceutical-storage',
+            '/self-storage-dubai',
+            '/self-storage-sharjah',
             '/shop',
             '/booking',
             '/blogs',

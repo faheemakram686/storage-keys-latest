@@ -34,6 +34,10 @@
     } elseif ($path === 'long-term-storage' || $path === 'office-storage' || $path === 'art-storage' || $path === 'equipment-storage' || $path === 'construction-storage' || $path === 'boat-storage' || $path === 'pharmaceutical-storage') {
         $css[] = 'business-storage.css';
         $css[] = 'long-term-storage.css';
+    } elseif ($path === 'self-storage-dubai' || $path === 'self-storage-sharjah') {
+        $css[] = 'business-storage.css';
+        $css[] = 'long-term-storage.css';
+        $css[] = 'location.css';
     } elseif ($path === 'about-us') {
         $css[] = 'personal-storage.css';
         $css[] = 'business-storage.css';
