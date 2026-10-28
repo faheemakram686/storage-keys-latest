@@ -146,6 +146,7 @@
                             <a href="https://maps.app.goo.gl/cZhb4mLPGVsGcooA9" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
                             <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
                         </div>
+                        <a href="{{ url('/self-storage-dubai') }}" class="sk-loc-more">Self storage in Dubai <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </article>
                 <article class="sk-loc-tile">
@@ -175,6 +176,7 @@
                             <a href="https://maps.app.goo.gl/vvWVRRKCtBnups2k6" target="_blank" rel="noopener" class="sk-btn sk-btn-primary"><i class="fas fa-directions" aria-hidden="true"></i> Get Directions</a>
                             <a href="tel:+971565018785" class="sk-btn sk-btn-outline"><i class="fas fa-phone" aria-hidden="true"></i> Call</a>
                         </div>
+                        <a href="{{ url('/self-storage-sharjah') }}" class="sk-loc-more">Self storage in Sharjah <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </article>
             </div>

@@ -176,3 +176,14 @@
         grid-template-columns: 1fr;
     }
 }
+
+.sk-loc-more {
+    align-self: flex-start;
+    margin-top: 14px;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--sk-accent-2, #F48922);
+    text-decoration: none;
+}
+.sk-loc-more:hover { text-decoration: underline; }
+.sk-loc-more i { margin-left: 4px; font-size: 12px; }

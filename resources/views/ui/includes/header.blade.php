@@ -98,7 +98,14 @@
           </div>
         </div>
       </div>
-      <a href="{{ url('/shop') }}" class="{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>
+      <div class="pv-has-sub">
+        <a href="{{ url('/self-storage-dubai') }}" class="{{ request()->is('self-storage-dubai', 'self-storage-sharjah') ? 'active' : '' }}">Locations</a>
+        <div class="pv-sub">
+          <a href="{{ url('/self-storage-dubai') }}" class="{{ request()->is('self-storage-dubai') ? 'active' : '' }}">Self Storage in Dubai</a>
+          <a href="{{ url('/self-storage-sharjah') }}" class="{{ request()->is('self-storage-sharjah') ? 'active' : '' }}">Self Storage in Sharjah</a>
+        </div>
+      </div>
+      <a href="{{ url('/shop') }}" class=""{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>
       <a href="{{ url('/booking') }}" class="{{ request()->is('booking') ? 'active' : '' }}">Booking</a>
       <a href="{{ url('/blogs') }}" class="{{ request()->is('blogs', 'blogs/*', 'blog-details') ? 'active' : '' }}">Blogs</a>
       <a href="{{ url('/contact-us') }}" class="{{ request()->is('contact-us') ? 'active' : '' }}">Contact Us</a>

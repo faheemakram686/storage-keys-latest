@@ -25,6 +25,8 @@
         'pharmaceutical-storage'     => 'Pharmaceutical Storage',
         'art-storage'                => 'Art Storage',
         'boat-storage'               => 'Boat Storage',
+        'self-storage-dubai'         => 'Self Storage in Dubai',
+        'self-storage-sharjah'       => 'Self Storage in Sharjah',
     ];
 
     $guides = [
@@ -74,6 +76,8 @@
         'pharmaceutical-storage'     => [['climate-controlled-storage', 'business-storage', 'warehouse-storage', 'office-storage', 'equipment-storage', 'long-term-storage'], ['climate-controlled-storage-worth-it', 'secure-storage-dubai', 'choose-best-storage-company-dubai']],
         'art-storage'                => [['climate-controlled-storage', 'furniture-storage', 'long-term-storage', 'personal-storage', 'moving-services', 'boat-storage'], ['storing-fragile-items', 'climate-controlled-storage-worth-it', 'secure-storage-dubai']],
         'boat-storage'               => [['vehicle-storage', 'car-storage', 'equipment-storage', 'long-term-storage', 'short-term-storage', 'art-storage'], ['secure-storage-dubai', 'what-can-and-cant-be-stored-in-a-storage-unit', 'sports-equipment-storage']],
+        'self-storage-dubai'         => [['personal-storage', 'business-storage', 'furniture-storage', 'car-storage', 'climate-controlled-storage', 'moving-services'], ['how-much-does-self-storage-cost-in-dubai', 'choose-best-storage-company-dubai', 'apartment-storage-dubai']],
+        'self-storage-sharjah'       => [['personal-storage', 'business-storage', 'warehouse-storage', 'long-term-storage', 'moving-services', 'equipment-storage'], ['choose-best-storage-company-dubai', 'student-storage-dubai', 'what-size-storage-unit-do-you-need']],
     ];
 
     $page = $page ?? null;

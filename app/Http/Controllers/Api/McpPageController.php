@@ -328,6 +328,8 @@ class McpPageController extends Controller
             'short-term-storage',
             'vehicle-storage',
             'long-term-storage',
+            'self-storage-dubai',
+            'self-storage-sharjah',
             'product-details',
             'product-detail',
             'booking',
