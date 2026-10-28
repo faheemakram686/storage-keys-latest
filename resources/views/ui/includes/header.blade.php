@@ -98,11 +98,29 @@
           </div>
         </div>
       </div>
-      <div class="pv-has-sub">
-        <a href="{{ url('/self-storage-dubai') }}" class="{{ request()->is('self-storage-dubai', 'self-storage-sharjah') ? 'active' : '' }}">Locations</a>
-        <div class="pv-sub">
-          <a href="{{ url('/self-storage-dubai') }}" class="{{ request()->is('self-storage-dubai') ? 'active' : '' }}">Self Storage in Dubai</a>
-          <a href="{{ url('/self-storage-sharjah') }}" class="{{ request()->is('self-storage-sharjah') ? 'active' : '' }}">Self Storage in Sharjah</a>
+      @php
+        $locMenu = \App\Support\LocationPages::menu();
+        $locSlugs = \App\Support\LocationPages::slugs();
+      @endphp
+      <div class="pv-has-sub pv-has-mega">
+        <a href="{{ url('/self-storage-dubai') }}" class="{{ request()->is(...$locSlugs) ? 'active' : '' }}">Locations</a>
+        <div class="pv-sub pv-mega pv-mega--loc">
+          <div class="pv-mega-cols">
+            @foreach($locMenu as $city => $links)
+              <div class="pv-mega-col">
+                <div class="pv-mega-head"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Storage Services in {{ $city }}</div>
+                @foreach($links as [$slug, $label, $icon])
+                  <a href="{{ url('/' . $slug) }}" class="{{ request()->is($slug) ? 'active' : '' }}"><i class="fas {{ $icon }}" aria-hidden="true"></i><span>{{ $label }}</span></a>
+                @endforeach
+              </div>
+            @endforeach
+          </div>
+          <div class="pv-mega-foot">
+            <span class="pv-mega-note"><i class="fas fa-map-marked-alt" aria-hidden="true"></i> Al Quoz, Dubai &amp; Sharjah — open 24/7</span>
+            <span class="pv-mega-actions">
+              <a href="{{ url('/contact-us') }}#ct-map" class="pv-mega-all">Find our facilities <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </span>
+          </div>
         </div>
       </div>
       <a href="{{ url('/shop') }}" class=""{{ request()->is('shop', 'product-details', 'cart', 'checkout') ? 'active' : '' }}">Shop</a>

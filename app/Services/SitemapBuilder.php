@@ -4,13 +4,14 @@ namespace App\Services;
 
 use App\Models\Blog;
 use App\Models\Page;
+use App\Support\LocationPages;
 use Throwable;
 
 class SitemapBuilder
 {
     public function staticPaths(): array
     {
-        return [
+        return array_merge([
             '/',
             '/storage-options',
             '/personal-storage',
@@ -33,8 +34,6 @@ class SitemapBuilder
             '/construction-storage',
             '/boat-storage',
             '/pharmaceutical-storage',
-            '/self-storage-dubai',
-            '/self-storage-sharjah',
             '/shop',
             '/booking',
             '/blogs',
@@ -46,7 +45,7 @@ class SitemapBuilder
             '/support-policy',
             '/cookie-policy',
             '/terms-of-service',
-        ];
+        ], array_map(static fn ($slug) => '/' . $slug, LocationPages::slugs()));
     }
 
     public function baseUrl(): string

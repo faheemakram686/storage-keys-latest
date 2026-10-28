@@ -297,7 +297,7 @@ class McpPageController extends Controller
      */
     public function reservedSlugs(): array
     {
-        return [
+        return array_merge([
             '',
             'admin',
             'api',
@@ -328,8 +328,6 @@ class McpPageController extends Controller
             'short-term-storage',
             'vehicle-storage',
             'long-term-storage',
-            'self-storage-dubai',
-            'self-storage-sharjah',
             'product-details',
             'product-detail',
             'booking',
@@ -363,6 +361,6 @@ class McpPageController extends Controller
             'redirectPaymentRef',
             'sign-contract',
             'upload-estimate-documents',
-        ];
+        ], \App\Support\LocationPages::slugs());
     }
 }

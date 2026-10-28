@@ -1235,3 +1235,13 @@ button.theme-btn-2,
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Locations menu (two cities) ---------- */
+@media (min-width: 992px) {
+  .pv-sub.pv-mega.pv-mega--loc {
+    max-width: 680px;
+  }
+  .pv-mega--loc .pv-mega-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

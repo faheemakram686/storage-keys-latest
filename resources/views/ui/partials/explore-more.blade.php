@@ -82,7 +82,9 @@
 
     $page = $page ?? null;
     $showIndustries = $page === 'storage-options';
-    [$relatedServices, $relatedGuides] = $map[$page] ?? [[], []];
+    // City service pages (personal-storage-dubai, ...) reuse the links of their base service page.
+    $mapKey = isset($map[$page]) ? $page : preg_replace('/-(dubai|sharjah)$/', '', (string) $page);
+    [$relatedServices, $relatedGuides] = $map[$mapKey] ?? [[], []];
 @endphp
 
 @if($showIndustries || $relatedServices || $relatedGuides)

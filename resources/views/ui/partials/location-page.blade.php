@@ -1,19 +1,20 @@
 {{--
-    Shared layout for the location pages (/self-storage-dubai, /self-storage-sharjah).
-    Each page builds a $loc array and includes this partial, so both locations stay in step.
+    Shared layout for every location page. $loc comes from App\Support\LocationPages::page().
+    City pages list the city's services; service pages add a "What we store" block and link to
+    the other services in the same city.
 --}}
-@php
-    $locations = [
-        ['slug' => 'self-storage-dubai', 'city' => 'Dubai', 'title' => 'Storage Keys — Al Quoz, Dubai', 'text' => 'Minutes from Sheikh Zayed Road. Best for Downtown, Al Barsha, Business Bay, Dubai Marina, JLT and New Dubai.'],
-        ['slug' => 'self-storage-sharjah', 'city' => 'Sharjah', 'title' => 'Storage Keys — Sharjah (Main Facility)', 'text' => 'Our main facility and office. Cost-effective for long-term storage, larger units and customers in Sharjah, Ajman and the Dubai border areas.'],
-    ];
-@endphp
 <div class="sk-home loc-page">
 
     <!-- ============ HERO ============ -->
     <section class="lt-hero loc-hero">
         <div class="sk-container">
-            <div class="lt-crumb"><a href="{{ url('/') }}">Home</a> <i class="fas fa-chevron-right"></i> <span>{{ $loc['crumb'] }}</span></div>
+            <div class="lt-crumb">
+                <a href="{{ url('/') }}">Home</a>
+                @foreach($loc['crumbs'] as [$crumbSlug, $crumbLabel])
+                    <i class="fas fa-chevron-right"></i> <a href="{{ url('/' . $crumbSlug) }}">{{ $crumbLabel }}</a>
+                @endforeach
+                <i class="fas fa-chevron-right"></i> <span>{{ $loc['crumb'] }}</span>
+            </div>
             <div class="loc-hero-grid">
                 <div>
                     <span class="sk-eyebrow sk-eyebrow--light">{{ $loc['eyebrow'] }}</span>
@@ -81,12 +82,33 @@
         </div>
     </section>
 
-    <!-- ============ SERVICES ============ -->
+    @if(!empty($loc['items']))
+    <!-- ============ WHAT WE STORE (service pages) ============ -->
     <section class="sk-section sk-section--soft">
         <div class="sk-container">
             <div class="sk-section-head">
-                <span class="sk-eyebrow sk-eyebrow--center">Storage in {{ $loc['city'] }}</span>
-                <h2>What You Can Store in {{ $loc['city'] }}</h2>
+                <span class="sk-eyebrow sk-eyebrow--center">What We Store</span>
+                <h2>{{ $loc['itemsTitle'] }}</h2>
+                <p>{{ $loc['itemsIntro'] }}</p>
+            </div>
+            <div class="loc-items sk-reveal">
+                @foreach($loc['items'] as [$icon, $title, $text])
+                    <div class="loc-item">
+                        <span class="ic"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
+                        <div><span class="h4">{{ $title }}</span><p>{{ $text }}</p></div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- ============ SERVICES IN THIS CITY ============ -->
+    <section class="sk-section {{ empty($loc['items']) ? 'sk-section--soft' : '' }}">
+        <div class="sk-container">
+            <div class="sk-section-head">
+                <span class="sk-eyebrow sk-eyebrow--center">{{ $loc['servicesEyebrow'] }}</span>
+                <h2>{{ $loc['servicesTitle'] }}</h2>
                 <p>{{ $loc['servicesIntro'] }}</p>
             </div>
             <div class="loc-services sk-reveal">
@@ -103,7 +125,7 @@
     </section>
 
     <!-- ============ MAP + GETTING HERE ============ -->
-    <section class="sk-section" id="loc-map">
+    <section class="sk-section {{ empty($loc['items']) ? '' : 'sk-section--soft' }}" id="loc-map">
         <div class="sk-container">
             <div class="loc-visit sk-reveal">
                 <div class="loc-visit-map">
@@ -138,13 +160,13 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow sk-eyebrow--center sk-eyebrow--light">How It Works</span>
-                <h2>Storage in {{ $loc['city'] }} in Four Simple Steps</h2>
+                <h2>{{ $loc['h1'] }} in Four Simple Steps</h2>
             </div>
             <ol class="loc-steps sk-reveal">
                 <li><span class="n">1</span><span class="h4">Tell us what you store</span><p>Share your items and dates by form, phone or WhatsApp.</p></li>
-                <li><span class="n">2</span><span class="h4">Get the right unit</span><p>We recommend a size and send a clear quote, with no long lease.</p></li>
+                <li><span class="n">2</span><span class="h4">Get the right space</span><p>We recommend a size and send a clear quote, with no long lease.</p></li>
                 <li><span class="n">3</span><span class="h4">Drop off or we collect</span><p>Bring items yourself or let our <a href="{{ url('/moving-services') }}">moving team</a> collect them.</p></li>
-                <li><span class="n">4</span><span class="h4">Access any time</span><p>Visit your unit 24/7 and resize it as your needs change.</p></li>
+                <li><span class="n">4</span><span class="h4">Access any time</span><p>Visit your space 24/7 and resize it as your needs change.</p></li>
             </ol>
         </div>
     </section>
@@ -191,16 +213,16 @@
         </div>
     </section>
 
-    <!-- ============ BOTH LOCATIONS ============ -->
+    <!-- ============ BOTH CITIES ============ -->
     <section class="sk-section">
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow sk-eyebrow--center">Our Locations</span>
-                <h2>Two Facilities, One Team</h2>
-                <p>Choose the facility closest to you. Same security, same service and one point of contact for both.</p>
+                <h2>{{ $loc['compareTitle'] }}</h2>
+                <p>{{ $loc['compareIntro'] }}</p>
             </div>
             <div class="loc-compare sk-reveal">
-                @foreach($locations as $item)
+                @foreach($loc['compare'] as $item)
                     @php $isHere = $item['slug'] === $loc['slug']; @endphp
                     <div class="loc-cmp {{ $isHere ? 'is-here' : '' }}">
                         <div class="loc-cmp-top">
@@ -214,7 +236,7 @@
                         @if($isHere)
                             <a href="#ps-quote" class="sk-btn sk-btn-primary">Get a Quote for {{ $item['city'] }}</a>
                         @else
-                            <a href="{{ url('/' . $item['slug']) }}" class="sk-btn sk-btn-outline">View {{ $item['city'] }} Storage <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{{ url('/' . $item['slug']) }}" class="sk-btn sk-btn-outline">{{ $item['cta'] }} <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                         @endif
                     </div>
                 @endforeach
@@ -248,7 +270,7 @@
             <div class="svc-quote sk-reveal">
                 <div>
                     <span class="sk-eyebrow sk-eyebrow--light">Free Quote</span>
-                    <h2>Need Storage in {{ $loc['city'] }}?</h2>
+                    <h2>Need {{ $loc['h1'] }}?</h2>
                     <p>{{ $loc['quoteText'] }}</p>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
@@ -266,6 +288,7 @@
                     'title' => 'Request your quote',
                     'submitLabel' => 'Request Free Quote',
                     'submitClass' => 'sk-btn sk-btn-primary svc-form-submit',
+                    'defaultStorage' => $loc['storageType'],
                 ])
             </div>
         </div>
