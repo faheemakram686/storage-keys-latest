@@ -62,4 +62,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/upload-estimate-documents',[EstimateController::class, 'uploadEstimateDocumentsApi']);
     Route::post('/reset-password',[CustomerHomeController::class, 'resetPassword'])->middleware('auth:sanctum');
 
+    //account deletion (mobile app)
+    Route::get('/delete-account-reasons',[AuthController::class, 'deleteAccountReasons']);
+    Route::post('/delete-account',[AuthController::class, 'deleteAccount'])->middleware('throttle:5,1');
+
 });

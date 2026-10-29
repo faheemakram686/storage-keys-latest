@@ -9,6 +9,7 @@ use App\Models\Core\Auth\Profile;
 
 use App\Models\Core\Auth\User;
 use App\Models\Customer;
+use App\Models\CustomerAccountDeletion;
 use App\Models\Invoice;
 use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
@@ -294,7 +295,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            if(!Auth::guard('contact')->attempt($request->only(['email', 'password']))){
+            if(!Auth::guard('contact')->attempt($request->only(['email', 'password']) + ['is_deleted' => 0])){
                 return response()->json([
                     'status' => false,
                     'message' => 'Email & Password does not match with our record.',
@@ -317,6 +318,107 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
 
+        }
+    }
+
+    /**
+     * Mobile API: reasons the app can show on the delete account screen.
+     */
+    public function deleteAccountReasons()
+    {
+        $reasons = collect(CustomerAccountDeletion::REASONS)
+            ->map(fn ($label, $key) => ['key' => $key, 'label' => $label])
+            ->values();
+
+        return response()->json([
+            'data' => $reasons,
+            'status' => true,
+            'message' => 'Account deletion reasons',
+        ], 200);
+    }
+
+    /**
+     * Mobile API: the logged-in customer deletes their own account.
+     * The contact is flagged is_deleted (records such as contracts and
+     * invoices are kept). Deleting the primary contact closes the whole
+     * customer account. All API tokens of the affected contacts are revoked.
+     */
+    public function deleteAccount(Request $request)
+    {
+        try {
+            $contact = $request->user();
+
+            if (!$contact instanceof Contact || $contact->is_deleted) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'password' => ['required', 'string'],
+                'reason'   => ['required', 'in:' . implode(',', array_keys(CustomerAccountDeletion::REASONS))],
+                'comments' => ['required_if:reason,other', 'nullable', 'string', 'max:1000'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            if (!Hash::check($request->password, $contact->getAuthPassword())) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => ['password' => ['The password is incorrect.']],
+                ], 422);
+            }
+
+            DB::transaction(function () use ($request, $contact) {
+                CustomerAccountDeletion::create([
+                    'customer_id' => $contact->customer_id,
+                    'contact_id'  => $contact->id,
+                    'email'       => $contact->email,
+                    'reason'      => $request->reason,
+                    'comments'    => $request->comments,
+                    'ip_address'  => $request->ip(),
+                    'user_agent'  => substr((string) $request->userAgent(), 0, 255),
+                ]);
+
+                $contactIds = [$contact->id];
+
+                if ($contact->contact_type === 'primary') {
+                    $customer = Customer::find($contact->customer_id);
+                    if ($customer) {
+                        $customer->is_deleted = 1;
+                        $customer->status = 0;
+                        $customer->save();
+                    }
+
+                    $contactIds = Contact::where('customer_id', $contact->customer_id)->pluck('id')->all();
+                }
+
+                Contact::whereIn('id', $contactIds)->update(['is_deleted' => 1, 'status' => 0]);
+
+                DB::table('personal_access_tokens')
+                    ->where('tokenable_type', Contact::class)
+                    ->whereIn('tokenable_id', $contactIds)
+                    ->delete();
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Your account has been deleted successfully.',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
         }
     }
 }
