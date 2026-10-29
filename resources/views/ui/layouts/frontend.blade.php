@@ -23,8 +23,9 @@
     @yield('css')
     @include('ui.includes.page-css')
     @if($isHome)
-    {{-- Home: critical + brand CSS are inlined so nothing blocks first paint; full sheets load async (FCP/LCP).
-         Relative url()s in the sheets point at sk-assets/, so they are made absolute once inlined. --}}
+    {{-- Home: critical + brand CSS are inlined. landing-page.css and site-chrome.css lay out the hero and header,
+         so they must block first paint: loaded async they arrive after it and the hero jumps (CLS ~1 on desktop).
+         Only font-icons.css loads async. Relative url()s in the inlined sheets are made absolute. --}}
     @php
         $inlineCss = fn (string $file) => str_replace(
             '../../assets/',
@@ -33,12 +34,8 @@
         );
     @endphp
     <style>{!! $inlineCss('home-critical.css') !!}</style>
-    <link rel="preload" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}" as="style">
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}"></noscript>
-    <link rel="preload" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}" as="style">
-    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}"></noscript>
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/landing-page.css') }}">
+    <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     <link rel="preload" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" as="style">
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/font-icons.css') }}"></noscript>
