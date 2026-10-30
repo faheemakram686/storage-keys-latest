@@ -260,6 +260,13 @@
 (function () {
     var MOBILE = '(max-width: 991px)';
 
+    // The header is already parsed here: set its height now, before first paint. Waiting for
+    // DOMContentLoaded left the 100px fallback in place and the hero jumped when it was corrected (CLS).
+    var parsedHeader = document.querySelector('.pv-header');
+    if (parsedHeader && parsedHeader.offsetHeight) {
+        document.documentElement.style.setProperty('--pv-header-h', parsedHeader.offsetHeight + 'px');
+    }
+
     function ready(fn) {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', fn);

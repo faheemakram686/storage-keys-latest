@@ -3,11 +3,13 @@
 @section('metaTitle', 'Self Storage in UAE | Secure Storage Units - Storagekeys')
 @section('metaDescription', 'Secure, climate-controlled self storage across the UAE. Flexible plans, 24/7 access, no hidden costs. Get a free quote today.')
 
-@section('css')
+@section('preload')
 {{-- LCP: responsive preload so mobile gets the smaller hero first --}}
 <link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header-mobile.webp') }}?v=3" media="(max-width: 767px)" fetchpriority="high">
 <link rel="preload" as="image" type="image/webp" href="{{ asset('sk-assets/assets/images/frontend/home-header.webp') }}?v=3" media="(min-width: 768px)" fetchpriority="high">
-<link rel="preconnect" href="https://d2mpatx37cqexb.cloudfront.net" crossorigin>
+@endsection
+
+@section('css')
 <link rel="dns-prefetch" href="https://d2mpatx37cqexb.cloudfront.net">
 @endsection
 
@@ -121,7 +123,7 @@
             </div>
             <div class="sk-sol-grid">
                 <article class="sk-sol-card">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}');"></div>
+                    <div class="ph" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/personal-storage-80kb.jpg') }}"></div>
                     <div class="bd">
                         <h3>Personal Storage</h3>
                         <p>Ideal for furniture, documents, luggage and seasonal items. Perfect for short-term or long-term household needs at affordable rates.</p>
@@ -129,7 +131,7 @@
                     </div>
                 </article>
                 <article class="sk-sol-card">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}');"></div>
+                    <div class="ph" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/Business-storage-80kb.jpg') }}"></div>
                     <div class="bd">
                         <h3>Business Storage</h3>
                         <p>Designed for retailers, distributors and e-commerce businesses that need organised inventory and regular access to their goods.</p>
@@ -137,7 +139,7 @@
                     </div>
                 </article>
                 <article class="sk-sol-card">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}');"></div>
+                    <div class="ph" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/warehouse-storage-80kb.jpg') }}"></div>
                     <div class="bd">
                         <h3>Warehouse Storage</h3>
                         <p>Flexible warehouse space for bulk inventory, equipment and commercial stock with scalable rental terms and easy access.</p>
@@ -145,7 +147,7 @@
                     </div>
                 </article>
                 <article class="sk-sol-card">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}');"></div>
+                    <div class="ph" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/Moving-Storage-80kb.jpg') }}"></div>
                     <div class="bd">
                         <h3>Moving Storage</h3>
                         <p>A convenient moving and temporary storage solution that simplifies relocations for both households and businesses.</p>
@@ -183,7 +185,7 @@
                     </div>
                 </div>
                 <div class="sk-panel" id="sk-bookband">
-                    <div class="ph" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/shop-header.webp') }}');"></div>
+                    <div class="ph" data-bg="{{ asset('sk-assets/assets/images/frontend/shop-header.webp') }}"></div>
                     <div class="bd">
                         <h2>Get started with secure storage solutions today</h2>
                         <p>Whether you need personal, business or warehouse storage, Storage Keys offers secure, flexible storage solutions across the UAE. Book your unit today and discover why customers trust us.</p>
@@ -202,7 +204,7 @@
     <section class="sk-section sk-about">
         <div class="sk-container">
             <div class="sk-about-grid">
-                <div class="sk-about-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}'); background-size:cover; background-position:center;">
+                <div class="sk-about-img" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/corridor%20area-80kb.jpg') }}" style="background-image:none; background-size:cover; background-position:center;">
                     <div class="sk-about-badge">
                         <div class="n">Dubai · Sharjah</div>
                         <div class="l">Storage facilities across the UAE</div>
@@ -366,7 +368,7 @@
     <section class="sk-section" style="background:#fff;">
         <div class="sk-container">
             <div class="sk-secure-grid sk-reveal">
-                <div class="sk-secure-img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}');"></div>
+                <div class="sk-secure-img" data-bg="{{ asset('sk-assets/assets/images/frontend/landing-page/peace-of-mind-80kb.jpg') }}"></div>
                 <div>
                     <span class="sk-eyebrow">Peace of Mind</span>
                     <h3>Secure Self Storage in the UAE You Can Trust</h3>
@@ -510,7 +512,7 @@
                 ];
                 $galleryBase = 'sk-assets/assets/images/frontend/landing-page/';
             @endphp
-            <div class="sk-gallery-carousel sk-reveal" id="skGalleryCarousel" aria-roledescription="carousel" aria-label="Facility photos">
+            <div class="sk-gallery-carousel sk-reveal" id="skGalleryCarousel" data-bg-group aria-roledescription="carousel" aria-label="Facility photos">
                 <button type="button" class="sk-gal-btn sk-gal-prev" aria-label="Previous photos">
                     <i class="fas fa-chevron-left" aria-hidden="true"></i>
                 </button>
@@ -518,7 +520,7 @@
                     <div class="sk-gal-track">
                         @foreach ($facilityGallery as $i => $shot)
                             <div class="sk-gal-slide" role="group" aria-roledescription="slide" aria-label="Photo {{ $i + 1 }} of {{ count($facilityGallery) }}">
-                                <div class="g" style="background-image:url('{{ asset($galleryBase . $shot['file']) }}');" role="img" aria-label="{{ $shot['alt'] }}"></div>
+                                <div class="g" data-bg="{{ asset($galleryBase . $shot['file']) }}" role="img" aria-label="{{ $shot['alt'] }}"></div>
                             </div>
                         @endforeach
                     </div>
@@ -752,7 +754,7 @@
                         $hasDisc = (float) $product->disc_amount > 0;
                     @endphp
                     <article class="sh-card">
-                        <div class="sh-card-img" style="background-image:url('{{ $img }}');">
+                        <div class="sh-card-img" data-bg="{{ $img }}">
                             @if($hasDisc)
                                 <span class="sh-badge">Sale</span>
                             @endif
@@ -783,11 +785,11 @@
             @else
             <div class="sk-supplies sk-supplies-2 sk-reveal">
                 <div class="sk-supply">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-17.jpg') }}');"></div>
+                    <div class="img" data-bg="{{ asset('sk-assets/assets/images/frontend/landing/inline-17.jpg') }}"></div>
                     <div class="b"><span class="h3">Box</span><p>Sturdy storage boxes for packing belongings before they go into your unit.</p><a href="{{ url('/shop') }}">Shop now <i class="fas fa-arrow-right"></i></a></div>
                 </div>
                 <div class="sk-supply">
-                    <div class="img" style="background-image:url('{{ asset('sk-assets/assets/images/frontend/landing/inline-19.jpg') }}');"></div>
+                    <div class="img" data-bg="{{ asset('sk-assets/assets/images/frontend/landing/inline-19.jpg') }}"></div>
                     <div class="b"><span class="h3">Tape</span><p>Heavy-duty packing tape to keep your boxes sealed and secure.</p><a href="{{ url('/shop') }}">Shop now <i class="fas fa-arrow-right"></i></a></div>
                 </div>
             </div>
@@ -843,5 +845,41 @@
     </div>
 
 </div>
+
+{{-- Below-the-fold background photos load when they near the viewport, so they do not compete with the hero
+     for bandwidth. A [data-bg-group] (the gallery carousel) loads all its photos together, so sliding never
+     shows a blank slide. --}}
+<script>
+(function () {
+    var setBg = function (el) {
+        var src = el.getAttribute('data-bg');
+        if (!src) return;
+        el.style.backgroundImage = 'url("' + src.replace(/"/g, '%22') + '")';
+        el.removeAttribute('data-bg');
+    };
+    var loadTarget = function (target) {
+        if (target.hasAttribute('data-bg')) setBg(target);
+        target.querySelectorAll('[data-bg]').forEach(setBg);
+    };
+    var targets = [];
+    document.querySelectorAll('.sk-home [data-bg]').forEach(function (el) {
+        var t = el.closest('[data-bg-group]') || el;
+        if (targets.indexOf(t) === -1) targets.push(t);
+    });
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach(loadTarget);
+        return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                io.unobserve(e.target);
+                loadTarget(e.target);
+            }
+        });
+    }, { rootMargin: '400px 0px' });
+    targets.forEach(function (t) { io.observe(t); });
+})();
+</script>
 
 @endsection 

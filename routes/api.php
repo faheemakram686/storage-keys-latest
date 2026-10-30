@@ -37,7 +37,7 @@ use App\Http\Controllers\Api\McpAnalyticsController;
 |
 */
 //auth api
-Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/register', [AuthController::class, 'createUser'])->middleware('throttle:5,1,employee-register');
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::post('/webhook/receive-customer', [WebhookController::class, 'handleCustomerResponse']);
@@ -139,4 +139,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/attendanceslog',[AttendanceLogController::class, 'attendencelogAPI']);
     Route::post('/attendenceRequestCancel',[AttendanceStatusController::class, 'updateCancelAPI']);
     Route::post('/leaveAllowance',[EmployeeLeaveAllowanceController::class, 'leaveAllowanceAPI']);
+
+    //account deletion (employee app)
+    Route::get('/delete-account-reasons',[AuthController::class, 'deleteAccountReasons']);
+    Route::post('/delete-account',[AuthController::class, 'deleteAccount'])->middleware('throttle:5,1,employee-delete-account');
 });

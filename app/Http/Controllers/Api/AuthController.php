@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Core\Auth\Role;
 use App\Models\Core\Auth\User;
+use App\Models\EmployeeAccountDeletion;
+use App\Repositories\Core\Status\StatusRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -16,16 +21,27 @@ class AuthController extends Controller
        return User::find($request->id);
     }
 
+    /**
+     * Mobile API: an employee signs up from the app.
+     * The account gets the employee role but stays inactive (pending
+     * approval), so it cannot log in until an admin activates it and sets
+     * the department, designation and employment status.
+     */
     public function createUser(Request $request)
     {
-
         try {
-            //Validated
+            // Older app builds send a single "name" field.
+            if (!$request->filled('first_name') && $request->filled('name')) {
+                $request->merge(['first_name' => $request->input('name')]);
+            }
+
             $validateUser = Validator::make($request->all(),
                 [
-                    'name' => 'required',
-                    'email' => 'required|email|unique:users,email',
-                    'password' => 'required',
+                    'first_name' => ['required', 'string', 'max:100'],
+                    'last_name' => ['nullable', 'string', 'max:100'],
+                    'email' => ['required', 'email', 'max:160', Rule::unique('users', 'email')],
+                    'phone' => ['nullable', 'string', 'max:30'],
+                    'password' => ['required', 'string', 'min:8', 'confirmed'],
                 ]);
 
             if($validateUser->fails()){
@@ -34,23 +50,59 @@ class AuthController extends Controller
                     'success' => false,
                     'message' => 'validation error',
                     'errors' => $validateUser->errors()
-                ], 401);
+                ], 422);
             }
 
-            $user = User::create([
-                'first_name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'status_id' =>1,
+            $employeeRole = Role::query()->where('alias', 'employee')->first();
+
+            if (!$employeeRole) {
+                return response()->json([
+                    'status' => false,
+                    'success' => false,
+                    'message' => 'Sign up is not available. Please contact admin.',
+                ], 500);
+            }
+
+            $user = DB::transaction(function () use ($request, $employeeRole) {
+                // phone and the legacy status column are not mass assignable;
+                // access is controlled by status_id.
+                $user = new User();
+                $user->forceFill([
+                    'first_name' => trim($request->first_name),
+                    'last_name' => $request->filled('last_name') ? trim($request->last_name) : null,
+                    'email' => strtolower(trim($request->email)),
+                    'phone' => $request->filled('phone') ? trim($request->phone) : null,
+                    'password' => Hash::make($request->password),
+                    'status_id' => resolve(StatusRepository::class)->userInactive(),
+                    'status' => 0,
+                    'invitation_token' => '',
+                    'is_in_employee' => 1,
+                ])->save();
+
+                $user->roles()->attach($employeeRole->id);
+
+                return $user;
+            });
+
+            Log::info('api.auth.register.success', [
+                'email' => $user->email,
+                'user_id' => $user->id,
+                'ua' => $request->userAgent(),
+                'ip' => $request->ip(),
             ]);
 
             return response()->json([
-                'user' => $user,
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                ],
                 'status' => true,
                 'success' => true,
-                'message' => 'User Created Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
-            ], 200);
+                'pending_approval' => true,
+                'message' => 'Your account has been created. You can log in once an admin approves it.',
+            ], 201);
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -60,6 +112,113 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Mobile API: reasons the app can show on the delete account screen.
+     */
+    public function deleteAccountReasons()
+    {
+        $reasons = collect(EmployeeAccountDeletion::REASONS)
+            ->map(fn ($label, $key) => ['key' => $key, 'label' => $label])
+            ->values();
+
+        return response()->json([
+            'data' => $reasons,
+            'status' => true,
+            'success' => true,
+            'message' => 'Account deletion reasons',
+        ], 200);
+    }
+
+    /**
+     * Mobile API: the logged-in employee deletes their own account.
+     * The user is soft deleted (attendance, leave and payroll records are
+     * kept) and their email is released so it can sign up again; the
+     * original email is kept in employee_account_deletions. All API tokens
+     * are revoked.
+     */
+    public function deleteAccount(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user instanceof User) {
+                return response()->json([
+                    'status' => false,
+                    'success' => false,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+
+            // The app admin must not lock everyone out by deleting themselves.
+            if ($user->isAppAdmin()) {
+                return response()->json([
+                    'status' => false,
+                    'success' => false,
+                    'message' => 'Admin accounts cannot be deleted from the app.',
+                ], 403);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'password' => ['required', 'string'],
+                'reason'   => ['required', 'in:' . implode(',', array_keys(EmployeeAccountDeletion::REASONS))],
+                'comments' => ['required_if:reason,other', 'nullable', 'string', 'max:1000'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'success' => false,
+                    'message' => 'validation error',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            if (!Hash::check((string) $request->password, (string) $user->password)) {
+                return response()->json([
+                    'status' => false,
+                    'success' => false,
+                    'message' => 'validation error',
+                    'errors' => ['password' => ['The password is incorrect.']],
+                ], 422);
+            }
+
+            DB::transaction(function () use ($request, $user) {
+                EmployeeAccountDeletion::create([
+                    'user_id'    => $user->id,
+                    'email'      => $user->email,
+                    'reason'     => $request->reason,
+                    'comments'   => $request->comments,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => substr((string) $request->userAgent(), 0, 255),
+                ]);
+
+                $user->tokens()->delete();
+
+                // users.email is unique at DB level, so free it for a future sign up.
+                $user->email = substr('deleted_' . $user->id . '_' . time() . '_' . $user->email, 0, 160);
+                $user->status_id = resolve(StatusRepository::class)->userInactive();
+                $user->is_deleted = 1;
+                $user->save();
+
+                $user->delete();
+            });
+
+            return response()->json([
+                'status' => true,
+                'success' => true,
+                'message' => 'Your account has been deleted successfully.',
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'success' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
     public function loginUser(Request $request)
     {
         try {
