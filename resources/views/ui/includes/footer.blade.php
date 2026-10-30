@@ -155,13 +155,19 @@
             document.body.appendChild(s);
         }
 
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadWhatsAppWidget, { timeout: 12000 });
-        } else {
-            window.addEventListener('load', function () {
-                setTimeout(loadWhatsAppWidget, 6000);
-            });
-        }
+        // The widget button pops into the first screen, so it loads on the visitor's first interaction
+        // (or 8s after load) instead of during page load, where it delayed Speed Index.
+        (function () {
+            var done = false, triggers = ['scroll', 'pointerdown', 'keydown', 'touchstart', 'mousemove'];
+            function run() {
+                if (done) return;
+                done = true;
+                triggers.forEach(function (t) { window.removeEventListener(t, run); });
+                loadWhatsAppWidget();
+            }
+            triggers.forEach(function (t) { window.addEventListener(t, run, { passive: true }); });
+            window.addEventListener('load', function () { setTimeout(run, 8000); });
+        })();
     </script>
 
 
