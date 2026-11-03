@@ -40,7 +40,7 @@
                 <article class="lp-article">
                     <section id="who-we-are">
                         <h2>1. Who we are</h2>
-                        <p>StorageKeys (“we”, “us”, “our”) provides personal, business, warehouse, climate-controlled, luggage and car storage, as well as moving support, from our facility in Sharjah, United Arab Emirates.</p>
+                        <p>StorageKeys (“we”, “us”, “our”) provides personal, business, warehouse, climate-controlled, luggage and car storage, as well as moving support, from our two facilities in Dubai and Sharjah, United Arab Emirates.</p>
                         <p>This Privacy Policy applies to information collected through our website, quote forms, booking and reservation process, email, phone and WhatsApp.</p>
                     </section>
 
