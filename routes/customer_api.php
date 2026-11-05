@@ -26,11 +26,11 @@ use App\Http\Controllers\Frontend\OrderController;
 */
 //auth api
 Route::post('/customer/register', [AuthController::class, 'registerCustomer'])
-    ->middleware('throttle:5,1');
+    ->middleware('throttle:5,1,customer-register');
 Route::post('/customer/login', [AuthController::class, 'loginCustomer'])
-    ->middleware('throttle:10,1');
+    ->middleware('throttle:10,1,customer-login');
 Route::post('/customer/forgot-password', [AuthController::class, 'forgotPasswordCustomer'])
-    ->middleware('throttle:5,1');
+    ->middleware('throttle:5,1,customer-forgot-password');
 
 
 //Route::apiResource('users',[AuthController::class, 'users'])->middleware('auth:sanctum');
@@ -41,20 +41,20 @@ Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
 
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'token.type:customer'])->group(function () {
 
     //user related api
-    Route::post('/profile',[AuthController::class, 'getCustomer']);
-    Route::post('/customer',[AuthController::class, 'dashboardApi']);
+    Route::post('/profile',[AuthController::class, 'getCustomer'])->middleware('customer.scope');
+    Route::post('/customer',[AuthController::class, 'dashboardApi'])->middleware('customer.scope');
     Route::post('/update-profile',[CustomerHomeController::class, 'updateProfileApi']);
-    Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi']);
-    Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi']);
+    Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi'])->middleware('customer.scope');
+    Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi'])->middleware('customer.scope');
     Route::post('/pay-invoice',[InvoiceController::class, 'payInvoiceApi']);
     Route::post('/verify-payment',[InvoiceController::class, 'verifyPaymentApi']);
     Route::post('/order-list',[OrderController::class, 'getCustomerOrdersApi']);
-    Route::post('/payment-list',[PaymentController::class, 'getCustomerPaymentsApi']);
-    Route::post('/move-in-request',[MoveInRequestController::class, 'saveMoveInRequestApi']);
-    Route::post('/move-out-request',[MoveInRequestController::class, 'saveMoveInRequestApi']);
+    Route::post('/payment-list',[PaymentController::class, 'getCustomerPaymentsApi'])->middleware('customer.scope');
+    Route::post('/move-in-request',[MoveInRequestController::class, 'saveMoveInRequestApi'])->middleware('customer.scope');
+    Route::post('/move-out-request',[MoveInRequestController::class, 'saveMoveInRequestApi'])->middleware('customer.scope');
 
     //estimate document upload (mobile app)
     Route::post('/estimate-list',[EstimateController::class, 'getCustomerEstimatesApi']);
@@ -64,6 +64,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //account deletion (mobile app)
     Route::get('/delete-account-reasons',[AuthController::class, 'deleteAccountReasons']);
-    Route::post('/delete-account',[AuthController::class, 'deleteAccount'])->middleware('throttle:5,1');
+    Route::post('/delete-account',[AuthController::class, 'deleteAccount'])->middleware('throttle:5,1,customer-delete-account');
 
 });

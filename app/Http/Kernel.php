@@ -70,6 +70,8 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'token.type' => \App\Http\Middleware\EnsureTokenType::class,
+        'customer.scope' => \App\Http\Middleware\ScopeRequestToCustomer::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'authorize' => \App\Http\Middleware\AuthorizeMiddleware::class,
         'permission' => \App\Http\Middleware\PermissionMiddleware::class,

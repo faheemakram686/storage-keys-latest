@@ -24,7 +24,11 @@ class AttendanceLogController extends Controller
     public function attendencelogAPI(Request $request)
     {
 
-        $details = AttendanceDetails::where('attendance_id',$request->attendance_id)->get();
+        $details = AttendanceDetails::where('attendance_id',$request->attendance_id)
+            ->whereHas('attendance', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->get();
         return $details->load(
             'parentAttendanceDetails:id,in_time,out_time,status_id,review_by,attendance_details_id,created_at,updated_at,added_by',
             'comments',

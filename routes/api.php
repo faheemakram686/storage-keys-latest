@@ -110,7 +110,7 @@ Route::middleware('auth:sanctum')->get('/users', function (Request $request) {
 
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'token.type:employee'])->group(function () {
 
     //user related api
     Route::post('/user',[AuthController::class, 'getUser']);

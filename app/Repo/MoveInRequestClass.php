@@ -2,6 +2,7 @@
 namespace App\Repo;
 use App\Http\Controllers\Backend\MoveInRequestController;
 use App\Models\BarcodeLabel;
+use App\Models\Contract;
 use App\Models\Country;
 use App\Models\LeadSource;
 use App\Models\LeadStatus;
@@ -46,6 +47,17 @@ class MoveInRequestClass implements MoveInRequestInterface {
                     'errors' => $validateUser->errors()
                 ], 401);
             }
+            $ownsContract = Contract::where('id', $request->contract_id)
+                ->where('customer_id', $request->customer_id)
+                ->where('is_deleted', 0)
+                ->exists();
+            if (!$ownsContract) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Contract not found',
+                ], 404);
+            }
+
             $country=new MoveInRequest();
             $country->customer_id = $request->customer_id;
             $country->contract_id = $request->contract_id;
