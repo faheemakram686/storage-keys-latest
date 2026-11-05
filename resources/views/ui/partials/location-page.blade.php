@@ -18,7 +18,7 @@
             <div class="loc-hero-grid">
                 <div>
                     <span class="sk-eyebrow sk-eyebrow--light">{{ $loc['eyebrow'] }}</span>
-                    <h1>{{ $loc['h1'] }} <span>{{ $loc['h1Accent'] }}</span></h1>
+                    <h1>{{ $loc['h1'] }}: <span>{{ $loc['h1Accent'] }}</span></h1>
                     <p class="lead">{{ $loc['lead'] }}</p>
                     <div class="lt-hero-cta">
                         <a href="#ps-quote" class="sk-btn sk-btn-primary"><i class="fas fa-warehouse"></i> Get a Free Quote</a>
@@ -95,7 +95,7 @@
                 @foreach($loc['items'] as [$icon, $title, $text])
                     <div class="loc-item">
                         <span class="ic"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
-                        <div><span class="h4">{{ $title }}</span><p>{{ $text }}</p></div>
+                        <div><h3 class="h4">{{ $title }}</h3><p>{{ $text }}</p></div>
                     </div>
                 @endforeach
             </div>
@@ -160,13 +160,13 @@
         <div class="sk-container">
             <div class="sk-section-head">
                 <span class="sk-eyebrow sk-eyebrow--center sk-eyebrow--light">How It Works</span>
-                <h2>{{ $loc['h1'] }} in Four Simple Steps</h2>
+                <h2>{{ $loc['stepsTitle'] ?? 'How It Works' }}</h2>
             </div>
             <ol class="loc-steps sk-reveal">
-                <li><span class="n">1</span><span class="h4">Tell us what you store</span><p>Share your items and dates by form, phone or WhatsApp.</p></li>
-                <li><span class="n">2</span><span class="h4">Get the right space</span><p>We recommend a size and send a clear quote, with no long lease.</p></li>
-                <li><span class="n">3</span><span class="h4">Drop off or we collect</span><p>Bring items yourself or let our <a href="{{ url('/moving-services') }}">moving team</a> collect them.</p></li>
-                <li><span class="n">4</span><span class="h4">Access any time</span><p>Visit your space 24/7 and resize it as your needs change.</p></li>
+                <li><span class="n">1</span><h3 class="h4">Tell us what you store</h3><p>Share your items and dates by form, phone or WhatsApp.</p></li>
+                <li><span class="n">2</span><h3 class="h4">Get the right space</h3><p>We recommend a size and send a clear quote, with no long lease.</p></li>
+                <li><span class="n">3</span><h3 class="h4">Drop off or we collect</h3><p>Bring items yourself or let our <a href="{{ url('/moving-services') }}">moving team</a> collect them.</p></li>
+                <li><span class="n">4</span><h3 class="h4">Access any time</h3><p>Visit your space 24/7 and resize it as your needs change.</p></li>
             </ol>
         </div>
     </section>
@@ -182,7 +182,7 @@
                 @foreach($loc['why'] as [$icon, $title, $text])
                     <div class="loc-why-i">
                         <span class="ic"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
-                        <span class="h4">{{ $title }}</span>
+                        <h3 class="h4">{{ $title }}</h3>
                         <p>{{ $text }}</p>
                     </div>
                 @endforeach
@@ -201,7 +201,7 @@
             <div class="loc-areas sk-reveal">
                 @foreach($loc['areas'] as $group => $places)
                     <div class="loc-area">
-                        <span class="h4"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ $group }}</span>
+                        <h3 class="h4"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> {{ $group }}</h3>
                         <div class="loc-chips">
                             @foreach($places as $place)
                                 <span>{{ $place }}</span>
@@ -231,7 +231,7 @@
                                 <span class="loc-cmp-here">You are here</span>
                             @endif
                         </div>
-                        <span class="h3">{{ $item['title'] }}</span>
+                        <h3 class="h3">{{ $item['title'] }}</h3>
                         <p>{{ $item['text'] }}</p>
                         @if($isHere)
                             <a href="#ps-quote" class="sk-btn sk-btn-primary">Get a Quote for {{ $item['city'] }}</a>
@@ -256,7 +256,7 @@
             <div class="lt-faq">
                 @foreach($loc['faqs'] as $i => [$q, $a])
                     <details {{ $i === 0 ? 'open' : '' }}>
-                        <summary>{{ $q }}</summary>
+                        <summary><h3 class="loc-faq-q">{{ $q }}</h3></summary>
                         <div class="a">{{ $a }}</div>
                     </details>
                 @endforeach
@@ -270,7 +270,7 @@
             <div class="svc-quote sk-reveal">
                 <div>
                     <span class="sk-eyebrow sk-eyebrow--light">Free Quote</span>
-                    <h2>Need {{ $loc['h1'] }}?</h2>
+                    <h2>{{ $loc['quoteTitle'] ?? 'Get a Free Storage Quote' }}</h2>
                     <p>{{ $loc['quoteText'] }}</p>
                     <div class="contacts">
                         <a href="tel:+971565018785"><i class="fas fa-phone"></i> +971 56 501 8785</a>
