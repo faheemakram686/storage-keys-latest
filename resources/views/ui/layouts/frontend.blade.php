@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/site-chrome.css') }}">
     <link rel="stylesheet" href="{{ asset('sk-assets/css/frontend/brand.css') }}">
     @endif
+    @include('ui.partials.business-schema')
     @yield('headExtra')
 </head>
 <body class="{{ $isHome ? 'sk-is-home' : '' }}">

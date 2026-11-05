@@ -186,6 +186,7 @@ class LocationPages
                 'addressHtml' => 'Plot # 4202<br>Sharjah, UAE',
                 'schemaAddress' => ['streetAddress' => 'Plot # 4202', 'addressLocality' => 'Sharjah', 'addressRegion' => 'Sharjah'],
                 'schemaAreas' => ['Sharjah', 'Ajman'],
+                'geo' => [25.353524, 55.6316793],
                 'directions' => 'https://maps.app.goo.gl/vvWVRRKCtBnups2k6',
                 'mapEmbed' => 'https://maps.google.com/maps?q=Storage%20Keys%2C%20Plot%20%23%204202%20-%20Sharjah%20-%20United%20Arab%20Emirates&z=15&output=embed',
                 'visitTitle' => 'Find Us in Sharjah',
