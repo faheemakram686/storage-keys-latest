@@ -244,6 +244,27 @@
         </div>
     </section>
 
+    @if(!empty($loc['guide']))
+    <!-- ============ GOOD TO KNOW ============ -->
+    <section class="sk-section sk-section--soft">
+        <div class="sk-container">
+            <div class="sk-section-head">
+                <span class="sk-eyebrow sk-eyebrow--center">{{ $loc['guide']['eyebrow'] }}</span>
+                <h2>{{ $loc['guide']['title'] }}</h2>
+                <p>{{ $loc['guide']['intro'] }}</p>
+            </div>
+            <div class="loc-items sk-reveal">
+                @foreach($loc['guide']['points'] as [$icon, $title, $text])
+                    <div class="loc-item">
+                        <span class="ic"><i class="fas {{ $icon }}" aria-hidden="true"></i></span>
+                        <div><h3 class="h4">{{ $title }}</h3><p>{{ $text }}</p></div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     @include('ui.partials.explore-more', ['page' => $loc['slug']])
 
     <!-- ============ FAQ ============ -->
