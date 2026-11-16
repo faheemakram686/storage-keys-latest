@@ -134,6 +134,13 @@ class AuthController extends Controller
                 'last_name'     => 'required|string|max:100',
                 'company_name'  => 'nullable|string|max:150',
                 'customer_type' => 'nullable|in:individual,company',
+                // validation (line 136 ke baad add)
+                'account_type' => 'nullable|in:individual,company',
+
+                // line 149 replace
+                $customerType = $data['account_type']
+                    ?? $data['customer_type']
+                    ?? (!empty($data['company_name']) ? 'company' : 'individual'),
                 'email'         => 'required|email|unique:contacts,email',
                 'password'      => 'required|confirmed|min:8',
             ]);

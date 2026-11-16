@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StorageKeys.com — Developer &amp; SEO Report</title>
+<style>
+  /* ── Reset & Base ─────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #fff;
+  }
+
+  /* ── Cover Page ───────────────────────────────────── */
+  .cover {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 72px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 480px; height: 480px;
+    border-radius: 50%;
+    background: rgba(0,188,212,0.08);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .cover-badge {
+    background: rgba(0,188,212,0.15);
+    border: 1px solid rgba(0,188,212,0.4);
+    color: #00bcd4;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    max-width: 700px;
+  }
+  .cover h1 span { color: #00bcd4; }
+  .cover p.tagline {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin-bottom: 48px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 4px;
+  }
+  .cover-meta-item span {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+  .cover-url {
+    position: absolute;
+    bottom: 48px;
+    right: 72px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+  }
+
+  /* ── Page wrapper ─────────────────────────────────── */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 56px;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: avoid; }
+
+  /* ── Section headings ─────────────────────────────── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #00bcd4;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f3460;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8f0fe;
+  }
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f3460;
+    margin: 24px 0 10px;
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    margin: 16px 0 6px;
+  }
+  p { margin-bottom: 10px; color: #444; }
+
+  /* ── Score Cards ──────────────────────────────────── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .score-card {
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    background: #f8faff;
+    border: 1px solid #e8f0fe;
+  }
+  .score-card .score-num {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .score-card .score-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .score-card.red .score-num   { color: #e53935; }
+  .score-card.orange .score-num { color: #f57c00; }
+  .score-card.green .score-num  { color: #2e7d32; }
+  .score-card.blue .score-num   { color: #0f3460; }
+
+  /* ── Metric Rows ──────────────────────────────────── */
+  .metric-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 12.5px;
+  }
+  .metric-table th {
+    background: #0f3460;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .metric-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #eef2ff;
+    vertical-align: top;
+  }
+  .metric-table tr:nth-child(even) td { background: #f8faff; }
+  .metric-table tr:hover td { background: #eef2ff; }
+
+  /* ── Badges ───────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-red    { background: #ffebee; color: #c62828; }
+  .badge-orange { background: #fff3e0; color: #e65100; }
+  .badge-green  { background: #e8f5e9; color: #1b5e20; }
+  .badge-blue   { background: #e3f2fd; color: #0d47a1; }
+  .badge-gray   { background: #f3f4f6; color: #555; }
+
+  /* ── Priority / Task cards ────────────────────────── */
+  .task-card {
+    border-left: 4px solid #0f3460;
+    background: #f8faff;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 12px 0;
+  }
+  .task-card.critical { border-left-color: #e53935; }
+  .task-card.high     { border-left-color: #f57c00; }
+  .task-card.medium   { border-left-color: #fbc02d; }
+  .task-card.low      { border-left-color: #43a047; }
+
+  .task-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .task-id {
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1px;
+  }
+  .task-title {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: #1a1a2e;
+    flex: 1;
+  }
+  .task-body {
+    font-size: 12.5px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .task-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Progress bars ────────────────────────────────── */
+  .perf-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .perf-bar-label {
+    width: 220px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #444;
+    flex-shrink: 0;
+  }
+  .perf-bar-track {
+    flex: 1;
+    background: #e8ecf8;
+    border-radius: 6px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .perf-bar-fill {
+    height: 10px;
+    border-radius: 6px;
+  }
+  .perf-bar-val {
+    width: 60px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+  }
+  .fill-red    { background: #e53935; }
+  .fill-orange { background: #f57c00; }
+  .fill-yellow { background: #fbc02d; }
+  .fill-green  { background: #43a047; }
+
+  /* ── Git log table ────────────────────────────────── */
+  .git-log {
+    font-size: 11.5px;
+  }
+  .git-log td:first-child {
+    font-family: monospace;
+    color: #0f3460;
+    white-space: nowrap;
+    width: 90px;
+  }
+
+  /* ── Info boxes ───────────────────────────────────── */
+  .info-box {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 12.5px;
+  }
+  .info-box.warn {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    color: #5d4037;
+  }
+  .info-box.success {
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    color: #1b5e20;
+  }
+  .info-box.danger {
+    background: #ffebee;
+    border: 1px solid #ef9a9a;
+    color: #b71c1c;
+  }
+  .info-box.info {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    color: #0d47a1;
+  }
+  .info-box strong { font-weight: 700; }
+
+  /* ── Two-col ──────────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 16px 0;
+  }
+  .col-card {
+    background: #f8faff;
+    border: 1px solid #e8f0fe;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .col-card h4 { margin-top: 0; }
+
+  /* ── Footer ───────────────────────────────────────── */
+  .report-footer {
+    text-align: center;
+    padding: 32px;
+    background: #0f3460;
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    page-break-before: always;
+  }
+  .report-footer strong { color: #00bcd4; }
+
+  ul.checks li {
+    padding: 3px 0;
+    color: #444;
+    font-size: 12.5px;
+  }
+  ul.checks li::before {
+    content: '✓ ';
+    color: #43a047;
+    font-weight: 700;
+  }
+  ul.issues li {
+    padding: 3px 0;
+    color: #444;
+    font-size: 12.5px;
+  }
+  ul.issues li::before {
+    content: '⚠ ';
+    color: #f57c00;
+    font-weight: 700;
+  }
+  ul.todo li::before {
+    content: '→ ';
+    color: #0f3460;
+    font-weight: 700;
+  }
+  ul { padding-left: 4px; list-style: none; }
+  li { margin-bottom: 4px; }
+
+  /* ── Page break helpers ───────────────────────────── */
+  @media print {
+    .page { page-break-after: always; }
+    .cover { page-break-after: always; }
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #e8f0fe;
+    margin: 24px 0;
+  }
+
+  .highlight-number {
+    font-size: 40px;
+    font-weight: 800;
+    color: #0f3460;
+    line-height: 1;
+  }
+  .highlight-sub {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+  }
+
+  .branch-pill {
+    display: inline-block;
+    background: #e3f2fd;
+    color: #0d47a1;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-family: monospace;
+    margin: 2px;
+  }
+
+  .toc {
+    background: #f8faff;
+    border: 1px solid #e8f0fe;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .toc h3 { margin-top: 0; }
+  .toc ol { padding-left: 20px; list-style: decimal; }
+  .toc li { padding: 4px 0; color: #333; font-size: 13px; }
+  .toc li span { color: #888; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="cover-badge">Confidential · Technical Report</div>
+  <h1><span>StorageKeys</span>.com<br>Developer &amp; SEO Audit</h1>
+  <p class="tagline">A comprehensive analysis of the codebase, git history, Lighthouse performance, and SEO health for storagekeys.com — a self-storage platform serving Dubai &amp; Sharjah, UAE.</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Report Date</label>
+      <span>November 2, 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Website</label>
+      <span>storagekeys.com</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Repository</label>
+      <span>faheemakram686 / storage-keys-latest</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Active Branch</label>
+      <span>storagekeys-frontend-changes</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Tech Stack</label>
+      <span>Laravel · PHP · Blade · MySQL</span>
+    </div>
+  </div>
+  <div class="cover-url">github.com/faheemakram686/storage-keys-latest</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ TABLE OF CONTENTS -->
+<div class="page">
+  <div class="section-label">Navigation</div>
+  <h2>Table of Contents</h2>
+  <div class="toc">
+    <ol>
+      <li>Executive Summary <span>— high-level findings &amp; scores</span></li>
+      <li>Project Overview <span>— business context, tech stack, architecture</span></li>
+      <li>Git Repository Analysis <span>— branches, commit history, workflow</span></li>
+      <li>Lighthouse Performance Audit <span>— desktop &amp; mobile Core Web Vitals</span></li>
+      <li>SEO Audit <span>— on-page, technical, content &amp; structure</span></li>
+      <li>Developer Task List <span>— prioritised, actionable backlog</span></li>
+      <li>SEO Task List <span>— prioritised, actionable backlog</span></li>
+      <li>Recommendations Summary <span>— quick wins &amp; roadmap</span></li>
+    </ol>
+  </div>
+
+  <h3>About This Report</h3>
+  <p>This report was generated by analysing the live website (<strong>storagekeys.com</strong>), the GitHub repository (<strong>faheemakram686/storage-keys-latest</strong>), and two Lighthouse JSON reports captured on <strong>1 September 2026</strong> — one against the local dev build (desktop simulation) and one against the live production URL on mobile. Findings are split into developer and SEO tasks, each with a priority level and implementation guidance.</p>
+
+  <div class="info-box info">
+    <strong>Lighthouse data captured:</strong> lighthouse-home.json (local desktop run, Sept 1 2026) and lighthouse-mobile.json (live production mobile run, Sept 1 2026). All scores are from those snapshots; re-running may yield slightly different results.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 1: EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="section-label">Section 1</div>
+  <h2>Executive Summary</h2>
+
+  <p>StorageKeys is a growing UAE-based self-storage business with facilities in <strong>Dubai and Sharjah</strong>. The web application is a Laravel/PHP platform combining a customer-facing marketing site, an online booking flow, an admin portal, and mobile-app APIs. The repository is actively developed with multiple feature branches and a clear deployment pipeline.</p>
+
+  <p>The headline finding is a <strong>critical performance gap on mobile</strong>. The site loads well for SEO signals (100/100 SEO score desktop) but delivers a very slow perceived experience — especially on mobile — that directly hurts conversion rates and Google's Page Experience ranking signal.</p>
+
+  <div class="score-grid">
+    <div class="score-card red">
+      <div class="score-num">52</div>
+      <div class="score-label">Performance<br>Desktop</div>
+    </div>
+    <div class="score-card orange">
+      <div class="score-num">56</div>
+      <div class="score-label">Performance<br>Mobile</div>
+    </div>
+    <div class="score-card green">
+      <div class="score-num">100</div>
+      <div class="score-label">SEO Score<br>Desktop</div>
+    </div>
+    <div class="score-card green">
+      <div class="score-num">95</div>
+      <div class="score-label">Accessibility<br>Desktop</div>
+    </div>
+  </div>
+
+  <h3>Key Findings at a Glance</h3>
+
+  <table class="metric-table">
+    <tr>
+      <th>Area</th>
+      <th>Finding</th>
+      <th>Severity</th>
+    </tr>
+    <tr>
+      <td>LCP (mobile)</td>
+      <td>10.8 s — hero image is the LCP element, served too large &amp; uncached</td>
+      <td><span class="badge badge-red">Critical</span></td>
+    </tr>
+    <tr>
+      <td>LCP (desktop)</td>
+      <td>11.1 s — same root cause as mobile</td>
+      <td><span class="badge badge-red">Critical</span></td>
+    </tr>
+    <tr>
+      <td>CLS (desktop)</td>
+      <td>0.227 — layout shift, likely font or image reserve missing</td>
+      <td><span class="badge badge-orange">High</span></td>
+    </tr>
+    <tr>
+      <td>Unused CSS</td>
+      <td>~696 KiB of unused CSS (desktop); ~96 KiB (mobile)</td>
+      <td><span class="badge badge-orange">High</span></td>
+    </tr>
+    <tr>
+      <td>Unused JS</td>
+      <td>~286 KiB of unused JS on mobile</td>
+      <td><span class="badge badge-orange">High</span></td>
+    </tr>
+    <tr>
+      <td>Speed Index (mobile)</td>
+      <td>24.2 s — extremely slow visual population</td>
+      <td><span class="badge badge-red">Critical</span></td>
+    </tr>
+    <tr>
+      <td>SEO on-page</td>
+      <td>Meta title, description, canonical, hreflang, robots.txt all pass</td>
+      <td><span class="badge badge-green">Pass</span></td>
+    </tr>
+    <tr>
+      <td>Image alt text</td>
+      <td>All images have alt attributes — passes Lighthouse check</td>
+      <td><span class="badge badge-green">Pass</span></td>
+    </tr>
+    <tr>
+      <td>Structured data</td>
+      <td>Not fully validated in Lighthouse; needs manual schema review</td>
+      <td><span class="badge badge-orange">Medium</span></td>
+    </tr>
+    <tr>
+      <td>Git workflow</td>
+      <td>Multiple long-lived feature branches; merges via PRs — healthy</td>
+      <td><span class="badge badge-green">Good</span></td>
+    </tr>
+    <tr>
+      <td>API security</td>
+      <td>Customer/employee account deletion APIs added — need rate limiting</td>
+      <td><span class="badge badge-orange">Medium</span></td>
+    </tr>
+    <tr>
+      <td>reCAPTCHA</td>
+      <td>Added to inquiry forms; deferred loading via interaction trigger</td>
+      <td><span class="badge badge-green">Good</span></td>
+    </tr>
+    <tr>
+      <td>GTM / Analytics</td>
+      <td>GTM-TFQVW88D and GA4 G-50RLY19Z5F present</td>
+      <td><span class="badge badge-green">Good</span></td>
+    </tr>
+    <tr>
+      <td>HTTPS</td>
+      <td>Full HTTPS enforced with canonical redirect</td>
+      <td><span class="badge badge-green">Pass</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 2: PROJECT OVERVIEW -->
+<div class="page">
+  <div class="section-label">Section 2</div>
+  <h2>Project Overview</h2>
+
+  <h3>Business Context</h3>
+  <p><strong>StorageKeys</strong> provides secure, flexible self-storage units for homes and businesses across <strong>Dubai and Sharjah, UAE</strong>. The product range includes personal storage, warehouse storage, furniture, appliances, luggage, boxes, office, art, equipment, construction, boat, and pharmaceutical storage. The business is growing and has begun city-specific landing pages to capture location-based search.</p>
+
+  <div class="two-col">
+    <div class="col-card">
+      <h4>🏢 Business Services</h4>
+      <ul class="checks">
+        <li>Personal storage (Dubai &amp; Sharjah)</li>
+        <li>Warehouse &amp; business storage</li>
+        <li>Furniture, appliance, luggage</li>
+        <li>Pharma, construction, boat</li>
+        <li>Online booking with cart/checkout</li>
+        <li>Mobile apps (iOS &amp; Android)</li>
+        <li>Contract management system</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>⚙️ Tech Stack</h4>
+      <ul class="checks">
+        <li>PHP / Laravel (framework)</li>
+        <li>Blade templating engine</li>
+        <li>MySQL database</li>
+        <li>Laravel Mix / webpack</li>
+        <li>XAMPP (local dev environment)</li>
+        <li>GitHub for version control</li>
+        <li>Zapier for automation</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Application Architecture</h3>
+  <p>The repository follows a standard Laravel MVC structure with custom extensions for multi-tenant features and a rich set of modules:</p>
+
+  <table class="metric-table">
+    <tr>
+      <th>Module</th>
+      <th>Location</th>
+      <th>Purpose</th>
+    </tr>
+    <tr><td>Frontend Controllers</td><td>app/Http/Controllers/Frontend</td><td>Booking, cart, checkout, home, CMS pages, sitemap</td></tr>
+    <tr><td>API Controllers</td><td>app/Http/Controllers/Api &amp; Customer_api</td><td>Mobile app APIs (customer + employee)</td></tr>
+    <tr><td>Backend Controllers</td><td>app/Http/Controllers/Backend</td><td>Admin panel routes and views</td></tr>
+    <tr><td>Models</td><td>app/Models (59+ models)</td><td>ORM layer for all entities</td></tr>
+    <tr><td>MCP Blog Server</td><td>mcp-blog-server/</td><td>AI-assisted automated blog publishing</td></tr>
+    <tr><td>Routes</td><td>routes/web.php, api.php, customer.php…</td><td>Multi-segment routing (web, admin, API, tenant)</td></tr>
+    <tr><td>Exports</td><td>app/Export</td><td>Excel/CSV exports for payroll, attendance, assets</td></tr>
+    <tr><td>Jobs</td><td>app/Jobs</td><td>Background processing (tenant, user actions)</td></tr>
+    <tr><td>Mail</td><td>app/Mail</td><td>Transactional emails (contact, tenant, tag, core)</td></tr>
+    <tr><td>Frontend Views</td><td>resources/views/frontend</td><td>Public-facing Blade templates</td></tr>
+  </table>
+
+  <h3>Integrations</h3>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Third-Party Services</h4>
+      <ul class="checks">
+        <li>Google Analytics 4 (G-50RLY19Z5F)</li>
+        <li>Google Tag Manager (GTM-TFQVW88D)</li>
+        <li>Google reCAPTCHA v2 (forms)</li>
+        <li>Zapier (automation hooks)</li>
+        <li>NGenius payment gateway</li>
+        <li>App Store &amp; Google Play (app badges)</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Hosting &amp; CI</h4>
+      <ul class="checks">
+        <li>GitHub repository (public-ish)</li>
+        <li>deploy.php (Deployer-style script)</li>
+        <li>HTTPS enforced via .htaccess</li>
+        <li>Sitemap auto-served from pages+blogs</li>
+        <li>robots.txt in version control</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 3: GIT ANALYSIS -->
+<div class="page">
+  <div class="section-label">Section 3</div>
+  <h2>Git Repository Analysis</h2>
+
+  <h3>Repository Overview</h3>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Repository Details</h4>
+      <table style="width:100%;font-size:12px;">
+        <tr><td style="color:#888;padding:4px 0;width:130px;">Remote</td><td>github.com/faheemakram686/storage-keys-latest</td></tr>
+        <tr><td style="color:#888;padding:4px 0;">Active Branch</td><td><span class="branch-pill">storagekeys-frontend-changes</span></td></tr>
+        <tr><td style="color:#888;padding:4px 0;">Status</td><td>Up to date with origin, clean working tree</td></tr>
+        <tr><td style="color:#888;padding:4px 0;">Total Commits</td><td>50+ in current view (multiple branches)</td></tr>
+        <tr><td style="color:#888;padding:4px 0;">PRs Merged</td><td>#25, #26, #27 visible in log</td></tr>
+      </table>
+    </div>
+    <div class="col-card">
+      <h4>Branch Structure</h4>
+      <span class="branch-pill">main</span>
+      <span class="branch-pill">storagekeys-frontend-changes ★</span>
+      <span class="branch-pill">storagekeys-seo</span>
+      <span class="branch-pill">storagekeys-auto-payment</span>
+      <span class="branch-pill">storagekeys-admin-changes</span>
+      <span class="branch-pill">storagekeys-staging</span>
+      <span class="branch-pill">storagekeys-changes</span>
+      <span class="branch-pill">sk-internal-linking</span>
+      <span class="branch-pill">storagekyes-mcp-server</span>
+      <br><br>
+      <small style="color:#888;">+ 16 remote branches tracked on origin</small>
+    </div>
+  </div>
+
+  <h3>Recent Commit History (Top 20)</h3>
+  <table class="metric-table git-log">
+    <tr>
+      <th>Hash</th>
+      <th>Commit Message</th>
+      <th>Category</th>
+    </tr>
+    <tr><td>341d241</td><td>Speed up home page on mobile: inline hero CSS, lazy-load below-fold images, remove layout shifts</td><td><span class="badge badge-orange">Perf</span></td></tr>
+    <tr><td>e3e6731</td><td>Add employee app sign up (pending admin approval) and account deletion API with reason</td><td><span class="badge badge-blue">Feature</span></td></tr>
+    <tr><td>e0863ec</td><td>Fix home page layout shift: load hero and header CSS before first paint, self-host Figtree</td><td><span class="badge badge-orange">Perf/Fix</span></td></tr>
+    <tr><td>021b836</td><td>Add customer app account deletion API with reason; stop deleted customers logging in</td><td><span class="badge badge-blue">Feature</span></td></tr>
+    <tr><td>3d26c61</td><td>Speed up home page: load reCAPTCHA and Google tags on interaction; inline critical CSS</td><td><span class="badge badge-orange">Perf</span></td></tr>
+    <tr><td>93581f7</td><td>Add Warehouse, Personal, Furniture, Appliance, Luggage and Box storage pages for Dubai &amp; Sharjah</td><td><span class="badge badge-blue">SEO/Feature</span></td></tr>
+    <tr><td>66104284</td><td>Add Dubai and Sharjah location pages at /self-storage-dubai and /self-storage-sharjah</td><td><span class="badge badge-blue">SEO</span></td></tr>
+    <tr><td>1703923</td><td>Link service and industry pages to each other and to guides; add Industries footer column</td><td><span class="badge badge-blue">SEO</span></td></tr>
+    <tr><td>86a24e9</td><td>Show Figtree (closest web-licensed match to brand font Capitana) on every page</td><td><span class="badge badge-gray">UI</span></td></tr>
+    <tr><td>0f7a20e</td><td>Auto payment captured and order flow, Zapier test, recurring invoice Zapier call</td><td><span class="badge badge-blue">Feature</span></td></tr>
+    <tr><td>5c8f5c8</td><td>Save featured images, SEO meta, and schema from daily blog automation payloads</td><td><span class="badge badge-blue">SEO/Auto</span></td></tr>
+    <tr><td>de177fd</td><td>Serve the sitemap from published pages and blogs so new posts are included automatically</td><td><span class="badge badge-blue">SEO</span></td></tr>
+    <tr><td>40eb20d</td><td>Add equipment, construction, boat and pharmaceutical storage pages &amp; grouped mega menu</td><td><span class="badge badge-blue">Feature</span></td></tr>
+    <tr><td>a0680df</td><td>Add Google Tag Manager (GTM-TFQVW88D) to public layouts</td><td><span class="badge badge-gray">Analytics</span></td></tr>
+    <tr><td>8b99c17</td><td>Update robots.txt and sitemap.xml</td><td><span class="badge badge-blue">SEO</span></td></tr>
+    <tr><td>72a1ede</td><td>Force HTTPS on all page canonical URLs for SEO consistency</td><td><span class="badge badge-blue">SEO/Fix</span></td></tr>
+    <tr><td>6fd8d55</td><td>Add Google reCAPTCHA v2 to website inquiry forms</td><td><span class="badge badge-gray">Security</span></td></tr>
+    <tr><td>31068dc</td><td>Block spam inquiry submissions from filling email and Google Sheet</td><td><span class="badge badge-gray">Security</span></td></tr>
+    <tr><td>00bd148</td><td>Fix canonical Blade parse error by removing invalid endhasSection</td><td><span class="badge badge-green">Fix</span></td></tr>
+    <tr><td>eb61a95</td><td>Add searchable Customer dropdown on contract create and edit</td><td><span class="badge badge-gray">UX</span></td></tr>
+  </table>
+
+  <h3>Workflow Assessment</h3>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>✅ Strengths</h4>
+      <ul class="checks">
+        <li>Feature branches per concern (seo, admin-changes, frontend-changes)</li>
+        <li>Pull Requests used for merging (#25, #26, #27)</li>
+        <li>Meaningful, descriptive commit messages</li>
+        <li>Clean working tree (nothing uncommitted)</li>
+        <li>Dedicated staging branch</li>
+        <li>deploy.php for deployment automation</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>⚠️ Areas to Improve</h4>
+      <ul class="issues">
+        <li>No automated CI/CD pipeline visible (GitHub Actions)</li>
+        <li>Typo in branch name: <code>storagekyes-mcp-server</code></li>
+        <li>Multiple stale long-lived branches without merge</li>
+        <li>One commit message is vague: "make new layout color and set width errors"</li>
+        <li>No evidence of automated testing before merges</li>
+        <li>No semantic versioning or release tags</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 4: LIGHTHOUSE -->
+<div class="page">
+  <div class="section-label">Section 4</div>
+  <h2>Lighthouse Performance Audit</h2>
+
+  <div class="info-box info">
+    Two Lighthouse 13.4.1 runs are available: <strong>Desktop simulation</strong> against local dev (Sept 1 2026) and <strong>Mobile simulation</strong> against live production (Sept 1 2026). Scores are out of 100. Core Web Vitals thresholds: LCP &lt;2.5 s (good), FID/TBT minimal, CLS &lt;0.1 (good).
+  </div>
+
+  <h3>Category Scores Comparison</h3>
+
+  <table class="metric-table">
+    <tr>
+      <th>Category</th>
+      <th>Desktop Score</th>
+      <th>Mobile Score</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Performance</td>
+      <td>52 / 100</td>
+      <td>56 / 100</td>
+      <td><span class="badge badge-red">Needs Work</span></td>
+    </tr>
+    <tr>
+      <td>Accessibility</td>
+      <td>95 / 100</td>
+      <td>N/A (local run)</td>
+      <td><span class="badge badge-green">Good</span></td>
+    </tr>
+    <tr>
+      <td>SEO</td>
+      <td>100 / 100</td>
+      <td>N/A (local run)</td>
+      <td><span class="badge badge-green">Excellent</span></td>
+    </tr>
+    <tr>
+      <td>Best Practices</td>
+      <td>100 / 100</td>
+      <td>N/A (local run)</td>
+      <td><span class="badge badge-green">Excellent</span></td>
+    </tr>
+  </table>
+
+  <h3>Core Web Vitals — Desktop</h3>
+
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">First Contentful Paint (FCP)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:13%;"></div></div>
+    <span class="perf-bar-val">4.7 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Largest Contentful Paint (LCP)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:5%;"></div></div>
+    <span class="perf-bar-val">11.1 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Speed Index (SI)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-yellow" style="width:69%;"></div></div>
+    <span class="perf-bar-val">4.7 s 🟡</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Time to Interactive (TTI)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:18%;"></div></div>
+    <span class="perf-bar-val">11.5 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Total Blocking Time (TBT)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-green" style="width:100%;"></div></div>
+    <span class="perf-bar-val">0 ms ✅</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Cumulative Layout Shift (CLS)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-orange" style="width:55%;"></div></div>
+    <span class="perf-bar-val">0.227 🟠</span>
+  </div>
+
+  <h3>Core Web Vitals — Mobile (Live Production)</h3>
+
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">First Contentful Paint (FCP)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:8%;"></div></div>
+    <span class="perf-bar-val">5.2 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Largest Contentful Paint (LCP)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:4%;"></div></div>
+    <span class="perf-bar-val">10.8 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Speed Index (SI)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:1%;"></div></div>
+    <span class="perf-bar-val">24.2 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Time to Interactive (TTI)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-red" style="width:6%;"></div></div>
+    <span class="perf-bar-val">15.7 s 🔴</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Total Blocking Time (TBT)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-green" style="width:100%;"></div></div>
+    <span class="perf-bar-val">50 ms ✅</span>
+  </div>
+  <div class="perf-bar-wrap">
+    <span class="perf-bar-label">Cumulative Layout Shift (CLS)</span>
+    <div class="perf-bar-track"><div class="perf-bar-fill fill-green" style="width:100%;"></div></div>
+    <span class="perf-bar-val">0.001 ✅</span>
+  </div>
+
+  <div class="info-box warn" style="margin-top:20px;">
+    <strong>Note on CLS discrepancy:</strong> CLS is 0.227 on the desktop local run but only 0.001 on the live mobile run. This suggests the layout shift fix (commit e0863ec — "Fix home page layout shift, self-host Figtree") has already been deployed to production and resolved the CLS issue on mobile. The desktop local run pre-dates that fix.
+  </div>
+
+  <h3>Key Opportunity — Unused CSS (696 KiB)</h3>
+  <p>Lighthouse identified approximately <strong>696 KiB of unused CSS</strong> on the desktop run. This is the single biggest quick win for performance. It's almost certainly caused by loading full UI framework stylesheets (Bootstrap, custom admin CSS) on public pages. CSS should be split per page type.</p>
+
+  <h3>Key Opportunity — Unused JavaScript (286 KiB)</h3>
+  <p>Around <strong>286 KiB of unused JavaScript</strong> is loaded on mobile pages. Admin panel JS bundles or large vendor scripts are likely loaded on frontend pages unnecessarily.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 5: SEO AUDIT -->
+<div class="page">
+  <div class="section-label">Section 5</div>
+  <h2>SEO Audit</h2>
+
+  <h3>Lighthouse SEO Checks</h3>
+  <table class="metric-table">
+    <tr>
+      <th>Check</th>
+      <th>Result</th>
+      <th>Notes</th>
+    </tr>
+    <tr><td>Meta Description</td><td><span class="badge badge-green">Pass ✓</span></td><td>Present and well-formed on homepage</td></tr>
+    <tr><td>Document Title</td><td><span class="badge badge-green">Pass ✓</span></td><td>Descriptive title tag present</td></tr>
+    <tr><td>Hreflang</td><td><span class="badge badge-green">Pass ✓</span></td><td>Language tags valid</td></tr>
+    <tr><td>Canonical URL</td><td><span class="badge badge-green">Pass ✓</span></td><td>HTTPS canonical forced across all pages</td></tr>
+    <tr><td>robots.txt</td><td><span class="badge badge-green">Pass ✓</span></td><td>Valid and updated in version control</td></tr>
+    <tr><td>Image Alt Text</td><td><span class="badge badge-green">Pass ✓</span></td><td>All images have alt attributes</td></tr>
+    <tr><td>Link Text</td><td><span class="badge badge-green">Pass ✓</span></td><td>Descriptive anchor text present</td></tr>
+    <tr><td>Structured Data</td><td><span class="badge badge-orange">Review</span></td><td>Schema added via MCP blog automation; needs manual validation at schema.org</td></tr>
+    <tr><td>HTTPS</td><td><span class="badge badge-green">Pass ✓</span></td><td>Full HTTPS, redirects enforced</td></tr>
+    <tr><td>Viewport Meta</td><td><span class="badge badge-green">Pass ✓</span></td><td>Mobile-responsive viewport tag present</td></tr>
+  </table>
+
+  <h3>Content &amp; Structure Analysis</h3>
+
+  <h4>Pages Identified in Git History</h4>
+  <table class="metric-table">
+    <tr>
+      <th>Page / URL Pattern</th>
+      <th>Status</th>
+      <th>SEO Notes</th>
+    </tr>
+    <tr><td>/ (Home)</td><td><span class="badge badge-green">Live</span></td><td>Strong — has GTM, analytics, reCAPTCHA deferred</td></tr>
+    <tr><td>/self-storage-dubai</td><td><span class="badge badge-green">Live</span></td><td>City landing page — good for local search</td></tr>
+    <tr><td>/self-storage-sharjah</td><td><span class="badge badge-green">Live</span></td><td>City landing page — good for local search</td></tr>
+    <tr><td>/warehouse-storage-[city]</td><td><span class="badge badge-green">Live</span></td><td>Service + location pages — high value</td></tr>
+    <tr><td>/personal-storage-[city]</td><td><span class="badge badge-green">Live</span></td><td>Service + location pages</td></tr>
+    <tr><td>/furniture-storage-[city]</td><td><span class="badge badge-green">Live</span></td><td>Service + location pages</td></tr>
+    <tr><td>/appliance-storage-[city]</td><td><span class="badge badge-green">Live</span></td><td>Service + location pages</td></tr>
+    <tr><td>/luggage-storage-[city]</td><td><span class="badge badge-green">Live</span></td><td>Service + location pages</td></tr>
+    <tr><td>/equipment-storage</td><td><span class="badge badge-green">Live</span></td><td>Niche service — pharmaceutical/boat/construction</td></tr>
+    <tr><td>/blog/*</td><td><span class="badge badge-green">Live</span></td><td>AI-automated blog via MCP server — dynamic sitemap</td></tr>
+    <tr><td>/sitemap.xml</td><td><span class="badge badge-green">Auto</span></td><td>Dynamically serves published pages + blogs</td></tr>
+  </table>
+
+  <h4>Internal Linking</h4>
+  <p>Commit <code>1703923</code> added internal linking between service pages, industry pages, and guides, plus an "Industries" footer column. This is a strong SEO foundation. The "Explore More" section style was also fixed so links don't inherit incorrect styles.</p>
+
+  <h4>Blog Automation</h4>
+  <p>The <strong>mcp-blog-server</strong> directory contains an AI-powered blog automation system. Commit <code>5c8f5c8</code> saves featured images, SEO meta, and JSON-LD schema from automated payloads. This is excellent for consistent on-page SEO but requires regular audit to ensure content quality meets E-E-A-T standards expected by Google.</p>
+
+  <h3>Technical SEO — Issues &amp; Gaps</h3>
+
+  <div class="info-box warn">
+    <strong>Structured Data:</strong> Schema markup is being added via the MCP blog pipeline, but it has not been validated through <a href="https://search.google.com/test/rich-results">Google's Rich Results Test</a>. LocalBusiness schema for both Dubai and Sharjah locations should be added manually to the homepage and location pages.
+  </div>
+
+  <div class="info-box warn">
+    <strong>Page Speed as SEO Signal:</strong> Google uses Core Web Vitals (LCP, FID, CLS) as a ranking factor via the Page Experience update. The current mobile LCP of <strong>10.8 seconds</strong> is well into "Poor" territory (&gt;4 s). This likely suppresses rankings for competitive UAE storage keywords.
+  </div>
+
+  <div class="info-box info">
+    <strong>Sitemap:</strong> Dynamic sitemap generation from published CMS pages and blogs is implemented. Ensure the sitemap is submitted to Google Search Console and Bing Webmaster Tools.
+  </div>
+
+  <h3>Competitor Context</h3>
+  <p>Direct UAE competitors include <strong>localstorage.ae</strong>, <strong>selfstorage.solutions</strong>, and <strong>selfstoredubai.com</strong>. StorageKeys has a content advantage with city-specific landing pages and a blog. The main competitive gap is <strong>page speed</strong> — competitors with faster sites will rank higher in Google's mobile-first index for the same keywords.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 6: DEV TASKS -->
+<div class="page">
+  <div class="section-label">Section 6</div>
+  <h2>Developer Task List</h2>
+  <p>Tasks are ordered by priority. Each task includes a description, technical approach, and estimated effort.</p>
+
+  <!-- CRITICAL -->
+  <h3>🔴 Critical Priority</h3>
+
+  <div class="task-card critical">
+    <div class="task-header">
+      <span class="task-id">DEV-001</span>
+      <span class="task-title">Reduce LCP — Optimise &amp; Preload Hero Image</span>
+      <span class="badge badge-red">Critical</span>
+    </div>
+    <div class="task-body">
+      LCP is 10.8 s on mobile and 11.1 s on desktop. The hero image is almost certainly the LCP element. It needs to be served as a next-gen format (WebP/AVIF), properly sized for each breakpoint, and preloaded. The &lt;link rel="preload"&gt; tag must be the first resource hint in &lt;head&gt;.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Blade template</span>
+      <span class="badge badge-gray">public/images</span>
+      <span class="badge badge-orange">Effort: 1–2 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Convert hero image to WebP (use cwebp or Squoosh)</li>
+      <li>Add srcset with sizes for mobile (480px), tablet (768px), desktop (1280px)</li>
+      <li>Add <code>&lt;link rel="preload" as="image" href="hero.webp" fetchpriority="high"&gt;</code> in &lt;head&gt;</li>
+      <li>Set <code>loading="eager"</code> and <code>fetchpriority="high"</code> on the hero &lt;img&gt;</li>
+      <li>Remove any lazy-load attribute from the hero</li>
+    </ul>
+  </div>
+
+  <div class="task-card critical">
+    <div class="task-header">
+      <span class="task-id">DEV-002</span>
+      <span class="task-title">Eliminate 696 KiB of Unused CSS</span>
+      <span class="badge badge-red">Critical</span>
+    </div>
+    <div class="task-body">
+      Nearly 700 KiB of CSS is loaded on public pages but not used. This causes render-blocking and increases parse time. The root cause is likely that admin/backend CSS bundles are included on frontend layouts.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">webpack.mix.js</span>
+      <span class="badge badge-gray">resources/views/layout</span>
+      <span class="badge badge-orange">Effort: 2–3 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Use PurgeCSS with Laravel Mix to remove unused rules from public CSS build</li>
+      <li>Split layout templates: separate public and admin CSS stacks</li>
+      <li>Defer non-critical CSS with <code>media="print" onload</code> pattern</li>
+      <li>Use Chrome Coverage tool to identify which selectors are unused</li>
+      <li>Target &lt;300 KiB total CSS on public pages</li>
+    </ul>
+  </div>
+
+  <div class="task-card critical">
+    <div class="task-header">
+      <span class="task-id">DEV-003</span>
+      <span class="task-title">Reduce Unused JavaScript (286 KiB mobile)</span>
+      <span class="badge badge-red">Critical</span>
+    </div>
+    <div class="task-body">
+      286 KiB of JS is loaded but not executed on mobile. This delays TTI to 15.7 seconds. Likely causes: admin JS loaded on public pages, large vendor bundles, undeferred scripts.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">webpack.mix.js</span>
+      <span class="badge badge-gray">resources/js</span>
+      <span class="badge badge-orange">Effort: 2–3 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Audit JS includes in frontend layout Blade files — remove admin JS</li>
+      <li>Add <code>defer</code> to all non-critical &lt;script&gt; tags</li>
+      <li>Use dynamic <code>import()</code> for page-specific modules</li>
+      <li>Move reCAPTCHA and GTM to interaction-triggered loading (already started — validate)</li>
+      <li>Bundle-split with webpack: separate vendor, app, admin, frontend chunks</li>
+    </ul>
+  </div>
+
+  <!-- HIGH -->
+  <h3>🟠 High Priority</h3>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">DEV-004</span>
+      <span class="task-title">Add Rate Limiting to Account Deletion APIs</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      Commits e3e6731 and 021b836 added account deletion endpoints for employees and customers. Without rate limiting, these endpoints are vulnerable to automated abuse. Laravel's built-in ThrottleRequests middleware should be applied.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">routes/api.php</span>
+      <span class="badge badge-gray">Http/Kernel.php</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Apply <code>throttle:5,1</code> middleware to deletion endpoints (5 attempts per minute)</li>
+      <li>Add authenticated-user check before allowing deletion</li>
+      <li>Log all deletion requests (user, reason, timestamp, IP)</li>
+      <li>Return a confirmation token that must be re-submitted within a TTL</li>
+    </ul>
+  </div>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">DEV-005</span>
+      <span class="task-title">Set Up GitHub Actions CI/CD Pipeline</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      There is no visible automated testing or CI pipeline. Merges to main go without automated checks. Adding GitHub Actions will catch regressions before they reach production.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">.github/workflows/</span>
+      <span class="badge badge-gray">phpunit.xml exists</span>
+      <span class="badge badge-orange">Effort: 1–2 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Create <code>.github/workflows/ci.yml</code> — PHP lint, composer install, phpunit</li>
+      <li>Add <code>.github/workflows/deploy.yml</code> — trigger on push to main</li>
+      <li>Add branch protection rules on main (require PR + CI green)</li>
+      <li>Add Lighthouse CI to flag performance regressions per PR</li>
+    </ul>
+  </div>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">DEV-006</span>
+      <span class="task-title">Fix &amp; Validate CLS on Desktop (0.227)</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      The local desktop Lighthouse run shows CLS of 0.227 (the mobile live run shows 0.001 after recent fixes). Verify that the fix from commit e0863ec is fully effective by running a fresh desktop Lighthouse audit against production.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">home page template</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Run Lighthouse desktop audit against live storagekeys.com</li>
+      <li>If CLS &gt; 0.1: identify shifting elements via DevTools Layout Shift Regions</li>
+      <li>Set explicit width/height attributes on all images &amp; embeds</li>
+      <li>Ensure font-display: swap or optional in @font-face for Figtree</li>
+    </ul>
+  </div>
+
+  <!-- MEDIUM -->
+  <h3>🟡 Medium Priority</h3>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">DEV-007</span>
+      <span class="task-title">Implement Server-Side Caching (OPcache + HTTP Cache Headers)</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      FCP of 4.7 s on desktop points to a slow server response (TTFB). Enabling PHP OPcache, adding HTTP cache headers for static assets, and using Laravel's route caching will significantly reduce TTFB.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">.htaccess</span>
+      <span class="badge badge-gray">config/cache.php</span>
+      <span class="badge badge-orange">Effort: 1 day</span>
+    </div>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">DEV-008</span>
+      <span class="task-title">Enable Gzip / Brotli Compression</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      Ensure text compression (gzip or Brotli) is enabled for HTML, CSS, and JS responses. This can reduce payload sizes by 60–80% and significantly cut load times on mobile networks.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">.htaccess</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">DEV-009</span>
+      <span class="task-title">Clean Up Stale Git Branches</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      Multiple branches appear stale (no recent commits) and add clutter. The typo branch <code>storagekyes-mcp-server</code> should be renamed or deleted. A branch cleanup policy should be documented.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">GitHub repo settings</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">DEV-010</span>
+      <span class="task-title">Add Semantic Versioning &amp; Release Tags</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      There are no git tags or versioned releases. Adding semantic version tags (v1.x.x) on production deployments enables rollback, changelog generation, and release traceability.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">git tag</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+  </div>
+
+  <!-- LOW -->
+  <h3>🟢 Low Priority</h3>
+
+  <div class="task-card low">
+    <div class="task-header">
+      <span class="task-id">DEV-011</span>
+      <span class="task-title">Write Feature Tests for Booking &amp; Checkout Flow</span>
+      <span class="badge badge-green">Low</span>
+    </div>
+    <div class="task-body">phpunit.xml exists but test coverage is unknown. The booking and checkout flow are revenue-critical paths that should have automated tests.</div>
+    <div class="task-meta">
+      <span class="badge badge-gray">tests/Feature</span>
+      <span class="badge badge-orange">Effort: 3–5 days</span>
+    </div>
+  </div>
+
+  <div class="task-card low">
+    <div class="task-header">
+      <span class="task-id">DEV-012</span>
+      <span class="task-title">Add Content Security Policy (CSP) Headers</span>
+      <span class="badge badge-green">Low</span>
+    </div>
+    <div class="task-body">A CSP header will protect against XSS attacks. Given GTM and third-party scripts, a report-only policy should be tested first before enforcing.</div>
+    <div class="task-meta">
+      <span class="badge badge-gray">.htaccess / middleware</span>
+      <span class="badge badge-orange">Effort: 1–2 days</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 7: SEO TASKS -->
+<div class="page">
+  <div class="section-label">Section 7</div>
+  <h2>SEO Task List</h2>
+
+  <h3>🔴 Critical Priority</h3>
+
+  <div class="task-card critical">
+    <div class="task-header">
+      <span class="task-id">SEO-001</span>
+      <span class="task-title">Fix Mobile Page Speed to Improve Core Web Vitals Rankings</span>
+      <span class="badge badge-red">Critical</span>
+    </div>
+    <div class="task-body">
+      Mobile LCP of 10.8 s and Speed Index of 24.2 s are failing Google's Page Experience signal. This directly suppresses rankings in Google's mobile-first index — which is the primary index for UAE users. This is linked to DEV-001/002/003 but the SEO impact makes it independently critical.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Cross-team: Dev + SEO</span>
+      <span class="badge badge-red">High SEO Impact</span>
+    </div>
+    <br>
+    <strong>Target Metrics:</strong>
+    <ul class="todo">
+      <li>LCP &lt; 2.5 s on mobile (currently 10.8 s)</li>
+      <li>FCP &lt; 1.8 s on mobile (currently 5.2 s)</li>
+      <li>CLS &lt; 0.1 on all devices (mobile passing, verify desktop)</li>
+      <li>Monitor via Google Search Console → Core Web Vitals report</li>
+    </ul>
+  </div>
+
+  <!-- HIGH -->
+  <h3>🟠 High Priority</h3>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">SEO-002</span>
+      <span class="task-title">Add LocalBusiness JSON-LD Schema to Homepage &amp; Location Pages</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      Google uses LocalBusiness schema to populate Knowledge Panels and Local Pack results. StorageKeys has two physical locations (Dubai &amp; Sharjah). Adding proper schema will improve visibility in "storage near me" searches.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Blade layout head</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+    <br>
+    <strong>Schema fields to include:</strong>
+    <ul class="todo">
+      <li>@type: SelfStorage</li>
+      <li>name, url, logo, description</li>
+      <li>address (Dubai location + Sharjah location)</li>
+      <li>telephone: +971509797573</li>
+      <li>geo: latitude/longitude for both locations</li>
+      <li>openingHours, priceRange</li>
+      <li>areaServed: Dubai, Sharjah, UAE</li>
+    </ul>
+  </div>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">SEO-003</span>
+      <span class="task-title">Submit Sitemap to Google Search Console &amp; Bing Webmaster</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      The dynamic sitemap is implemented but needs to be submitted to search engine webmaster tools. This ensures new city pages and blog posts are discovered and indexed promptly.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Google Search Console</span>
+      <span class="badge badge-gray">Bing Webmaster Tools</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Verify storagekeys.com in Google Search Console (if not already done)</li>
+      <li>Submit storagekeys.com/sitemap.xml</li>
+      <li>Verify in Bing Webmaster Tools and submit sitemap</li>
+      <li>Monitor Index Coverage report weekly for errors</li>
+    </ul>
+  </div>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">SEO-004</span>
+      <span class="task-title">Expand City-Service Landing Pages for Abu Dhabi &amp; Ajman</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      Dubai and Sharjah pages are live. Competitors like selfstorage.solutions serve Abu Dhabi and Ajman. Expanding to these markets with the same city+service page pattern will capture additional search volume without major development effort.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">CMS / routes</span>
+      <span class="badge badge-orange">Effort: 2–3 days</span>
+    </div>
+  </div>
+
+  <div class="task-card high">
+    <div class="task-header">
+      <span class="task-id">SEO-005</span>
+      <span class="task-title">Audit &amp; Validate Blog Schema / E-E-A-T Quality</span>
+      <span class="badge badge-orange">High</span>
+    </div>
+    <div class="task-body">
+      The MCP blog automation pipeline produces content with schema. Google's E-E-A-T (Experience, Expertise, Authoritativeness, Trust) guidelines mean AI-generated content must be reviewed for quality, factual accuracy, and author attribution. Without this, the blog may be devalued by Helpful Content updates.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">mcp-blog-server</span>
+      <span class="badge badge-gray">Blog admin</span>
+      <span class="badge badge-orange">Effort: Ongoing</span>
+    </div>
+    <br>
+    <strong>Steps:</strong>
+    <ul class="todo">
+      <li>Add human author bylines to all blog posts</li>
+      <li>Add an "About the Author" section linking to author expertise</li>
+      <li>Review last 20 AI-generated posts for accuracy and depth</li>
+      <li>Validate structured data at search.google.com/test/rich-results</li>
+      <li>Add FAQ schema to high-traffic service pages</li>
+    </ul>
+  </div>
+
+  <!-- MEDIUM -->
+  <h3>🟡 Medium Priority</h3>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">SEO-006</span>
+      <span class="task-title">Optimise Title Tags &amp; Meta Descriptions for All Service Pages</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      While the homepage passes Lighthouse's meta checks, the city-specific and service pages added in recent commits may have auto-generated or template-based meta. Each page should have a unique, keyword-rich title (under 60 chars) and description (under 155 chars).
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">CMS / Blade templates</span>
+      <span class="badge badge-orange">Effort: 1–2 days</span>
+    </div>
+    <br>
+    <strong>Template for city+service pages:</strong>
+    <ul class="todo">
+      <li>Title: [Service] Storage in [City] | StorageKeys UAE</li>
+      <li>Description: Secure [service] storage in [city]. Flexible units from [price]. Book online — StorageKeys.</li>
+    </ul>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">SEO-007</span>
+      <span class="task-title">Build Backlink Profile — Local Citations &amp; UAE Directories</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      The business is listed on Crunchbase, placedigger, and Enterprise League. Expanding citation coverage to UAE-specific directories (Bayut, Yellow Pages UAE, dubizzle, Gulf Business Directory) will strengthen local authority.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Off-page SEO</span>
+      <span class="badge badge-orange">Effort: Ongoing</span>
+    </div>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">SEO-008</span>
+      <span class="task-title">Implement FAQ Schema on Key Service Pages</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      Adding FAQ rich results to pages like /self-storage-dubai and /warehouse-storage increases SERP real estate and can improve CTR. Target common questions: "How much does storage cost in Dubai?", "What size unit do I need?", etc.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Blade templates</span>
+      <span class="badge badge-orange">Effort: 1 day</span>
+    </div>
+  </div>
+
+  <div class="task-card medium">
+    <div class="task-header">
+      <span class="task-id">SEO-009</span>
+      <span class="task-title">Add Open Graph &amp; Twitter Card Meta Tags</span>
+      <span class="badge badge-gray">Medium</span>
+    </div>
+    <div class="task-body">
+      Social sharing meta tags (og:title, og:description, og:image, twitter:card) are not confirmed present. Without them, links shared on WhatsApp, Twitter/X, LinkedIn, or Facebook will display poorly, reducing social click-through.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">layout/app.blade.php</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+  </div>
+
+  <!-- LOW -->
+  <h3>🟢 Low Priority</h3>
+
+  <div class="task-card low">
+    <div class="task-header">
+      <span class="task-id">SEO-010</span>
+      <span class="task-title">Set Up Google Business Profile for Both Locations</span>
+      <span class="badge badge-green">Low</span>
+    </div>
+    <div class="task-body">
+      A verified Google Business Profile for both the Dubai and Sharjah facilities will appear in local pack results and Google Maps. This is distinct from (and complementary to) website schema.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Off-page / Business</span>
+      <span class="badge badge-orange">Effort: 0.5 days</span>
+    </div>
+  </div>
+
+  <div class="task-card low">
+    <div class="task-header">
+      <span class="task-id">SEO-011</span>
+      <span class="task-title">Monitor &amp; Improve Core Web Vitals via Search Console Field Data</span>
+      <span class="badge badge-green">Low</span>
+    </div>
+    <div class="task-body">
+      Lab data (Lighthouse) differs from real-user data (CrUX). Search Console's Core Web Vitals report shows field data from actual visitors. Set up monthly monitoring and target "Good" status (&gt;75% of page views) across all pages.
+    </div>
+    <div class="task-meta">
+      <span class="badge badge-gray">Google Search Console</span>
+      <span class="badge badge-orange">Effort: Ongoing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SECTION 8: RECOMMENDATIONS -->
+<div class="page">
+  <div class="section-label">Section 8</div>
+  <h2>Recommendations Summary &amp; Roadmap</h2>
+
+  <h3>Quick Wins (Do This Week)</h3>
+  <div class="info-box success">
+    <strong>Highest ROI tasks that can be done immediately with minimal risk:</strong>
+    <ul style="margin-top:8px;">
+      <li><strong>SEO-003</strong> — Submit sitemap to Google Search Console &amp; Bing (30 mins)</li>
+      <li><strong>DEV-004</strong> — Add rate limiting to deletion APIs (2–3 hours)</li>
+      <li><strong>SEO-009</strong> — Add Open Graph meta tags to all layouts (2–3 hours)</li>
+      <li><strong>SEO-002</strong> — Add LocalBusiness JSON-LD schema to homepage (half day)</li>
+      <li><strong>DEV-006</strong> — Run fresh desktop Lighthouse audit and validate CLS fix (1 hour)</li>
+    </ul>
+  </div>
+
+  <h3>Sprint 1 — Performance Focus (2–4 Weeks)</h3>
+  <div class="info-box info">
+    <strong>Core Web Vitals improvement sprint:</strong>
+    <ul style="margin-top:8px;">
+      <li>DEV-001 — Hero image optimisation (WebP, preload, correct sizing)</li>
+      <li>DEV-002 — Eliminate 696 KiB unused CSS via PurgeCSS + layout split</li>
+      <li>DEV-003 — Remove unused JS, defer all non-critical scripts</li>
+      <li>DEV-007 — Enable OPcache and HTTP cache headers</li>
+      <li>DEV-008 — Enable Brotli/Gzip compression</li>
+    </ul>
+    <strong>Target outcome:</strong> Mobile LCP &lt;4 s, Performance score &gt;70
+  </div>
+
+  <h3>Sprint 2 — SEO Content &amp; Structure (4–8 Weeks)</h3>
+  <div class="info-box info">
+    <ul style="margin-top:8px;">
+      <li>SEO-005 — Review and improve blog content quality / E-E-A-T</li>
+      <li>SEO-006 — Optimise meta titles and descriptions for all service pages</li>
+      <li>SEO-004 — Build Abu Dhabi and Ajman location pages</li>
+      <li>SEO-008 — Add FAQ schema to high-traffic pages</li>
+      <li>SEO-007 — Build UAE local directory citations</li>
+    </ul>
+  </div>
+
+  <h3>Sprint 3 — Engineering Quality (8–12 Weeks)</h3>
+  <div class="info-box info">
+    <ul style="margin-top:8px;">
+      <li>DEV-005 — Set up GitHub Actions CI/CD pipeline</li>
+      <li>DEV-009 — Clean up stale git branches</li>
+      <li>DEV-010 — Add semantic versioning / release tags</li>
+      <li>DEV-011 — Write feature tests for booking/checkout</li>
+      <li>DEV-012 — Implement Content Security Policy headers</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <h3>Expected Impact — Performance Fixes</h3>
+  <table class="metric-table">
+    <tr>
+      <th>Metric</th>
+      <th>Current</th>
+      <th>Target (After Sprint 1)</th>
+      <th>Google Threshold</th>
+    </tr>
+    <tr><td>LCP (mobile)</td><td style="color:#c62828;font-weight:700;">10.8 s</td><td style="color:#2e7d32;font-weight:700;">&lt; 3.5 s</td><td>≤ 2.5 s (Good)</td></tr>
+    <tr><td>LCP (desktop)</td><td style="color:#c62828;font-weight:700;">11.1 s</td><td style="color:#2e7d32;font-weight:700;">&lt; 3.5 s</td><td>≤ 2.5 s (Good)</td></tr>
+    <tr><td>FCP (mobile)</td><td style="color:#c62828;font-weight:700;">5.2 s</td><td style="color:#2e7d32;font-weight:700;">&lt; 2.0 s</td><td>≤ 1.8 s (Good)</td></tr>
+    <tr><td>CLS (desktop)</td><td style="color:#e65100;font-weight:700;">0.227</td><td style="color:#2e7d32;font-weight:700;">&lt; 0.05</td><td>≤ 0.1 (Good)</td></tr>
+    <tr><td>Performance score</td><td style="color:#c62828;font-weight:700;">52–56</td><td style="color:#2e7d32;font-weight:700;">&gt; 75</td><td>&gt; 90 (ideal)</td></tr>
+  </table>
+
+  <h3>Summary</h3>
+  <p>StorageKeys has a <strong>strong SEO foundation</strong> — 100/100 Lighthouse SEO score, HTTPS, canonical URLs, sitemap, internal linking, and city-specific landing pages. The codebase is actively developed with good commit hygiene and a clear branching strategy.</p>
+  <p>The <strong>primary blocker to growth</strong> is mobile page performance. LCP and Speed Index scores are in the "Poor" range and will be suppressing rankings for competitive UAE storage keywords. The fixes are well-understood (image optimisation, CSS/JS trimming) and achievable within a focused 2–4 week sprint.</p>
+  <p>Combining the performance fixes with the SEO structural improvements (LocalBusiness schema, FAQ schema, E-E-A-T blog quality) should result in measurably improved rankings and conversions within 60–90 days.</p>
+
+  <div class="info-box success">
+    <strong>✅ What's already working well:</strong> HTTPS enforcement, canonical URLs, GTM/GA4 integration, reCAPTCHA on forms, dynamic sitemap, internal linking, city landing pages, auto payment flow, mobile app APIs, Figtree font self-hosting, and a clean git workflow with PRs.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+<div class="report-footer">
+  <p><strong>StorageKeys.com</strong> — Developer &amp; SEO Audit Report</p>
+  <p style="margin-top:8px;">Generated: <strong>November 2, 2026</strong> · Repository: <strong>faheemakram686/storage-keys-latest</strong> · Lighthouse v13.4.1 (Sept 1 2026)</p>
+  <p style="margin-top:8px;">Data sources: Git log, lighthouse-home.json, lighthouse-mobile.json, web search for storagekeys.com. Performance data reflects Lighthouse simulation — actual field data may vary.</p>
+</div>
+
+</body>
+</html>
