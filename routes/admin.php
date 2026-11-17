@@ -562,17 +562,17 @@ Route::get('/oauth/gmail/logout', function (){
     return redirect()->to('/admin/emails');
 });
 // Route::get('/test-create-customer', function () {
-//     $customer  = Customer::create([
-//         'customer_name' => 'Muhammad Aleem Akram',
-//         'email' => 'Aleem@example.com',
-//         'phone' => '123456789',
-//         'address' => 'Lahore, Pakistan',
+//     $customer = \App\Models\Customer::create([
+//         'customer_name' => 'Zapier Test Customer ' . now()->format('YmdHis'),
+//         'email' => 'zapier.test.' . now()->format('YmdHis') . '@example.com',
+//         'phone' => '0500000000',
+//         'address' => 'Dubai, UAE',
 //         'status' => 1,
 //     ]);
 //
 //     return response()->json([
 //         'message' => 'Customer created successfully!',
-//         'customer' => $customer
+//         'customer' => $customer,
 //     ]);
 // });
 

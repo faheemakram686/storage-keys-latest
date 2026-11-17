@@ -53,6 +53,8 @@
                                                     <th class="nk-tb-col"><span class="sub-text">Contract/Order</span></th>
                                                     <th class="nk-tb-col"><span class="sub-text">INV-Date</span></th>
                                                     <th class="nk-tb-col"><span class="sub-text">Due</span></th>
+                                                    <th class="nk-tb-col"><span class="sub-text">Amount</span></th>
+                                                    <th class="nk-tb-col"><span class="sub-text">Balance</span></th>
                                                     <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                                                     <th class="nk-tb-col"><span class="sub-text">Payment</span></th>
                                                     <th class="nk-tb-col"><span class="sub-text">Action</span></th>
@@ -118,6 +120,8 @@
                                 '<td class="nk-tb-col nk-tb-col-tools">' + contractOrOrderHtml + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].invoice_date + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' + data[i].due_date + '</td>' +
+                                '<td class="nk-tb-col nk-tb-col-tools"><strong>' + parseFloat(data[i].grand_total || 0).toFixed(2) + '</strong></td>' +
+                                '<td class="nk-tb-col nk-tb-col-tools">' + (data[i].balance_amount > 0 ? '<strong class="text-danger">' + parseFloat(data[i].balance_amount).toFixed(2) + '</strong>' : '<span class="text-success">0.00</span>') + '</td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + (data[i].status === 'Active' ? 'badge-success' : 'badge-danger') + '">' + data[i].status + '</span></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools"><span class="badge ' + paymentStatusBadgeClass(data[i].payment_status) + '">' + data[i].payment_status + '</span></td>' +
                                 '<td class="nk-tb-col nk-tb-col-tools">' +

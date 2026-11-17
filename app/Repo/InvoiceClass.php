@@ -229,6 +229,8 @@ class InvoiceClass implements InvoiceInterface {
             $invoice->syncPaymentStatus();
             $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
             $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
+            $invoice->setAttribute('paid_amount', $invoice->paidAmount());
+            $invoice->setAttribute('balance_amount', $invoice->balanceAmount());
         });
 
         return $invoices;
@@ -250,6 +252,10 @@ class InvoiceClass implements InvoiceInterface {
 
             $invoices->each(function ($invoice) {
                 $invoice->syncPaymentStatus();
+                $invoice->setAttribute('recurring_interval_label', $invoice->recurringIntervalLabel());
+                $invoice->setAttribute('months_overdue', $invoice->monthsOverdue());
+                $invoice->setAttribute('paid_amount', $invoice->paidAmount());
+                $invoice->setAttribute('balance_amount', $invoice->balanceAmount());
             });
 
             return response()->json([
