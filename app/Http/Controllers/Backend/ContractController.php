@@ -188,13 +188,29 @@ class ContractController extends Controller
                 'signed' => 'required|string',
             ]);
 
+            // Get authenticated user
+            $user = auth()->user();
+            
             // Verify the contract belongs to the authenticated customer
             $contract = $this->contract->getContract($request->contract_id);
             
-            if (empty($contract) || $contract[0]->customer_id != auth()->id()) {
+            if (empty($contract)) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Contract not found or unauthorized access'
+                    'message' => 'Contract not found'
+                ], 404);
+            }
+
+            // Check if customer_id matches authenticated user id
+            if ($contract[0]->customer_id != $user->id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized access to this contract',
+                    'debug' => [
+                        'contract_customer_id' => $contract[0]->customer_id,
+                        'auth_user_id' => $user->id,
+                        'contract_id' => $request->contract_id
+                    ]
                 ], 403);
             }
 
