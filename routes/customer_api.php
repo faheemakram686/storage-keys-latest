@@ -27,6 +27,10 @@ use App\Http\Controllers\Frontend\OrderController;
 //auth api
 Route::post('/customer/register', [AuthController::class, 'registerCustomer'])
     ->middleware('throttle:5,1,customer-register');
+Route::post('/customer/verify-otp', [AuthController::class, 'verifyCustomerOtp'])
+    ->middleware('throttle:10,1,customer-verify-otp');
+Route::post('/customer/resend-otp', [AuthController::class, 'resendCustomerOtp'])
+    ->middleware('throttle:5,1,customer-resend-otp');
 Route::post('/customer/login', [AuthController::class, 'loginCustomer'])
     ->middleware('throttle:10,1,customer-login');
 Route::post('/customer/forgot-password', [AuthController::class, 'forgotPasswordCustomer'])

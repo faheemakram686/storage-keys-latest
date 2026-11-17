@@ -11,6 +11,7 @@ use App\Models\Core\Auth\User;
 use App\Models\Customer;
 use App\Models\CustomerAccountDeletion;
 use App\Models\Invoice;
+use App\Services\Auth\CustomerOtpService;
 use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,6 +24,13 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    private $otpService;
+
+    public function __construct(CustomerOtpService $otpService)
+    {
+        $this->otpService = $otpService;
+    }
+
     public function dashboardApi(Request $request)
     {
         try {
@@ -165,29 +173,33 @@ class AuthController extends Controller
                 }
             }
 
-            DB::transaction(function () use ($data, $customerType, $firstName, $lastName, $companyName) {
-                $customer = Customer::create([
-                    'customer_type' => $customerType,
-                    'customer_name' => trim($firstName . ' ' . $lastName),
-                    'company_name' => $companyName,
-                    // Self-registrations start In-Active so spam does not flood the Active list.
-                    'status'       => 0,
-                ]);
+            // Prepare registration data
+            $registrationData = [
+                'customer_type' => $customerType,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'company_name' => $companyName,
+                'email' => $data['email'],
+                'password' => $data['password']
+            ];
 
-                Contact::create([
-                    'customer_id' => $customer->id,
-                    'first_name'  => $firstName,
-                    'last_name'   => $lastName,
-                    'email'       => $data['email'],
-                    'password'    => Hash::make($data['password']),
-                    'status'      => 0,
-                    'contact_type' => 'primary',
-                ]);
-            });
+            // Create pending registration and generate OTP
+            $result = $this->otpService->createPendingRegistration($registrationData);
+            
+            // Send OTP email
+            $customerName = trim($firstName . ' ' . $lastName);
+            $this->otpService->sendOtp($data['email'], $result['otp'], $customerName);
+            
+            // Mask email for response
+            $maskedEmail = $this->otpService->maskEmail($data['email']);
 
             return response()->json([
-                            'status' => true,
-                            'message' => ' Your Account Registered Successfully',], 200);
+                'status' => true,
+                'verification_token' => $result['verification_token'],
+                'email_masked' => $maskedEmail,
+                'expires_in' => 60,
+                'message' => 'OTP has been sent to your email address.'
+            ], 200);
         
         } catch (\Throwable $th) {
             return response()->json([
@@ -421,6 +433,156 @@ class AuthController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify OTP and create customer account (Mobile API)
+     */
+    public function verifyCustomerOtp(Request $request)
+    {
+        try {
+            $validated = Validator::make($request->all(), [
+                'verification_token' => 'required|string',
+                'otp' => 'required|digits:4',
+            ]);
+
+            if ($validated->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validated->errors()
+                ], 401);
+            }
+
+            $data = $validated->validated();
+            
+            // Verify OTP
+            $registrationData = $this->otpService->verifyOtp($data['verification_token'], $data['otp']);
+
+            if (!$registrationData) {
+                // Check if token still exists to provide better error message
+                $pending = $this->otpService->getPendingRegistration($data['verification_token']);
+                
+                if (!$pending) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Registration session not found. Please register again.'
+                    ], 404);
+                }
+                
+                if ($pending->isExpired()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'OTP code has expired. Please request a new one.',
+                        'error_code' => 'OTP_EXPIRED'
+                    ], 401);
+                }
+                
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid OTP code. Please check and try again.',
+                    'error_code' => 'OTP_INVALID'
+                ], 401);
+            }
+
+            // Create customer account
+            $customer = null;
+            $contact = null;
+            
+            DB::transaction(function () use ($registrationData, &$customer, &$contact) {
+                $customer = Customer::create([
+                    'customer_type' => $registrationData['customer_type'],
+                    'customer_name' => trim($registrationData['first_name'] . ' ' . $registrationData['last_name']),
+                    'company_name' => $registrationData['company_name'],
+                    'status'       => 1, // Active - OTP verified
+                ]);
+
+                $contact = Contact::create([
+                    'customer_id' => $customer->id,
+                    'first_name'  => $registrationData['first_name'],
+                    'last_name'   => $registrationData['last_name'],
+                    'email'       => $registrationData['email'],
+                    'password'    => Hash::make($registrationData['password']),
+                    'status'      => 1, // Active - OTP verified
+                    'contact_type' => 'primary',
+                ]);
+            });
+
+            // Delete pending registration
+            $this->otpService->deletePendingRegistration($data['verification_token']);
+
+            // Load customer relationship for response
+            $contact->load('customer');
+
+            return response()->json([
+                'user' => $contact,
+                'status' => true,
+                'message' => 'Account created successfully. You can now login.',
+                'token' => $contact->createToken("API TOKEN")->plainTextToken
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Resend OTP (Mobile API)
+     */
+    public function resendCustomerOtp(Request $request)
+    {
+        try {
+            $validated = Validator::make($request->all(), [
+                'verification_token' => 'required|string',
+            ]);
+
+            if ($validated->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validated->errors()
+                ], 401);
+            }
+
+            $token = $validated->validated()['verification_token'];
+
+            // Check rate limit
+            if (!$this->otpService->canResendOtp($token)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please wait before requesting another OTP.',
+                    'retry_after' => 60
+                ], 429);
+            }
+
+            // Resend OTP
+            $result = $this->otpService->resendOtp($token);
+
+            if (!$result) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid verification token or unable to resend OTP.'
+                ], 400);
+            }
+
+            // Send new OTP email
+            $this->otpService->sendOtp($result['email'], $result['otp'], $result['customer_name']);
+
+            return response()->json([
+                'status' => true,
+                'expires_in' => 60,
+                'message' => 'New OTP has been sent to your email.'
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
             ], 500);
         }
     }

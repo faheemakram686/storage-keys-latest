@@ -22,6 +22,17 @@ Route::middleware('guest:contact')->group(function () {
         ->middleware('throttle:5,1')
         ->name('customer.register');
 
+    Route::get('customer/verify-otp', [CustomerRegisterController::class, 'showOtpForm'])
+        ->name('customer.verify.otp.form');
+
+    Route::post('customer/verify-otp', [CustomerRegisterController::class, 'verifyOtp'])
+        ->middleware('throttle:10,1')
+        ->name('customer.verify.otp');
+
+    Route::post('customer/resend-otp', [CustomerRegisterController::class, 'resendOtp'])
+        ->middleware('throttle:5,1')
+        ->name('customer.resend.otp');
+
     Route::get('customer-login', [CustomerLoginController::class, 'customerLoginForm'])
         ->name('customer.login');
 
