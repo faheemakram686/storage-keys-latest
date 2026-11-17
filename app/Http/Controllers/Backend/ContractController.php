@@ -180,6 +180,59 @@ class ContractController extends Controller
         return response()->json(['success' => 'Contract signed successfully'], 200);
     }
 
+    public function signContractApi(Request $request)
+    {
+        try {
+            $request->validate([
+                'contract_id' => 'required|integer|exists:contracts,id',
+                'signed' => 'required|string',
+            ]);
+
+            // Verify the contract belongs to the authenticated customer
+            $contract = $this->contract->getContract($request->contract_id);
+            
+            if (empty($contract) || $contract[0]->customer_id != auth()->id()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Contract not found or unauthorized access'
+                ], 403);
+            }
+
+            // Use the same signing logic as website
+            $signRequest = new Request([
+                'id' => $request->contract_id,
+                'signed' => $request->signed
+            ]);
+
+            $res = $this->contract->signContact($signRequest);
+
+            if ($res) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Contract signed successfully',
+                    'contract_id' => $request->contract_id
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Failed to sign contract'
+                ], 500);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function showTasks($request)
     {
         $data['contract'] = $this->contract->getContract($request);

@@ -52,6 +52,7 @@ Route::middleware(['auth:sanctum', 'token.type:customer'])->group(function () {
     Route::post('/customer',[AuthController::class, 'dashboardApi'])->middleware('customer.scope');
     Route::post('/update-profile',[CustomerHomeController::class, 'updateProfileApi']);
     Route::post('/contract-list',[ContractController::class, 'getCustomerContractsApi'])->middleware('customer.scope');
+    Route::post('/sign-contract',[ContractController::class, 'signContractApi'])->middleware('customer.scope');
     Route::post('/invoice-list',[InvoiceController::class, 'getCustomerInvoicesApi'])->middleware('customer.scope');
     Route::post('/pay-invoice',[InvoiceController::class, 'payInvoiceApi']);
     Route::post('/verify-payment',[InvoiceController::class, 'verifyPaymentApi']);
