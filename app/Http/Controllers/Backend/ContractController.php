@@ -188,7 +188,7 @@ class ContractController extends Controller
                 'signed' => 'required|string',
             ]);
 
-            // Get authenticated user
+            // Get authenticated user (Contact model with customer_id)
             $user = auth()->user();
             
             // Verify the contract belongs to the authenticated customer
@@ -201,16 +201,12 @@ class ContractController extends Controller
                 ], 404);
             }
 
-            // Check if customer_id matches authenticated user id
-            if ($contract[0]->customer_id != $user->id) {
+            // Check if customer_id matches authenticated contact's customer_id
+            // The authenticated user is a Contact, so we compare contract->customer_id with contact->customer_id
+            if ($contract[0]->customer_id != $user->customer_id) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Unauthorized access to this contract',
-                    'debug' => [
-                        'contract_customer_id' => $contract[0]->customer_id,
-                        'auth_user_id' => $user->id,
-                        'contract_id' => $request->contract_id
-                    ]
+                    'message' => 'Unauthorized access to this contract'
                 ], 403);
             }
 
