@@ -17,6 +17,7 @@ use App\Http\Controllers\Tenant\Attendance\AttendanceStatusController;
 use App\Http\Controllers\Tenant\Employee\EmployeeLeaveAllowanceController;
 use App\Http\Controllers\Tenant\Employee\DocumentController;
 use App\Http\Controllers\WebhookController;
+use App\Http\Controllers\Api\WebsiteFormsController;
 use App\Http\Controllers\Api\McpBlogController;
 use App\Http\Controllers\Api\McpStreamController;
 use App\Http\Controllers\Api\McpSiteController;
@@ -39,6 +40,21 @@ use App\Http\Controllers\Api\McpAnalyticsController;
 //auth api
 Route::post('/auth/register', [AuthController::class, 'createUser'])->middleware('throttle:5,1,employee-register');
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
+
+// Website forms for the mobile app (public, no login). Docs: docs/WEBSITE-FORMS-API.md
+Route::prefix('website')->group(function () {
+    Route::get('/form-options', [WebsiteFormsController::class, 'formOptions']);
+    Route::get('/countries', [WebsiteFormsController::class, 'countries']);
+    Route::get('/cities', [WebsiteFormsController::class, 'cities']);
+    Route::get('/locations', [WebsiteFormsController::class, 'locations']);
+    Route::get('/warehouses', [WebsiteFormsController::class, 'warehouses']);
+    Route::get('/storage-units', [WebsiteFormsController::class, 'storageUnits']);
+    Route::get('/storage-units/{id}', [WebsiteFormsController::class, 'storageUnit'])->whereNumber('id');
+    Route::post('/inquiries', [WebsiteFormsController::class, 'storeInquiry'])
+        ->middleware('throttle:5,1,website-inquiry');
+    Route::post('/reservations', [WebsiteFormsController::class, 'storeReservation'])
+        ->middleware('throttle:5,1,website-reservation');
+});
 
 Route::post('/webhook/receive-customer', [WebhookController::class, 'handleCustomerResponse']);
 Route::post('/webhook/receive-product', [WebhookController::class, 'handleProductResponse']);
