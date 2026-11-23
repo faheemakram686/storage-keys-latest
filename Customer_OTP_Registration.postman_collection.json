@@ -1,0 +1,237 @@
+{
+  "info": {
+    "name": "Customer Registration with OTP",
+    "description": "API collection for testing customer registration with OTP verification",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Register Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.verification_token) {",
+              "        pm.environment.set('verification_token', jsonData.verification_token);",
+              "        pm.environment.set('email_masked', jsonData.email_masked);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"SecurePassword123\",\n  \"password_confirmation\": \"SecurePassword123\",\n  \"customer_type\": \"individual\",\n  \"company_name\": null\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customer/register",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customer", "register"]
+        },
+        "description": "Register a new customer and receive OTP via email.\n\nResponse includes:\n- verification_token: Store this for OTP verification\n- email_masked: Display to user\n- expires_in: OTP validity (60 seconds)"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Verify OTP",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.token) {",
+              "        pm.environment.set('auth_token', jsonData.token);",
+              "        pm.environment.set('user_id', jsonData.user.id);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"verification_token\": \"{{verification_token}}\",\n  \"otp\": \"1234\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customer/verify-otp",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customer", "verify-otp"]
+        },
+        "description": "Verify the OTP code sent to email.\n\nRequired:\n- verification_token: From registration response\n- otp: 4-digit code from email\n\nResponse includes:\n- user: User and customer data\n- token: Authentication token (store for future API calls)\n- status: true if successful"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Resend OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"verification_token\": \"{{verification_token}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customer/resend-otp",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customer", "resend-otp"]
+        },
+        "description": "Request a new OTP code.\n\nRate Limit: 1 request per minute per verification_token\n\nRequired:\n- verification_token: From registration response\n\nResponse:\n- expires_in: 60 (new OTP validity)\n- message: Success message"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Customer Profile (Authenticated)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": {{user_id}}\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/profile",
+          "host": ["{{base_url}}"],
+          "path": ["api", "profile"]
+        },
+        "description": "Example of an authenticated API call using the token from OTP verification.\n\nHeaders:\n- Authorization: Bearer {token}\n\nBody:\n- id: User ID from verification response"
+      },
+      "response": []
+    },
+    {
+      "name": "Example: Register with Company",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.verification_token) {",
+              "        pm.environment.set('verification_token', jsonData.verification_token);",
+              "        pm.environment.set('email_masked', jsonData.email_masked);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"email\": \"jane.smith@company.com\",\n  \"password\": \"CompanyPass123\",\n  \"password_confirmation\": \"CompanyPass123\",\n  \"customer_type\": \"company\",\n  \"company_name\": \"Acme Corporation\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/customer/register",
+          "host": ["{{base_url}}"],
+          "path": ["api", "customer", "register"]
+        },
+        "description": "Example of registering as a company customer.\n\nRequired additional fields:\n- customer_type: \"company\"\n- company_name: Company name (required when type is company)"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "verification_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "email_masked",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
