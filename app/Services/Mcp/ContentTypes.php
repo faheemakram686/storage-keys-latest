@@ -19,6 +19,8 @@ class ContentTypes
         'page' => ['model' => Page::class, 'label' => 'title', 'trash' => 'is_deleted'],
         'blog' => ['model' => Blog::class, 'label' => 'title', 'trash' => 'is_deleted'],
         'section' => ['model' => PageSection::class, 'label' => 'name', 'trash' => 'is_deleted'],
+        'category' => ['model' => \App\Models\BlogCategory::class, 'label' => 'name', 'trash' => 'is_deleted'],
+        'tag' => ['model' => \App\Models\BlogTag::class, 'label' => 'name', 'trash' => 'is_deleted'],
     ];
 
     /** @var array<string, list<callable(Model): void>> */

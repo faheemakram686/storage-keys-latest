@@ -93,9 +93,10 @@ class Handler extends ExceptionHandler
 
 
         if (!$request->expectsJson() && $exception instanceof ModelNotFoundException) {
+            // Send a real 404: a "not found" page with status 200 is a soft 404 for search engines.
             return response()->view('custom_errors.404', [
                 'message' => trans('default.resource_not_found', ['resource' => trans('default.resource')])
-            ]);
+            ], 404);
         }
 
         if (!$request->expectsJson() && $exception instanceof AuthorizationException) {

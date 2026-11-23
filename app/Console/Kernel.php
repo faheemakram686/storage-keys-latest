@@ -53,6 +53,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('queue:work --queue=high,default --tries=2 --stop-when-empty')->everyMinute()->withoutOverlapping();
 
+        // Blog posts scheduled through the MCP schedule_blog tool.
+        $schedule->command('mcp:publish-scheduled')->everyMinute()->withoutOverlapping();
+
         $schedule->job(new UpdateWorkingShiftJob)->dailyAt('00:01');
         $schedule->job(new AssignUpcomingWorkingShiftJob())->dailyAt('00:01');
         $schedule->job(new AssignLeaveByStatusJob)->dailyAt('00:01');

@@ -22,10 +22,12 @@ class Blog extends Model
         'robots',
         'schema_json',
         'last_reviewed_at',
+        'publish_at',
     ];
 
     protected $casts = [
         'last_reviewed_at' => 'datetime',
+        'publish_at' => 'datetime',
     ];
 
     public function categories()

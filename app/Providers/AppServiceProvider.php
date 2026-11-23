@@ -219,6 +219,9 @@ class AppServiceProvider extends ServiceProvider
             $blog->tags()->detach();
         });
 
+        \App\Services\Mcp\ContentTypes::onPurge('category', fn (\App\Models\BlogCategory $c) => $c->blogs()->detach());
+        \App\Services\Mcp\ContentTypes::onPurge('tag', fn (\App\Models\BlogTag $t) => $t->blogs()->detach());
+
         // A section back from the trash goes to the end of its page, which is then rebuilt.
         \App\Services\Mcp\ContentTypes::onRestore('section', function (\App\Models\PageSection $section) {
             $page = $section->page;

@@ -14,13 +14,14 @@ class McpTaxonomyController extends Controller
 {
     public function categories()
     {
-        $items = BlogCategory::query()->orderBy('name')->get()->map(function (BlogCategory $c) {
+        $items = BlogCategory::query()->where('is_deleted', 0)->orderBy('name')->get()->map(function (BlogCategory $c) {
             return [
                 'id' => $c->id,
                 'name' => $c->name,
                 'slug' => $c->slug,
                 'description' => $c->description,
                 'blogs_count' => $c->blogs()->where('is_deleted', 0)->count(),
+                'updated_at' => \App\Services\Mcp\Versioning::stamp($c),
             ];
         });
 
@@ -56,12 +57,13 @@ class McpTaxonomyController extends Controller
 
     public function tags()
     {
-        $items = BlogTag::query()->orderBy('name')->get()->map(function (BlogTag $t) {
+        $items = BlogTag::query()->where('is_deleted', 0)->orderBy('name')->get()->map(function (BlogTag $t) {
             return [
                 'id' => $t->id,
                 'name' => $t->name,
                 'slug' => $t->slug,
                 'blogs_count' => $t->blogs()->where('is_deleted', 0)->count(),
+                'updated_at' => \App\Services\Mcp\Versioning::stamp($t),
             ];
         });
 
@@ -116,7 +118,8 @@ class McpTaxonomyController extends Controller
             if ($request->filled('category_slugs')) {
                 $ids = array_merge($ids, BlogCategory::query()->whereIn('slug', $request->input('category_slugs'))->pluck('id')->all());
             }
-            $blog->categories()->sync(array_values(array_unique(array_map('intval', $ids))));
+            $ids = BlogCategory::query()->where('is_deleted', 0)->whereIn('id', array_map('intval', $ids))->pluck('id')->all();
+            $blog->categories()->sync(array_values(array_unique($ids)));
         }
 
         if ($request->exists('tag_ids') || $request->exists('tag_slugs')) {
@@ -124,7 +127,8 @@ class McpTaxonomyController extends Controller
             if ($request->filled('tag_slugs')) {
                 $ids = array_merge($ids, BlogTag::query()->whereIn('slug', $request->input('tag_slugs'))->pluck('id')->all());
             }
-            $blog->tags()->sync(array_values(array_unique(array_map('intval', $ids))));
+            $ids = BlogTag::query()->where('is_deleted', 0)->whereIn('id', array_map('intval', $ids))->pluck('id')->all();
+            $blog->tags()->sync(array_values(array_unique($ids)));
         }
 
         $blog->load(['categories:id,name,slug', 'tags:id,name,slug']);

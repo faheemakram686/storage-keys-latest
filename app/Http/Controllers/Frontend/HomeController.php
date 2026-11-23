@@ -107,8 +107,10 @@ class HomeController extends Controller
         return view('ui.pages.booking')->with(compact('data'));;
     }
     public function blogs(){
+        // Drafts (status 0) stay hidden from visitors until published.
         $blogs = Blog::query()
             ->where('is_deleted', 0)
+            ->where('status', 1)
             ->orderBy('id', 'DESC')
             ->paginate(9);
 
@@ -152,11 +154,13 @@ class HomeController extends Controller
     {
         $blog = Blog::query()
             ->where('is_deleted', 0)
+            ->where('status', 1)
             ->where('slug', $slug)
             ->firstOrFail();
 
         $recent = Blog::query()
             ->where('is_deleted', 0)
+            ->where('status', 1)
             ->where('id', '!=', $blog->id)
             ->orderBy('id', 'DESC')
             ->limit(4)
