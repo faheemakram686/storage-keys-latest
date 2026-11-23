@@ -44,7 +44,7 @@
                         <span><i class="far fa-user"></i> StorageKeys</span>
                     </div>
                     <div class="bl-prose">
-                        {!! $blog->description !!}
+                        {!! \App\Services\Mcp\ContentRenderer::render($blog->description) !!}
                     </div>
                 </article>
 

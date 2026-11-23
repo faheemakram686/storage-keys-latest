@@ -82,6 +82,9 @@ class McpBlogController extends Controller
         $input = $this->jsonBody($request);
         $title = trim((string) ($input['title'] ?? ''));
         $description = $input['description'] ?? '';
+        if ($bad = \App\Services\Mcp\Placeholders::unknown((string) $description)) {
+            return response()->json(['success' => false, 'message' => 'Unknown placeholder(s): ' . implode(', ', $bad), 'unknown_placeholders' => $bad], 422);
+        }
         // Default draft for MCP uploads — review before publishing
         $status = array_key_exists('status', $input) ? (int) $input['status'] : 0;
 
@@ -152,6 +155,9 @@ class McpBlogController extends Controller
         }
 
         if (array_key_exists('description', $input)) {
+            if ($bad = \App\Services\Mcp\Placeholders::unknown((string) $input['description'])) {
+                return response()->json(['success' => false, 'message' => 'Unknown placeholder(s): ' . implode(', ', $bad), 'unknown_placeholders' => $bad], 422);
+            }
             $blog->description = $input['description'];
         }
 

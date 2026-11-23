@@ -97,9 +97,9 @@ class McpStreamController extends Controller
                         ],
                         'serverInfo' => [
                             'name' => 'storagekeys-blog',
-                            'version' => '1.3.0',
+                            'version' => '2.0.0',
                         ],
-                        'instructions' => 'StorageKeys blog MCP v1.3. Prefer drafts (status=0). Includes CRUD, SEO/schema, categories/tags/redirects, internal-link/orphan audit, content audit, sitemap/robots validation, stale posts, and analytics stubs (503 until Google credentials). Destructive tools need confirm=true. Only publish when asked.',
+                        'instructions' => 'StorageKeys site MCP v2.0. Most pages are coded (Blade): read them with get_page_outline and the audit tools; change them in the code. DB pages (list_pages; self-storage-dubai is one when published) are edited by section: get_page_sections, then update_page_section with expected_updated_at. Blog posts: create_blog/update_blog. Rules: read before you write (pass back updated_at as expected_updated_at); new content is a draft, publish only when the owner asks; sitewide and bulk tools preview until dry_run=false; deletes go to the trash (list_trash, restore_item; purge_item needs confirm=true); every change is in activity_log. HTML is sanitized, a page has one H1, use only known {{placeholders}} (get_settings). Never invent addresses, prices or reviews, and never add Review/AggregateRating schema for StorageKeys. Analytics tools return 503 until Google credentials are set.',
                     ]);
 
                 case 'notifications/initialized':
@@ -257,7 +257,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'get_pages',
-                'description' => 'List known static marketing page URLs (Blade templates — not editable via MCP).',
+                'description' => 'List the coded (Blade) page URLs in the sitemap. Their content is in the code: read one with get_page_outline or audit_seo; edit DB pages and blog posts instead.',
                 'inputSchema' => ['type' => 'object', 'properties' => new \stdClass()],
             ],
             [

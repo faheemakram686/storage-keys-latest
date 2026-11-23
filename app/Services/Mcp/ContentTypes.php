@@ -22,6 +22,10 @@ class ContentTypes
         'category' => ['model' => \App\Models\BlogCategory::class, 'label' => 'name', 'trash' => 'is_deleted'],
         'tag' => ['model' => \App\Models\BlogTag::class, 'label' => 'name', 'trash' => 'is_deleted'],
         'image' => ['model' => \App\Models\MediaItem::class, 'label' => 'path', 'trash' => 'is_deleted'],
+        'office' => ['model' => \App\Models\Office::class, 'label' => 'name', 'trash' => 'is_deleted'],
+        'faq' => ['model' => \App\Models\Faq::class, 'label' => 'question', 'trash' => 'is_deleted'],
+        'testimonial' => ['model' => \App\Models\Testimonial::class, 'label' => 'name', 'trash' => 'is_deleted'],
+        'pricing_plan' => ['model' => \App\Models\PricingPlan::class, 'label' => 'name', 'trash' => 'is_deleted'],
     ];
 
     /** @var array<string, list<callable(Model): void>> */

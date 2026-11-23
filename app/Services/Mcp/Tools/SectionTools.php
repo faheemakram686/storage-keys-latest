@@ -174,6 +174,7 @@ class SectionTools extends Toolset
     private function cleanHtml(string $html): array
     {
         $clean = HtmlSanitizer::clean($html);
+        \App\Services\Mcp\Placeholders::assertKnown($clean['html']);
 
         return [$clean['html'], $clean['removed']];
     }

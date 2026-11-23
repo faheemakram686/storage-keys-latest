@@ -92,6 +92,9 @@ class McpPageController extends Controller
         $status = $request->has('status') ? (int) $request->input('status') : 0;
 
         $clean = HtmlSanitizer::clean((string) $request->input('content'));
+        if ($bad = \App\Services\Mcp\Placeholders::unknown($clean['html'])) {
+            return response()->json(['success' => false, 'message' => 'Unknown placeholder(s): ' . implode(', ', $bad), 'unknown_placeholders' => $bad], 422);
+        }
 
         $page = new Page();
         $page->title = $title;
@@ -171,6 +174,9 @@ class McpPageController extends Controller
         $sectionNote = null;
         if ($request->has('content')) {
             $clean = HtmlSanitizer::clean((string) $request->input('content'));
+            if ($bad = \App\Services\Mcp\Placeholders::unknown($clean['html'])) {
+                return response()->json(['success' => false, 'message' => 'Unknown placeholder(s): ' . implode(', ', $bad), 'unknown_placeholders' => $bad], 422);
+            }
             $removed = $clean['removed'];
             $page->content = $clean['html'];
             if ($page->isDirty('content') && Sections::active($page)->count() > 1) {

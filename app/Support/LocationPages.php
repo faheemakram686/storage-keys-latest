@@ -170,7 +170,44 @@ class LocationPages
     // Facilities (shared by every page in a city)
     // ------------------------------------------------------------------
 
+    /**
+     * Facility details, with the address, map link and coordinates from the offices table
+     * (edited with the MCP office tools) laid over the defaults in codeFacilities().
+     */
     public static function facilities(): array
+    {
+        static $cache = null;
+        if ($cache !== null && !app()->runningUnitTests()) {
+            return $cache;
+        }
+
+        $facilities = self::codeFacilities();
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('offices')) {
+                $offices = \App\Models\Office::query()->where('is_deleted', 0)->whereIn('key', array_keys($facilities))->get();
+                foreach ($offices as $o) {
+                    $f = &$facilities[$o->key];
+                    $f['facilityName'] = $o->name;
+                    $f['addressHtml'] = e($o->street) . '<br>' . e($o->locality) . ', UAE';
+                    $f['schemaAddress'] = ['streetAddress' => $o->street, 'addressLocality' => $o->locality, 'addressRegion' => $o->region];
+                    if ($o->map_link) {
+                        $f['directions'] = $o->map_link;
+                    }
+                    if ($o->lat !== null && $o->lng !== null) {
+                        $f['geo'] = [(float) $o->lat, (float) $o->lng];
+                    }
+                    unset($f);
+                }
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return $cache = $facilities;
+    }
+
+    /** The facility details as written in code (also the seed for the offices table). */
+    public static function codeFacilities(): array
     {
         return [
             'dubai' => [

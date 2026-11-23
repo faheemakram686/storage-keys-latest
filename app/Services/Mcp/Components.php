@@ -26,6 +26,30 @@ class Components
                     'source' => ['type' => 'string', 'description' => 'Lead source label saved with the inquiry.', 'var' => 'source'],
                 ],
             ],
+            'faq_list' => [
+                'description' => 'The published FAQs of this page (create_faq with this page in page_slugs) as an accordion. With it on the page, FAQ changes also update the FAQPage schema of the page.',
+                'render' => 'faqList',
+                'attrs' => [
+                    'page' => ['type' => 'string', 'description' => 'Show the FAQs of another page slug (default: this page).', 'var' => 'page'],
+                    'title' => ['type' => 'string', 'description' => 'Heading above the list (H2). Default "Frequently Asked Questions".', 'var' => 'title'],
+                ],
+            ],
+            'testimonials' => [
+                'description' => 'Published customer reviews (create_testimonial). No review schema is output.',
+                'render' => 'testimonials',
+                'attrs' => [
+                    'limit' => ['type' => 'string', 'description' => 'How many to show (default 6).', 'var' => 'limit'],
+                    'title' => ['type' => 'string', 'description' => 'Heading (H2). Default "What Our Customers Say".', 'var' => 'title'],
+                ],
+            ],
+            'pricing_table' => [
+                'description' => 'Published pricing plans (create_pricing_plan) as cards. Plans without a price show "Ask for a quote".',
+                'render' => 'pricingTable',
+                'attrs' => [
+                    'plans' => ['type' => 'string', 'description' => 'Comma-separated plan slugs to show (default: all published).', 'var' => 'plans'],
+                    'title' => ['type' => 'string', 'description' => 'Heading (H2). Default "Storage Unit Prices".', 'var' => 'title'],
+                ],
+            ],
             'explore_more' => [
                 'description' => 'The "Explore More" internal-links block (related services and guides) used above the FAQ on service pages.',
                 'view' => 'ui.partials.explore-more',
@@ -81,7 +105,7 @@ class Components
         return '<!--sk-component:' . $name . ' ' . json_encode((object) $attrs, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '-->';
     }
 
-    public static function render(string $name, array $attrs): string
+    public static function render(string $name, array $attrs, ?int $pageId = null): string
     {
         $defs = self::definitions();
         if (!isset($defs[$name])) {
@@ -95,6 +119,10 @@ class Components
         }
 
         try {
+            if (isset($defs[$name]['render'])) {
+                return BusinessBlocks::{$defs[$name]['render']}($vars, $pageId);
+            }
+
             return view($defs[$name]['view'], $vars)->render();
         } catch (\Throwable $e) {
             Log::warning('MCP component render failed', ['component' => $name, 'error' => $e->getMessage()]);

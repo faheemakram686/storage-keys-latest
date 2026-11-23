@@ -25,6 +25,7 @@ abstract class McpTestCase extends BaseTestCase
         parent::setUp();
         config(['services.mcp_blog.token' => $this->token]);
         $this->withoutMiddleware(ThrottleRequests::class);
+        \App\Services\Mcp\SiteSettings::flush();
     }
 
     /**

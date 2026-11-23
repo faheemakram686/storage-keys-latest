@@ -226,6 +226,9 @@ class AppServiceProvider extends ServiceProvider
         \App\Services\Mcp\ContentTypes::onRestore('image', fn (\App\Models\MediaItem $m) => \App\Services\Mcp\ImageStore::moveFromTrash($m));
         \App\Services\Mcp\ContentTypes::onPurge('image', fn (\App\Models\MediaItem $m) => \App\Services\Mcp\ImageStore::deleteFiles($m));
 
+        // A restored FAQ shows again, so its pages' FAQPage schema follows.
+        \App\Services\Mcp\ContentTypes::onRestore('faq', fn (\App\Models\Faq $f) => \App\Services\Mcp\FaqSchema::sync((array) $f->page_slugs));
+
         // A section back from the trash goes to the end of its page, which is then rebuilt.
         \App\Services\Mcp\ContentTypes::onRestore('section', function (\App\Models\PageSection $section) {
             $page = $section->page;
