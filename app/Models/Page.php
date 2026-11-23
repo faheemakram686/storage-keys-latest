@@ -19,6 +19,7 @@ class Page extends Model
         'status',
         'is_deleted',
         'hide_banner',
+        'schema_json',
     ];
 
     protected $casts = [
@@ -33,6 +34,14 @@ class Page extends Model
     public function scopePublished($query)
     {
         return $query->active()->where('status', 1);
+    }
+
+    /** Saved JSON-LD (generate_schema), or null. */
+    public function schemaArray(): ?array
+    {
+        $decoded = json_decode(trim((string) ($this->schema_json ?? '')), true);
+
+        return is_array($decoded) && $decoded !== [] ? $decoded : null;
     }
 
     public function seoTitle(): string

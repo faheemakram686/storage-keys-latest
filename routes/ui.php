@@ -30,6 +30,8 @@ Route::middleware(['set.guard'])->group(function () {
 // Frontend Routes
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+    // Edited with the MCP update_robots tool (App\Services\Mcp\RobotsTxt); no static public/robots.txt.
+    Route::get('/robots.txt', fn () => response(\App\Services\Mcp\RobotsTxt::content(), 200, ['Content-Type' => 'text/plain; charset=UTF-8']))->name('robots');
     Route::get('/notify', [HomeController::class, 'notify'])->name('notify');
     Route::get('/storage-options', [HomeController::class, 'storageOption'])->name('storageOption');
     Route::get('/shop', [HomeController::class, 'shop'])->name('shop');

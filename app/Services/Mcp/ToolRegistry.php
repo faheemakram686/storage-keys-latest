@@ -7,6 +7,7 @@ use App\Services\Mcp\Tools\BlogTools;
 use App\Services\Mcp\Tools\ImageTools;
 use App\Services\Mcp\Tools\LinkTools;
 use App\Services\Mcp\Tools\SafetyTools;
+use App\Services\Mcp\Tools\SchemaTools;
 use App\Services\Mcp\Tools\SectionTools;
 use App\Services\Mcp\Tools\Toolset;
 
@@ -24,6 +25,7 @@ class ToolRegistry
         LinkTools::class,
         BlogTools::class,
         ImageTools::class,
+        SchemaTools::class,
     ];
 
     /** @return list<Toolset> */

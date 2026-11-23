@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\DB;
  */
 class SafetyTools extends Toolset
 {
+    /** Logged changes that are not trashable records. */
+    private const LOG_ONLY_TYPES = ['robots', 'setting'];
+
     public function definitions(): array
     {
         $types = ContentTypes::names();
@@ -21,7 +24,7 @@ class SafetyTools extends Toolset
         return [
             $this->tool('activity_log', 'Recent content changes (MCP and admin panel) with before/after values of the changed fields, source, tool and time. Long text is trimmed unless full=true.', [
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200],
-                'entity_type' => ['type' => 'string', 'enum' => $types],
+                'entity_type' => ['type' => 'string', 'enum' => array_merge($types, self::LOG_ONLY_TYPES)],
                 'entity_id' => ['type' => 'integer'],
                 'full' => ['type' => 'boolean', 'description' => 'Return full before/after text'],
             ]),
@@ -66,7 +69,9 @@ class SafetyTools extends Toolset
     {
         $q = ContentRevision::query()->orderByDesc('id');
         if ($type = $this->str($a, 'entity_type')) {
-            ContentTypes::get($type);
+            if (!in_array($type, self::LOG_ONLY_TYPES, true)) {
+                ContentTypes::get($type);
+            }
             $q->where('entity_type', $type);
         }
         if ($id = $this->int($a, 'entity_id')) {

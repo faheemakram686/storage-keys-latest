@@ -1043,6 +1043,10 @@ class McpBlogController extends Controller
             }
         }
 
+        if ($blog->schema_json !== null && ($problems = \App\Services\Mcp\SchemaRules::problems(json_decode($blog->schema_json, true)))) {
+            return response()->json(['success' => false, 'message' => 'Schema refused.', 'problems' => $problems], 422);
+        }
+
         $blog->save();
 
         return response()->json([

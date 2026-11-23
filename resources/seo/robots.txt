@@ -18,6 +18,7 @@ Disallow: /contract-to-customer/
 Disallow: /estimate-upload-document/
 Disallow: /contact-setpassword/
 Disallow: /redirectPaymentRef
+Disallow: /mcp-upload/
 
 # Internal search parameters (block crawl of search/filter query URLs)
 Disallow: /*?*q=

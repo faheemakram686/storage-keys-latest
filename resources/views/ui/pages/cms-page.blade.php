@@ -3,12 +3,15 @@
 @section('metaTitle', $page->seoTitle())
 @section('metaDescription', $page->seoDescription(160))
 
-@isset($loc)
-    {{-- CMS page standing in for a location page: keep its facility and breadcrumb schema. --}}
-    @section('headExtra')
+@section('headExtra')
+    @isset($loc)
+        {{-- CMS page standing in for a location page: keep its facility and breadcrumb schema. --}}
         @include('ui.partials.location-schema', ['loc' => $loc])
-    @endsection
-@endisset
+    @endisset
+    @if($pageSchema = $page->schemaArray())
+        <script type="application/ld+json">{!! json_encode($pageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
+    @endif
+@endsection
 
 @php
     // Explicit DB flag OR auto-detect full hero in content.

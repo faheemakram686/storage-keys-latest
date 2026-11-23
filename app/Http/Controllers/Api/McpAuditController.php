@@ -263,16 +263,21 @@ class McpAuditController extends Controller
             }
         }
 
-        if (!is_file($robotsPath)) {
-            $issues[] = 'public/robots.txt missing';
-        } else {
-            $robots = (string) file_get_contents($robotsPath);
-            $ok[] = 'robots.txt present';
-            if (!preg_match('/sitemap:\s*\S+/i', $robots)) {
-                $issues[] = 'robots.txt has no Sitemap: directive';
-            } else {
-                $ok[] = 'robots.txt references a Sitemap';
-            }
+        // robots.txt is served by Laravel (update_robots); same rules as update_robots uses.
+        $robots = \App\Services\Mcp\RobotsTxt::content();
+        $ok[] = 'robots.txt served from ' . (is_file($robotsPath) ? 'public/robots.txt (a static file overrides the editable one: delete it)' : 'the site (editable with update_robots)');
+        if (is_file($robotsPath)) {
+            $warnings[] = 'public/robots.txt exists, so edits made with update_robots are not served. Delete the file.';
+        }
+        $robotsCheck = \App\Services\Mcp\RobotsTxt::validate($robots);
+        foreach ($robotsCheck['errors'] as $e) {
+            $issues[] = 'robots.txt: ' . $e;
+        }
+        foreach ($robotsCheck['warnings'] as $w) {
+            $warnings[] = 'robots.txt: ' . $w;
+        }
+        if ($robotsCheck['errors'] === []) {
+            $ok[] = 'robots.txt is valid and lists ' . $sitemapUrl;
         }
 
         return response()->json([
