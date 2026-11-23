@@ -201,5 +201,22 @@ class AppServiceProvider extends ServiceProvider
         Invoice::observe(InvoiceObserver::class);
         TermLength::observe(ServiceObserver::class);
         Addon::observe(AddonObserver::class);
+
+        $this->registerMcpContentTracking();
+    }
+
+    /**
+     * Revisions + trash for website content edited through the MCP connector or the admin panel.
+     */
+    private function registerMcpContentTracking(): void
+    {
+        foreach (\App\Services\Mcp\ContentTypes::all() as $def) {
+            $def['model']::observe(\App\Observers\ContentRevisionObserver::class);
+        }
+
+        \App\Services\Mcp\ContentTypes::onPurge('blog', function (\App\Models\Blog $blog) {
+            $blog->categories()->detach();
+            $blog->tags()->detach();
+        });
     }
 }

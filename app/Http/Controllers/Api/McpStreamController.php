@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\Mcp\McpContext;
+use App\Services\Mcp\McpException;
+use App\Services\Mcp\ToolRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -108,15 +111,15 @@ class McpStreamController extends Controller
 
                 case 'tools/list':
                     return $this->rpcResult($id, [
-                        'tools' => $this->toolDefinitions(),
+                        'tools' => array_merge($this->toolDefinitions(), app(ToolRegistry::class)->definitions()),
                     ]);
 
                 case 'tools/call':
                     $params = is_array($message['params'] ?? null) ? $message['params'] : [];
-                    $name = $params['name'] ?? '';
+                    $name = (string) ($params['name'] ?? '');
                     $arguments = is_array($params['arguments'] ?? null) ? $params['arguments'] : [];
 
-                    return $this->rpcResult($id, $this->callTool((string) $name, $arguments));
+                    return $this->rpcResult($id, McpContext::as($name, fn () => $this->callTool($name, $arguments)));
 
                 default:
                     if ($isNotification) {
@@ -874,8 +877,42 @@ class McpStreamController extends Controller
                 ])));
 
             default:
-                return $this->toolError('Unknown tool: ' . $name);
+                return $this->callRegistryTool($name, $arguments);
         }
+    }
+
+    /**
+     * Tools added after v1.3 live in App\Services\Mcp\Tools; same result shape as the REST-backed tools.
+     *
+     * @param  array<string, mixed>  $arguments
+     */
+    private function callRegistryTool(string $name, array $arguments): array
+    {
+        $set = app(ToolRegistry::class)->find($name);
+        if ($set === null) {
+            return $this->toolError('Unknown tool: ' . $name);
+        }
+
+        try {
+            $data = array_merge(['success' => true], $set->call($name, $arguments));
+            $isError = false;
+        } catch (McpException $e) {
+            $data = $e->payload();
+            $isError = true;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $data = ['success' => false, 'message' => 'Validation error', 'errors' => $e->errors()];
+            $isError = true;
+        }
+
+        return [
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                ],
+            ],
+            'isError' => $isError,
+        ];
     }
 
     /**
