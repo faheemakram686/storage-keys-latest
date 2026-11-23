@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Services\Mcp\ContentTypes;
 use App\Services\Mcp\Revisions;
+use App\Services\Mcp\SiteCache;
 use App\Services\Mcp\Versioning;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,5 +44,11 @@ class ContentRevisionObserver
     public function deleted(Model $model): void
     {
         Revisions::record($model, 'purged', Revisions::snapshot($model, true), null);
+    }
+
+    /** Any content write makes cached audit results stale. */
+    public function saved(Model $model): void
+    {
+        SiteCache::touch();
     }
 }

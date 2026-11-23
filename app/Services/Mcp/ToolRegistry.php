@@ -2,6 +2,7 @@
 
 namespace App\Services\Mcp;
 
+use App\Services\Mcp\Tools\AuditTools;
 use App\Services\Mcp\Tools\SafetyTools;
 use App\Services\Mcp\Tools\SectionTools;
 use App\Services\Mcp\Tools\Toolset;
@@ -16,6 +17,7 @@ class ToolRegistry
     private const TOOLSETS = [
         SafetyTools::class,
         SectionTools::class,
+        AuditTools::class,
     ];
 
     /** @return list<Toolset> */
