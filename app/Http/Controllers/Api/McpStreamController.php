@@ -259,7 +259,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'list_pages',
-                'description' => 'List DB CMS pages (editable). Does not change static Blade pages.',
+                'description' => 'List DB CMS pages. Each has live/live_note: a DB page whose slug belongs to a coded page (e.g. office-storage) is never shown on the site. Exception: self-storage-dubai — a published DB page with that slug replaces the coded Dubai page.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -280,7 +280,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_page',
-                'description' => 'Create a DB CMS page. Defaults to draft (status=0). For full custom hero pages pass hide_banner=true to skip default breadcrumb+H1 and render HTML edge-to-edge (no 820px box).',
+                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Slugs of coded pages are refused, except self-storage-dubai: create it as a draft, then publish (status=1) to replace the coded Dubai page (the H1 comes from title unless content has its own hero). For full custom hero pages pass hide_banner=true to skip default breadcrumb+H1 and render HTML edge-to-edge (no 820px box).',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -300,7 +300,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'update_page',
-                'description' => 'Update a DB CMS page by id or slug. Pass hide_banner=true to suppress default banner and use full-bleed content wrapper.',
+                'description' => 'Update a DB CMS page by id or slug. Refused (409) for DB copies of coded pages, because those edits would never go live. Pass hide_banner=true to suppress default banner and use full-bleed content wrapper.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [

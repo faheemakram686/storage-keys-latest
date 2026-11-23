@@ -3,6 +3,13 @@
 @section('metaTitle', $page->seoTitle())
 @section('metaDescription', $page->seoDescription(160))
 
+@isset($loc)
+    {{-- CMS page standing in for a location page: keep its facility and breadcrumb schema. --}}
+    @section('headExtra')
+        @include('ui.partials.location-schema', ['loc' => $loc])
+    @endsection
+@endisset
+
 @php
     // Explicit DB flag OR auto-detect full hero in content.
     $fullBleed = $page->shouldHideBanner();

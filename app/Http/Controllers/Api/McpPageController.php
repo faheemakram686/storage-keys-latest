@@ -136,6 +136,19 @@ class McpPageController extends Controller
             ], 422);
         }
 
+        // Editing a DB copy of a coded page would report success while nothing changes on the site.
+        // Allowed only when the same request moves it to a free slug.
+        $movingToFreeSlug = $request->filled('slug')
+            && !$this->isReservedSlug(Str::slug($request->input('slug'), '-'));
+        if ($this->isReservedSlug((string) $page->slug) && !$movingToFreeSlug) {
+            return response()->json([
+                'success' => false,
+                'message' => $this->liveNote($page),
+                'live' => false,
+                'slug' => $page->slug,
+            ], 409);
+        }
+
         if ($request->filled('title')) {
             $page->title = trim($request->input('title'));
         }
@@ -219,6 +232,8 @@ class McpPageController extends Controller
             'status' => $rawStatus,
             'status_label' => $rawStatus === 1 ? 'Published' : 'Draft',
             'url' => url('/' . $page->slug),
+            'live' => $this->isLive($page),
+            'live_note' => $this->liveNote($page),
             'meta_title' => $page->meta_title,
             'meta_description' => $page->meta_description,
             'hide_banner' => (bool) $page->hide_banner,
@@ -328,6 +343,12 @@ class McpPageController extends Controller
             'short-term-storage',
             'vehicle-storage',
             'long-term-storage',
+            'office-storage',
+            'art-storage',
+            'equipment-storage',
+            'construction-storage',
+            'boat-storage',
+            'pharmaceutical-storage',
             'product-details',
             'product-detail',
             'booking',
@@ -361,6 +382,33 @@ class McpPageController extends Controller
             'redirectPaymentRef',
             'sign-contract',
             'upload-estimate-documents',
-        ], \App\Support\LocationPages::slugs());
+        ], array_values(array_filter(
+            \App\Support\LocationPages::slugs(),
+            static fn (string $slug) => !\App\Support\LocationPages::isCmsEditable($slug)
+        )));
+    }
+
+    /**
+     * Whether visitors see this page. A slug served by a coded route never shows the DB page.
+     */
+    private function isLive(Page $page): bool
+    {
+        return (int) $page->getRawOriginal('status') === 1 && !$this->isReservedSlug((string) $page->slug);
+    }
+
+    private function liveNote(Page $page): string
+    {
+        $slug = (string) $page->slug;
+        if ($this->isReservedSlug($slug)) {
+            return '/' . $slug . ' is a coded page in the site\'s templates, so this DB copy is NOT shown on the site '
+                . 'and edits to it will not go live. That page has to be changed in the code.';
+        }
+        if (\App\Support\LocationPages::isCmsEditable($slug)) {
+            return (int) $page->getRawOriginal('status') === 1
+                ? 'Published: this page replaces the coded /' . $slug . ' page on the live site.'
+                : 'Draft: the coded /' . $slug . ' page stays live until this page is published (status=1).';
+        }
+
+        return (int) $page->getRawOriginal('status') === 1 ? 'Published and live.' : 'Draft: not visible on the site.';
     }
 }

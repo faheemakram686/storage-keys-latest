@@ -24,24 +24,26 @@
     if (!empty($loc['geo'])) {
         $facilityNode['geo'] = ['@type' => 'GeoCoordinates', 'latitude' => $loc['geo'][0], 'longitude' => $loc['geo'][1]];
     }
-@endphp
-<script type="application/ld+json">
-{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@graph' => [
-        $facilityNode,
-        [
+    $graph = [$facilityNode];
+    // No FAQPage when the page shows no coded FAQs (e.g. a CMS page standing in for this one).
+    if (!empty($loc['faqs'])) {
+        $graph[] = [
             '@type' => 'FAQPage',
             'mainEntity' => array_map(fn ($f) => [
                 '@type' => 'Question',
                 'name' => $f[0],
                 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f[1]],
             ], $loc['faqs']),
-        ],
-        [
-            '@type' => 'BreadcrumbList',
-            'itemListElement' => $crumbList,
-        ],
-    ],
+        ];
+    }
+    $graph[] = [
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => $crumbList,
+    ];
+@endphp
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@graph' => $graph,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>

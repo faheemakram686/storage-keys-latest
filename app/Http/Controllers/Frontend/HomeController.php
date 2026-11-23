@@ -254,6 +254,17 @@ class HomeController extends Controller
         $loc = \App\Support\LocationPages::page($slug);
         abort_if(!$loc, 404);
 
+        // A published CMS page with this slug replaces the coded page (edited through the MCP connector).
+        if (\App\Support\LocationPages::isCmsEditable($slug)) {
+            $page = \App\Models\Page::query()->published()->where('slug', $slug)->first();
+            if ($page) {
+                // Keep the facility + breadcrumb schema; the coded FAQs are not on this page, so no FAQPage.
+                $loc['faqs'] = [];
+
+                return view('ui.pages.cms-page', ['page' => $page, 'loc' => $loc]);
+            }
+        }
+
         return view('ui.pages.location', compact('loc'));
     }
     public function bookingReservation($id)
