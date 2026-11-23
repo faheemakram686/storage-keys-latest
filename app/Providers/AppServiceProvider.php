@@ -218,5 +218,17 @@ class AppServiceProvider extends ServiceProvider
             $blog->categories()->detach();
             $blog->tags()->detach();
         });
+
+        // A section back from the trash goes to the end of its page, which is then rebuilt.
+        \App\Services\Mcp\ContentTypes::onRestore('section', function (\App\Models\PageSection $section) {
+            $page = $section->page;
+            if (!$page) {
+                return;
+            }
+            $section->position = \App\Services\Mcp\Sections::active($page)->max('position') + 1;
+            $section->save();
+            \App\Services\Mcp\Sections::renumber($page);
+            \App\Services\Mcp\Sections::rebuild($page->fresh());
+        });
     }
 }

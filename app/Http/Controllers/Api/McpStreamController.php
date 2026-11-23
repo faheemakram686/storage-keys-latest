@@ -313,6 +313,7 @@ class McpStreamController extends Controller
                         'content' => ['type' => 'string'],
                         'status' => ['type' => 'integer', 'enum' => [0, 1]],
                         'new_slug' => ['type' => 'string'],
+                        'expected_updated_at' => ['type' => 'string', 'description' => 'Optional: the page updated_at from your last read; refused (409) if it changed since'],
                         'meta_title' => ['type' => 'string'],
                         'meta_description' => ['type' => 'string'],
                         'hide_banner' => [
@@ -694,7 +695,7 @@ class McpStreamController extends Controller
                     return $this->toolError('Provide id or slug.');
                 }
                 $payload = [];
-                foreach (['title', 'content', 'status', 'meta_title', 'meta_description'] as $field) {
+                foreach (['title', 'content', 'status', 'meta_title', 'meta_description', 'expected_updated_at'] as $field) {
                     if (array_key_exists($field, $arguments)) {
                         $payload[$field] = $arguments[$field];
                     }

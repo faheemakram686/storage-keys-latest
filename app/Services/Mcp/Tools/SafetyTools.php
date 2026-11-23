@@ -112,8 +112,11 @@ class SafetyTools extends Toolset
             throw new McpException(ucfirst($type) . ' ' . $model->getKey() . ' is not in the trash.', 422);
         }
 
-        $model->setAttribute(ContentTypes::get($type)['trash'], 0);
-        $model->save();
+        DB::transaction(function () use ($type, $model) {
+            $model->setAttribute(ContentTypes::get($type)['trash'], 0);
+            $model->save();
+            ContentTypes::runRestoreHooks($type, $model);
+        });
         SiteCache::touch();
 
         return [

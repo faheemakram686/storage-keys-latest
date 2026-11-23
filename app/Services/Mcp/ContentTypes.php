@@ -4,6 +4,7 @@ namespace App\Services\Mcp;
 
 use App\Models\Blog;
 use App\Models\Page;
+use App\Models\PageSection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,7 +18,24 @@ class ContentTypes
     private static array $types = [
         'page' => ['model' => Page::class, 'label' => 'title', 'trash' => 'is_deleted'],
         'blog' => ['model' => Blog::class, 'label' => 'title', 'trash' => 'is_deleted'],
+        'section' => ['model' => PageSection::class, 'label' => 'name', 'trash' => 'is_deleted'],
     ];
+
+    /** @var array<string, list<callable(Model): void>> */
+    private static array $restoreHooks = [];
+
+    /** Follow-up after a record of $type comes back from the trash (e.g. rebuild the page). */
+    public static function onRestore(string $type, callable $hook): void
+    {
+        self::$restoreHooks[$type][] = $hook;
+    }
+
+    public static function runRestoreHooks(string $type, Model $model): void
+    {
+        foreach (self::$restoreHooks[$type] ?? [] as $hook) {
+            $hook($model);
+        }
+    }
 
     /** @var array<string, list<callable(Model): void>> */
     private static array $purgeHooks = [];

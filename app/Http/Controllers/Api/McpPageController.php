@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Services\Mcp\HtmlSanitizer;
+use App\Services\Mcp\Sections;
+use App\Services\Mcp\Versioning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -88,10 +91,12 @@ class McpPageController extends Controller
         $slug = $this->uniqueSlug($slugBase);
         $status = $request->has('status') ? (int) $request->input('status') : 0;
 
+        $clean = HtmlSanitizer::clean((string) $request->input('content'));
+
         $page = new Page();
         $page->title = $title;
         $page->slug = $slug;
-        $page->content = $request->input('content');
+        $page->content = $clean['html'];
         $page->status = $status;
         $page->is_deleted = 0;
         $page->meta_title = $request->input('meta_title');
@@ -103,12 +108,13 @@ class McpPageController extends Controller
             $page->hide_banner = (new Page(['content' => $page->content]))->contentStartsWithHero();
         }
         $page->save();
+        Sections::forPage($page);
 
-        return response()->json([
+        return response()->json(array_merge([
             'success' => true,
             'message' => 'Page created successfully',
             'page' => $this->formatPage($page->fresh(), true),
-        ], 201);
+        ], $clean['removed'] ? ['sanitized_removed' => $clean['removed']] : []), 201);
     }
 
     public function update(Request $request, $idOrSlug)
@@ -136,6 +142,15 @@ class McpPageController extends Controller
             ], 422);
         }
 
+        // Optional for backwards compatibility: refuse when the page changed since it was read.
+        if ($request->filled('expected_updated_at')) {
+            try {
+                Versioning::assertCurrent($page, $request->input('expected_updated_at'), 'Page');
+            } catch (\App\Services\Mcp\McpException $e) {
+                return response()->json($e->payload(), $e->status);
+            }
+        }
+
         // Editing a DB copy of a coded page would report success while nothing changes on the site.
         // Allowed only when the same request moves it to a free slug.
         $movingToFreeSlug = $request->filled('slug')
@@ -152,8 +167,15 @@ class McpPageController extends Controller
         if ($request->filled('title')) {
             $page->title = trim($request->input('title'));
         }
+        $removed = [];
+        $sectionNote = null;
         if ($request->has('content')) {
-            $page->content = $request->input('content');
+            $clean = HtmlSanitizer::clean((string) $request->input('content'));
+            $removed = $clean['removed'];
+            $page->content = $clean['html'];
+            if ($page->isDirty('content') && Sections::active($page)->count() > 1) {
+                $sectionNote = 'content replaced the whole page, so its sections became one html section (the earlier ones are in the trash). Use the section tools to edit one part of a page.';
+            }
         }
         if ($request->has('status') && in_array((string) $request->input('status'), ['0', '1'], true)) {
             $page->status = (int) $request->input('status');
@@ -187,13 +209,17 @@ class McpPageController extends Controller
             }
         }
 
+        $contentChanged = $page->isDirty('content');
         $page->save();
+        if ($contentChanged) {
+            Sections::replaceWithContent($page, (string) $page->content);
+        }
 
-        return response()->json([
+        return response()->json(array_merge([
             'success' => true,
             'message' => 'Page updated successfully',
             'page' => $this->formatPage($page->fresh(), true),
-        ]);
+        ], $removed ? ['sanitized_removed' => $removed] : [], $sectionNote ? ['note' => $sectionNote] : []));
     }
 
     public function destroy(Request $request, $idOrSlug)

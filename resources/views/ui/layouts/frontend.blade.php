@@ -58,7 +58,9 @@
 <body class="{{ $isHome ? 'sk-is-home' : '' }}">
     @include('ui.includes.google-tag-manager-noscript')
     @include('ui.includes.header')
+    <!--sk-main-start-->
     @yield('content')
+    <!--sk-main-end-->
     @include('ui.includes.footer')
 @yield('footerInsert')
 

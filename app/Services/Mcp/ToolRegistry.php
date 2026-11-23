@@ -3,6 +3,7 @@
 namespace App\Services\Mcp;
 
 use App\Services\Mcp\Tools\SafetyTools;
+use App\Services\Mcp\Tools\SectionTools;
 use App\Services\Mcp\Tools\Toolset;
 
 /**
@@ -14,6 +15,7 @@ class ToolRegistry
     /** @var list<class-string<Toolset>> */
     private const TOOLSETS = [
         SafetyTools::class,
+        SectionTools::class,
     ];
 
     /** @return list<Toolset> */

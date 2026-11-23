@@ -19,7 +19,7 @@
 @if($fullBleed)
     {{-- Edge-to-edge like static service pages: no ps-hero, no sk-container, no bl-prose box. --}}
     <div class="sk-home sk-cms-page sk-cms-page--fullbleed">
-        {!! $page->content !!}
+        {!! \App\Services\Mcp\ContentRenderer::render($page->content) !!}
     </div>
 @else
     <div class="sk-home sk-cms-page">
@@ -37,7 +37,7 @@
             <div class="sk-container">
                 <article class="bl-article sk-reveal" style="max-width:820px;margin:0 auto;">
                     <div class="bl-prose">
-                        {!! $page->content !!}
+                        {!! \App\Services\Mcp\ContentRenderer::render($page->content) !!}
                     </div>
                 </article>
             </div>
