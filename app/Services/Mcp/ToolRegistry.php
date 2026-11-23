@@ -3,6 +3,7 @@
 namespace App\Services\Mcp;
 
 use App\Services\Mcp\Tools\AuditTools;
+use App\Services\Mcp\Tools\LinkTools;
 use App\Services\Mcp\Tools\SafetyTools;
 use App\Services\Mcp\Tools\SectionTools;
 use App\Services\Mcp\Tools\Toolset;
@@ -18,6 +19,7 @@ class ToolRegistry
         SafetyTools::class,
         SectionTools::class,
         AuditTools::class,
+        LinkTools::class,
     ];
 
     /** @return list<Toolset> */

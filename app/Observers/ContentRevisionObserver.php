@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Services\Mcp\ContentTypes;
 use App\Services\Mcp\Revisions;
 use App\Services\Mcp\SiteCache;
+use App\Services\Mcp\SlugRedirects;
 use App\Services\Mcp\Versioning;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,6 +40,7 @@ class ContentRevisionObserver
         }
 
         Revisions::record($model, $event, $before, $after);
+        SlugRedirects::handle($model);
     }
 
     public function deleted(Model $model): void

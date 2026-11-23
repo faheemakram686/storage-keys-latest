@@ -144,4 +144,29 @@ class Sections
 
         return 'Section ' . $position;
     }
+
+    /**
+     * Exactly one H1 per page: refuse a change that adds a second one.
+     */
+    public static function assertOneH1(Page $page, string $newContent): array
+    {
+        $count = static function (string $content) use ($page): int {
+            $probe = new Page(['content' => $content, 'hide_banner' => $page->hide_banner]);
+            $h1s = count(array_filter(Html::headings($content), fn ($h) => $h['level'] === 1));
+
+            return $h1s + ($probe->shouldHideBanner() ? 0 : 1);
+        };
+
+        $after = $count($newContent);
+        $before = $count((string) $page->content);
+        if ($after > 1 && $after > $before) {
+            throw new McpException(
+                'This would give the page ' . $after . ' H1 headings; a page has exactly one. '
+                . ($page->shouldHideBanner() ? 'Use <h2> for this heading.' : 'The page title is already the H1 (from the template banner); use <h2>.'),
+                422
+            );
+        }
+
+        return $after === 0 ? ['The page has no H1. Add one (with hide_banner pages the content must contain it).'] : [];
+    }
 }
