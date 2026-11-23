@@ -222,6 +222,10 @@ class AppServiceProvider extends ServiceProvider
         \App\Services\Mcp\ContentTypes::onPurge('category', fn (\App\Models\BlogCategory $c) => $c->blogs()->detach());
         \App\Services\Mcp\ContentTypes::onPurge('tag', fn (\App\Models\BlogTag $t) => $t->blogs()->detach());
 
+        // Trashed image files sit outside the web root; restore and purge follow them there.
+        \App\Services\Mcp\ContentTypes::onRestore('image', fn (\App\Models\MediaItem $m) => \App\Services\Mcp\ImageStore::moveFromTrash($m));
+        \App\Services\Mcp\ContentTypes::onPurge('image', fn (\App\Models\MediaItem $m) => \App\Services\Mcp\ImageStore::deleteFiles($m));
+
         // A section back from the trash goes to the end of its page, which is then rebuilt.
         \App\Services\Mcp\ContentTypes::onRestore('section', function (\App\Models\PageSection $section) {
             $page = $section->page;

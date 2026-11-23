@@ -408,6 +408,7 @@ class McpPageController extends Controller
             'redirectPaymentRef',
             'sign-contract',
             'upload-estimate-documents',
+            'mcp-upload',
         ], array_values(array_filter(
             \App\Support\LocationPages::slugs(),
             static fn (string $slug) => !\App\Support\LocationPages::isCmsEditable($slug)

@@ -21,6 +21,7 @@ class ContentTypes
         'section' => ['model' => PageSection::class, 'label' => 'name', 'trash' => 'is_deleted'],
         'category' => ['model' => \App\Models\BlogCategory::class, 'label' => 'name', 'trash' => 'is_deleted'],
         'tag' => ['model' => \App\Models\BlogTag::class, 'label' => 'name', 'trash' => 'is_deleted'],
+        'image' => ['model' => \App\Models\MediaItem::class, 'label' => 'path', 'trash' => 'is_deleted'],
     ];
 
     /** @var array<string, list<callable(Model): void>> */

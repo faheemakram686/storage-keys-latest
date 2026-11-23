@@ -135,6 +135,14 @@ Route::get("/test", function(){
     Route::any('contact-savepassword', [ContactController::class, 'savePassword'])
         ->name('password.save');
 
+// One-time image upload page made by the MCP create_image_upload_link tool.
+Route::middleware(['throttle:20,1'])->group(function () {
+    Route::get('/mcp-upload/{token}', [\App\Http\Controllers\Frontend\McpImageUploadController::class, 'show'])
+        ->where('token', '[A-Za-z0-9]{48}')->name('mcp.image-upload');
+    Route::post('/mcp-upload/{token}', [\App\Http\Controllers\Frontend\McpImageUploadController::class, 'store'])
+        ->where('token', '[A-Za-z0-9]{48}')->name('mcp.image-upload.store');
+});
+
 // CMS DB pages — last so every existing static/app URL keeps priority unchanged.
 Route::middleware(['set.guard'])->group(function () {
     Route::get('/{slug}', [\App\Http\Controllers\Frontend\CmsPageController::class, 'show'])
