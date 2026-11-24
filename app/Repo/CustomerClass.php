@@ -283,7 +283,7 @@ class CustomerClass implements CustomerInterface {
                 $altName = trim((string) ($lead->alt_contact_name ?? ''));
                 $altMobile = trim((string) ($lead->alt_contact_mobile ?? ''));
                 if ($altEmail !== '' && strcasecmp($altEmail, (string) $request->email) !== 0) {
-                    $emailExists = Contact::where('email', $altEmail)->exists();
+                    $emailExists = Contact::where('email', $altEmail)->where('is_deleted', 0)->exists();
                     if (!$emailExists) {
                         $nameParts = preg_split('/\s+/', $altName, 2);
                         $altContact = new Contact();

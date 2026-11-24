@@ -143,7 +143,7 @@ class AuthController extends Controller
                 'company_name'  => 'nullable|string|max:150',
                 'customer_type' => 'nullable|in:individual,company',
                 'account_type'  => 'nullable|in:individual,company',
-                'email'         => 'required|email|unique:contacts,email',
+                'email'         => 'required|email|unique:contacts,email,NULL,id,is_deleted,0',
                 'password'      => 'required|confirmed|min:8',
             ]);
               if($validated->fails()){
@@ -317,7 +317,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = Contact::with('customer')->where('email', $request->email)->first();
+            $user = Contact::with('customer')->where('email', $request->email)->where('is_deleted', 0)->first();
 
             return response()->json([
                 'user' => $user,

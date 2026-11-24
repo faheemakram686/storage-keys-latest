@@ -44,7 +44,7 @@ class CustomerRegisterController extends Controller
                 'first_name'    => 'required|string|max:100',
                 'last_name'     => 'required|string|max:100',
                 'company_name'  => 'required_if:customer_type,company|nullable|string|max:150',
-                'email'         => 'required|email|unique:contacts,email',
+                'email'         => 'required|email|unique:contacts,email,NULL,id,is_deleted,0',
                 'password'      => 'required|confirmed|min:8',
             ]);
 
