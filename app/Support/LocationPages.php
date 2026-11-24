@@ -13,15 +13,19 @@ class LocationPages
     public const CITIES = ['dubai', 'sharjah'];
 
     /**
-     * Location pages the CMS may take over. When a *published* DB page (App\Models\Page) has one
-     * of these slugs, it is shown instead of the coded page; draft or deleted, the coded page stays.
-     * This is what lets the MCP connector edit these pages. Add a slug here to open another page.
+     * Location pages the CMS may take over: every city page and every service page in every city,
+     * so a new service or city is open too without touching this list. When a *published* DB page
+     * (App\Models\Page) has one of these slugs, it is shown instead of the coded page; draft or
+     * deleted, the coded page stays. This is what lets the MCP connector edit these pages.
      */
-    public const CMS_EDITABLE = ['self-storage-dubai'];
+    public static function cmsEditableSlugs(): array
+    {
+        return self::slugs();
+    }
 
     public static function isCmsEditable(string $slug): bool
     {
-        return in_array($slug, self::CMS_EDITABLE, true);
+        return in_array($slug, self::cmsEditableSlugs(), true);
     }
 
     public static function slugs(): array

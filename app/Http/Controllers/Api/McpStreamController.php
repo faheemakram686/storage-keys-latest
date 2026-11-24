@@ -99,7 +99,7 @@ class McpStreamController extends Controller
                             'name' => 'storagekeys-blog',
                             'version' => '2.0.0',
                         ],
-                        'instructions' => 'StorageKeys site MCP v2.0. Most pages are coded (Blade): read them with get_page_outline and the audit tools; change them in the code. DB pages (list_pages; self-storage-dubai is one when published) are edited by section: get_page_sections, then update_page_section with expected_updated_at. Blog posts: create_blog/update_blog. Rules: read before you write (pass back updated_at as expected_updated_at); new content is a draft, publish only when the owner asks; sitewide and bulk tools preview until dry_run=false; deletes go to the trash (list_trash, restore_item; purge_item needs confirm=true); every change is in activity_log. HTML is sanitized, a page has one H1, use only known {{placeholders}} (get_settings). Never invent addresses, prices or reviews, and never add Review/AggregateRating schema for StorageKeys. Analytics tools return 503 until Google credentials are set.',
+                        'instructions' => 'StorageKeys site MCP v2.0. Most pages are coded (Blade): read them with get_page_outline and the audit tools; change them in the code. Location pages (' . $this->cmsEditableList() . ') can be taken over by the CMS: create_page with the same slug as a draft (the coded page stays live), then publish (status=1) to replace the coded page. DB pages (list_pages) are edited by section: get_page_sections, then update_page_section with expected_updated_at. Blog posts: create_blog/update_blog. Rules: read before you write (pass back updated_at as expected_updated_at); new content is a draft, publish only when the owner asks; sitewide and bulk tools preview until dry_run=false; deletes go to the trash (list_trash, restore_item; purge_item needs confirm=true); every change is in activity_log. HTML is sanitized, a page has one H1, use only known {{placeholders}} (get_settings). Never invent addresses, prices or reviews, and never add Review/AggregateRating schema for StorageKeys. Analytics tools return 503 until Google credentials are set.',
                     ]);
 
                 case 'notifications/initialized':
@@ -143,6 +143,12 @@ class McpStreamController extends Controller
                 'isError' => true,
             ]);
         }
+    }
+
+    /** The location slugs a CMS page may take over, for tool texts (always matches App\Support\LocationPages). */
+    private function cmsEditableList(): string
+    {
+        return implode(', ', \App\Support\LocationPages::cmsEditableSlugs());
     }
 
     private function toolDefinitions(): array
@@ -262,7 +268,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'list_pages',
-                'description' => 'List DB CMS pages. Each has live/live_note: a DB page whose slug belongs to a coded page (e.g. office-storage) is never shown on the site. Exception: self-storage-dubai — a published DB page with that slug replaces the coded Dubai page.',
+                'description' => 'List DB CMS pages. Each has live/live_note: a DB page whose slug belongs to a coded page (e.g. office-storage) is never shown on the site. Exception, the location pages (' . $this->cmsEditableList() . '): a published DB page with one of those slugs replaces that coded page.',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [
@@ -283,7 +289,7 @@ class McpStreamController extends Controller
             ],
             [
                 'name' => 'create_page',
-                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Slugs of coded pages are refused, except self-storage-dubai: create it as a draft, then publish (status=1) to replace the coded Dubai page (the H1 comes from title unless content has its own hero). For full custom hero pages pass hide_banner=true to skip default breadcrumb+H1 and render HTML edge-to-edge (no 820px box).',
+                'description' => 'Create a DB CMS page. Defaults to draft (status=0). Slugs of coded pages are refused, except the location pages (' . $this->cmsEditableList() . '): create one as a draft (the coded page stays live), then publish (status=1) to replace that coded page (the H1 comes from title unless content has its own hero). For full custom hero pages pass hide_banner=true to skip default breadcrumb+H1 and render HTML edge-to-edge (no 820px box).',
                 'inputSchema' => [
                     'type' => 'object',
                     'properties' => [

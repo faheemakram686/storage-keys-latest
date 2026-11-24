@@ -215,6 +215,40 @@ class SectionToolsTest extends McpTestCase
         $this->get('/self-storage-dubai')->assertSee('MCP Dubai content section');
     }
 
+    public function test_every_location_page_can_be_replaced_by_a_cms_page(): void
+    {
+        $slugs = \App\Support\LocationPages::slugs();
+        $this->assertContains('warehouse-storage-dubai', $slugs);
+        $this->assertContains('box-storage-sharjah', $slugs);
+
+        foreach ($slugs as $slug) {
+            $coded = \App\Support\LocationPages::page($slug)['whyTitle'] ?? null;
+            $marker = 'MCP takeover ' . $slug;
+            $this->assertTrue(\App\Support\LocationPages::isCmsEditable($slug), $slug);
+
+            $this->ok('create_page', ['title' => 'Takeover ' . $slug, 'slug' => $slug, 'content' => '<p>' . $marker . '</p>', 'status' => 0]);
+            $draft = $this->get('/' . $slug)->assertOk()->assertDontSee($marker);
+            if ($coded) {
+                $draft->assertSee($coded);
+            }
+
+            $this->ok('update_page', ['slug' => $slug, 'status' => 1]);
+            $live = $this->get('/' . $slug)->assertOk()->assertSee($marker);
+            if ($coded) {
+                $live->assertDontSee($coded);
+            }
+        }
+    }
+
+    public function test_tool_texts_name_every_cms_editable_slug(): void
+    {
+        $tools = collect($this->rpc('tools/list')->json('result.tools'))->keyBy('name');
+        foreach (\App\Support\LocationPages::cmsEditableSlugs() as $slug) {
+            $this->assertStringContainsString($slug, $tools['create_page']['description']);
+            $this->assertStringContainsString($slug, $tools['list_pages']['description']);
+        }
+    }
+
     private function stripTokens(string $html): string
     {
         return preg_replace('/(name="_token" value=|csrf-token" content=)"[^"]*"/', '$1""', $html);

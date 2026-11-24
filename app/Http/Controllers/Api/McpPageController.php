@@ -83,8 +83,10 @@ class McpPageController extends Controller
         if ($this->isReservedSlug($slugBase)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Slug is reserved by an existing static site route. Choose a different slug so current pages/URLs stay unchanged.',
+                'message' => 'Slug is reserved by an existing static site route. Choose a different slug so current pages/URLs stay unchanged. '
+                    . 'Coded pages a CMS page may replace: ' . implode(', ', \App\Support\LocationPages::cmsEditableSlugs()) . '.',
                 'reserved_slug' => $slugBase,
+                'cms_editable_slugs' => \App\Support\LocationPages::cmsEditableSlugs(),
             ], 422);
         }
 
@@ -194,8 +196,10 @@ class McpPageController extends Controller
             if ($this->isReservedSlug($slugBase)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Slug is reserved by an existing static site route.',
+                    'message' => 'Slug is reserved by an existing static site route. Coded pages a CMS page may replace: '
+                        . implode(', ', \App\Support\LocationPages::cmsEditableSlugs()) . '.',
                     'reserved_slug' => $slugBase,
+                    'cms_editable_slugs' => \App\Support\LocationPages::cmsEditableSlugs(),
                 ], 422);
             }
             $page->slug = $this->uniqueSlug($slugBase, (int) $page->id);
