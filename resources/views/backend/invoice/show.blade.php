@@ -116,6 +116,15 @@
                                                                 <li class="invoice-id"><span>Order No</span>:<span>Order# {{$data['invoice'][0]->order_id}}</span></li>
                                                             @endif
                                                             <li class="invoice-date"><span>Date</span>:<span>{{$data['invoice'][0]->created_at}}</span></li>
+                                                            @if($data['invoice'][0]->due_date)
+                                                                @php
+                                                                    $inv = $data['invoice'][0];
+                                                                    $dueAt = \Carbon\Carbon::parse($inv->due_date);
+                                                                    $isOverdue = $dueAt->lt(\Carbon\Carbon::today())
+                                                                        && !(method_exists($inv, 'isFullyPaid') && $inv->isFullyPaid());
+                                                                @endphp
+                                                                <li class="invoice-date"><span>Due Date</span>:<span style="font-weight:600;{{ $isOverdue ? 'color:#e85347;' : '' }}">{{ $dueAt->format('Y-m-d') }}@if($isOverdue) (Overdue)@endif</span></li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </div><!-- .invoice-head -->
